@@ -19,20 +19,10 @@ package core
 
 import (
 	"go.mongodb.org/mongo-driver/bson"
-	"time"
 )
 
 func (app *Application) getVersion() string {
 	return app.version
-}
-
-func (app *Application) getTime() (*time.Time, error) {
-	loc, err := time.LoadLocation("UTC")
-	if err != nil {
-		return nil, err
-	}
-	now := time.Now().In(loc)
-	return &now, nil
 }
 
 func (app *Application) getAllStudentGuides() ([]bson.M, error) {

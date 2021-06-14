@@ -17,10 +17,6 @@
 
 package core
 
-import (
-	"sync"
-)
-
 //Application represents the core application code based on hexagonal architecture
 type Application struct {
 	version string
@@ -29,13 +25,6 @@ type Application struct {
 	Services Services //expose to the drivers adapters
 
 	storage Storage
-
-	//cache config data
-	cvLock *sync.RWMutex
-
-	//cache app versions
-	avLock            *sync.RWMutex
-	cachedAppVersions []string
 }
 
 //Start starts the core part of the application
@@ -44,10 +33,8 @@ func (app *Application) Start() {
 
 //NewApplication creates new Application
 func NewApplication(version string, build string, storage Storage) *Application {
-	cvLock := &sync.RWMutex{}
-	avLock := &sync.RWMutex{}
 
-	application := Application{version: version, build: build, storage: storage, cvLock: cvLock, avLock: avLock}
+	application := Application{version: version, build: build, storage: storage}
 
 	//add the drivers ports/interfaces
 	application.Services = &servicesImpl{app: &application}

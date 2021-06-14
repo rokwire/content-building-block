@@ -38,7 +38,7 @@ func main() {
 		Version = "dev"
 	}
 
-	port := getEnvKey("PORT", true)
+	port := getEnvKey("CONTENT_PORT", true)
 
 	//mongoDB adapter
 	mongoDBAuth := getEnvKey("CONTENT_MONGO_AUTH", true)

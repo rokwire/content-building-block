@@ -21,8 +21,6 @@ import (
 	"log"
 	"strconv"
 	"time"
-
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 //Adapter implements the Storage interface
@@ -47,11 +45,4 @@ func NewStorageAdapter(mongoDBAuth string, mongoDBName string, mongoTimeout stri
 
 	db := &database{mongoDBAuth: mongoDBAuth, mongoDBName: mongoDBName, mongoTimeout: timeoutMS}
 	return &Adapter{db: db}
-}
-
-func abortTransaction(sessionContext mongo.SessionContext) {
-	err := sessionContext.AbortTransaction(sessionContext)
-	if err != nil {
-		log.Printf("error on aborting a transaction - %s", err)
-	}
 }
