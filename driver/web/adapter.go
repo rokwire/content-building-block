@@ -38,7 +38,8 @@ type Adapter struct {
 	auth          *Auth
 	authorization *casbin.Enforcer
 
-	apisHandler rest.ApisHandler
+	apisHandler      rest.ApisHandler
+	adminApisHandler rest.AdminApisHandler
 
 	app *core.Application
 }
@@ -72,17 +73,22 @@ func (we Adapter) Start() {
 	router := mux.NewRouter().StrictSlash(true)
 
 	// handle apis
-	subRouter := router.PathPrefix("/content").Subrouter()
-	subRouter.PathPrefix("/doc/ui").Handler(we.serveDocUI())
-	subRouter.HandleFunc("/doc", we.serveDoc)
-	subRouter.HandleFunc("/version", we.wrapFunc(we.apisHandler.Version)).Methods("GET")
+	contentRouter := router.PathPrefix("/content").Subrouter()
+	contentRouter.PathPrefix("/doc/ui").Handler(we.serveDocUI())
+	contentRouter.HandleFunc("/doc", we.serveDoc)
+	contentRouter.HandleFunc("/version", we.wrapFunc(we.apisHandler.Version)).Methods("GET")
 
-	// handle student guide apis
-	subRouter.HandleFunc("/student_guides", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetAllStudentGuides)).Methods("GET")
-	subRouter.HandleFunc("/student_guides/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuide)).Methods("GET")
-	subRouter.HandleFunc("/student_guides", we.adminAppIDTokenAuthWrapFunc(we.apisHandler.CreateStudentGuide)).Methods("POST")
-	subRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.apisHandler.UpdateStudentGuide)).Methods("PUT")
-	subRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.apisHandler.DeleteStudentGuide)).Methods("DELETE")
+	// handle student guide client apis
+	contentRouter.HandleFunc("/student_guides", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuides)).Methods("GET")
+	contentRouter.HandleFunc("/student_guides/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuide)).Methods("GET")
+
+	// handle student guide admin apis
+	adminSubRouter := contentRouter.PathPrefix("/admin").Subrouter()
+	adminSubRouter.HandleFunc("/student_guides", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.GetStudentGuides)).Methods("GET")
+	adminSubRouter.HandleFunc("/student_guides", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.CreateStudentGuide)).Methods("POST")
+	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.GetStudentGuide)).Methods("GET")
+	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.UpdateStudentGuide)).Methods("PUT")
+	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.DeleteStudentGuide)).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":"+we.port, router))
 }
@@ -232,7 +238,8 @@ func NewWebAdapter(host string, port string, app *core.Application, appKeys []st
 	authorization := casbin.NewEnforcer("driver/web/authorization_model.conf", "driver/web/authorization_policy.csv")
 
 	apisHandler := rest.NewApisHandler(app)
-	return Adapter{host: host, port: port, auth: auth, authorization: authorization, apisHandler: apisHandler, app: app}
+	adminApisHandler := rest.NewAdminApisHandler(app)
+	return Adapter{host: host, port: port, auth: auth, authorization: authorization, apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app}
 }
 
 //AppListener implements core.ApplicationListener interface

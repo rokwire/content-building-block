@@ -25,8 +25,8 @@ func (app *Application) getVersion() string {
 	return app.version
 }
 
-func (app *Application) getAllStudentGuides() ([]bson.M, error) {
-	items, err := app.storage.GetAllStudentGuides()
+func (app *Application) getStudentGuides(ids []string) ([]bson.M, error) {
+	items, err := app.storage.GetStudentGuides(ids)
 	if err != nil {
 		return nil, err
 	}

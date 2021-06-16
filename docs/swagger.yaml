@@ -9,42 +9,90 @@ info:
   title: Rokwire Content Building Block API
   version: 0.4.0
 paths:
+  /admin/student_guides:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves  all items
+      operationId: AdminGetStudentGuides
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Retrieves  all items
+      operationId: AdminCreateStudentGuide
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/student_guides/{id}:
+    delete:
+      description: Deletes a student guide with the specified id
+      operationId: AdminDeleteStudentGuide
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    get:
+      consumes:
+      - application/json
+      description: Retrieves  all items
+      operationId: AdminGetStudentGuide
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    put:
+      consumes:
+      - application/json
+      description: Updates a student guide with the specified id
+      operationId: AdminUpdateStudentGuide
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
   /student_guides:
     get:
       consumes:
       - application/json
       description: Retrieves  all items
-      operationId: getAllStudentGuides
+      operationId: GetStudentGuides
+      parameters:
+      - description: List of IDs of the desired records
+        in: query
+        name: ids
+        required: true
+        type: string
       responses:
         "200":
           description: ""
       security:
-      - RokwireAuth AdminUserAuth: []
-      tags:
-      - StudentGuides
-    post:
-      consumes:
-      - application/json
-      description: Retrieves  all items
-      operationId: CreateStudentGuide
-      responses:
-        "200":
-          description: ""
-      security:
-      - AdminUserAuth: []
+      - RokwireAuth: []
       tags:
       - StudentGuides
   /student_guides/{id}:
-    delete:
-      description: Deletes a student guide with the specified id
-      operationId: DeleteStudentGuide
-      responses:
-        "200":
-          description: ""
-      security:
-      - AdminUserAuth: []
-      tags:
-      - StudentGuides
     get:
       consumes:
       - application/json
@@ -56,21 +104,7 @@ paths:
         "200":
           description: ""
       security:
-      - RokwireAuth AdminUserAuth: []
-      tags:
-      - StudentGuides
-    put:
-      consumes:
-      - application/json
-      description: Updates a student guide with the specified id
-      operationId: UpdateStudentGuide
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: ""
-      security:
-      - AdminUserAuth: []
+      - RokwireAuth: []
       tags:
       - StudentGuides
   /version:

@@ -21,10 +21,9 @@ import (
 	"content/core"
 	"encoding/json"
 	"github.com/gorilla/mux"
-	"go.mongodb.org/mongo-driver/bson"
-	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 //ApisHandler handles the rest APIs implementation
@@ -42,60 +41,24 @@ func (h ApisHandler) Version(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(h.app.Services.GetVersion()))
 }
 
-// CreateStudentGuide retrieves  all items
+// GetStudentGuides retrieves  all items
 // @Description Retrieves  all items
 // @Tags StudentGuides
-// @ID CreateStudentGuide
+// @ID GetStudentGuides
+// @Param ids query string true "List of IDs of the desired records"
 // @Accept json
 // @Success 200
-// @Security AdminUserAuth
-// @Router /student_guides [post]
-func (h ApisHandler) CreateStudentGuide(w http.ResponseWriter, r *http.Request) {
-
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Error on marshal create a ctest - %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	var item bson.M
-	err = json.Unmarshal(data, &item)
-	if err != nil {
-		log.Printf("Error on unmarshal the create ctest request data - %s\n", err.Error())
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	createdItem, err := h.app.Services.CreateStudentGuide(item)
-	if err != nil {
-		log.Printf("Error on creatint item: %s\n", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	jsonData, err := json.Marshal(createdItem)
-	if err != nil {
-		log.Println("Error on marshal the new item")
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-	w.Write(jsonData)
-}
-
-// GetAllStudentGuides retrieves  all items
-// @Description Retrieves  all items
-// @Tags StudentGuides
-// @ID getAllStudentGuides
-// @Accept json
-// @Success 200
-// @Security RokwireAuth AdminUserAuth
+// @Security RokwireAuth
 // @Router /student_guides [get]
-func (h ApisHandler) GetAllStudentGuides(w http.ResponseWriter, r *http.Request) {
-	resData, err := h.app.Services.GetAllStudentGuides()
+func (h ApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
+	IDs := []string{}
+	IDskeys, ok := r.URL.Query()["ids"]
+	if ok && len(IDskeys[0]) > 0 {
+		extIDs := IDskeys[0]
+		IDs = strings.Split(extIDs, ",")
+	}
+
+	resData, err := h.app.Services.GetStudentGuides(IDs)
 	if err != nil {
 		log.Printf("Error on getting track items by external id - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -121,7 +84,7 @@ func (h ApisHandler) GetAllStudentGuides(w http.ResponseWriter, r *http.Request)
 // @Accept json
 // @Produce json
 // @Success 200
-// @Security RokwireAuth AdminUserAuth
+// @Security RokwireAuth
 // @Router /student_guides/{id} [get]
 func (h ApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -146,76 +109,12 @@ func (h ApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// UpdateStudentGuide Updates a student guide with the specified id
-// @Description Updates a student guide with the specified id
-// @Tags StudentGuides
-// @ID UpdateStudentGuide
-// @Accept json
-// @Produce json
-// @Success 200
-// @Security AdminUserAuth
-// @Router /student_guides/{id} [put]
-func (h ApisHandler) UpdateStudentGuide(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	guideID := vars["id"]
-
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Error on marshal create a ctest - %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	var item bson.M
-	err = json.Unmarshal(data, &item)
-	if err != nil {
-		log.Printf("Error on unmarshal the create ctest request data - %s\n", err.Error())
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	resData, err := h.app.Services.UpdateStudentGuide(guideID, item)
-	if err != nil {
-		log.Printf("Error on updating student guide with id - %s\n %s", guideID, err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	jsonData, err := json.Marshal(resData)
-	if err != nil {
-		log.Println("Error on marshal the new item")
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-	w.Write(jsonData)
-}
-
-// DeleteStudentGuide Deletes a student guide with the specified id
-// @Description Deletes a student guide with the specified id
-// @Tags StudentGuides
-// @ID DeleteStudentGuide
-// @Success 200
-// @Security AdminUserAuth
-// @Router /student_guides/{id} [delete]
-func (h ApisHandler) DeleteStudentGuide(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	guideID := vars["id"]
-
-	err := h.app.Services.DeleteStudentGuide(guideID)
-	if err != nil {
-		log.Printf("Error on deleting student guide with id - %s\n %s", guideID, err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-}
-
 //NewApisHandler creates new rest Handler instance
 func NewApisHandler(app *core.Application) ApisHandler {
 	return ApisHandler{app: app}
+}
+
+//NewAdminApisHandler creates new rest Handler instance
+func NewAdminApisHandler(app *core.Application) AdminApisHandler {
+	return AdminApisHandler{app: app}
 }
