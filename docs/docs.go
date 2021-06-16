@@ -28,11 +28,11 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/student_guides": {
+        "/admin/student_guides": {
             "get": {
                 "security": [
                     {
-                        "RokwireAuth AdminUserAuth": []
+                        "AdminUserAuth": []
                     }
                 ],
                 "description": "Retrieves  all items",
@@ -40,9 +40,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "StudentGuides"
+                    "Admin"
                 ],
-                "operationId": "getAllStudentGuides",
+                "operationId": "AdminGetStudentGuides",
                 "responses": {
                     "200": {
                         "description": ""
@@ -60,9 +60,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "StudentGuides"
+                    "Admin"
                 ],
-                "operationId": "CreateStudentGuide",
+                "operationId": "AdminCreateStudentGuide",
                 "responses": {
                     "200": {
                         "description": ""
@@ -70,11 +70,11 @@ var doc = `{
                 }
             }
         },
-        "/student_guides/{id}": {
+        "/admin/student_guides/{id}": {
             "get": {
                 "security": [
                     {
-                        "RokwireAuth AdminUserAuth": []
+                        "AdminUserAuth": []
                     }
                 ],
                 "description": "Retrieves  all items",
@@ -85,9 +85,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "StudentGuides"
+                    "Admin"
                 ],
-                "operationId": "GetStudentGuide",
+                "operationId": "AdminGetStudentGuide",
                 "responses": {
                     "200": {
                         "description": ""
@@ -108,9 +108,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "StudentGuides"
+                    "Admin"
                 ],
-                "operationId": "UpdateStudentGuide",
+                "operationId": "AdminUpdateStudentGuide",
                 "responses": {
                     "200": {
                         "description": ""
@@ -125,9 +125,65 @@ var doc = `{
                 ],
                 "description": "Deletes a student guide with the specified id",
                 "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminDeleteStudentGuide",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/student_guides": {
+            "get": {
+                "security": [
+                    {
+                        "RokwireAuth": []
+                    }
+                ],
+                "description": "Retrieves  all items",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
                     "StudentGuides"
                 ],
-                "operationId": "DeleteStudentGuide",
+                "operationId": "GetStudentGuides",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "List of IDs of the desired records",
+                        "name": "ids",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/student_guides/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "RokwireAuth": []
+                    }
+                ],
+                "description": "Retrieves  all items",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "StudentGuides"
+                ],
+                "operationId": "GetStudentGuide",
                 "responses": {
                     "200": {
                         "description": ""

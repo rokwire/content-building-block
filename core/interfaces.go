@@ -24,7 +24,7 @@ import (
 //Services exposes APIs for the driver adapters
 type Services interface {
 	GetVersion() string
-	GetAllStudentGuides() ([]bson.M, error)
+	GetStudentGuides(ids []string) ([]bson.M, error)
 	GetStudentGuide(id string) (bson.M, error)
 	CreateStudentGuide(item bson.M) (bson.M, error)
 	UpdateStudentGuide(id string, item bson.M) (bson.M, error)
@@ -39,8 +39,8 @@ func (s *servicesImpl) GetVersion() string {
 	return s.app.getVersion()
 }
 
-func (s *servicesImpl) GetAllStudentGuides() ([]bson.M, error) {
-	return s.app.getAllStudentGuides()
+func (s *servicesImpl) GetStudentGuides(ids []string) ([]bson.M, error) {
+	return s.app.getStudentGuides(ids)
 }
 
 func (s *servicesImpl) CreateStudentGuide(item bson.M) (bson.M, error) {
@@ -61,7 +61,7 @@ func (s *servicesImpl) DeleteStudentGuide(id string) error {
 
 //Storage is used by core to storage data - DB storage adapter, file storage adapter etc
 type Storage interface {
-	GetAllStudentGuides() ([]bson.M, error)
+	GetStudentGuides(ids []string) ([]bson.M, error)
 	GetStudentGuide(id string) (bson.M, error)
 	CreateStudentGuide(item bson.M) (bson.M, error)
 	UpdateStudentGuide(id string, item bson.M) (bson.M, error)

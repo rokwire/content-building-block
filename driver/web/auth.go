@@ -165,49 +165,6 @@ func (auth *AdminAuth) start() {
 
 }
 
-func (auth *AdminAuth) check1(w http.ResponseWriter, r *http.Request) (bool, string) {
-	//1. Get the token from the request
-	rawIDToken, tokenType, err := auth.getIDToken(r)
-	if err != nil {
-		auth.responseBadRequest(w)
-		return false, ""
-	}
-
-	//2. Get the group from the request
-	group := r.Header.Get("GROUP")
-	if len(group) <= 0 {
-		auth.responseBadRequest(w)
-		return false, ""
-	}
-
-	//3. Validate the token
-	idToken, err := auth.verify(*rawIDToken, *tokenType)
-	if err != nil {
-		log.Printf("error validating token - %s\n", err)
-
-		auth.responseUnauthorized(*rawIDToken, w)
-		return false, ""
-	}
-
-	//4. Get the user data from the token
-	var userData userData
-	if err := idToken.Claims(&userData); err != nil {
-		log.Printf("error getting user data from token - %s\n", err)
-
-		auth.responseUnauthorized(*rawIDToken, w)
-		return false, ""
-	}
-	//we must have UIuceduUIN
-	if userData.UIuceduUIN == nil {
-		log.Printf("error - missing uiuceuin data in the token - %s\n", err)
-
-		auth.responseUnauthorized(*rawIDToken, w)
-		return false, ""
-	}
-
-	return true, group
-}
-
 //gets the token from the request - as cookie or as Authorization header.
 //returns the id token and its type - mobile or web. If the token is taken by the cookie it is web otherwise it is mobile
 func (auth *AdminAuth) getIDToken(r *http.Request) (*string, *string, error) {
