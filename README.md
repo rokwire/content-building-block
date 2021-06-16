@@ -121,6 +121,6 @@ Response
 
 ## Documentation
 
-The documentation is placed here - https://api-dev.rokwire.illinois.edu/docs/?urls.primaryName=Health%20Building%20Block
+The documentation is placed here - https://api-dev.rokwire.illinois.edu/docs/
 
 Alternativelly the documentation is served by the service on the following url - https://api-dev.rokwire.illinois.edu/content/doc/ui/
