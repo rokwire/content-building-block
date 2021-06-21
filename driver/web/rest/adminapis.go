@@ -36,7 +36,7 @@ func (h AdminApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Reques
 
 	resData, err := h.app.Services.GetStudentGuides(IDs)
 	if err != nil {
-		log.Printf("Error on getting track items by external id - %s\n", err)
+		log.Printf("Error on getting guide items by id - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -100,7 +100,7 @@ func (h AdminApisHandler) UpdateStudentGuide(w http.ResponseWriter, r *http.Requ
 
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Printf("Error on marshal create a ctest - %s\n", err.Error())
+		log.Printf("Error on marshal create a student guide - %s\n", err.Error())
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
@@ -108,7 +108,7 @@ func (h AdminApisHandler) UpdateStudentGuide(w http.ResponseWriter, r *http.Requ
 	var item bson.M
 	err = json.Unmarshal(data, &item)
 	if err != nil {
-		log.Printf("Error on unmarshal the create ctest request data - %s\n", err.Error())
+		log.Printf("Error on unmarshal the create student guide request data - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -122,7 +122,7 @@ func (h AdminApisHandler) UpdateStudentGuide(w http.ResponseWriter, r *http.Requ
 
 	jsonData, err := json.Marshal(resData)
 	if err != nil {
-		log.Println("Error on marshal the new item")
+		log.Println("Error on marshal the updated student guide")
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
@@ -144,7 +144,7 @@ func (h AdminApisHandler) CreateStudentGuide(w http.ResponseWriter, r *http.Requ
 
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Printf("Error on marshal create a ctest - %s\n", err.Error())
+		log.Printf("Error on marshal create a student guide - %s\n", err.Error())
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
@@ -152,14 +152,14 @@ func (h AdminApisHandler) CreateStudentGuide(w http.ResponseWriter, r *http.Requ
 	var item bson.M
 	err = json.Unmarshal(data, &item)
 	if err != nil {
-		log.Printf("Error on unmarshal the create ctest request data - %s\n", err.Error())
+		log.Printf("Error on unmarshal the create student guide request data - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	createdItem, err := h.app.Services.CreateStudentGuide(item)
 	if err != nil {
-		log.Printf("Error on creatint item: %s\n", err)
+		log.Printf("Error on creating student guide: %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
