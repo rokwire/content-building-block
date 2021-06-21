@@ -60,7 +60,7 @@ func (h ApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
 
 	resData, err := h.app.Services.GetStudentGuides(IDs)
 	if err != nil {
-		log.Printf("Error on getting track items by external id - %s\n", err)
+		log.Printf("Error on getting track items by id - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
