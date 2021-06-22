@@ -43,6 +43,14 @@ var doc = `{
                     "Admin"
                 ],
                 "operationId": "AdminGetStudentGuides",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Coma separated IDs of the desired records",
+                        "name": "ids",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": ""
@@ -147,16 +155,15 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "StudentGuides"
+                    "Client"
                 ],
                 "operationId": "GetStudentGuides",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "List of IDs of the desired records",
+                        "description": "Coma separated IDs of the desired records",
                         "name": "ids",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -181,7 +188,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "StudentGuides"
+                    "Client"
                 ],
                 "operationId": "GetStudentGuide",
                 "responses": {
@@ -196,6 +203,9 @@ var doc = `{
                 "description": "Gives the service version.",
                 "produces": [
                     "text/plain"
+                ],
+                "tags": [
+                    "Client"
                 ],
                 "operationId": "Version",
                 "responses": {
