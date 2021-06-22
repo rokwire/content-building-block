@@ -18,7 +18,7 @@ type AdminApisHandler struct {
 
 // GetStudentGuides retrieves  all items
 // @Description Retrieves  all items
-// @Param ids query string true "List of IDs of the desired records"
+// @Param ids query string false "Coma separated IDs of the desired records"
 // @Tags Admin
 // @ID AdminGetStudentGuides
 // @Accept json

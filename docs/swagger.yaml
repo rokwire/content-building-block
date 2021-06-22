@@ -15,6 +15,11 @@ paths:
       - application/json
       description: Retrieves  all items
       operationId: AdminGetStudentGuides
+      parameters:
+      - description: Coma separated IDs of the desired records
+        in: query
+        name: ids
+        type: string
       responses:
         "200":
           description: ""
@@ -80,10 +85,9 @@ paths:
       description: Retrieves  all items
       operationId: GetStudentGuides
       parameters:
-      - description: List of IDs of the desired records
+      - description: Coma separated IDs of the desired records
         in: query
         name: ids
-        required: true
         type: string
       responses:
         "200":
@@ -91,7 +95,7 @@ paths:
       security:
       - RokwireAuth: []
       tags:
-      - StudentGuides
+      - Client
   /student_guides/{id}:
     get:
       consumes:
@@ -106,7 +110,7 @@ paths:
       security:
       - RokwireAuth: []
       tags:
-      - StudentGuides
+      - Client
   /version:
     get:
       description: Gives the service version.
@@ -116,6 +120,8 @@ paths:
       responses:
         "200":
           description: ""
+      tags:
+      - Client
 schemes:
 - https
 securityDefinitions:

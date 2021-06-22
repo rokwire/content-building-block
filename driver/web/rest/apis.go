@@ -33,6 +33,7 @@ type ApisHandler struct {
 
 //Version gives the service version
 // @Description Gives the service version.
+// @Tags Client
 // @ID Version
 // @Produce plain
 // @Success 200
@@ -43,9 +44,9 @@ func (h ApisHandler) Version(w http.ResponseWriter, r *http.Request) {
 
 // GetStudentGuides retrieves  all items
 // @Description Retrieves  all items
-// @Tags StudentGuides
+// @Tags Client
 // @ID GetStudentGuides
-// @Param ids query string true "List of IDs of the desired records"
+// @Param ids query string false "Coma separated IDs of the desired records"
 // @Accept json
 // @Success 200
 // @Security RokwireAuth
@@ -79,7 +80,7 @@ func (h ApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
 
 // GetStudentGuide Retrieves a student guide by id
 // @Description Retrieves  all items
-// @Tags StudentGuides
+// @Tags Client
 // @ID GetStudentGuide
 // @Accept json
 // @Produce json
