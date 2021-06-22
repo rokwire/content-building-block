@@ -15,7 +15,7 @@ The following Environment variables are supported. The service will not start un
 
 Name|Value|Required|Description
 ---|---|---|---
-PORT | < value > | yes | The port number of the listening port
+CONTENT_PORT | < value > | yes | The port number of the listening port
 CONTENT_AUTH_ISSUER | < value > | yes | Auth issuer base uri
 CONTENT_AUTH_KEYS | < value > | yes | Auth keys
 CONTENT_HOST | < value > | yes | Host name
@@ -27,7 +27,6 @@ CONTENT_OIDC_ADMIN_WEB_CLIENT_ID | < value > | yes | OIDC admin web client id
 CONTENT_OIDC_APP_CLIENT_ID | < value > | yes | OIDC app client id
 CONTENT_OIDC_PROVIDER | < value > | yes | OIDC provider
 CONTENT_PHONE_SECRET | < value > | yes | Phone secret
-CONTENT_PROVIDERS_KEY | <value1,value2,value3> | yes | Comma separated list of providers api keys
 ROKWIRE_API_KEYS | <value1,value2,value3> | yes | Comma separated list of rokwire api keys
 ### Run Application
 
