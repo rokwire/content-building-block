@@ -5,3 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.0.6] - 2021-06-23
+### Fixed
+- GET /student_guides results "null" response on missing data in the table [#8](https://github.com/rokwire/content-building-block/issues/8)
+- Improve documentation [#6](https://github.com/rokwire/content-building-block/issues/6)
+
+### Added
+- Implement student guide client & admin APIs [#1](https://github.com/rokwire/content-building-block/issues/1)
+
