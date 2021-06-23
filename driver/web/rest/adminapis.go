@@ -41,6 +41,10 @@ func (h AdminApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	if resData == nil {
+		resData = []bson.M{}
+	}
+
 	data, err := json.Marshal(resData)
 	if err != nil {
 		log.Println("Error on marshal all student guides")

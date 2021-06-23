@@ -21,6 +21,7 @@ import (
 	"content/core"
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/bson"
 	"log"
 	"net/http"
 	"strings"
@@ -64,6 +65,10 @@ func (h ApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Error on getting track items by id - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+
+	if resData == nil {
+		resData = []bson.M{}
 	}
 
 	data, err := json.Marshal(resData)
