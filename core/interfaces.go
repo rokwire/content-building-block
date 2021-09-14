@@ -18,6 +18,7 @@
 package core
 
 import (
+	"content/core/model"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -29,6 +30,8 @@ type Services interface {
 	CreateStudentGuide(item bson.M) (bson.M, error)
 	UpdateStudentGuide(id string, item bson.M) (bson.M, error)
 	DeleteStudentGuide(id string) error
+
+	UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (bson.M, error)
 }
 
 type servicesImpl struct {
@@ -57,6 +60,10 @@ func (s *servicesImpl) UpdateStudentGuide(id string, item bson.M) (bson.M, error
 
 func (s *servicesImpl) DeleteStudentGuide(id string) error {
 	return s.app.deleteStudentGuide(id)
+}
+
+func (s *servicesImpl) UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (bson.M, error) {
+	return s.app.uploadImage(fileName, filetype, bytes, path, spec)
 }
 
 //Storage is used by core to storage data - DB storage adapter, file storage adapter etc

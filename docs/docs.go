@@ -143,6 +143,31 @@ var doc = `{
                 }
             }
         },
+        "/image": {
+            "post": {
+                "security": [
+                    {
+                        "RokwireAuth": []
+                    }
+                ],
+                "description": "Uploads an image to AWS S3",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Client"
+                ],
+                "operationId": "AdminUpdateStudentGuide",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/student_guides": {
             "get": {
                 "security": [

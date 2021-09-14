@@ -18,7 +18,10 @@
 package core
 
 import (
+	"content/core/model"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
+	"strings"
 )
 
 func (app *Application) getVersion() string {
@@ -60,4 +63,44 @@ func (app *Application) updateStudentGuide(id string, item bson.M) (bson.M, erro
 func (app *Application) deleteStudentGuide(id string) error {
 	err := app.storage.DeleteStudentGuide(id)
 	return err
+}
+
+func (app *Application) uploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (bson.M, error) {
+
+	err := app.tempStorageAdapter.Save(fileName, filetype, bytes)
+	if err != nil {
+		return nil, fmt.Errorf("Unable to save file: %s", err)
+	}
+
+	inputFileName := fileName
+	outputFileName := fmt.Sprintf("%s.%s", strings.Split(fileName, ".")[0], "webp") //get the file name without the extension
+	err = app.webpAdapter.Convert(inputFileName, outputFileName, spec)
+	if err != nil {
+		app.tempStorageAdapter.Delete(inputFileName)
+		app.tempStorageAdapter.Delete(outputFileName)
+		return nil, fmt.Errorf("Unable to convert to webp file: %s", err)
+	}
+
+	convertedFile, err := app.tempStorageAdapter.Read(outputFileName)
+	if err != nil {
+		app.tempStorageAdapter.Delete(inputFileName)
+		app.tempStorageAdapter.Delete(outputFileName)
+		return nil, fmt.Errorf("Unable to read webp file: %s", err)
+	}
+
+	url, err := app.awsAdapter.CreateImage(convertedFile, path)
+	if err != nil {
+		app.tempStorageAdapter.Delete(inputFileName)
+		app.tempStorageAdapter.Delete(outputFileName)
+		return nil, fmt.Errorf("Unable to upload to S3: %s", err)
+	}
+
+	app.tempStorageAdapter.Delete(inputFileName)
+	app.tempStorageAdapter.Delete(outputFileName)
+
+	if url != nil {
+		return bson.M{"url": url}, nil
+	}
+
+	return nil, nil
 }

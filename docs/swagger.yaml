@@ -78,6 +78,21 @@ paths:
       - AdminUserAuth: []
       tags:
       - Admin
+  /image:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Uploads an image to AWS S3
+      operationId: AdminUpdateStudentGuide
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - RokwireAuth: []
+      tags:
+      - Client
   /student_guides:
     get:
       consumes:

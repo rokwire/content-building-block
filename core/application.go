@@ -17,6 +17,12 @@
 
 package core
 
+import (
+	"content/driven/awsstorage"
+	"content/driven/tempstorage"
+	"content/driven/webp"
+)
+
 //Application represents the core application code based on hexagonal architecture
 type Application struct {
 	version string
@@ -24,7 +30,10 @@ type Application struct {
 
 	Services Services //expose to the drivers adapters
 
-	storage Storage
+	storage            Storage
+	awsAdapter         *awsstorage.Adapter
+	tempStorageAdapter *tempstorage.Adapter
+	webpAdapter        *webp.Adapter
 }
 
 //Start starts the core part of the application
@@ -32,9 +41,9 @@ func (app *Application) Start() {
 }
 
 //NewApplication creates new Application
-func NewApplication(version string, build string, storage Storage) *Application {
+func NewApplication(version string, build string, storage Storage, awsAdapter *awsstorage.Adapter, tempStorageAdapter *tempstorage.Adapter, webpAdapter *webp.Adapter) *Application {
 
-	application := Application{version: version, build: build, storage: storage}
+	application := Application{version: version, build: build, storage: storage, awsAdapter: awsAdapter, tempStorageAdapter: tempStorageAdapter, webpAdapter: webpAdapter}
 
 	//add the drivers ports/interfaces
 	application.Services = &servicesImpl{app: &application}
