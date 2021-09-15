@@ -205,7 +205,7 @@ func (h AdminApisHandler) DeleteStudentGuide(w http.ResponseWriter, r *http.Requ
 
 // UploadImage Uploads an image to AWS S3
 // @Description Uploads an image to AWS S3
-// @Tags Client
+// @Tags Admin
 // @ID AdminUploadImage
 // @Param path body string true "path - path within the S3 bucket"
 // @Param width body string false "width - width of the image to resize. If width and height are missing - then the new image will use the original size"

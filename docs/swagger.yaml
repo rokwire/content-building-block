@@ -52,7 +52,7 @@ paths:
       security:
       - AdminUserAuth: []
       tags:
-      - Client
+      - Admin
   /admin/student_guides:
     get:
       consumes:
