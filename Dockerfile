@@ -2,6 +2,9 @@ FROM golang:1.16-buster as builder
 
 ENV CGO_ENABLED=0
 
+RUN apt-get update -y
+RUN apt-get install -y webp libwebp-dev
+
 RUN mkdir /content-app
 WORKDIR /content-app
 # Copy the source from the current directory to the Working Directory inside the container
@@ -12,6 +15,10 @@ FROM alpine:3.13
 
 #we need timezone database
 RUN apk --no-cache add tzdata
+
+RUN apk update && \
+    apk upgrade -U && \
+    apk add ca-certificates ffmpeg libwebp libwebp-tools libwebp-dev
 
 COPY --from=builder /content-app/bin/content /
 COPY --from=builder /content-app/docs/swagger.yaml /docs/swagger.yaml
