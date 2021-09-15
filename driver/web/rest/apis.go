@@ -124,6 +124,11 @@ func (h ApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request) {
 // @Description Uploads an image to AWS S3
 // @Tags Client
 // @ID AdminUpdateStudentGuide
+// @Param path body string true "path - path within the S3 bucket"
+// @Param width body string false "width - width of the image to resize. If width and height are missing - then the new image will use the original size"
+// @Param height body string false "height - height of the image to resize. If width and height are missing - then the new image will use the original size"
+// @Param quality body string false "quality - quality of the image. Default: 90"
+// @Param fileName body string false "fileName - the uploaded file name"
 // @Accept multipart/form-data
 // @Produce json
 // @Success 200

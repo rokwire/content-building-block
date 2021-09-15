@@ -9,6 +9,50 @@ info:
   title: Rokwire Content Building Block API
   version: 0.4.0
 paths:
+  /admin/image:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Uploads an image to AWS S3
+      operationId: AdminUploadImage
+      parameters:
+      - description: path - path within the S3 bucket
+        in: body
+        name: path
+        required: true
+        schema:
+          type: string
+      - description: width - width of the image to resize. If width and height are
+          missing - then the new image will use the original size
+        in: body
+        name: width
+        schema:
+          type: string
+      - description: height - height of the image to resize. If width and height are
+          missing - then the new image will use the original size
+        in: body
+        name: height
+        schema:
+          type: string
+      - description: 'quality - quality of the image. Default: 90'
+        in: body
+        name: quality
+        schema:
+          type: string
+      - description: fileName - the uploaded file name
+        in: body
+        name: fileName
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Client
   /admin/student_guides:
     get:
       consumes:
@@ -84,6 +128,35 @@ paths:
       - multipart/form-data
       description: Uploads an image to AWS S3
       operationId: AdminUpdateStudentGuide
+      parameters:
+      - description: path - path within the S3 bucket
+        in: body
+        name: path
+        required: true
+        schema:
+          type: string
+      - description: width - width of the image to resize. If width and height are
+          missing - then the new image will use the original size
+        in: body
+        name: width
+        schema:
+          type: string
+      - description: height - height of the image to resize. If width and height are
+          missing - then the new image will use the original size
+        in: body
+        name: height
+        schema:
+          type: string
+      - description: 'quality - quality of the image. Default: 90'
+        in: body
+        name: quality
+        schema:
+          type: string
+      - description: fileName - the uploaded file name
+        in: body
+        name: fileName
+        schema:
+          type: string
       produces:
       - application/json
       responses:

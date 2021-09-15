@@ -28,6 +28,74 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/admin/image": {
+            "post": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Uploads an image to AWS S3",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Client"
+                ],
+                "operationId": "AdminUploadImage",
+                "parameters": [
+                    {
+                        "description": "path - path within the S3 bucket",
+                        "name": "path",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "width - width of the image to resize. If width and height are missing - then the new image will use the original size",
+                        "name": "width",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "height - height of the image to resize. If width and height are missing - then the new image will use the original size",
+                        "name": "height",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "quality - quality of the image. Default: 90",
+                        "name": "quality",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "fileName - the uploaded file name",
+                        "name": "fileName",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/admin/student_guides": {
             "get": {
                 "security": [
@@ -161,6 +229,49 @@ var doc = `{
                     "Client"
                 ],
                 "operationId": "AdminUpdateStudentGuide",
+                "parameters": [
+                    {
+                        "description": "path - path within the S3 bucket",
+                        "name": "path",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "width - width of the image to resize. If width and height are missing - then the new image will use the original size",
+                        "name": "width",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "height - height of the image to resize. If width and height are missing - then the new image will use the original size",
+                        "name": "height",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "quality - quality of the image. Default: 90",
+                        "name": "quality",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "fileName - the uploaded file name",
+                        "name": "fileName",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": ""
