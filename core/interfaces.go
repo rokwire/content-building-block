@@ -22,7 +22,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-//Services exposes APIs for the driver adapters
+// Services exposes APIs for the driver adapters
 type Services interface {
 	GetVersion() string
 	GetStudentGuides(ids []string) ([]bson.M, error)
@@ -32,6 +32,7 @@ type Services interface {
 	DeleteStudentGuide(id string) error
 
 	UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (bson.M, error)
+	GetTwitterPosts(count int, force bool) (map[string]interface{}, error)
 }
 
 type servicesImpl struct {
@@ -66,7 +67,11 @@ func (s *servicesImpl) UploadImage(fileName string, filetype string, bytes []byt
 	return s.app.uploadImage(fileName, filetype, bytes, path, spec)
 }
 
-//Storage is used by core to storage data - DB storage adapter, file storage adapter etc
+func (s *servicesImpl) GetTwitterPosts(count int, force bool) (map[string]interface{}, error) {
+	return s.app.getTwitterPosts(count, force)
+}
+
+// Storage is used by core to storage data - DB storage adapter, file storage adapter etc
 type Storage interface {
 	GetStudentGuides(ids []string) ([]bson.M, error)
 	GetStudentGuide(id string) (bson.M, error)

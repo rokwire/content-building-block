@@ -199,6 +199,29 @@ paths:
       - RokwireAuth: []
       tags:
       - Client
+  /twitter/posts:
+    get:
+      description: Retrieves top most Twitter posts
+      operationId: GetTweeterPosts
+      parameters:
+      - description: 'count - the number of the tweets that will be retrieved. Default:
+          5'
+        in: query
+        name: count
+        type: string
+      - description: 'force - Forced refresh. Default: false'
+        in: query
+        name: force
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - RokwireAuth: []
+      tags:
+      - Client
   /version:
     get:
       description: Gives the service version.

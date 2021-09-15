@@ -21,8 +21,10 @@ import (
 	"content/core"
 	"content/core/model"
 	"content/driven/awsstorage"
+	cacheadapter "content/driven/cache"
 	storage "content/driven/storage"
 	"content/driven/tempstorage"
+	"content/driven/twitter"
 	"content/driven/webp"
 	driver "content/driver/web"
 	"log"
@@ -66,8 +68,14 @@ func main() {
 
 	webpAdapter := webp.NewWebpAdapter()
 
+	cacheAdapter := cacheadapter.NewCacheAdapter()
+
+	twitterFeedURL := getEnvKey("TWITTER_FEED_URL", true)
+	twitterAccessToken := getEnvKey("TWITTER_ACCESS_TOKEN", true)
+	twitterAdapter := twitter.NewTwitterAdapter(twitterFeedURL, twitterAccessToken)
+
 	//application
-	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, tempStorageAdapter, webpAdapter)
+	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, tempStorageAdapter, webpAdapter, twitterAdapter, cacheAdapter)
 	application.Start()
 
 	//web adapter
