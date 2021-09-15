@@ -91,7 +91,7 @@ func (we Adapter) Start() {
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.GetStudentGuide)).Methods("GET")
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.UpdateStudentGuide)).Methods("PUT")
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.DeleteStudentGuide)).Methods("DELETE")
-	adminSubRouter.HandleFunc("/image", we.apiKeyOrTokenWrapFunc(we.adminApisHandler.UploadImage)).Methods("POST")
+	adminSubRouter.HandleFunc("/image", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.UploadImage)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+we.port, router))
 }
