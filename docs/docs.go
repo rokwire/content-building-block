@@ -43,7 +43,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Client"
+                    "Admin"
                 ],
                 "operationId": "AdminUploadImage",
                 "parameters": [

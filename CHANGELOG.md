@@ -5,8 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed 
+- Fixed API doc[#10](https://github.com/rokwire/content-building-block/issues/10)
 
 ## [1.0.7] - 2021-09-15
+### Added
 - Implement upload image api [#10](https://github.com/rokwire/content-building-block/issues/10)
 - Implement Twitter feed api [#11](https://github.com/rokwire/content-building-block/issues/11)
 ## [1.0.6] - 2021-06-23
