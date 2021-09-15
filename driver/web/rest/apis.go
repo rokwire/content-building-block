@@ -205,6 +205,40 @@ func (h ApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
+// GetTweeterPosts Retrieves top most Twitter posts
+// @Description Retrieves top most Twitter posts
+// @Tags Client
+// @ID GetTweeterPosts
+// @Param count query string false "count - the number of the tweets that will be retrieved. Default: 5"
+// @Param force query string false "force - Forced refresh. Default: false"
+// @Produce json
+// @Success 200
+// @Security RokwireAuth
+// @Router /twitter/posts [get]
+func (h ApisHandler) GetTweeterPosts(w http.ResponseWriter, r *http.Request) {
+	defaultCount := 5
+	count := getIntQueryParam(r, "count", defaultCount)
+	force := getBoolQueryParam(r, "force", false)
+
+	resData, err := h.app.Services.GetTwitterPosts(count, force)
+	if err != nil {
+		log.Printf("Error on getting Twitter Posts: %s", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Printf("Error on marshal the Twitter Posts: %s", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 func intPostValueFromString(stringValue string) int {
 	var value int
 	if len(stringValue) > 0 {

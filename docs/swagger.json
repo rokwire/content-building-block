@@ -322,6 +322,42 @@
                 }
             }
         },
+        "/twitter/posts": {
+            "get": {
+                "security": [
+                    {
+                        "RokwireAuth": []
+                    }
+                ],
+                "description": "Retrieves top most Twitter posts",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Client"
+                ],
+                "operationId": "GetTweeterPosts",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "count - the number of the tweets that will be retrieved. Default: 5",
+                        "name": "count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "force - Forced refresh. Default: false",
+                        "name": "force",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/version": {
             "get": {
                 "description": "Gives the service version.",
