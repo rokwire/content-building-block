@@ -81,6 +81,7 @@ func (we Adapter) Start() {
 	// handle student guide client apis
 	contentRouter.HandleFunc("/student_guides", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuides)).Methods("GET")
 	contentRouter.HandleFunc("/student_guides/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuide)).Methods("GET")
+	contentRouter.HandleFunc("/image", we.apiKeyOrTokenWrapFunc(we.apisHandler.UploadImage)).Methods("POST")
 
 	// handle student guide admin apis
 	adminSubRouter := contentRouter.PathPrefix("/admin").Subrouter()
@@ -89,6 +90,7 @@ func (we Adapter) Start() {
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.GetStudentGuide)).Methods("GET")
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.UpdateStudentGuide)).Methods("PUT")
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.DeleteStudentGuide)).Methods("DELETE")
+	adminSubRouter.HandleFunc("/image", we.apiKeyOrTokenWrapFunc(we.adminApisHandler.UploadImage)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+we.port, router))
 }
@@ -230,9 +232,8 @@ func (auth *AdminAuth) check(w http.ResponseWriter, r *http.Request) (bool, *mod
 }
 
 //NewWebAdapter creates new WebAdapter instance
-func NewWebAdapter(host string, port string, app *core.Application, appKeys []string, oidcProvider string,
-	oidcAppClientID string, adminAppClientID string, adminWebAppClientID string, phoneAuthSecret string,
-	authKeys string, authIssuer string) Adapter {
+func NewWebAdapter(host string, port string, app *core.Application, appKeys []string, oidcProvider string, oidcAppClientID string, adminAppClientID string,
+	adminWebAppClientID string, phoneAuthSecret string, authKeys string, authIssuer string) Adapter {
 	auth := NewAuth(app, appKeys, oidcProvider, oidcAppClientID, adminAppClientID, adminWebAppClientID,
 		phoneAuthSecret, authKeys, authIssuer)
 	authorization := casbin.NewEnforcer("driver/web/authorization_model.conf", "driver/web/authorization_policy.csv")
