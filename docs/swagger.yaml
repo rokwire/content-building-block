@@ -199,19 +199,16 @@ paths:
       - RokwireAuth: []
       tags:
       - Client
-  /twitter/posts:
+  /twitter/users/{user_id}/tweets:
     get:
-      description: Retrieves top most Twitter posts
+      description: Retrieves Twitter tweets for the specified user id. This API is
+        intended to be invoked with the original Twitter query params to https://api.twitter.com/2/users/%s/tweets
       operationId: GetTweeterPosts
       parameters:
-      - description: 'count - the number of the tweets that will be retrieved. Default:
-          5'
-        in: query
-        name: count
-        type: string
-      - description: 'force - Forced refresh. Default: false'
-        in: query
-        name: force
+      - description: id
+        in: path
+        name: id
+        required: true
         type: string
       produces:
       - application/json

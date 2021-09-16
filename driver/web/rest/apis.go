@@ -205,22 +205,36 @@ func (h ApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
-// GetTweeterPosts Retrieves top most Twitter posts
-// @Description Retrieves top most Twitter posts
+// GetTweeterPosts Retrieves Twitter tweets for the specified user id. This API is intended to be invoked with the original Twitter query params to https://api.twitter.com/2/users/%s/tweets
+// @Description Retrieves Twitter tweets for the specified user id. This API is intended to be invoked with the original Twitter query params to https://api.twitter.com/2/users/%s/tweets
 // @Tags Client
 // @ID GetTweeterPosts
-// @Param count query string false "count - the number of the tweets that will be retrieved. Default: 5"
-// @Param force query string false "force - Forced refresh. Default: false"
+// @Param id path string true "id"
 // @Produce json
 // @Success 200
 // @Security RokwireAuth
-// @Router /twitter/posts [get]
+// @Router /twitter/users/{user_id}/tweets [get]
 func (h ApisHandler) GetTweeterPosts(w http.ResponseWriter, r *http.Request) {
-	defaultCount := 5
-	count := getIntQueryParam(r, "count", defaultCount)
-	force := getBoolQueryParam(r, "force", false)
+	vars := mux.Vars(r)
+	userID := vars["user_id"]
 
-	resData, err := h.app.Services.GetTwitterPosts(count, force)
+	if userID == "" {
+		log.Printf("user_id is required query param")
+		http.Error(w, "user_id is required query param", http.StatusBadRequest)
+		return
+	}
+
+	twitterQueryParams := r.URL.RawQuery
+	if twitterQueryParams == "" {
+		log.Printf("Missing raw query params for Twitter")
+		http.Error(w, "Missing raw query params for Twitter", http.StatusBadRequest)
+		return
+	}
+
+	cacheControl := r.Header.Get("Cache-Control")
+	force := cacheControl == "no-cache"
+
+	resData, err := h.app.Services.GetTwitterPosts(userID, twitterQueryParams, force)
 	if err != nil {
 		log.Printf("Error on getting Twitter Posts: %s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -334,14 +334,14 @@ var doc = `{
                 }
             }
         },
-        "/twitter/posts": {
+        "/twitter/users/{user_id}/tweets": {
             "get": {
                 "security": [
                     {
                         "RokwireAuth": []
                     }
                 ],
-                "description": "Retrieves top most Twitter posts",
+                "description": "Retrieves Twitter tweets for the specified user id. This API is intended to be invoked with the original Twitter query params to https://api.twitter.com/2/users/%s/tweets",
                 "produces": [
                     "application/json"
                 ],
@@ -352,15 +352,10 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "count - the number of the tweets that will be retrieved. Default: 5",
-                        "name": "count",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "force - Forced refresh. Default: false",
-                        "name": "force",
-                        "in": "query"
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
