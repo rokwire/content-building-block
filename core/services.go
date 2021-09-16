@@ -105,16 +105,19 @@ func (app *Application) uploadImage(fileName string, filetype string, bytes []by
 	return nil, nil
 }
 
-func (app *Application) getTwitterPosts(count int, force bool) (map[string]interface{}, error) {
+func (app *Application) getTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error) {
 	var err error
-	posts := app.cacheAdapter.GetTwitterPosts(count)
+	posts := app.cacheAdapter.GetTwitterPosts(userID, twitterQueryParams)
 	if posts == nil || force {
 		app.cacheLock.Lock()
-		posts = app.cacheAdapter.GetTwitterPosts(count)
+		posts = app.cacheAdapter.GetTwitterPosts(userID, twitterQueryParams)
 		if posts == nil || force {
-			posts, err = app.twitterAdapter.GetTwitterPosts(count)
+			if force {
+				app.cacheAdapter.ClearTwitterCacheForUser(userID)
+			}
+			posts, err = app.twitterAdapter.GetTwitterPosts(userID, twitterQueryParams)
 			if err == nil {
-				app.cacheAdapter.SetTwitterPosts(count, posts)
+				app.cacheAdapter.SetTwitterPosts(userID, twitterQueryParams, posts)
 			}
 			app.cacheLock.Unlock()
 		}

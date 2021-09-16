@@ -23,8 +23,9 @@ func NewTwitterAdapter(twitterFeedURL string, twitterAccessToken string) *Adapte
 }
 
 // GetTwitterPosts converts an image
-func (a *Adapter) GetTwitterPosts(count int) (map[string]interface{}, error) {
-	url := fmt.Sprintf(a.twitterFeedURL, count)
+func (a *Adapter) GetTwitterPosts(userID string, twitterQueryParams string) (map[string]interface{}, error) {
+	url := fmt.Sprintf(a.twitterFeedURL, userID)
+	url += fmt.Sprintf("?%s", twitterQueryParams)
 
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)

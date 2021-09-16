@@ -32,7 +32,7 @@ type Services interface {
 	DeleteStudentGuide(id string) error
 
 	UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (bson.M, error)
-	GetTwitterPosts(count int, force bool) (map[string]interface{}, error)
+	GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error)
 }
 
 type servicesImpl struct {
@@ -67,8 +67,8 @@ func (s *servicesImpl) UploadImage(fileName string, filetype string, bytes []byt
 	return s.app.uploadImage(fileName, filetype, bytes, path, spec)
 }
 
-func (s *servicesImpl) GetTwitterPosts(count int, force bool) (map[string]interface{}, error) {
-	return s.app.getTwitterPosts(count, force)
+func (s *servicesImpl) GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error) {
+	return s.app.getTwitterPosts(userID, twitterQueryParams, force)
 }
 
 // Storage is used by core to storage data - DB storage adapter, file storage adapter etc
