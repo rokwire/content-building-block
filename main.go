@@ -68,7 +68,8 @@ func main() {
 
 	webpAdapter := webp.NewWebpAdapter()
 
-	cacheAdapter := cacheadapter.NewCacheAdapter()
+	defaultCacheExpirationSeconds := getEnvKey("DEFAULT_CACHE_EXPIRATION_SECONDS", false)
+	cacheAdapter := cacheadapter.NewCacheAdapter(defaultCacheExpirationSeconds)
 
 	twitterFeedURL := getEnvKey("TWITTER_FEED_URL", true)
 	twitterAccessToken := getEnvKey("TWITTER_ACCESS_TOKEN", true)

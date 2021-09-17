@@ -3,13 +3,9 @@ package cacheadapter
 import (
 	"fmt"
 	"github.com/patrickmn/go-cache"
+	"strconv"
 	"strings"
 	"time"
-)
-
-const (
-	// DefaultExpireDuration default duration
-	DefaultExpireDuration = 2 * time.Minute
 )
 
 // CacheAdapter structure
@@ -18,8 +14,17 @@ type CacheAdapter struct {
 }
 
 // NewCacheAdapter creates new instance
-func NewCacheAdapter() *CacheAdapter {
-	cache := cache.New(DefaultExpireDuration, DefaultExpireDuration)
+func NewCacheAdapter(defaultCacheExpirationSeconds string) *CacheAdapter {
+
+	val, err := strconv.ParseInt(defaultCacheExpirationSeconds, 0, 64)
+	var duration time.Duration
+	if val == 0 || err != nil {
+		duration = 120 * time.Second
+	} else {
+		duration = time.Duration(val) * time.Second
+	}
+
+	cache := cache.New(duration, duration)
 
 	return &CacheAdapter{
 		cache: cache,
