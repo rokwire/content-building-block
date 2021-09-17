@@ -132,7 +132,7 @@ func (h ApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request) {
 // @Accept multipart/form-data
 // @Produce json
 // @Success 200
-// @Security RokwireAuth
+// @Security UserAuth
 // @Router /image [post]
 func (h ApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 	//validate the image type

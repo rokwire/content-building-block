@@ -46,7 +46,7 @@ type Adapter struct {
 
 // @title Rokwire Content Building Block API
 // @description Rokwire Content Building Block API Documentation.
-// @version 1.0.7
+// @version 1.0.8
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host localhost
@@ -56,6 +56,10 @@ type Adapter struct {
 // @securityDefinitions.apikey RokwireAuth
 // @in header
 // @name ROKWIRE-API-KEY
+
+// @securityDefinitions.apikey UserAuth
+// @in header (add Bearer prefix to the Authorization value)
+// @name Authorization
 
 // @securityDefinitions.apikey AdminUserAuth
 // @in header (add Bearer prefix to the Authorization value)
@@ -81,7 +85,7 @@ func (we Adapter) Start() {
 	// handle student guide client apis
 	contentRouter.HandleFunc("/student_guides", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuides)).Methods("GET")
 	contentRouter.HandleFunc("/student_guides/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuide)).Methods("GET")
-	contentRouter.HandleFunc("/image", we.apiKeyOrTokenWrapFunc(we.apisHandler.UploadImage)).Methods("POST")
+	contentRouter.HandleFunc("/image", we.userAuthWrapFunc(we.apisHandler.UploadImage)).Methods("POST")
 	contentRouter.HandleFunc("/twitter/users/{user_id}/tweets", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetTweeterPosts)).Methods("GET")
 
 	// handle student guide admin apis

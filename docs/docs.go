@@ -215,7 +215,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "RokwireAuth": []
+                        "UserAuth": []
                     }
                 ],
                 "description": "Uploads an image to AWS S3",
@@ -398,6 +398,11 @@ var doc = `{
             "type": "apiKey",
             "name": "ROKWIRE-API-KEY",
             "in": "header"
+        },
+        "UserAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header (add Bearer prefix to the Authorization value)"
         }
     }
 }`
@@ -413,7 +418,7 @@ type swaggerInfo struct {
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
-	Version:     "1.0.7",
+	Version:     "1.0.8",
 	Host:        "localhost",
 	BasePath:    "/content",
 	Schemes:     []string{"https"},

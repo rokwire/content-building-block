@@ -28,6 +28,13 @@ CONTENT_OIDC_APP_CLIENT_ID | < value > | yes | OIDC app client id
 CONTENT_OIDC_PROVIDER | < value > | yes | OIDC provider
 CONTENT_PHONE_SECRET | < value > | yes | Phone secret
 ROKWIRE_API_KEYS | <value1,value2,value3> | yes | Comma separated list of rokwire api keys
+AWS_ACCESS_KEY_ID | < value > | yes | AWS Access key ID
+AWS_SECRET_ACCESS_KEY | < value > | yes | AWS Secret access ket
+S3_BUCKET | < value > | yes | AWS S3 bucket name
+S3_REGION | < value > | yes | AWS S3 region name
+TWITTER_FEED_URL | < value > | yes | Twitter Feed base URL
+TWITTER_ACCESS_TOKEN | < value > | yes | Twitter Bearer access token
+DEFAULT_CACHE_EXPIRATION_SECONDS | < value > | false | Default cache expiration time in seconds. Default: 120
 ### Run Application
 
 #### Run locally without Docker
@@ -45,7 +52,7 @@ $ make
 
 4. Run the executable
 ```
-$ ./bin/health
+$ ./bin/content
 ```
 
 #### Run locally as Docker container
@@ -122,4 +129,4 @@ Response
 
 The documentation is placed here - https://api-dev.rokwire.illinois.edu/docs/
 
-Alternativelly the documentation is served by the service on the following url - https://api-dev.rokwire.illinois.edu/content/doc/ui/
+Alternatively the documentation is served by the service on the following url - https://api-dev.rokwire.illinois.edu/content/doc/ui/
