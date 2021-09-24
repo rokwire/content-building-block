@@ -88,12 +88,12 @@ func (we Adapter) Start() {
 
 	// handle student guide admin apis
 	adminSubRouter := contentRouter.PathPrefix("/admin").Subrouter()
-	adminSubRouter.HandleFunc("/student_guides", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.GetStudentGuides)).Methods("GET")
-	adminSubRouter.HandleFunc("/student_guides", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.CreateStudentGuide)).Methods("POST")
-	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.GetStudentGuide)).Methods("GET")
-	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.UpdateStudentGuide)).Methods("PUT")
-	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.DeleteStudentGuide)).Methods("DELETE")
-	adminSubRouter.HandleFunc("/image", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.UploadImage)).Methods("POST")
+	adminSubRouter.HandleFunc("/student_guides", we.adminIDTokenAuthWrapFunc(we.adminApisHandler.GetStudentGuides)).Methods("GET")
+	adminSubRouter.HandleFunc("/student_guides", we.adminIDTokenAuthWrapFunc(we.adminApisHandler.CreateStudentGuide)).Methods("POST")
+	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminIDTokenAuthWrapFunc(we.adminApisHandler.GetStudentGuide)).Methods("GET")
+	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminIDTokenAuthWrapFunc(we.adminApisHandler.UpdateStudentGuide)).Methods("PUT")
+	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminIDTokenAuthWrapFunc(we.adminApisHandler.DeleteStudentGuide)).Methods("DELETE")
+	adminSubRouter.HandleFunc("/image", we.adminIDTokenAuthWrapFunc(we.adminApisHandler.UploadImage)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+we.port, router))
 }
@@ -161,7 +161,7 @@ func (we Adapter) userAuthWrapFunc(handler userAuthFunc) http.HandlerFunc {
 
 type adminAuthFunc = func(http.ResponseWriter, *http.Request)
 
-func (we Adapter) adminAppIDTokenAuthWrapFunc(handler adminAuthFunc) http.HandlerFunc {
+func (we Adapter) adminIDTokenAuthWrapFunc(handler adminAuthFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		utils.LogRequest(req)
 

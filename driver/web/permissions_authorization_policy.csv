@@ -1,0 +1,2 @@
+p, student_guides, /admin/student_guides, (GET)|(POST)|(PUT)|(DELETE)
+p, admin_image, /admin/image, (POST)
