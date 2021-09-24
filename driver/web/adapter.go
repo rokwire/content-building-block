@@ -19,7 +19,6 @@ package web
 
 import (
 	"content/core"
-	"content/core/model"
 	"content/driver/web/rest"
 	"content/utils"
 	"fmt"
@@ -27,17 +26,16 @@ import (
 	"net/http"
 
 	"github.com/casbin/casbin"
+
 	"github.com/gorilla/mux"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 //Adapter entity
 type Adapter struct {
-	host          string
-	port          string
-	auth          *Auth
-	authorization *casbin.Enforcer
-
+	host             string
+	port             string
+	auth             *Auth
 	apisHandler      rest.ApisHandler
 	adminApisHandler rest.AdminApisHandler
 
@@ -167,25 +165,8 @@ func (we Adapter) adminAppIDTokenAuthWrapFunc(handler adminAuthFunc) http.Handle
 	return func(w http.ResponseWriter, req *http.Request) {
 		utils.LogRequest(req)
 
-		ok, shiboUser := we.auth.adminCheck(w, req)
+		_, ok := we.auth.adminCheck(w, req)
 		if !ok {
-			return
-		}
-
-		obj := req.URL.Path // the resource that is going to be accessed.
-		act := req.Method   // the operation that the user performs on the resource.
-
-		var HasAccess bool = false
-		for _, s := range *shiboUser.IsMemberOf {
-			HasAccess = we.authorization.Enforce(s, obj, act)
-			if HasAccess {
-				break
-			}
-		}
-
-		if !HasAccess {
-			log.Printf("Access control error - UIN: %s is trying to apply %s operation for %s\n", shiboUser.Uin, act, obj)
-			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 			return
 		}
 
@@ -193,59 +174,16 @@ func (we Adapter) adminAppIDTokenAuthWrapFunc(handler adminAuthFunc) http.Handle
 	}
 }
 
-func (auth *Auth) adminCheck(w http.ResponseWriter, r *http.Request) (bool, *model.ShibbolethAuth) {
-	return auth.adminAuth.check(w, r)
-}
-
-func (auth *AdminAuth) check(w http.ResponseWriter, r *http.Request) (bool, *model.ShibbolethAuth) {
-	//1. Get the token from the request
-	rawIDToken, tokenType, err := auth.getIDToken(r)
-	if err != nil {
-		auth.responseBadRequest(w)
-		return false, nil
-	}
-
-	//3. Validate the token
-	idToken, err := auth.verify(*rawIDToken, *tokenType)
-	if err != nil {
-		log.Printf("error validating token - %s\n", err)
-
-		auth.responseUnauthorized(*rawIDToken, w)
-		return false, nil
-	}
-
-	//4. Get the user data from the token
-	var userData userData
-	if err := idToken.Claims(&userData); err != nil {
-		log.Printf("error getting user data from token - %s\n", err)
-
-		auth.responseUnauthorized(*rawIDToken, w)
-		return false, nil
-	}
-	//we must have UIuceduUIN
-	if userData.UIuceduUIN == nil {
-		log.Printf("error - missing uiuceuin data in the token - %s\n", err)
-
-		auth.responseUnauthorized(*rawIDToken, w)
-		return false, nil
-	}
-
-	shibboAuth := &model.ShibbolethAuth{Uin: *userData.UIuceduUIN, Email: *userData.Email,
-		IsMemberOf: userData.UIuceduIsMemberOf}
-
-	return true, shibboAuth
-}
-
 //NewWebAdapter creates new WebAdapter instance
 func NewWebAdapter(host string, port string, app *core.Application, appKeys []string, oidcProvider string, oidcAppClientID string, adminAppClientID string,
-	adminWebAppClientID string, phoneAuthSecret string, authKeys string, authIssuer string) Adapter {
-	auth := NewAuth(app, appKeys, oidcProvider, oidcAppClientID, adminAppClientID, adminWebAppClientID,
-		phoneAuthSecret, authKeys, authIssuer)
+	adminWebAppClientID string, phoneAuthSecret string, authKeys string, authIssuer string, coreBBHost string) Adapter {
 	authorization := casbin.NewEnforcer("driver/web/authorization_model.conf", "driver/web/authorization_policy.csv")
+	auth := NewAuth(app, host, appKeys, oidcProvider, oidcAppClientID, adminAppClientID, adminWebAppClientID,
+		phoneAuthSecret, authKeys, authIssuer, coreBBHost, authorization)
 
 	apisHandler := rest.NewApisHandler(app)
 	adminApisHandler := rest.NewAdminApisHandler(app)
-	return Adapter{host: host, port: port, auth: auth, authorization: authorization, apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app}
+	return Adapter{host: host, port: port, auth: auth, apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app}
 }
 
 //AppListener implements core.ApplicationListener interface

@@ -89,8 +89,9 @@ func main() {
 	phoneSecret := getEnvKey("CONTENT_PHONE_SECRET", true)
 	authKeys := getEnvKey("CONTENT_AUTH_KEYS", true)
 	authIssuer := getEnvKey("CONTENT_AUTH_ISSUER", true)
+	coreBBHost := getEnvKey("CORE_BB_HOST", false)
 
-	webAdapter := driver.NewWebAdapter(host, port, application, apiKeys, oidcProvider, oidcAppClientID, adminAppClientID, adminWebAppClientID, phoneSecret, authKeys, authIssuer)
+	webAdapter := driver.NewWebAdapter(host, port, application, apiKeys, oidcProvider, oidcAppClientID, adminAppClientID, adminWebAppClientID, phoneSecret, authKeys, authIssuer, coreBBHost)
 
 	webAdapter.Start()
 }
