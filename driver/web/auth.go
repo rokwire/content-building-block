@@ -19,6 +19,7 @@ package web
 
 import (
 	"content/core"
+	"content/core/model"
 	"context"
 	"crypto/rsa"
 	"encoding/json"
@@ -32,6 +33,8 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/lestrrat-go/jwx/jwk"
+	"github.com/rokmetro/auth-library/authservice"
+	"github.com/rokmetro/auth-library/tokenauth"
 	"golang.org/x/sync/syncmap"
 	"gopkg.in/ericchiang/go-oidc.v2"
 )
@@ -46,6 +49,7 @@ type Auth struct {
 	userAuth      *UserAuth
 	adminAuth     *AdminAuth
 	providersAuth *ProvidersAuth
+	coreAuth      *CoreAuth
 }
 
 //Start starts the auth module
@@ -77,14 +81,13 @@ func (auth *Auth) userCheck(w http.ResponseWriter, r *http.Request) (bool, *stri
 }
 
 //NewAuth creates new auth handler
-func NewAuth(app *core.Application, appKeys []string, oidcProvider string,
-	oidcAppClientID string, appClientID string, webAppClientID string, phoneAuthSecret string,
-	authKeys string, authIssuer string) *Auth {
-	apiKeysAuth := newAPIKeysAuth(appKeys)
-	userAuth2 := newUserAuth(app, oidcProvider, oidcAppClientID, phoneAuthSecret, authKeys, authIssuer)
-	adminAuth := newAdminAuth(app, oidcProvider, appClientID, webAppClientID)
+func NewAuth(app *core.Application, config model.Config) *Auth {
+	apiKeysAuth := newAPIKeysAuth(config.AppKeys)
+	userAuth2 := newUserAuth(app, config)
+	adminAuth := newAdminAuth(app, config)
+	coreAuth := newCoreAuth(app, config)
 
-	auth := Auth{apiKeysAuth: apiKeysAuth, userAuth: userAuth2, adminAuth: adminAuth}
+	auth := Auth{apiKeysAuth: apiKeysAuth, userAuth: userAuth2, adminAuth: adminAuth, coreAuth: coreAuth}
 	return &auth
 }
 
@@ -237,20 +240,20 @@ func (auth *AdminAuth) responseInternalServerError(w http.ResponseWriter) {
 	w.Write([]byte("Internal Server Error"))
 }
 
-func newAdminAuth(app *core.Application, oidcProvider string, appClientID string, webAppClientID string) *AdminAuth {
-	provider, err := oidc.NewProvider(context.Background(), oidcProvider)
+func newAdminAuth(app *core.Application, config model.Config) *AdminAuth {
+	provider, err := oidc.NewProvider(context.Background(), config.OidcProvider)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	appVerifier := provider.Verifier(&oidc.Config{ClientID: appClientID})
-	webAppVerifier := provider.Verifier(&oidc.Config{ClientID: webAppClientID})
+	appVerifier := provider.Verifier(&oidc.Config{ClientID: config.AdminAppClientID})
+	webAppVerifier := provider.Verifier(&oidc.Config{ClientID: config.WebAppClientID})
 
 	cacheUsers := &syncmap.Map{}
 	lock := &sync.RWMutex{}
 
-	auth := AdminAuth{app: app, appVerifier: appVerifier, appClientID: appClientID,
-		webAppVerifier: webAppVerifier, webAppClientID: webAppClientID,
+	auth := AdminAuth{app: app, appVerifier: appVerifier, appClientID: config.AdminAppClientID,
+		webAppVerifier: webAppVerifier, webAppClientID: config.WebAppClientID,
 		cachedUsers: cacheUsers, cachedUsersLock: lock}
 	return &auth
 }
@@ -742,16 +745,15 @@ func (auth *UserAuth) responseForbbiden(info string, w http.ResponseWriter) {
 	w.Write([]byte("Forbidden"))
 }
 
-func newUserAuth(app *core.Application, oidcProvider string, oidcAppClientID string,
-	phoneAuthSecret string, keys string, issuer string) *UserAuth {
+func newUserAuth(app *core.Application, config model.Config) *UserAuth {
 
-	provider, err := oidc.NewProvider(context.Background(), oidcProvider)
+	provider, err := oidc.NewProvider(context.Background(), config.OidcProvider)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	appIDTokenVerifier := provider.Verifier(&oidc.Config{ClientID: oidcAppClientID})
+	appIDTokenVerifier := provider.Verifier(&oidc.Config{ClientID: config.OidcAppClientID})
 
-	keysSet, err := jwk.ParseString(keys)
+	keysSet, err := jwk.ParseString(config.AuthKeys)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -762,7 +764,46 @@ func newUserAuth(app *core.Application, oidcProvider string, oidcAppClientID str
 	cacheRosters := []map[string]string{}
 	rostersLock := &sync.RWMutex{}
 
-	auth := UserAuth{app: app, appIDTokenVerifier: appIDTokenVerifier, phoneAuthSecret: phoneAuthSecret, Keys: keysSet, Issuer: issuer,
+	auth := UserAuth{app: app, appIDTokenVerifier: appIDTokenVerifier, phoneAuthSecret: config.PhoneAuthSecret, Keys: keysSet, Issuer: config.AuthIssuer,
 		cachedUsers: cacheUsers, cachedUsersLock: lock, rosters: cacheRosters, rostersLock: rostersLock}
 	return &auth
+}
+
+// CoreAuth implementation
+type CoreAuth struct {
+	app                *core.Application
+	tokenAuth          *tokenauth.TokenAuth
+	coreAuthPrivateKey *string
+}
+
+func newCoreAuth(app *core.Application, config model.Config) *CoreAuth {
+
+	serviceLoader := authservice.NewRemoteServiceRegLoader(config.CoreServiceRegLoaderURL, []string{"core"})
+	authService, err := authservice.NewAuthService("content", config.ContentServiceURL, serviceLoader)
+	if err != nil {
+		log.Fatalf("Error initializing auth service: %v", err)
+	}
+	tokenAuth, err := tokenauth.NewTokenAuth(true, authService, nil, nil)
+	if err != nil {
+		log.Fatalf("Error intitializing token auth: %v", err)
+	}
+
+	auth := CoreAuth{app: app, tokenAuth: tokenAuth, coreAuthPrivateKey: &config.CoreAuthPrivateKey}
+	return &auth
+}
+
+func (ca CoreAuth) coreAuthCheck(w http.ResponseWriter, r *http.Request) (bool, *tokenauth.Claims) {
+	claims, err := ca.tokenAuth.CheckRequestTokens(r)
+	if err != nil {
+		log.Printf("error validate token: %s", err)
+		return false, nil
+	}
+
+	if claims != nil {
+		if claims.Valid() == nil {
+			return true, claims
+		}
+	}
+
+	return false, nil
 }

@@ -89,8 +89,25 @@ func main() {
 	phoneSecret := getEnvKey("CONTENT_PHONE_SECRET", true)
 	authKeys := getEnvKey("CONTENT_AUTH_KEYS", true)
 	authIssuer := getEnvKey("CONTENT_AUTH_ISSUER", true)
+	coreAuthPrivateKey := getEnvKey("CORE_AUTH_PRIVATE_KEY", true)
+	coreServiceRegLoaderURL := getEnvKey("CORE_SERVICE_REG_LOADER_URL", true)
+	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
 
-	webAdapter := driver.NewWebAdapter(host, port, application, apiKeys, oidcProvider, oidcAppClientID, adminAppClientID, adminWebAppClientID, phoneSecret, authKeys, authIssuer)
+	config := model.Config{
+		AppKeys:                 apiKeys,
+		OidcProvider:            oidcProvider,
+		OidcAppClientID:         oidcAppClientID,
+		AdminAppClientID:        adminAppClientID,
+		WebAppClientID:          adminWebAppClientID,
+		PhoneAuthSecret:         phoneSecret,
+		AuthKeys:                authKeys,
+		AuthIssuer:              authIssuer,
+		CoreAuthPrivateKey:      coreAuthPrivateKey,
+		CoreServiceRegLoaderURL: coreServiceRegLoaderURL,
+		ContentServiceURL:       contentServiceURL,
+	}
+
+	webAdapter := driver.NewWebAdapter(host, port, application, config)
 
 	webAdapter.Start()
 }
@@ -118,7 +135,6 @@ func getEnvKey(key string, required bool) string {
 			log.Printf("No provided environment variable for " + key)
 		}
 	}
-	printEnvVar(key, value)
 	return value
 }
 
