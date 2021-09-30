@@ -28,11 +28,79 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/student_guides": {
+        "/admin/image": {
+            "post": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Uploads an image to AWS S3",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminUploadImage",
+                "parameters": [
+                    {
+                        "description": "path - path within the S3 bucket",
+                        "name": "path",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "width - width of the image to resize. If width and height are missing - then the new image will use the original size",
+                        "name": "width",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "height - height of the image to resize. If width and height are missing - then the new image will use the original size",
+                        "name": "height",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "quality - quality of the image. Default: 90",
+                        "name": "quality",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "fileName - the uploaded file name",
+                        "name": "fileName",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/admin/student_guides": {
             "get": {
                 "security": [
                     {
-                        "RokwireAuth AdminUserAuth": []
+                        "AdminUserAuth": []
                     }
                 ],
                 "description": "Retrieves  all items",
@@ -40,9 +108,17 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "StudentGuides"
+                    "Admin"
                 ],
-                "operationId": "getAllStudentGuides",
+                "operationId": "AdminGetStudentGuides",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Coma separated IDs of the desired records",
+                        "name": "ids",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": ""
@@ -60,9 +136,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "StudentGuides"
+                    "Admin"
                 ],
-                "operationId": "CreateStudentGuide",
+                "operationId": "AdminCreateStudentGuide",
                 "responses": {
                     "200": {
                         "description": ""
@@ -70,11 +146,11 @@ var doc = `{
                 }
             }
         },
-        "/student_guides/{id}": {
+        "/admin/student_guides/{id}": {
             "get": {
                 "security": [
                     {
-                        "RokwireAuth AdminUserAuth": []
+                        "AdminUserAuth": []
                     }
                 ],
                 "description": "Retrieves  all items",
@@ -85,9 +161,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "StudentGuides"
+                    "Admin"
                 ],
-                "operationId": "GetStudentGuide",
+                "operationId": "AdminGetStudentGuide",
                 "responses": {
                     "200": {
                         "description": ""
@@ -108,9 +184,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "StudentGuides"
+                    "Admin"
                 ],
-                "operationId": "UpdateStudentGuide",
+                "operationId": "AdminUpdateStudentGuide",
                 "responses": {
                     "200": {
                         "description": ""
@@ -125,9 +201,163 @@ var doc = `{
                 ],
                 "description": "Deletes a student guide with the specified id",
                 "tags": [
-                    "StudentGuides"
+                    "Admin"
                 ],
-                "operationId": "DeleteStudentGuide",
+                "operationId": "AdminDeleteStudentGuide",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/image": {
+            "post": {
+                "security": [
+                    {
+                        "UserAuth": []
+                    }
+                ],
+                "description": "Uploads an image to AWS S3",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Client"
+                ],
+                "operationId": "AdminUpdateStudentGuide",
+                "parameters": [
+                    {
+                        "description": "path - path within the S3 bucket",
+                        "name": "path",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "width - width of the image to resize. If width and height are missing - then the new image will use the original size",
+                        "name": "width",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "height - height of the image to resize. If width and height are missing - then the new image will use the original size",
+                        "name": "height",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "quality - quality of the image. Default: 90",
+                        "name": "quality",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "fileName - the uploaded file name",
+                        "name": "fileName",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/student_guides": {
+            "get": {
+                "security": [
+                    {
+                        "RokwireAuth": []
+                    }
+                ],
+                "description": "Retrieves  all items",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Client"
+                ],
+                "operationId": "GetStudentGuides",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Coma separated IDs of the desired records",
+                        "name": "ids",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/student_guides/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "RokwireAuth": []
+                    }
+                ],
+                "description": "Retrieves  all items",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Client"
+                ],
+                "operationId": "GetStudentGuide",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/twitter/users/{user_id}/tweets": {
+            "get": {
+                "security": [
+                    {
+                        "RokwireAuth": []
+                    }
+                ],
+                "description": "Retrieves Twitter tweets for the specified user id. This API is intended to be invoked with the original Twitter query params to https://api.twitter.com/2/users/%s/tweets",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Client"
+                ],
+                "operationId": "GetTweeterPosts",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": ""
@@ -140,6 +370,9 @@ var doc = `{
                 "description": "Gives the service version.",
                 "produces": [
                     "text/plain"
+                ],
+                "tags": [
+                    "Client"
                 ],
                 "operationId": "Version",
                 "responses": {
@@ -165,6 +398,11 @@ var doc = `{
             "type": "apiKey",
             "name": "ROKWIRE-API-KEY",
             "in": "header"
+        },
+        "UserAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header (add Bearer prefix to the Authorization value)"
         }
     }
 }`
@@ -180,7 +418,7 @@ type swaggerInfo struct {
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
-	Version:     "0.4.0",
+	Version:     "1.0.8",
 	Host:        "localhost",
 	BasePath:    "/content",
 	Schemes:     []string{"https"},

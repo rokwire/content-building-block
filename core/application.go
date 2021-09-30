@@ -18,6 +18,11 @@
 package core
 
 import (
+	"content/driven/awsstorage"
+	cacheadapter "content/driven/cache"
+	"content/driven/tempstorage"
+	"content/driven/twitter"
+	"content/driven/webp"
 	"sync"
 )
 
@@ -26,30 +31,28 @@ type Application struct {
 	version string
 	build   string
 
+	cacheLock *sync.Mutex
+
 	Services Services //expose to the drivers adapters
 
-	storage Storage
-
-	//cache config data
-	cvLock *sync.RWMutex
-
-	//cache app versions
-	avLock            *sync.RWMutex
-	cachedAppVersions []string
+	storage            Storage
+	awsAdapter         *awsstorage.Adapter
+	tempStorageAdapter *tempstorage.Adapter
+	webpAdapter        *webp.Adapter
+	twitterAdapter     *twitter.Adapter
+	cacheAdapter       *cacheadapter.CacheAdapter
 }
 
-//Start starts the core part of the application
+// Start starts the core part of the application
 func (app *Application) Start() {
 }
 
-//NewApplication creates new Application
-func NewApplication(version string, build string, storage Storage) *Application {
-	cvLock := &sync.RWMutex{}
-	avLock := &sync.RWMutex{}
+// NewApplication creates new Application
+func NewApplication(version string, build string, storage Storage, awsAdapter *awsstorage.Adapter, tempStorageAdapter *tempstorage.Adapter, webpAdapter *webp.Adapter, twitterAdapter *twitter.Adapter, cacheadapter *cacheadapter.CacheAdapter) *Application {
+	cacheLock := &sync.Mutex{}
+	application := Application{version: version, build: build, cacheLock: cacheLock, storage: storage, awsAdapter: awsAdapter, tempStorageAdapter: tempStorageAdapter, webpAdapter: webpAdapter, twitterAdapter: twitterAdapter, cacheAdapter: cacheadapter}
 
-	application := Application{version: version, build: build, storage: storage, cvLock: cvLock, avLock: avLock}
-
-	//add the drivers ports/interfaces
+	// add the drivers ports/interfaces
 	application.Services = &servicesImpl{app: &application}
 
 	return &application

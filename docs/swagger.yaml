@@ -7,44 +7,184 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   title: Rokwire Content Building Block API
-  version: 0.4.0
+  version: 1.0.8
 paths:
+  /admin/image:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Uploads an image to AWS S3
+      operationId: AdminUploadImage
+      parameters:
+      - description: path - path within the S3 bucket
+        in: body
+        name: path
+        required: true
+        schema:
+          type: string
+      - description: width - width of the image to resize. If width and height are
+          missing - then the new image will use the original size
+        in: body
+        name: width
+        schema:
+          type: string
+      - description: height - height of the image to resize. If width and height are
+          missing - then the new image will use the original size
+        in: body
+        name: height
+        schema:
+          type: string
+      - description: 'quality - quality of the image. Default: 90'
+        in: body
+        name: quality
+        schema:
+          type: string
+      - description: fileName - the uploaded file name
+        in: body
+        name: fileName
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/student_guides:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves  all items
+      operationId: AdminGetStudentGuides
+      parameters:
+      - description: Coma separated IDs of the desired records
+        in: query
+        name: ids
+        type: string
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Retrieves  all items
+      operationId: AdminCreateStudentGuide
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/student_guides/{id}:
+    delete:
+      description: Deletes a student guide with the specified id
+      operationId: AdminDeleteStudentGuide
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    get:
+      consumes:
+      - application/json
+      description: Retrieves  all items
+      operationId: AdminGetStudentGuide
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    put:
+      consumes:
+      - application/json
+      description: Updates a student guide with the specified id
+      operationId: AdminUpdateStudentGuide
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /image:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Uploads an image to AWS S3
+      operationId: AdminUpdateStudentGuide
+      parameters:
+      - description: path - path within the S3 bucket
+        in: body
+        name: path
+        required: true
+        schema:
+          type: string
+      - description: width - width of the image to resize. If width and height are
+          missing - then the new image will use the original size
+        in: body
+        name: width
+        schema:
+          type: string
+      - description: height - height of the image to resize. If width and height are
+          missing - then the new image will use the original size
+        in: body
+        name: height
+        schema:
+          type: string
+      - description: 'quality - quality of the image. Default: 90'
+        in: body
+        name: quality
+        schema:
+          type: string
+      - description: fileName - the uploaded file name
+        in: body
+        name: fileName
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - UserAuth: []
+      tags:
+      - Client
   /student_guides:
     get:
       consumes:
       - application/json
       description: Retrieves  all items
-      operationId: getAllStudentGuides
+      operationId: GetStudentGuides
+      parameters:
+      - description: Coma separated IDs of the desired records
+        in: query
+        name: ids
+        type: string
       responses:
         "200":
           description: ""
       security:
-      - RokwireAuth AdminUserAuth: []
+      - RokwireAuth: []
       tags:
-      - StudentGuides
-    post:
-      consumes:
-      - application/json
-      description: Retrieves  all items
-      operationId: CreateStudentGuide
-      responses:
-        "200":
-          description: ""
-      security:
-      - AdminUserAuth: []
-      tags:
-      - StudentGuides
+      - Client
   /student_guides/{id}:
-    delete:
-      description: Deletes a student guide with the specified id
-      operationId: DeleteStudentGuide
-      responses:
-        "200":
-          description: ""
-      security:
-      - AdminUserAuth: []
-      tags:
-      - StudentGuides
     get:
       consumes:
       - application/json
@@ -56,23 +196,29 @@ paths:
         "200":
           description: ""
       security:
-      - RokwireAuth AdminUserAuth: []
+      - RokwireAuth: []
       tags:
-      - StudentGuides
-    put:
-      consumes:
-      - application/json
-      description: Updates a student guide with the specified id
-      operationId: UpdateStudentGuide
+      - Client
+  /twitter/users/{user_id}/tweets:
+    get:
+      description: Retrieves Twitter tweets for the specified user id. This API is
+        intended to be invoked with the original Twitter query params to https://api.twitter.com/2/users/%s/tweets
+      operationId: GetTweeterPosts
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: ""
       security:
-      - AdminUserAuth: []
+      - RokwireAuth: []
       tags:
-      - StudentGuides
+      - Client
   /version:
     get:
       description: Gives the service version.
@@ -82,6 +228,8 @@ paths:
       responses:
         "200":
           description: ""
+      tags:
+      - Client
 schemes:
 - https
 securityDefinitions:
@@ -96,5 +244,9 @@ securityDefinitions:
   RokwireAuth:
     in: header
     name: ROKWIRE-API-KEY
+    type: apiKey
+  UserAuth:
+    in: header (add Bearer prefix to the Authorization value)
+    name: Authorization
     type: apiKey
 swagger: "2.0"

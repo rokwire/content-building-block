@@ -21,22 +21,20 @@ import (
 	"log"
 	"strconv"
 	"time"
-
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-//Adapter implements the Storage interface
+// Adapter implements the Storage interface
 type Adapter struct {
 	db *database
 }
 
-//Start starts the storage
+// Start starts the storage
 func (sa *Adapter) Start() error {
 	err := sa.db.start()
 	return err
 }
 
-//NewStorageAdapter creates a new storage adapter instance
+// NewStorageAdapter creates a new storage adapter instance
 func NewStorageAdapter(mongoDBAuth string, mongoDBName string, mongoTimeout string) *Adapter {
 	timeout, err := strconv.Atoi(mongoTimeout)
 	if err != nil {
@@ -47,11 +45,4 @@ func NewStorageAdapter(mongoDBAuth string, mongoDBName string, mongoTimeout stri
 
 	db := &database{mongoDBAuth: mongoDBAuth, mongoDBName: mongoDBName, mongoTimeout: timeoutMS}
 	return &Adapter{db: db}
-}
-
-func abortTransaction(sessionContext mongo.SessionContext) {
-	err := sessionContext.AbortTransaction(sessionContext)
-	if err != nil {
-		log.Printf("error on aborting a transaction - %s", err)
-	}
 }

@@ -1,20 +1,3 @@
-/*
- *   Copyright (c) 2020 Board of Trustees of the University of Illinois.
- *   All rights reserved.
-
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
-
- *   http://www.apache.org/licenses/LICENSE-2.0
-
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
-
 package rest
 
 import (
@@ -26,38 +9,25 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
 	"strings"
 )
 
-const maxUploadSize = 15 * 1024 * 1024 // 15 mb
-
-//ApisHandler handles the rest APIs implementation
-type ApisHandler struct {
+//AdminApisHandler handles the rest Admin APIs implementation
+type AdminApisHandler struct {
 	app *core.Application
-}
-
-//Version gives the service version
-// @Description Gives the service version.
-// @Tags Client
-// @ID Version
-// @Produce plain
-// @Success 200
-// @Router /version [get]
-func (h ApisHandler) Version(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(h.app.Services.GetVersion()))
 }
 
 // GetStudentGuides retrieves  all items
 // @Description Retrieves  all items
-// @Tags Client
-// @ID GetStudentGuides
 // @Param ids query string false "Coma separated IDs of the desired records"
+// @Tags Admin
+// @ID AdminGetStudentGuides
 // @Accept json
 // @Success 200
-// @Security RokwireAuth
-// @Router /student_guides [get]
-func (h ApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
+// @Security AdminUserAuth
+// @Router /admin/student_guides [get]
+func (h AdminApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
+
 	IDs := []string{}
 	IDskeys, ok := r.URL.Query()["ids"]
 	if ok && len(IDskeys[0]) > 0 {
@@ -67,7 +37,7 @@ func (h ApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
 
 	resData, err := h.app.Services.GetStudentGuides(IDs)
 	if err != nil {
-		log.Printf("Error on getting track items by id - %s\n", err)
+		log.Printf("Error on getting guide items by id - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -90,14 +60,14 @@ func (h ApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
 
 // GetStudentGuide Retrieves a student guide by id
 // @Description Retrieves  all items
-// @Tags Client
-// @ID GetStudentGuide
+// @Tags Admin
+// @ID AdminGetStudentGuide
 // @Accept json
 // @Produce json
 // @Success 200
-// @Security RokwireAuth
-// @Router /student_guides/{id} [get]
-func (h ApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request) {
+// @Security AdminUserAuth
+// @Router /admin/student_guides/{id} [get]
+func (h AdminApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
@@ -120,10 +90,123 @@ func (h ApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// UpdateStudentGuide Updates a student guide with the specified id
+// @Description Updates a student guide with the specified id
+// @Tags Admin
+// @ID AdminUpdateStudentGuide
+// @Accept json
+// @Produce json
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/student_guides/{id} [put]
+func (h AdminApisHandler) UpdateStudentGuide(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	guideID := vars["id"]
+
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("Error on marshal create a student guide - %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	var item bson.M
+	err = json.Unmarshal(data, &item)
+	if err != nil {
+		log.Printf("Error on unmarshal the create student guide request data - %s\n", err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	resData, err := h.app.Services.UpdateStudentGuide(guideID, item)
+	if err != nil {
+		log.Printf("Error on updating student guide with id - %s\n %s", guideID, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal the updated student guide")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonData)
+}
+
+// CreateStudentGuide retrieves  all items
+// @Description Retrieves  all items
+// @Tags Admin
+// @ID AdminCreateStudentGuide
+// @Accept json
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/student_guides [post]
+func (h AdminApisHandler) CreateStudentGuide(w http.ResponseWriter, r *http.Request) {
+
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("Error on marshal create a student guide - %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	var item bson.M
+	err = json.Unmarshal(data, &item)
+	if err != nil {
+		log.Printf("Error on unmarshal the create student guide request data - %s\n", err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	createdItem, err := h.app.Services.CreateStudentGuide(item)
+	if err != nil {
+		log.Printf("Error on creating student guide: %s\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, err := json.Marshal(createdItem)
+	if err != nil {
+		log.Println("Error on marshal the new item")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonData)
+}
+
+// DeleteStudentGuide Deletes a student guide with the specified id
+// @Description Deletes a student guide with the specified id
+// @Tags Admin
+// @ID AdminDeleteStudentGuide
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/student_guides/{id} [delete]
+func (h AdminApisHandler) DeleteStudentGuide(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	guideID := vars["id"]
+
+	err := h.app.Services.DeleteStudentGuide(guideID)
+	if err != nil {
+		log.Printf("Error on deleting student guide with id - %s\n %s", guideID, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+}
+
 // UploadImage Uploads an image to AWS S3
 // @Description Uploads an image to AWS S3
-// @Tags Client
-// @ID AdminUpdateStudentGuide
+// @Tags Admin
+// @ID AdminUploadImage
 // @Param path body string true "path - path within the S3 bucket"
 // @Param width body string false "width - width of the image to resize. If width and height are missing - then the new image will use the original size"
 // @Param height body string false "height - height of the image to resize. If width and height are missing - then the new image will use the original size"
@@ -132,9 +215,9 @@ func (h ApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request) {
 // @Accept multipart/form-data
 // @Produce json
 // @Success 200
-// @Security UserAuth
-// @Router /image [post]
-func (h ApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
+// @Security AdminUserAuth
+// @Router /admin/image [post]
+func (h AdminApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 	//validate the image type
 	path := r.PostFormValue("path")
 	if len(path) <= 0 {
@@ -203,73 +286,4 @@ func (h ApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(jsonData)
-}
-
-// GetTweeterPosts Retrieves Twitter tweets for the specified user id. This API is intended to be invoked with the original Twitter query params to https://api.twitter.com/2/users/%s/tweets
-// @Description Retrieves Twitter tweets for the specified user id. This API is intended to be invoked with the original Twitter query params to https://api.twitter.com/2/users/%s/tweets
-// @Tags Client
-// @ID GetTweeterPosts
-// @Param id path string true "id"
-// @Produce json
-// @Success 200
-// @Security RokwireAuth
-// @Router /twitter/users/{user_id}/tweets [get]
-func (h ApisHandler) GetTweeterPosts(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	userID := vars["user_id"]
-
-	if userID == "" {
-		log.Printf("user_id is required query param")
-		http.Error(w, "user_id is required query param", http.StatusBadRequest)
-		return
-	}
-
-	twitterQueryParams := r.URL.RawQuery
-	if twitterQueryParams == "" {
-		log.Printf("Missing raw query params for Twitter")
-		http.Error(w, "Missing raw query params for Twitter", http.StatusBadRequest)
-		return
-	}
-
-	cacheControl := r.Header.Get("Cache-Control")
-	force := cacheControl == "no-cache"
-
-	resData, err := h.app.Services.GetTwitterPosts(userID, twitterQueryParams, force)
-	if err != nil {
-		log.Printf("Error on getting Twitter Posts: %s", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	data, err := json.Marshal(resData)
-	if err != nil {
-		log.Printf("Error on marshal the Twitter Posts: %s", err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-	w.Write(data)
-}
-
-func intPostValueFromString(stringValue string) int {
-	var value int
-	if len(stringValue) > 0 {
-		val, err := strconv.Atoi(stringValue)
-		if err == nil {
-			value = val
-		}
-	}
-	return value
-}
-
-//NewApisHandler creates new rest Handler instance
-func NewApisHandler(app *core.Application) ApisHandler {
-	return ApisHandler{app: app}
-}
-
-//NewAdminApisHandler creates new rest Handler instance
-func NewAdminApisHandler(app *core.Application) AdminApisHandler {
-	return AdminApisHandler{app: app}
 }

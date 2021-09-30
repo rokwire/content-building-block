@@ -19,7 +19,13 @@ package main
 
 import (
 	"content/core"
+	"content/core/model"
+	"content/driven/awsstorage"
+	cacheadapter "content/driven/cache"
 	storage "content/driven/storage"
+	"content/driven/tempstorage"
+	"content/driven/twitter"
+	"content/driven/webp"
 	driver "content/driver/web"
 	"log"
 	"os"
@@ -38,7 +44,7 @@ func main() {
 		Version = "dev"
 	}
 
-	port := getEnvKey("PORT", true)
+	port := getEnvKey("CONTENT_PORT", true)
 
 	//mongoDB adapter
 	mongoDBAuth := getEnvKey("CONTENT_MONGO_AUTH", true)
@@ -50,8 +56,27 @@ func main() {
 		log.Fatal("Cannot start the mongoDB adapter - " + err.Error())
 	}
 
+	// S3 Adapter
+	s3Bucket := getEnvKey("S3_BUCKET", true)
+	s3Region := getEnvKey("S3_REGION", true)
+	awsAccessKeyID := getEnvKey("AWS_ACCESS_KEY_ID", true)
+	awsSecretAccessKey := getEnvKey("AWS_SECRET_ACCESS_KEY", true)
+	awsConfig := &model.AWSConfig{S3Bucket: s3Bucket, S3Region: s3Region, AWSAccessKeyID: awsAccessKeyID, AWSSecretAccessKey: awsSecretAccessKey}
+	awsAdapter := awsstorage.NewAWSStorageAdapter(awsConfig)
+
+	tempStorageAdapter := tempstorage.NewTempStorageAdapter()
+
+	webpAdapter := webp.NewWebpAdapter()
+
+	defaultCacheExpirationSeconds := getEnvKey("DEFAULT_CACHE_EXPIRATION_SECONDS", false)
+	cacheAdapter := cacheadapter.NewCacheAdapter(defaultCacheExpirationSeconds)
+
+	twitterFeedURL := getEnvKey("TWITTER_FEED_URL", true)
+	twitterAccessToken := getEnvKey("TWITTER_ACCESS_TOKEN", true)
+	twitterAdapter := twitter.NewTwitterAdapter(twitterFeedURL, twitterAccessToken)
+
 	//application
-	application := core.NewApplication(Version, Build, storageAdapter)
+	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, tempStorageAdapter, webpAdapter, twitterAdapter, cacheAdapter)
 	application.Start()
 
 	//web adapter

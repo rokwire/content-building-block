@@ -79,9 +79,15 @@ func (m *database) start() error {
 	return nil
 }
 
-// GetAllStudentGuides retrieves all content items
-func (sa *Adapter) GetAllStudentGuides() ([]bson.M, error) {
+// GetStudentGuides retrieves all content items
+func (sa *Adapter) GetStudentGuides(ids []string) ([]bson.M, error) {
 	filter := bson.D{}
+	if len(ids) > 0 {
+		filter = bson.D{
+			primitive.E{Key: "_id", Value: bson.M{"$in": ids}},
+		}
+	}
+
 	var result []bson.M
 	err := sa.db.studentGuides.Find(filter, &result, nil)
 	if err != nil {

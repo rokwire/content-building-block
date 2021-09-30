@@ -38,14 +38,15 @@ type Adapter struct {
 	auth          *Auth
 	authorization *casbin.Enforcer
 
-	apisHandler rest.ApisHandler
+	apisHandler      rest.ApisHandler
+	adminApisHandler rest.AdminApisHandler
 
 	app *core.Application
 }
 
 // @title Rokwire Content Building Block API
 // @description Rokwire Content Building Block API Documentation.
-// @version 0.4.0
+// @version 1.0.8
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host localhost
@@ -55,6 +56,10 @@ type Adapter struct {
 // @securityDefinitions.apikey RokwireAuth
 // @in header
 // @name ROKWIRE-API-KEY
+
+// @securityDefinitions.apikey UserAuth
+// @in header (add Bearer prefix to the Authorization value)
+// @name Authorization
 
 // @securityDefinitions.apikey AdminUserAuth
 // @in header (add Bearer prefix to the Authorization value)
@@ -72,17 +77,25 @@ func (we Adapter) Start() {
 	router := mux.NewRouter().StrictSlash(true)
 
 	// handle apis
-	subRouter := router.PathPrefix("/content").Subrouter()
-	subRouter.PathPrefix("/doc/ui").Handler(we.serveDocUI())
-	subRouter.HandleFunc("/doc", we.serveDoc)
-	subRouter.HandleFunc("/version", we.wrapFunc(we.apisHandler.Version)).Methods("GET")
+	contentRouter := router.PathPrefix("/content").Subrouter()
+	contentRouter.PathPrefix("/doc/ui").Handler(we.serveDocUI())
+	contentRouter.HandleFunc("/doc", we.serveDoc)
+	contentRouter.HandleFunc("/version", we.wrapFunc(we.apisHandler.Version)).Methods("GET")
 
-	// handle student guide apis
-	subRouter.HandleFunc("/student_guides", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetAllStudentGuides)).Methods("GET")
-	subRouter.HandleFunc("/student_guides/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuide)).Methods("GET")
-	subRouter.HandleFunc("/student_guides", we.adminAppIDTokenAuthWrapFunc(we.apisHandler.CreateStudentGuide)).Methods("POST")
-	subRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.apisHandler.UpdateStudentGuide)).Methods("PUT")
-	subRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.apisHandler.DeleteStudentGuide)).Methods("DELETE")
+	// handle student guide client apis
+	contentRouter.HandleFunc("/student_guides", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuides)).Methods("GET")
+	contentRouter.HandleFunc("/student_guides/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuide)).Methods("GET")
+	contentRouter.HandleFunc("/image", we.userAuthWrapFunc(we.apisHandler.UploadImage)).Methods("POST")
+	contentRouter.HandleFunc("/twitter/users/{user_id}/tweets", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetTweeterPosts)).Methods("GET")
+
+	// handle student guide admin apis
+	adminSubRouter := contentRouter.PathPrefix("/admin").Subrouter()
+	adminSubRouter.HandleFunc("/student_guides", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.GetStudentGuides)).Methods("GET")
+	adminSubRouter.HandleFunc("/student_guides", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.CreateStudentGuide)).Methods("POST")
+	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.GetStudentGuide)).Methods("GET")
+	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.UpdateStudentGuide)).Methods("PUT")
+	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.DeleteStudentGuide)).Methods("DELETE")
+	adminSubRouter.HandleFunc("/image", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.UploadImage)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+we.port, router))
 }
@@ -224,15 +237,15 @@ func (auth *AdminAuth) check(w http.ResponseWriter, r *http.Request) (bool, *mod
 }
 
 //NewWebAdapter creates new WebAdapter instance
-func NewWebAdapter(host string, port string, app *core.Application, appKeys []string, oidcProvider string,
-	oidcAppClientID string, adminAppClientID string, adminWebAppClientID string, phoneAuthSecret string,
-	authKeys string, authIssuer string) Adapter {
+func NewWebAdapter(host string, port string, app *core.Application, appKeys []string, oidcProvider string, oidcAppClientID string, adminAppClientID string,
+	adminWebAppClientID string, phoneAuthSecret string, authKeys string, authIssuer string) Adapter {
 	auth := NewAuth(app, appKeys, oidcProvider, oidcAppClientID, adminAppClientID, adminWebAppClientID,
 		phoneAuthSecret, authKeys, authIssuer)
 	authorization := casbin.NewEnforcer("driver/web/authorization_model.conf", "driver/web/authorization_policy.csv")
 
 	apisHandler := rest.NewApisHandler(app)
-	return Adapter{host: host, port: port, auth: auth, authorization: authorization, apisHandler: apisHandler, app: app}
+	adminApisHandler := rest.NewAdminApisHandler(app)
+	return Adapter{host: host, port: port, auth: auth, authorization: authorization, apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app}
 }
 
 //AppListener implements core.ApplicationListener interface

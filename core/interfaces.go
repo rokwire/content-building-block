@@ -18,17 +18,21 @@
 package core
 
 import (
+	"content/core/model"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-//Services exposes APIs for the driver adapters
+// Services exposes APIs for the driver adapters
 type Services interface {
 	GetVersion() string
-	GetAllStudentGuides() ([]bson.M, error)
+	GetStudentGuides(ids []string) ([]bson.M, error)
 	GetStudentGuide(id string) (bson.M, error)
 	CreateStudentGuide(item bson.M) (bson.M, error)
 	UpdateStudentGuide(id string, item bson.M) (bson.M, error)
 	DeleteStudentGuide(id string) error
+
+	UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (bson.M, error)
+	GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error)
 }
 
 type servicesImpl struct {
@@ -39,8 +43,8 @@ func (s *servicesImpl) GetVersion() string {
 	return s.app.getVersion()
 }
 
-func (s *servicesImpl) GetAllStudentGuides() ([]bson.M, error) {
-	return s.app.getAllStudentGuides()
+func (s *servicesImpl) GetStudentGuides(ids []string) ([]bson.M, error) {
+	return s.app.getStudentGuides(ids)
 }
 
 func (s *servicesImpl) CreateStudentGuide(item bson.M) (bson.M, error) {
@@ -59,9 +63,17 @@ func (s *servicesImpl) DeleteStudentGuide(id string) error {
 	return s.app.deleteStudentGuide(id)
 }
 
-//Storage is used by core to storage data - DB storage adapter, file storage adapter etc
+func (s *servicesImpl) UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (bson.M, error) {
+	return s.app.uploadImage(fileName, filetype, bytes, path, spec)
+}
+
+func (s *servicesImpl) GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error) {
+	return s.app.getTwitterPosts(userID, twitterQueryParams, force)
+}
+
+// Storage is used by core to storage data - DB storage adapter, file storage adapter etc
 type Storage interface {
-	GetAllStudentGuides() ([]bson.M, error)
+	GetStudentGuides(ids []string) ([]bson.M, error)
 	GetStudentGuide(id string) (bson.M, error)
 	CreateStudentGuide(item bson.M) (bson.M, error)
 	UpdateStudentGuide(id string, item bson.M) (bson.M, error)
