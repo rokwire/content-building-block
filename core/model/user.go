@@ -17,8 +17,8 @@
 
 package model
 
-//ShibbolethAuth represents shibboleth auth entity
-type ShibbolethAuth struct {
+//ShibbolethToken represents shibboleth auth entity
+type ShibbolethToken struct {
 	Uin        string    `json:"uiucedu_uin" bson:"uiucedu_uin"`
 	Email      string    `json:"email" bson:"email"`
 	IsMemberOf *[]string `json:"uiucedu_is_member_of" bson:"uiucedu_is_member_of"`

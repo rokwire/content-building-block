@@ -75,17 +75,15 @@ func main() {
 	twitterAccessToken := getEnvKey("TWITTER_ACCESS_TOKEN", true)
 	twitterAdapter := twitter.NewTwitterAdapter(twitterFeedURL, twitterAccessToken)
 
-	//application
+	// application
 	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, tempStorageAdapter, webpAdapter, twitterAdapter, cacheAdapter)
 	application.Start()
 
-	//web adapter
+	// web adapter
 	apiKeys := getAPIKeys()
 	host := getEnvKey("CONTENT_HOST", true)
 	oidcProvider := getEnvKey("CONTENT_OIDC_PROVIDER", true)
-	oidcAppClientID := getEnvKey("CONTENT_OIDC_APP_CLIENT_ID", true)
-	adminAppClientID := getEnvKey("CONTENT_OIDC_ADMIN_CLIENT_ID", true)
-	adminWebAppClientID := getEnvKey("CONTENT_OIDC_ADMIN_WEB_CLIENT_ID", true)
+	oidcClientIDs := getEnvKeyAsList("CONTENT_OIDC_CLIENT_IDS", true)
 	phoneSecret := getEnvKey("CONTENT_PHONE_SECRET", true)
 	authKeys := getEnvKey("CONTENT_AUTH_KEYS", true)
 	authIssuer := getEnvKey("CONTENT_AUTH_ISSUER", true)
@@ -96,9 +94,7 @@ func main() {
 	config := model.Config{
 		AppKeys:                 apiKeys,
 		OidcProvider:            oidcProvider,
-		OidcAppClientID:         oidcAppClientID,
-		AdminAppClientID:        adminAppClientID,
-		WebAppClientID:          adminWebAppClientID,
+		OidcClientIDs:           oidcClientIDs,
 		PhoneAuthSecret:         phoneSecret,
 		AuthKeys:                authKeys,
 		AuthIssuer:              authIssuer,
@@ -113,10 +109,10 @@ func main() {
 }
 
 func getAPIKeys() []string {
-	//get from the environment
+	// get from the environment
 	rokwireAPIKeys := getEnvKey("ROKWIRE_API_KEYS", true)
 
-	//it is comma separated format
+	// it is comma separated format
 	rokwireAPIKeysList := strings.Split(rokwireAPIKeys, ",")
 	if len(rokwireAPIKeysList) <= 0 {
 		log.Fatal("For some reasons the apis keys list is empty")
@@ -125,8 +121,20 @@ func getAPIKeys() []string {
 	return rokwireAPIKeysList
 }
 
+func getEnvKeyAsList(key string, required bool) []string {
+	stringValue := getEnvKey(key, required)
+
+	// it is comma separated format
+	stringListValue := strings.Split(stringValue, ",")
+	if len(stringListValue) == 0 && required {
+		log.Fatalf("missing or empty env var: %s", key)
+	}
+
+	return stringListValue
+}
+
 func getEnvKey(key string, required bool) string {
-	//get from the environment
+	// get from the environment
 	value, exist := os.LookupEnv(key)
 	if !exist {
 		if required {
@@ -136,10 +144,4 @@ func getEnvKey(key string, required bool) string {
 		}
 	}
 	return value
-}
-
-func printEnvVar(name string, value string) {
-	if Version == "dev" {
-		log.Printf("%s=%s", name, value)
-	}
 }

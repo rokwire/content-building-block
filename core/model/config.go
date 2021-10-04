@@ -4,9 +4,7 @@ package model
 type Config struct {
 	AppKeys                 []string
 	OidcProvider            string
-	OidcAppClientID         string
-	AdminAppClientID        string
-	WebAppClientID          string
+	OidcClientIDs           []string
 	PhoneAuthSecret         string
 	AuthKeys                string
 	AuthIssuer              string
