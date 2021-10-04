@@ -181,11 +181,10 @@ func (we Adapter) adminAuthWrapFunc(handler adminAuthFunc) http.HandlerFunc {
 			if HasAccess {
 				handler(w, req)
 				return
-			} else {
-				log.Printf("Access control error - UIN: %s is trying to apply %s operation for %s\n", shibbolethUser.Uin, act, obj)
-				http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
-				return
 			}
+			log.Printf("Access control error - UIN: %s is trying to apply %s operation for %s\n", shibbolethUser.Uin, act, obj)
+			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+			return
 		} else {
 			coreAuth, claims := we.auth.coreAuth.Check(req)
 			if coreAuth {
@@ -201,11 +200,10 @@ func (we Adapter) adminAuthWrapFunc(handler adminAuthFunc) http.HandlerFunc {
 				if HasAccess {
 					handler(w, req)
 					return
-				} else {
-					log.Printf("Access control error - Core Subject: %s is trying to apply %s operation for %s\n", claims.Subject, act, obj)
-					http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
-					return
 				}
+				log.Printf("Access control error - Core Subject: %s is trying to apply %s operation for %s\n", claims.Subject, act, obj)
+				http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+				return
 			}
 		}
 
