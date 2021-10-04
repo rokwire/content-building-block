@@ -128,11 +128,10 @@ func (we Adapter) apiKeyOrTokenWrapFunc(handler apiKeysAuthFunc) http.HandlerFun
 		if len(apiKey) > 0 {
 			authenticated := we.auth.apiKeyCheck(w, req)
 			if !authenticated {
+				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return
 			}
-
 			handler(w, req)
-
 			return
 		}
 
@@ -142,6 +141,7 @@ func (we Adapter) apiKeyOrTokenWrapFunc(handler apiKeysAuthFunc) http.HandlerFun
 			handler(w, req)
 			return
 		}
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 	}
 }
 
@@ -153,6 +153,7 @@ func (we Adapter) userAuthWrapFunc(handler userAuthFunc) http.HandlerFunc {
 
 		ok, _ := we.auth.shibbolethAuth.Check(req)
 		if !ok {
+			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
 		}
 
@@ -185,26 +186,26 @@ func (we Adapter) adminAuthWrapFunc(handler adminAuthFunc) http.HandlerFunc {
 			log.Printf("Access control error - UIN: %s is trying to apply %s operation for %s\n", shibbolethUser.Uin, act, obj)
 			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 			return
-		} else {
-			coreAuth, claims := we.auth.coreAuth.Check(req)
-			if coreAuth {
-				permissions := strings.Split(claims.Permissions, ",")
+		}
 
-				HasAccess := false
-				for _, s := range permissions {
-					HasAccess = we.authorization.Enforce(s, obj, act)
-					if HasAccess {
-						break
-					}
-				}
+		coreAuth, claims := we.auth.coreAuth.Check(req)
+		if coreAuth {
+			permissions := strings.Split(claims.Permissions, ",")
+
+			HasAccess := false
+			for _, s := range permissions {
+				HasAccess = we.authorization.Enforce(s, obj, act)
 				if HasAccess {
-					handler(w, req)
-					return
+					break
 				}
-				log.Printf("Access control error - Core Subject: %s is trying to apply %s operation for %s\n", claims.Subject, act, obj)
-				http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+			}
+			if HasAccess {
+				handler(w, req)
 				return
 			}
+			log.Printf("Access control error - Core Subject: %s is trying to apply %s operation for %s\n", claims.Subject, act, obj)
+			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+			return
 		}
 
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)

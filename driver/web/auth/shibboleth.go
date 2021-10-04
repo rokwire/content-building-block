@@ -5,7 +5,6 @@ import (
 	"content/core/model"
 	"context"
 	"errors"
-	"fmt"
 	"gopkg.in/ericchiang/go-oidc.v2"
 	"log"
 	"net/http"
@@ -23,8 +22,7 @@ type tokenData struct {
 func (d *tokenData) HasClientID(clientIDs []string) bool {
 	if d.Audience != nil && len(clientIDs) > 0 {
 		for _, clientID := range clientIDs {
-
-			if strings.EqualFold(*d.Audience, fmt.Sprintf("%s-", clientID)) {
+			if strings.EqualFold(*d.Audience, clientID) {
 				return true
 			}
 		}
