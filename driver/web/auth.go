@@ -216,7 +216,7 @@ func (auth *AdminAuth) check(clientID *string, w http.ResponseWriter, r *http.Re
 
 	if auth.coreTokenAuth != nil {
 		claims, err := auth.coreTokenAuth.CheckRequestTokens(r)
-		if err == nil && claims != nil && claims.UID != "" && claims.AuthType == "illinois_oidc" {
+		if err == nil && claims != nil {
 			err = auth.coreTokenAuth.AuthorizeRequestPermissions(claims, r)
 			if err != nil {
 				log.Printf("Permission error: %v\n", err)
@@ -413,6 +413,7 @@ type UserAuth struct {
 
 	//shibboleth - keep for back compatability
 	appIDTokenVerifier *oidc.IDTokenVerifier
+	coreTokenAuth      *tokenauth.TokenAuth
 
 	//phone - keep for back compatability
 	phoneAuthSecret string
@@ -433,104 +434,25 @@ func (auth *UserAuth) start() {
 }
 
 func (auth *UserAuth) mainCheck(w http.ResponseWriter, r *http.Request) (bool, *string, *string) {
-	//get the tokens
-	token, tokenSourceType, csrfToken, err := auth.getTokens(r)
-	if err != nil {
-		log.Printf("error gettings tokens - %s", err)
-
-		auth.responseInternalServerError(w)
-		return false, nil, nil
-	}
-
-	//check if all input data is available
-	if token == nil || len(*token) == 0 {
-		auth.responseBadRequest(w)
-		return false, nil, nil
-	}
-	rawToken := *token //we have token
-	if *tokenSourceType == "cookie" && (csrfToken == nil || len(*csrfToken) == 0) {
-		//if the token is sent via cookie then we must have csrf token as well
-		auth.responseBadRequest(w)
-		return false, nil, nil
-	}
-
-	// determine the token type: 1 for shibboleth, 2 for phone, 3 for auth access token
-	// 1 & 2 are deprecated but we support them for back compatability
-	tokenType, err := auth.getTokenType(rawToken)
+	claims, err := auth.coreTokenAuth.CheckRequestTokens(r)
 	if err != nil {
 		auth.responseUnauthorized(err.Error(), w)
 		return false, nil, nil
 	}
-	if !(*tokenType == 1 || *tokenType == 2 || *tokenType == 3) {
+
+	var uid string
+	var authType string
+
+	if claims.Subject != "" && claims.Audience != "" {
+		authType = claims.Audience // maybe should be a different claim
+		uid = claims.Subject
+		log.Printf("UserAuth.mainCheck() -> current uid - %s\n", uid)
+	} else {
 		auth.responseUnauthorized("not supported token type", w)
 		return false, nil, nil
 	}
 
-	// process the token - validate it, extract the user identifier
-	var externalID string
-	var authType string
-
-	switch *tokenType {
-	case 1:
-		//support this for back compatability
-		uin, err := auth.processShibbolethToken(rawToken)
-		if err != nil {
-			auth.responseUnauthorized(err.Error(), w)
-			return false, nil, nil
-		}
-		externalID = *uin
-		authType = "shibboleth"
-	case 2:
-		//support this for back compatability
-		phone, err := auth.processPhoneToken(rawToken)
-		if err != nil {
-			auth.responseUnauthorized(err.Error(), w)
-			return false, nil, nil
-		}
-		externalID = *phone
-		authType = "phone"
-	case 3:
-		//mobile app sends just token, the browser sends token + csrf token
-
-		csrfCheck := false
-		if *tokenSourceType == "cookie" {
-			csrfCheck = true
-		}
-
-		tokenData, err := auth.processAccessToken(rawToken, csrfCheck, csrfToken)
-		if err != nil {
-			auth.responseUnauthorized(err.Error(), w)
-			return false, nil, nil
-		}
-
-		tokenAuth := tokenData.Auth
-		if tokenAuth == "oidc" {
-			externalID = tokenData.UID
-			authType = "shibboleth"
-		} else if tokenAuth == "rokwire_phone" {
-			externalID = tokenData.UID
-			authType = "phone"
-		} else {
-			auth.responseUnauthorized("not supported token auth type", w)
-			return false, nil, nil
-		}
-	}
-
-	//TODO - refactor!!!
-	// if phone token then treat it as shibboleth
-	if authType == "phone" {
-		foundedUIN := auth.findUINByPhone(externalID)
-		if foundedUIN == nil {
-			//not found, it means that this phone is not added, so return unauthorized
-			auth.responseUnauthorized(fmt.Sprintf("%s phone is not added in the system", externalID), w)
-			return false, nil, nil
-		}
-		//it was found
-		externalID = *foundedUIN
-		authType = "shibboleth"
-	}
-
-	return true, &externalID, &authType
+	return true, &uid, &authType
 }
 
 //token source type - cookie and header
