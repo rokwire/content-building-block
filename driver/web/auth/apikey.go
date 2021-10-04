@@ -12,15 +12,12 @@ type APIKeysAuth struct {
 }
 
 // Check checks the request contains a valid ROKWIRE-API-KEY header
-func (auth *APIKeysAuth) Check(w http.ResponseWriter, r *http.Request) bool {
+func (auth *APIKeysAuth) Check(r *http.Request) bool {
 	apiKey := r.Header.Get("ROKWIRE-API-KEY")
 	//check if there is api key in the header
 	if len(apiKey) == 0 {
 		//no key, so return 400
 		log.Println(fmt.Sprintf("400 - Bad Request"))
-
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Bad Request"))
 		return false
 	}
 
@@ -36,9 +33,6 @@ func (auth *APIKeysAuth) Check(w http.ResponseWriter, r *http.Request) bool {
 	if !exist {
 		//not exist, so return 401
 		log.Println(fmt.Sprintf("401 - Unauthorized for key %s", apiKey))
-
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte("Unauthorized"))
 		return false
 	}
 	return true

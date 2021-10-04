@@ -5,6 +5,7 @@ import (
 	"content/core/model"
 	"context"
 	"errors"
+	"fmt"
 	"gopkg.in/ericchiang/go-oidc.v2"
 	"log"
 	"net/http"
@@ -22,7 +23,8 @@ type tokenData struct {
 func (d *tokenData) HasClientID(clientIDs []string) bool {
 	if d.Audience != nil && len(clientIDs) > 0 {
 		for _, clientID := range clientIDs {
-			if strings.EqualFold(*d.Audience, clientID) {
+
+			if strings.EqualFold(*d.Audience, fmt.Sprintf("%s-", clientID)) {
 				return true
 			}
 		}
@@ -38,11 +40,10 @@ type ShibbolethAuth struct {
 }
 
 // Check checks the request contains a valid OIDC token from Shibboleth
-func (auth *ShibbolethAuth) Check(w http.ResponseWriter, r *http.Request) (bool, *model.ShibbolethToken) {
+func (auth *ShibbolethAuth) Check(r *http.Request) (bool, *model.ShibbolethToken) {
 	//1. Get the token from the request
 	rawIDToken, err := auth.getIDToken(r)
 	if err != nil {
-		auth.responseBadRequest(w)
 		return false, nil
 	}
 
@@ -50,8 +51,6 @@ func (auth *ShibbolethAuth) Check(w http.ResponseWriter, r *http.Request) (bool,
 	idToken, err := auth.verify(*rawIDToken)
 	if err != nil {
 		log.Printf("error validating token - %s\n", err)
-
-		auth.responseUnauthorized(*rawIDToken, w)
 		return false, nil
 	}
 
@@ -59,22 +58,17 @@ func (auth *ShibbolethAuth) Check(w http.ResponseWriter, r *http.Request) (bool,
 	var tokenData tokenData
 	if err := idToken.Claims(&tokenData); err != nil {
 		log.Printf("error getting user data from token - %s\n", err)
-
-		auth.responseUnauthorized(*rawIDToken, w)
 		return false, nil
 	}
 
 	if !tokenData.HasClientID(auth.clientIDs) {
 		log.Printf("error - Aud (%s) is not permitted %s\n", *tokenData.Audience, err)
-		auth.responseUnauthorized(*rawIDToken, w)
 		return false, nil
 	}
 
 	// we must have UIuceduUIN
 	if tokenData.UIuceduUIN == nil {
 		log.Printf("error - missing uiuceuin data in the token - %s\n", err)
-
-		auth.responseUnauthorized(*rawIDToken, w)
 		return false, nil
 	}
 
@@ -114,34 +108,6 @@ func (auth *ShibbolethAuth) getIDToken(r *http.Request) (*string, error) {
 func (auth *ShibbolethAuth) verify(rawIDToken string) (*oidc.IDToken, error) {
 	log.Println("ShibbolethToken -> token")
 	return auth.tokenVerifier.Verify(context.Background(), rawIDToken)
-}
-
-func (auth *ShibbolethAuth) responseBadRequest(w http.ResponseWriter) {
-	log.Println("ShibbolethToken -> 400 - Bad Request")
-
-	w.WriteHeader(http.StatusBadRequest)
-	w.Write([]byte("Bad Request"))
-}
-
-func (auth *ShibbolethAuth) responseUnauthorized(token string, w http.ResponseWriter) {
-	log.Printf("ShibbolethToken -> 401 - Unauthorized for token %s", token)
-
-	w.WriteHeader(http.StatusUnauthorized)
-	w.Write([]byte("Unauthorized"))
-}
-
-func (auth *ShibbolethAuth) responseForbbiden(info string, w http.ResponseWriter) {
-	log.Printf("ShibbolethToken -> 403 - Forbidden - %s", info)
-
-	w.WriteHeader(http.StatusForbidden)
-	w.Write([]byte("Forbidden"))
-}
-
-func (auth *ShibbolethAuth) responseInternalServerError(w http.ResponseWriter) {
-	log.Println("ShibbolethToken -> 500 - Internal Server Error")
-
-	w.WriteHeader(http.StatusInternalServerError)
-	w.Write([]byte("Internal Server Error"))
 }
 
 // NewShibbolethAuth creates ShibbolethAuth instance

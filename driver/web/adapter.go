@@ -151,7 +151,7 @@ func (we Adapter) userAuthWrapFunc(handler userAuthFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		utils.LogRequest(req)
 
-		ok, _ := we.auth.shibbolethAuth.Check(w, req)
+		ok, _ := we.auth.shibbolethAuth.Check(req)
 		if !ok {
 			return
 		}
@@ -169,23 +169,25 @@ func (we Adapter) adminAuthWrapFunc(handler adminAuthFunc) http.HandlerFunc {
 		obj := req.URL.Path // the resource that is going to be accessed.
 		act := req.Method   // the operation that the user performs on the resource.
 
-		shibbolethAuth, shibbolethUser := we.auth.adminCheck(w, req)
+		shibbolethAuth, shibbolethUser := we.auth.adminCheck(req)
 		if shibbolethAuth {
 			HasAccess := false
 			for _, s := range *shibbolethUser.IsMemberOf {
 				HasAccess = we.authorization.Enforce(s, obj, act)
 				if HasAccess {
-					return
+					break
 				}
 			}
 			if HasAccess {
 				handler(w, req)
+				return
 			} else {
 				log.Printf("Access control error - UIN: %s is trying to apply %s operation for %s\n", shibbolethUser.Uin, act, obj)
 				http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+				return
 			}
 		} else {
-			coreAuth, claims := we.auth.coreAuth.Check(w, req)
+			coreAuth, claims := we.auth.coreAuth.Check(req)
 			if coreAuth {
 				permissions := strings.Split(claims.Permissions, ",")
 
@@ -198,9 +200,11 @@ func (we Adapter) adminAuthWrapFunc(handler adminAuthFunc) http.HandlerFunc {
 				}
 				if HasAccess {
 					handler(w, req)
+					return
 				} else {
 					log.Printf("Access control error - Core Subject: %s is trying to apply %s operation for %s\n", claims.Subject, act, obj)
 					http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+					return
 				}
 			}
 		}
@@ -209,8 +213,8 @@ func (we Adapter) adminAuthWrapFunc(handler adminAuthFunc) http.HandlerFunc {
 	}
 }
 
-func (auth *Auth) adminCheck(w http.ResponseWriter, r *http.Request) (bool, *model.ShibbolethToken) {
-	return auth.shibbolethAuth.Check(w, r)
+func (auth *Auth) adminCheck(r *http.Request) (bool, *model.ShibbolethToken) {
+	return auth.shibbolethAuth.Check(r)
 }
 
 // NewWebAdapter creates new WebAdapter instance

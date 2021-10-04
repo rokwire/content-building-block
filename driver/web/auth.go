@@ -46,11 +46,11 @@ func (auth *Auth) clientIDCheck(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func (auth *Auth) apiKeyCheck(w http.ResponseWriter, r *http.Request) bool {
-	return auth.apiKeysAuth.Check(w, r)
+	return auth.apiKeysAuth.Check(r)
 }
 
 func (auth *Auth) shibbolethCheck(w http.ResponseWriter, r *http.Request) (bool, *model.ShibbolethToken) {
-	return auth.shibbolethAuth.Check(w, r)
+	return auth.shibbolethAuth.Check(r)
 }
 
 // NewAuth creates new auth handler

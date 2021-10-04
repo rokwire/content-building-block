@@ -34,7 +34,7 @@ func NewCoreAuth(app *core.Application, config model.Config) *CoreAuth {
 }
 
 // Check checks the request contains a valid Core access token
-func (ca CoreAuth) Check(w http.ResponseWriter, r *http.Request) (bool, *tokenauth.Claims) {
+func (ca CoreAuth) Check(r *http.Request) (bool, *tokenauth.Claims) {
 	claims, err := ca.tokenAuth.CheckRequestTokens(r)
 	if err != nil {
 		log.Printf("error validate token: %s", err)
