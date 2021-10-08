@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 )
 
 // Adapter struct
@@ -27,7 +28,9 @@ func (a *Adapter) GetTwitterPosts(userID string, twitterQueryParams string) (map
 	url := fmt.Sprintf(a.twitterFeedURL, userID)
 	url += fmt.Sprintf("?%s", twitterQueryParams)
 
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: 120 * time.Second,
+	}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		log.Printf("error creating Twitter request - %s", err)

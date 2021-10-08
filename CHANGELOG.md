@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.10] - 2021-10-08
+- Twitter feed/widget just spins and spins [#25](https://github.com/rokwire/content-building-block/issues/25)
+
+## [1.0.9] - 2021-10-05
+- Integrate Core-BB [#22](https://github.com/rokwire/content-building-block/issues/22)
+
 ## [1.0.8] - 2021-09-17
 ### Fixed
 - Additional fixes for image upload, cache expiration and readme improvements [#10](https://github.com/rokwire/content-building-block/issues/11)
