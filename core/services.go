@@ -118,9 +118,11 @@ func (app *Application) getTwitterPosts(userID string, twitterQueryParams string
 			posts, err = app.twitterAdapter.GetTwitterPosts(userID, twitterQueryParams)
 			if err == nil {
 				app.cacheAdapter.SetTwitterPosts(userID, twitterQueryParams, posts)
+			} else {
+				fmt.Printf("error feeding twitter: %s", err)
 			}
-			app.cacheLock.Unlock()
 		}
+		app.cacheLock.Unlock()
 	}
 	return posts, err
 }
