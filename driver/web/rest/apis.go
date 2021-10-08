@@ -135,9 +135,9 @@ func (h ApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request) {
 // @Security UserAuth
 // @Router /image [post]
 func (h ApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
-	//validate the image type
+	// validate the image type
 	path := r.PostFormValue("path")
-	if len(path) <= 0 {
+	if len(path) == 0 {
 		log.Print("Missing image path\n")
 		http.Error(w, "missing 'path' form param", http.StatusBadRequest)
 		return
@@ -264,12 +264,12 @@ func intPostValueFromString(stringValue string) int {
 	return value
 }
 
-//NewApisHandler creates new rest Handler instance
+// NewApisHandler creates new rest Handler instance
 func NewApisHandler(app *core.Application) ApisHandler {
 	return ApisHandler{app: app}
 }
 
-//NewAdminApisHandler creates new rest Handler instance
+// NewAdminApisHandler creates new rest Handler instance
 func NewAdminApisHandler(app *core.Application) AdminApisHandler {
 	return AdminApisHandler{app: app}
 }

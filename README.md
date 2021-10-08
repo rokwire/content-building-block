@@ -22,9 +22,7 @@ CONTENT_HOST | < value > | yes | Host name
 CONTENT_MONGO_AUTH | <mongodb://USER:PASSWORD@HOST:PORT/DATABASE NAME> | yes | MongoDB authentication string. The user must have read/write privileges.
 CONTENT_MONGO_DATABASE | < value > | yes | MongoDB database name
 CONTENT_MONGO_TIMEOUT | < value > | no | MongoDB timeout in milliseconds. Set default value(500 milliseconds) if omitted
-CONTENT_OIDC_ADMIN_CLIENT_ID | < value > | yes | OIDC admin client id
-CONTENT_OIDC_ADMIN_WEB_CLIENT_ID | < value > | yes | OIDC admin web client id
-CONTENT_OIDC_APP_CLIENT_ID | < value > | yes | OIDC app client id
+CONTENT_OIDC_CLIENT_IDS | < value > | yes | OIDC admin client id
 CONTENT_OIDC_PROVIDER | < value > | yes | OIDC provider
 CONTENT_PHONE_SECRET | < value > | yes | Phone secret
 ROKWIRE_API_KEYS | <value1,value2,value3> | yes | Comma separated list of rokwire api keys

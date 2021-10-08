@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/casbin/casbin"
 	"github.com/gorilla/mux"
@@ -72,8 +73,6 @@ type Adapter struct {
 //Start starts the module
 func (we Adapter) Start() {
 
-	we.auth.Start()
-
 	router := mux.NewRouter().StrictSlash(true)
 
 	// handle apis
@@ -90,12 +89,12 @@ func (we Adapter) Start() {
 
 	// handle student guide admin apis
 	adminSubRouter := contentRouter.PathPrefix("/admin").Subrouter()
-	adminSubRouter.HandleFunc("/student_guides", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.GetStudentGuides)).Methods("GET")
-	adminSubRouter.HandleFunc("/student_guides", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.CreateStudentGuide)).Methods("POST")
-	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.GetStudentGuide)).Methods("GET")
-	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.UpdateStudentGuide)).Methods("PUT")
-	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.DeleteStudentGuide)).Methods("DELETE")
-	adminSubRouter.HandleFunc("/image", we.adminAppIDTokenAuthWrapFunc(we.adminApisHandler.UploadImage)).Methods("POST")
+	adminSubRouter.HandleFunc("/student_guides", we.adminAuthWrapFunc(we.adminApisHandler.GetStudentGuides)).Methods("GET")
+	adminSubRouter.HandleFunc("/student_guides", we.adminAuthWrapFunc(we.adminApisHandler.CreateStudentGuide)).Methods("POST")
+	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAuthWrapFunc(we.adminApisHandler.GetStudentGuide)).Methods("GET")
+	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAuthWrapFunc(we.adminApisHandler.UpdateStudentGuide)).Methods("PUT")
+	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAuthWrapFunc(we.adminApisHandler.DeleteStudentGuide)).Methods("DELETE")
+	adminSubRouter.HandleFunc("/image", we.adminAuthWrapFunc(we.adminApisHandler.UploadImage)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+we.port, router))
 }
@@ -129,20 +128,20 @@ func (we Adapter) apiKeyOrTokenWrapFunc(handler apiKeysAuthFunc) http.HandlerFun
 		if len(apiKey) > 0 {
 			authenticated := we.auth.apiKeyCheck(w, req)
 			if !authenticated {
+				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return
 			}
-
 			handler(w, req)
-
 			return
 		}
 
 		//apply token check
-		authenticated, _, _ := we.auth.userCheck(w, req)
+		authenticated, _ := we.auth.shibbolethCheck(w, req)
 		if authenticated {
 			handler(w, req)
 			return
 		}
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 	}
 }
 
@@ -152,8 +151,9 @@ func (we Adapter) userAuthWrapFunc(handler userAuthFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		utils.LogRequest(req)
 
-		ok, _, _ := we.auth.userCheck(w, req)
+		ok, _ := we.auth.shibbolethAuth.Check(req)
 		if !ok {
+			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
 		}
 
@@ -163,84 +163,62 @@ func (we Adapter) userAuthWrapFunc(handler userAuthFunc) http.HandlerFunc {
 
 type adminAuthFunc = func(http.ResponseWriter, *http.Request)
 
-func (we Adapter) adminAppIDTokenAuthWrapFunc(handler adminAuthFunc) http.HandlerFunc {
+func (we Adapter) adminAuthWrapFunc(handler adminAuthFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		utils.LogRequest(req)
-
-		ok, shiboUser := we.auth.adminCheck(w, req)
-		if !ok {
-			return
-		}
 
 		obj := req.URL.Path // the resource that is going to be accessed.
 		act := req.Method   // the operation that the user performs on the resource.
 
-		var HasAccess bool = false
-		for _, s := range *shiboUser.IsMemberOf {
-			HasAccess = we.authorization.Enforce(s, obj, act)
-			if HasAccess {
-				break
+		shibbolethAuth, shibbolethUser := we.auth.adminCheck(req)
+		if shibbolethAuth {
+			HasAccess := false
+			for _, s := range *shibbolethUser.IsMemberOf {
+				HasAccess = we.authorization.Enforce(s, obj, act)
+				if HasAccess {
+					break
+				}
 			}
-		}
-
-		if !HasAccess {
-			log.Printf("Access control error - UIN: %s is trying to apply %s operation for %s\n", shiboUser.Uin, act, obj)
+			if HasAccess {
+				handler(w, req)
+				return
+			}
+			log.Printf("Access control error - UIN: %s is trying to apply %s operation for %s\n", shibbolethUser.Uin, act, obj)
 			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 			return
 		}
 
-		handler(w, req)
+		coreAuth, claims := we.auth.coreAuth.Check(req)
+		if coreAuth {
+			permissions := strings.Split(claims.Permissions, ",")
+
+			HasAccess := false
+			for _, s := range permissions {
+				HasAccess = we.authorization.Enforce(s, obj, act)
+				if HasAccess {
+					break
+				}
+			}
+			if HasAccess {
+				handler(w, req)
+				return
+			}
+			log.Printf("Access control error - Core Subject: %s is trying to apply %s operation for %s\n", claims.Subject, act, obj)
+			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+			return
+		}
+
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 	}
 }
 
-func (auth *Auth) adminCheck(w http.ResponseWriter, r *http.Request) (bool, *model.ShibbolethAuth) {
-	return auth.adminAuth.check(w, r)
+func (auth *Auth) adminCheck(r *http.Request) (bool, *model.ShibbolethToken) {
+	return auth.shibbolethAuth.Check(r)
 }
 
-func (auth *AdminAuth) check(w http.ResponseWriter, r *http.Request) (bool, *model.ShibbolethAuth) {
-	//1. Get the token from the request
-	rawIDToken, tokenType, err := auth.getIDToken(r)
-	if err != nil {
-		auth.responseBadRequest(w)
-		return false, nil
-	}
-
-	//3. Validate the token
-	idToken, err := auth.verify(*rawIDToken, *tokenType)
-	if err != nil {
-		log.Printf("error validating token - %s\n", err)
-
-		auth.responseUnauthorized(*rawIDToken, w)
-		return false, nil
-	}
-
-	//4. Get the user data from the token
-	var userData userData
-	if err := idToken.Claims(&userData); err != nil {
-		log.Printf("error getting user data from token - %s\n", err)
-
-		auth.responseUnauthorized(*rawIDToken, w)
-		return false, nil
-	}
-	//we must have UIuceduUIN
-	if userData.UIuceduUIN == nil {
-		log.Printf("error - missing uiuceuin data in the token - %s\n", err)
-
-		auth.responseUnauthorized(*rawIDToken, w)
-		return false, nil
-	}
-
-	shibboAuth := &model.ShibbolethAuth{Uin: *userData.UIuceduUIN, Email: *userData.Email,
-		IsMemberOf: userData.UIuceduIsMemberOf}
-
-	return true, shibboAuth
-}
-
-//NewWebAdapter creates new WebAdapter instance
-func NewWebAdapter(host string, port string, app *core.Application, appKeys []string, oidcProvider string, oidcAppClientID string, adminAppClientID string,
-	adminWebAppClientID string, phoneAuthSecret string, authKeys string, authIssuer string) Adapter {
-	auth := NewAuth(app, appKeys, oidcProvider, oidcAppClientID, adminAppClientID, adminWebAppClientID,
-		phoneAuthSecret, authKeys, authIssuer)
+// NewWebAdapter creates new WebAdapter instance
+func NewWebAdapter(host string, port string, app *core.Application, config model.Config) Adapter {
+	auth := NewAuth(app, config)
 	authorization := casbin.NewEnforcer("driver/web/authorization_model.conf", "driver/web/authorization_policy.csv")
 
 	apisHandler := rest.NewApisHandler(app)
@@ -248,7 +226,7 @@ func NewWebAdapter(host string, port string, app *core.Application, appKeys []st
 	return Adapter{host: host, port: port, auth: auth, authorization: authorization, apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app}
 }
 
-//AppListener implements core.ApplicationListener interface
+// AppListener implements core.ApplicationListener interface
 type AppListener struct {
 	adapter *Adapter
 }
