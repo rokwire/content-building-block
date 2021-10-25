@@ -15,7 +15,7 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pquerna/cachecontrol v0.1.0 // indirect
-	github.com/rokmetro/auth-library v0.1.19
+	github.com/rokmetro/auth-library v0.1.20
 	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/swaggo/http-swagger v1.0.0
 	github.com/swaggo/swag v1.7.0

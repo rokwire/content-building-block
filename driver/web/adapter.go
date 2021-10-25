@@ -124,7 +124,7 @@ func (we Adapter) apiKeyOrTokenWrapFunc(handler apiKeysAuthFunc) http.HandlerFun
 		utils.LogRequest(req)
 
 		apiKey := req.Header.Get("ROKWIRE-API-KEY")
-		//apply api key check
+		// apply api key check
 		if len(apiKey) > 0 {
 			authenticated := we.auth.apiKeyCheck(w, req)
 			if !authenticated {
@@ -135,12 +135,20 @@ func (we Adapter) apiKeyOrTokenWrapFunc(handler apiKeysAuthFunc) http.HandlerFun
 			return
 		}
 
-		//apply token check
-		authenticated, _ := we.auth.shibbolethCheck(w, req)
-		if authenticated {
+		// apply shibboleth token check
+		shibbolethAuthenticated, _ := we.auth.shibbolethCheck(w, req)
+		if shibbolethAuthenticated {
 			handler(w, req)
 			return
 		}
+
+		// apply core token check
+		coreAuth, _ := we.auth.coreAuth.Check(req)
+		if coreAuth {
+			handler(w, req)
+			return
+		}
+
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 	}
 }
@@ -151,13 +159,18 @@ func (we Adapter) userAuthWrapFunc(handler userAuthFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		utils.LogRequest(req)
 
-		ok, _ := we.auth.shibbolethAuth.Check(req)
-		if !ok {
-			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		shibbolethOk, _ := we.auth.shibbolethAuth.Check(req)
+		if shibbolethOk {
+			handler(w, req)
 			return
 		}
 
-		handler(w, req)
+		coreAuth, claims := we.auth.coreAuth.Check(req)
+		if coreAuth && claims != nil && !claims.Anonymous {
+			handler(w, req)
+			return
+		}
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 	}
 }
 
