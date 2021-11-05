@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.12] - 2021-11-05
+- Update permissions and link core permissions [#28](https://github.com/rokwire/content-building-block/issues/28)
+
 ## [1.0.11] - 2021-10-25
 - Support Core access tokens for UIUC client APIs [#27](https://github.com/rokwire/content-building-block/issues/27)
 
