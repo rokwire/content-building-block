@@ -1,2 +1,2 @@
 p, urn:mace:uiuc.edu:urbana:authman:app-rokwire-service-policy-rokwire admin app, /content/admin*, (GET)|(POST)|(PUT)|(DELETE)
-p, content_admin, /content/admin*, (GET)|(POST)|(PUT)|(DELETE)
+p, all_admin_content, /content/admin*, (GET)|(POST)|(PUT)|(DELETE)
