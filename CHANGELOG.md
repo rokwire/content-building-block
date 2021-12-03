@@ -6,8 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [1.0.14] - 2021-12-03
+- Introduce & support health information data [#33](https://github.com/rokwire/content-building-block/issues/33)
+
 ## [1.0.13] - 2021-11-08
-Add support of all_admin_content permission [#30](https://github.com/rokwire/content-building-block/issues/30)
+- Add support of all_admin_content permission [#30](https://github.com/rokwire/content-building-block/issues/30)
 
 ## [1.0.12] - 2021-11-05
 - Update permissions and link core permissions [#28](https://github.com/rokwire/content-building-block/issues/28)
