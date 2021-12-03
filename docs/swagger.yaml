@@ -9,6 +9,76 @@ info:
   title: Rokwire Content Building Block API
   version: 1.0.8
 paths:
+  /admin/health_location/{id}:
+    delete:
+      description: Deletes a health location with the specified id
+      operationId: AdminDeleteHealthLocation
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/health_locations:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves  all items
+      operationId: AdminGetHealthLocations
+      parameters:
+      - description: Coma separated IDs of the desired records
+        in: query
+        name: ids
+        type: string
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Create a health location
+      operationId: AdminCreateHealthLocation
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/health_locations/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves  all items
+      operationId: AdminGetHealthLocation
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    put:
+      consumes:
+      - application/json
+      description: Updates a health location with the specified id
+      operationId: AdminUpdateHealthLocation
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
   /admin/image:
     post:
       consumes:
@@ -122,6 +192,39 @@ paths:
       - AdminUserAuth: []
       tags:
       - Admin
+  /health_locations:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves  all health locations
+      operationId: GetHealthLocations
+      parameters:
+      - description: Coma separated IDs of the desired records
+        in: query
+        name: ids
+        type: string
+      responses:
+        "200":
+          description: ""
+      security:
+      - RokwireAuth: []
+      tags:
+      - Client
+  /health_locations/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a health location by id
+      operationId: GetHealthLocation
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - RokwireAuth: []
+      tags:
+      - Client
   /image:
     post:
       consumes:
@@ -170,7 +273,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieves  all items
+      description: Retrieves  all student guides
       operationId: GetStudentGuides
       parameters:
       - description: Coma separated IDs of the desired records
@@ -188,7 +291,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieves  all items
+      description: Retrieves a student guide by id
       operationId: GetStudentGuide
       produces:
       - application/json

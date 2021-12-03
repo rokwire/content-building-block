@@ -203,6 +203,192 @@ func (h AdminApisHandler) DeleteStudentGuide(w http.ResponseWriter, r *http.Requ
 	w.WriteHeader(http.StatusOK)
 }
 
+// GetHealthLocations retrieves  all items
+// @Description Retrieves  all items
+// @Param ids query string false "Coma separated IDs of the desired records"
+// @Tags Admin
+// @ID AdminGetHealthLocations
+// @Accept json
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/health_locations [get]
+func (h AdminApisHandler) GetHealthLocations(w http.ResponseWriter, r *http.Request) {
+
+	IDs := []string{}
+	IDskeys, ok := r.URL.Query()["ids"]
+	if ok && len(IDskeys[0]) > 0 {
+		extIDs := IDskeys[0]
+		IDs = strings.Split(extIDs, ",")
+	}
+
+	resData, err := h.app.Services.GetHealthLocations(IDs)
+	if err != nil {
+		log.Printf("Error on health location items by id - %s\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if resData == nil {
+		resData = []bson.M{}
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal all health locations")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// GetHealthLocation Retrieves a health location by id
+// @Description Retrieves  all items
+// @Tags Admin
+// @ID AdminGetHealthLocation
+// @Accept json
+// @Produce json
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/health_locations/{id} [get]
+func (h AdminApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	locationID := vars["id"]
+
+	resData, err := h.app.Services.GetHealthLocation(locationID)
+	if err != nil {
+		log.Printf("Error on getting health location id - %s\n %s", locationID, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal the health location")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// UpdateHealthLocation Updates a health location with the specified id
+// @Description Updates a health location with the specified id
+// @Tags Admin
+// @ID AdminUpdateHealthLocation
+// @Accept json
+// @Produce json
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/health_locations/{id} [put]
+func (h AdminApisHandler) UpdateHealthLocation(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	locationID := vars["id"]
+
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("Error on marshal create a health location - %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	var item bson.M
+	err = json.Unmarshal(data, &item)
+	if err != nil {
+		log.Printf("Error on unmarshal the create health location request data - %s\n", err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	resData, err := h.app.Services.UpdateHealthLocation(locationID, item)
+	if err != nil {
+		log.Printf("Error on updating health location with id - %s\n %s", locationID, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal the updated health location")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonData)
+}
+
+// CreateHealthLocation Create a health location
+// @Description Create a health location
+// @Tags Admin
+// @ID AdminCreateHealthLocation
+// @Accept json
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/health_locations [post]
+func (h AdminApisHandler) CreateHealthLocation(w http.ResponseWriter, r *http.Request) {
+
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("Error on marshal create a health location - %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	var item bson.M
+	err = json.Unmarshal(data, &item)
+	if err != nil {
+		log.Printf("Error on unmarshal the create health location request data - %s\n", err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	createdItem, err := h.app.Services.CreateHealthLocation(item)
+	if err != nil {
+		log.Printf("Error on creating health location: %s\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, err := json.Marshal(createdItem)
+	if err != nil {
+		log.Println("Error on marshal the new item")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonData)
+}
+
+// DeleteHealthLocation Deletes a health location with the specified id
+// @Description Deletes a health location with the specified id
+// @Tags Admin
+// @ID AdminDeleteHealthLocation
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/health_location/{id} [delete]
+func (h AdminApisHandler) DeleteHealthLocation(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	locationID := vars["id"]
+
+	err := h.app.Services.DeleteHealthLocation(locationID)
+	if err != nil {
+		log.Printf("Error on deleting health location with id - %s\n %s", locationID, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+}
+
 // UploadImage Uploads an image to AWS S3
 // @Description Uploads an image to AWS S3
 // @Tags Admin

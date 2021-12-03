@@ -48,8 +48,8 @@ func (h ApisHandler) Version(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(h.app.Services.GetVersion()))
 }
 
-// GetStudentGuides retrieves  all items
-// @Description Retrieves  all items
+// GetStudentGuides retrieves  all student guides
+// @Description Retrieves  all student guides
 // @Tags Client
 // @ID GetStudentGuides
 // @Param ids query string false "Coma separated IDs of the desired records"
@@ -67,7 +67,7 @@ func (h ApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
 
 	resData, err := h.app.Services.GetStudentGuides(IDs)
 	if err != nil {
-		log.Printf("Error on getting track items by id - %s\n", err)
+		log.Printf("Error on getting student guides by ids - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -89,7 +89,7 @@ func (h ApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetStudentGuide Retrieves a student guide by id
-// @Description Retrieves  all items
+// @Description Retrieves a student guide by id
 // @Tags Client
 // @ID GetStudentGuide
 // @Accept json
@@ -111,6 +111,78 @@ func (h ApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(resData)
 	if err != nil {
 		log.Println("Error on marshal the student guide")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// GetHealthLocations Retrieves  all health locations
+// @Description Retrieves  all health locations
+// @Tags Client
+// @ID GetHealthLocations
+// @Param ids query string false "Coma separated IDs of the desired records"
+// @Accept json
+// @Success 200
+// @Security RokwireAuth
+// @Router /health_locations [get]
+func (h ApisHandler) GetHealthLocations(w http.ResponseWriter, r *http.Request) {
+	IDs := []string{}
+	IDskeys, ok := r.URL.Query()["ids"]
+	if ok && len(IDskeys[0]) > 0 {
+		extIDs := IDskeys[0]
+		IDs = strings.Split(extIDs, ",")
+	}
+
+	resData, err := h.app.Services.GetHealthLocations(IDs)
+	if err != nil {
+		log.Printf("Error on getting health locations by ids - %s\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if resData == nil {
+		resData = []bson.M{}
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal all health locations")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// GetHealthLocation Retrieves a health location by id
+// @Description Retrieves a health location by id
+// @Tags Client
+// @ID GetHealthLocation
+// @Accept json
+// @Produce json
+// @Success 200
+// @Security RokwireAuth
+// @Router /health_locations/{id} [get]
+func (h ApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	guideID := vars["id"]
+
+	resData, err := h.app.Services.GetHealthLocation(guideID)
+	if err != nil {
+		log.Printf("Error on getting health location id - %s\n %s", guideID, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal the health location")
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}

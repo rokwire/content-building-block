@@ -84,6 +84,8 @@ func (we Adapter) Start() {
 	// handle student guide client apis
 	contentRouter.HandleFunc("/student_guides", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuides)).Methods("GET")
 	contentRouter.HandleFunc("/student_guides/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuide)).Methods("GET")
+	contentRouter.HandleFunc("/health_locations", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetHealthLocations)).Methods("GET")
+	contentRouter.HandleFunc("/health_locations/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetHealthLocation)).Methods("GET")
 	contentRouter.HandleFunc("/image", we.userAuthWrapFunc(we.apisHandler.UploadImage)).Methods("POST")
 	contentRouter.HandleFunc("/twitter/users/{user_id}/tweets", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetTweeterPosts)).Methods("GET")
 
@@ -94,6 +96,11 @@ func (we Adapter) Start() {
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAuthWrapFunc(we.adminApisHandler.GetStudentGuide)).Methods("GET")
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAuthWrapFunc(we.adminApisHandler.UpdateStudentGuide)).Methods("PUT")
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAuthWrapFunc(we.adminApisHandler.DeleteStudentGuide)).Methods("DELETE")
+	adminSubRouter.HandleFunc("/health_locations", we.adminAuthWrapFunc(we.adminApisHandler.GetHealthLocations)).Methods("GET")
+	adminSubRouter.HandleFunc("/health_locations", we.adminAuthWrapFunc(we.adminApisHandler.CreateHealthLocation)).Methods("POST")
+	adminSubRouter.HandleFunc("/health_location/{id}", we.adminAuthWrapFunc(we.adminApisHandler.GetHealthLocation)).Methods("GET")
+	adminSubRouter.HandleFunc("/health_location/{id}", we.adminAuthWrapFunc(we.adminApisHandler.UpdateHealthLocation)).Methods("PUT")
+	adminSubRouter.HandleFunc("/health_location/{id}", we.adminAuthWrapFunc(we.adminApisHandler.DeleteHealthLocation)).Methods("DELETE")
 	adminSubRouter.HandleFunc("/image", we.adminAuthWrapFunc(we.adminApisHandler.UploadImage)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+we.port, router))
