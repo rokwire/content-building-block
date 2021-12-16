@@ -106,6 +106,28 @@ func (app *Application) deleteHealthLocation(id string) error {
 	return err
 }
 
+// Content Items
+
+func (app *Application) getContentItems(ids []string, category *string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error) {
+	return app.storage.GetContentItems(ids, category, offset, limit, order)
+}
+
+func (app *Application) getContentItem(id string) (*model.ContentItem, error) {
+	return app.storage.GetContentItem(id)
+}
+
+func (app *Application) createContentItem(item *model.ContentItem) (*model.ContentItem, error) {
+	return app.storage.CreateContentItem(item)
+}
+
+func (app *Application) updateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error) {
+	return app.storage.UpdateContentItem(id, item)
+}
+
+func (app *Application) deleteContentItem(id string) error {
+	return app.storage.DeleteContentItem(id)
+}
+
 // Misc
 
 func (app *Application) uploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (bson.M, error) {

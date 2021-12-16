@@ -96,11 +96,19 @@ func (we Adapter) Start() {
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAuthWrapFunc(we.adminApisHandler.GetStudentGuide)).Methods("GET")
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAuthWrapFunc(we.adminApisHandler.UpdateStudentGuide)).Methods("PUT")
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAuthWrapFunc(we.adminApisHandler.DeleteStudentGuide)).Methods("DELETE")
+
 	adminSubRouter.HandleFunc("/health_locations", we.adminAuthWrapFunc(we.adminApisHandler.GetHealthLocations)).Methods("GET")
 	adminSubRouter.HandleFunc("/health_locations", we.adminAuthWrapFunc(we.adminApisHandler.CreateHealthLocation)).Methods("POST")
 	adminSubRouter.HandleFunc("/health_location/{id}", we.adminAuthWrapFunc(we.adminApisHandler.GetHealthLocation)).Methods("GET")
 	adminSubRouter.HandleFunc("/health_location/{id}", we.adminAuthWrapFunc(we.adminApisHandler.UpdateHealthLocation)).Methods("PUT")
 	adminSubRouter.HandleFunc("/health_location/{id}", we.adminAuthWrapFunc(we.adminApisHandler.DeleteHealthLocation)).Methods("DELETE")
+
+	adminSubRouter.HandleFunc("/content_items", we.adminAuthWrapFunc(we.adminApisHandler.GetContentItems)).Methods("GET")
+	adminSubRouter.HandleFunc("/content_items", we.adminAuthWrapFunc(we.adminApisHandler.CreateContentItem)).Methods("POST")
+	adminSubRouter.HandleFunc("/content_items/{id}", we.adminAuthWrapFunc(we.adminApisHandler.GetContentItem)).Methods("GET")
+	adminSubRouter.HandleFunc("/content_items/{id}", we.adminAuthWrapFunc(we.adminApisHandler.UpdateContentItem)).Methods("PUT")
+	adminSubRouter.HandleFunc("/content_items/{id}", we.adminAuthWrapFunc(we.adminApisHandler.DeleteContentItem)).Methods("DELETE")
+
 	adminSubRouter.HandleFunc("/image", we.adminAuthWrapFunc(we.adminApisHandler.UploadImage)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+we.port, router))

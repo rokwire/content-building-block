@@ -37,6 +37,12 @@ type Services interface {
 	UpdateHealthLocation(id string, item bson.M) (bson.M, error)
 	DeleteHealthLocation(id string) error
 
+	GetContentItems(ids []string, category *string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error)
+	GetContentItem(id string) (*model.ContentItem, error)
+	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)
+	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
+	DeleteContentItem(id string) error
+
 	UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (bson.M, error)
 	GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error)
 }
@@ -93,6 +99,28 @@ func (s *servicesImpl) DeleteHealthLocation(id string) error {
 	return s.app.deleteHealthLocation(id)
 }
 
+// Content Items
+
+func (s *servicesImpl) GetContentItems(ids []string, category *string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error) {
+	return s.app.getContentItems(ids, category, offset, limit, order)
+}
+
+func (s *servicesImpl) GetContentItem(id string) (*model.ContentItem, error) {
+	return s.app.getContentItem(id)
+}
+
+func (s *servicesImpl) CreateContentItem(item *model.ContentItem) (*model.ContentItem, error) {
+	return s.app.createContentItem(item)
+}
+
+func (s *servicesImpl) UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error) {
+	return s.app.updateContentItem(id, item)
+}
+
+func (s *servicesImpl) DeleteContentItem(id string) error {
+	return s.app.deleteContentItem(id)
+}
+
 // Misc
 
 func (s *servicesImpl) UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (bson.M, error) {
@@ -116,4 +144,10 @@ type Storage interface {
 	CreateHealthLocation(item bson.M) (bson.M, error)
 	UpdateHealthLocation(id string, item bson.M) (bson.M, error)
 	DeleteHealthLocation(id string) error
+
+	GetContentItems(ids []string, category *string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error)
+	GetContentItem(id string) (*model.ContentItem, error)
+	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)
+	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
+	DeleteContentItem(id string) error
 }
