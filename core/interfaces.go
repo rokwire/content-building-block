@@ -31,6 +31,12 @@ type Services interface {
 	UpdateStudentGuide(id string, item bson.M) (bson.M, error)
 	DeleteStudentGuide(id string) error
 
+	GetHealthLocations(ids []string) ([]bson.M, error)
+	GetHealthLocation(id string) (bson.M, error)
+	CreateHealthLocation(item bson.M) (bson.M, error)
+	UpdateHealthLocation(id string, item bson.M) (bson.M, error)
+	DeleteHealthLocation(id string) error
+
 	UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (bson.M, error)
 	GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error)
 }
@@ -42,6 +48,8 @@ type servicesImpl struct {
 func (s *servicesImpl) GetVersion() string {
 	return s.app.getVersion()
 }
+
+// Student Guides
 
 func (s *servicesImpl) GetStudentGuides(ids []string) ([]bson.M, error) {
 	return s.app.getStudentGuides(ids)
@@ -63,6 +71,30 @@ func (s *servicesImpl) DeleteStudentGuide(id string) error {
 	return s.app.deleteStudentGuide(id)
 }
 
+// Health Locations
+
+func (s *servicesImpl) GetHealthLocations(ids []string) ([]bson.M, error) {
+	return s.app.getHealthLocations(ids)
+}
+
+func (s *servicesImpl) CreateHealthLocation(item bson.M) (bson.M, error) {
+	return s.app.createHealthLocation(item)
+}
+
+func (s *servicesImpl) GetHealthLocation(id string) (bson.M, error) {
+	return s.app.getHealthLocation(id)
+}
+
+func (s *servicesImpl) UpdateHealthLocation(id string, item bson.M) (bson.M, error) {
+	return s.app.updateHealthLocation(id, item)
+}
+
+func (s *servicesImpl) DeleteHealthLocation(id string) error {
+	return s.app.deleteHealthLocation(id)
+}
+
+// Misc
+
 func (s *servicesImpl) UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (bson.M, error) {
 	return s.app.uploadImage(fileName, filetype, bytes, path, spec)
 }
@@ -78,4 +110,10 @@ type Storage interface {
 	CreateStudentGuide(item bson.M) (bson.M, error)
 	UpdateStudentGuide(id string, item bson.M) (bson.M, error)
 	DeleteStudentGuide(id string) error
+
+	GetHealthLocations(ids []string) ([]bson.M, error)
+	GetHealthLocation(id string) (bson.M, error)
+	CreateHealthLocation(item bson.M) (bson.M, error)
+	UpdateHealthLocation(id string, item bson.M) (bson.M, error)
+	DeleteHealthLocation(id string) error
 }

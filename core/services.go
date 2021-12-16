@@ -28,6 +28,8 @@ func (app *Application) getVersion() string {
 	return app.version
 }
 
+// Student guides
+
 func (app *Application) getStudentGuides(ids []string) ([]bson.M, error) {
 	items, err := app.storage.GetStudentGuides(ids)
 	if err != nil {
@@ -64,6 +66,47 @@ func (app *Application) deleteStudentGuide(id string) error {
 	err := app.storage.DeleteStudentGuide(id)
 	return err
 }
+
+// Health Locations
+
+func (app *Application) getHealthLocations(ids []string) ([]bson.M, error) {
+	items, err := app.storage.GetHealthLocations(ids)
+	if err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+func (app *Application) getHealthLocation(id string) (bson.M, error) {
+	item, err := app.storage.GetHealthLocation(id)
+	if err != nil {
+		return nil, err
+	}
+	return item, nil
+}
+
+func (app *Application) createHealthLocation(item bson.M) (bson.M, error) {
+	items, err := app.storage.CreateHealthLocation(item)
+	if err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+func (app *Application) updateHealthLocation(id string, item bson.M) (bson.M, error) {
+	items, err := app.storage.UpdateHealthLocation(id, item)
+	if err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+func (app *Application) deleteHealthLocation(id string) error {
+	err := app.storage.DeleteHealthLocation(id)
+	return err
+}
+
+// Misc
 
 func (app *Application) uploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (bson.M, error) {
 

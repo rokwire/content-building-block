@@ -19,10 +19,6 @@ package storage
 
 import (
 	"context"
-	"fmt"
-	"github.com/google/uuid"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
 	"time"
 
@@ -38,7 +34,8 @@ type database struct {
 	db       *mongo.Database
 	dbClient *mongo.Client
 
-	studentGuides *collectionWrapper
+	studentGuides   *collectionWrapper
+	healthLocations *collectionWrapper
 }
 
 func (m *database) start() error {
@@ -70,113 +67,17 @@ func (m *database) start() error {
 		return err
 	}
 
+	healthLocations := &collectionWrapper{database: m, coll: db.Collection("health_locations")}
+	if err != nil {
+		return err
+	}
+
 	//asign the db, db client and the collections
 	m.db = db
 	m.dbClient = client
 
 	m.studentGuides = studentGuides
+	m.healthLocations = healthLocations
 
 	return nil
-}
-
-// GetStudentGuides retrieves all content items
-func (sa *Adapter) GetStudentGuides(ids []string) ([]bson.M, error) {
-	filter := bson.D{}
-	if len(ids) > 0 {
-		filter = bson.D{
-			primitive.E{Key: "_id", Value: bson.M{"$in": ids}},
-		}
-	}
-
-	var result []bson.M
-	err := sa.db.studentGuides.Find(filter, &result, nil)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// CreateStudentGuide creates a new student guide record
-func (sa *Adapter) CreateStudentGuide(item bson.M) (bson.M, error) {
-
-	id := item["_id"]
-	if id == nil {
-		item["_id"] = uuid.NewString()
-	}
-
-	_, err := sa.db.studentGuides.InsertOne(&item)
-	if err != nil {
-		return nil, err
-	}
-	return item, nil
-}
-
-// GetStudentGuide retrieves a student guide record by id
-func (sa *Adapter) GetStudentGuide(id string) (bson.M, error) {
-
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
-	var result []bson.M
-	err := sa.db.studentGuides.Find(filter, &result, nil)
-	if err != nil {
-		return nil, err
-	}
-	if result == nil || len(result) == 0 {
-		//not found
-		return nil, fmt.Errorf("student guide with id: %s is not found", id)
-	}
-	return result[0], nil
-
-}
-
-// UpdateStudentGuide updates a student guide record
-func (sa *Adapter) UpdateStudentGuide(id string, item bson.M) (bson.M, error) {
-
-	jsonID := item["_id"]
-	if jsonID == nil && jsonID != id {
-		return nil, fmt.Errorf("attempt to override another object")
-	}
-
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
-	err := sa.db.studentGuides.ReplaceOne(filter, item, nil)
-	if err != nil {
-		return nil, err
-	}
-	return item, nil
-}
-
-// DeleteStudentGuide deletes a student guide record with the desired id
-func (sa *Adapter) DeleteStudentGuide(id string) error {
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
-	result, err := sa.db.studentGuides.DeleteOne(filter, nil)
-	if err != nil {
-		return err
-	}
-	if result == nil {
-		return fmt.Errorf("result is nil for resource item with id " + id)
-	}
-	deletedCount := result.DeletedCount
-	if deletedCount != 1 {
-		return fmt.Errorf("error occured while deleting a resource item with id " + id)
-	}
-	return nil
-
-}
-
-func (m *database) onDataChanged(changeDoc map[string]interface{}) {
-	if changeDoc == nil {
-		return
-	}
-	log.Printf("onDataChanged: %+v\n", changeDoc)
-	ns := changeDoc["ns"]
-	if ns == nil {
-		return
-	}
-	nsMap := ns.(map[string]interface{})
-	coll := nsMap["coll"]
-
-	if "configs" == coll {
-		log.Println("configs collection changed")
-	} else {
-		log.Println("other collection changed")
-	}
 }
