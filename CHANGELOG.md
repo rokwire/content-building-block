@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2021-12-17
+- Introduce content item APIs (admin & client) [#34](https://github.com/rokwire/content-building-block/issues/34)
 
 ## [1.0.14] - 2021-12-03
 - Introduce & support health information data [#33](https://github.com/rokwire/content-building-block/issues/33)
