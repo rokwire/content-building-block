@@ -192,6 +192,118 @@ func (h ApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// GetContentItems Retrieves  all content items
+// @Description Retrieves  all content items
+// @Param ids query string false "Coma separated IDs of the desired records"
+// @Tags Client
+// @ID GetContentItems
+// @Param offset query string false "offset"
+// @Param limit query string false "limit - limit the result"
+// @Param order query string false "order - Possible values: asc, desc. Default: desc"
+// @Param start_date query string false "start_date - Start date filter in milliseconds as an integer epoch value"
+// @Param end_date query string false "end_date - End date filter in milliseconds as an integer epoch value"
+// @Param data body getContentItemsRequestBody false "body json of the all items ids that need to be filtered"
+// @Accept json
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/content_items [get]
+func (h ApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
+
+	var category *string
+	categories, ok := r.URL.Query()["category"]
+	if ok && len(categories[0]) > 0 {
+		category = &categories[0]
+	}
+
+	var offset *int64
+	offsets, ok := r.URL.Query()["offset"]
+	if ok && len(offsets[0]) > 0 {
+		val, err := strconv.ParseInt(offsets[0], 0, 64)
+		if err == nil {
+			offset = &val
+		}
+	}
+
+	var limit *int64
+	limits, ok := r.URL.Query()["limit"]
+	if ok && len(limits[0]) > 0 {
+		val, err := strconv.ParseInt(limits[0], 0, 64)
+		if err == nil {
+			limit = &val
+		}
+	}
+
+	var order *string
+	orders, ok := r.URL.Query()["order"]
+	if ok && len(orders[0]) > 0 {
+		order = &orders[0]
+	}
+
+	var itemIDs []string
+	bodyData, _ := ioutil.ReadAll(r.Body)
+	if bodyData != nil {
+		var body getContentItemsRequestBody
+		bodyErr := json.Unmarshal(bodyData, &body)
+		if bodyErr == nil {
+			itemIDs = body.IDs
+		}
+	}
+
+	resData, err := h.app.Services.GetContentItems(itemIDs, category, offset, limit, order)
+	if err != nil {
+		log.Printf("Error on cgetting content items - %s\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if resData == nil {
+		resData = []model.ContentItem{}
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal all content items")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// GetContentItem Retrieves a content item by id
+// @Description Retrieves a content item by id
+// @Tags Client
+// @ID GetContentItem
+// @Accept json
+// @Produce json
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/content_items/{id} [get]
+func (h ApisHandler) GetContentItem(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	resData, err := h.app.Services.GetContentItem(id)
+	if err != nil {
+		log.Printf("Error on getting content item id - %s\n %s", id, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal the content item")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // UploadImage Uploads an image to AWS S3
 // @Description Uploads an image to AWS S3
 // @Tags Client

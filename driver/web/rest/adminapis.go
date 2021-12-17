@@ -720,7 +720,7 @@ func (h AdminApisHandler) DeleteContentItem(w http.ResponseWriter, r *http.Reque
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
-	err := h.app.Services.DeleteStudentGuide(guideID)
+	err := h.app.Services.DeleteContentItem(guideID)
 	if err != nil {
 		log.Printf("Error on deleting content item with id - %s\n %s", guideID, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
