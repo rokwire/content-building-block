@@ -28,6 +28,159 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/admin/content_items": {
+            "get": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Retrieves  all content items",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGetContentItems",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Coma separated IDs of the desired records",
+                        "name": "ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit - limit the result",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order - Possible values: asc, desc. Default: desc",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "start_date - Start date filter in milliseconds as an integer epoch value",
+                        "name": "start_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "end_date - End date filter in milliseconds as an integer epoch value",
+                        "name": "end_date",
+                        "in": "query"
+                    },
+                    {
+                        "description": "body json of the all items ids that need to be filtered",
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/getContentItemsRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Creates a new content item",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminCreateContentItem",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/admin/content_items/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Retrieves a content item by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGetContentItem",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Updates a content item with the specified id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminUpdateContentItem",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Deletes a content item with the specified id",
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminDeleteContentItem",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/admin/health_location/{id}": {
             "delete": {
                 "security": [
@@ -54,7 +207,7 @@ var doc = `{
                         "AdminUserAuth": []
                     }
                 ],
-                "description": "Retrieves  all items",
+                "description": "Retrieves  all health locations",
                 "consumes": [
                     "application/json"
                 ],
@@ -82,7 +235,7 @@ var doc = `{
                         "AdminUserAuth": []
                     }
                 ],
-                "description": "Create a health location",
+                "description": "Create a new health location",
                 "consumes": [
                     "application/json"
                 ],
@@ -104,7 +257,7 @@ var doc = `{
                         "AdminUserAuth": []
                     }
                 ],
-                "description": "Retrieves  all items",
+                "description": "Retrieves a health location by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -220,7 +373,7 @@ var doc = `{
                         "AdminUserAuth": []
                     }
                 ],
-                "description": "Retrieves  all items",
+                "description": "Retrieves  all student guides",
                 "consumes": [
                     "application/json"
                 ],
@@ -248,7 +401,7 @@ var doc = `{
                         "AdminUserAuth": []
                     }
                 ],
-                "description": "Retrieves  all items",
+                "description": "Creates a student guide item",
                 "consumes": [
                     "application/json"
                 ],
@@ -316,7 +469,7 @@ var doc = `{
                         "AdminUserAuth": []
                     }
                 ],
-                "description": "Deletes a student guide with the specified id",
+                "description": "Deletes a student guide item with the specified id",
                 "tags": [
                     "Admin"
                 ],
@@ -550,6 +703,19 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": ""
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "getContentItemsRequestBody": {
+            "type": "object",
+            "properties": {
+                "ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
                     }
                 }
             }

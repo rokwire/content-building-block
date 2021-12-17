@@ -308,16 +308,24 @@ func (sa *Adapter) GetContentItem(id string) (*model.ContentItem, error) {
 
 // UpdateContentItem updates a content item record
 func (sa *Adapter) UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error) {
+	if item != nil {
+		if item.ID != id {
+			return nil, fmt.Errorf("attempt to override another object")
+		}
 
-	if item.ID != id {
-		return nil, fmt.Errorf("attempt to override another object")
-	}
-
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
-	err := sa.db.contentItems.ReplaceOne(filter, item, nil)
-	if err != nil {
-		log.Printf("error deleting content item: %s", err)
-		return nil, err
+		filter := bson.D{primitive.E{Key: "_id", Value: id}}
+		update := bson.D{
+			primitive.E{Key: "$set", Value: bson.D{
+				primitive.E{Key: "category", Value: item.Category},
+				primitive.E{Key: "data", Value: item.Data},
+				primitive.E{Key: "date_updated", Value: time.Now().UTC()},
+			}},
+		}
+		_, err := sa.db.contentItems.UpdateOne(filter, update, nil)
+		if err != nil {
+			log.Printf("error updating content item: %s", err)
+			return nil, err
+		}
 	}
 	return item, nil
 }

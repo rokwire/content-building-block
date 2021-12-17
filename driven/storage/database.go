@@ -88,12 +88,11 @@ func (m *database) start() error {
 	m.healthLocations = healthLocations
 
 	err = m.applyContentItemsChecks(contentItems)
-	if err != nil{
+	if err != nil {
 		log.Printf("error on applyContentItemsChecks: %s", err)
 		return err
 	}
 	m.contentItems = contentItems
-
 
 	return nil
 }

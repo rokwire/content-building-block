@@ -18,8 +18,8 @@ type AdminApisHandler struct {
 	app *core.Application
 }
 
-// GetStudentGuides retrieves  all items
-// @Description Retrieves  all items
+// GetStudentGuides Retrieves  all student guides
+// @Description Retrieves  all student guides
 // @Param ids query string false "Coma separated IDs of the desired records"
 // @Tags Admin
 // @ID AdminGetStudentGuides
@@ -138,8 +138,8 @@ func (h AdminApisHandler) UpdateStudentGuide(w http.ResponseWriter, r *http.Requ
 	w.Write(jsonData)
 }
 
-// CreateStudentGuide retrieves  all items
-// @Description Retrieves  all items
+// CreateStudentGuide Creates a student guide item
+// @Description Creates a student guide item
 // @Tags Admin
 // @ID AdminCreateStudentGuide
 // @Accept json
@@ -182,8 +182,8 @@ func (h AdminApisHandler) CreateStudentGuide(w http.ResponseWriter, r *http.Requ
 	w.Write(jsonData)
 }
 
-// DeleteStudentGuide Deletes a student guide with the specified id
-// @Description Deletes a student guide with the specified id
+// DeleteStudentGuide Deletes a student guide item with the specified id
+// @Description Deletes a student guide item with the specified id
 // @Tags Admin
 // @ID AdminDeleteStudentGuide
 // @Success 200
@@ -204,8 +204,8 @@ func (h AdminApisHandler) DeleteStudentGuide(w http.ResponseWriter, r *http.Requ
 	w.WriteHeader(http.StatusOK)
 }
 
-// GetHealthLocations retrieves  all items
-// @Description Retrieves  all items
+// GetHealthLocations Retrieves  all health locations
+// @Description Retrieves  all health locations
 // @Param ids query string false "Coma separated IDs of the desired records"
 // @Tags Admin
 // @ID AdminGetHealthLocations
@@ -246,7 +246,7 @@ func (h AdminApisHandler) GetHealthLocations(w http.ResponseWriter, r *http.Requ
 }
 
 // GetHealthLocation Retrieves a health location by id
-// @Description Retrieves  all items
+// @Description Retrieves a health location by id
 // @Tags Admin
 // @ID AdminGetHealthLocation
 // @Accept json
@@ -324,8 +324,8 @@ func (h AdminApisHandler) UpdateHealthLocation(w http.ResponseWriter, r *http.Re
 	w.Write(jsonData)
 }
 
-// CreateHealthLocation Create a health location
-// @Description Create a health location
+// CreateHealthLocation Create a new health location
+// @Description Create a new health location
 // @Tags Admin
 // @ID AdminCreateHealthLocation
 // @Accept json
@@ -479,7 +479,7 @@ type getContentItemsRequestBody struct {
 	IDs []string `json:"ids"`
 } // @name getContentItemsRequestBody
 
-// GetContentItems retrieves  all content items
+// GetContentItems Retrieves  all content items
 // @Description Retrieves  all content items
 // @Param ids query string false "Coma separated IDs of the desired records"
 // @Tags Admin
@@ -560,7 +560,7 @@ func (h AdminApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request
 }
 
 // GetContentItem Retrieves a content item by id
-// @Description Retrieves  all items
+// @Description Retrieves a content item by id
 // @Tags Admin
 // @ID AdminGetContentItem
 // @Accept json
@@ -592,7 +592,7 @@ func (h AdminApisHandler) GetContentItem(w http.ResponseWriter, r *http.Request)
 }
 
 // UpdateContentItem Updates a content item with the specified id
-// @Description Updates a student guide with the specified id
+// @Description Updates a content item with the specified id
 // @Tags Admin
 // @ID AdminUpdateContentItem
 // @Accept json
@@ -602,7 +602,7 @@ func (h AdminApisHandler) GetContentItem(w http.ResponseWriter, r *http.Request)
 // @Router /admin/content_items/{id} [put]
 func (h AdminApisHandler) UpdateContentItem(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	guideID := vars["id"]
+	id := vars["id"]
 
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -611,7 +611,7 @@ func (h AdminApisHandler) UpdateContentItem(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	var item bson.M
+	var item model.ContentItem
 	err = json.Unmarshal(data, &item)
 	if err != nil {
 		log.Printf("Error on unmarshal the create content item request data - %s\n", err.Error())
@@ -619,9 +619,21 @@ func (h AdminApisHandler) UpdateContentItem(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	resData, err := h.app.Services.UpdateStudentGuide(guideID, item)
+	if item.ID != id {
+		log.Printf("Inconsistent attempt to update: path id is not equal to json ID")
+		http.Error(w, "Inconsistent attempt to update: path id is not equal to json ID", http.StatusBadRequest)
+		return
+	}
+
+	if len(item.Category) == 0 {
+		log.Printf("Unable to update content item: Missing category")
+		http.Error(w, "Unable to create content item: Missing category", http.StatusBadRequest)
+		return
+	}
+
+	resData, err := h.app.Services.UpdateContentItem(id, &item)
 	if err != nil {
-		log.Printf("Error on updating content item with id - %s\n %s", guideID, err)
+		log.Printf("Error on updating content item with id - %s\n %s", id, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -638,8 +650,14 @@ func (h AdminApisHandler) UpdateContentItem(w http.ResponseWriter, r *http.Reque
 	w.Write(jsonData)
 }
 
+// createContentItemRequestBody Expected body while creating a new content item
+type createContentItemRequestBody struct {
+	Category string                 `json:"category" bson:"category"`
+	Data     map[string]interface{} `json:"data" bson:"data"`
+} // @name createContentItemRequestBody
+
 // CreateContentItem creates a new content item
-// @Description creates a new content item
+// @Description Creates a new content item
 // @Tags Admin
 // @ID AdminCreateContentItem
 // @Accept json
@@ -655,7 +673,7 @@ func (h AdminApisHandler) CreateContentItem(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	var item bson.M
+	var item createContentItemRequestBody
 	err = json.Unmarshal(data, &item)
 	if err != nil {
 		log.Printf("Error on unmarshal the create content item request data - %s\n", err.Error())
@@ -663,7 +681,16 @@ func (h AdminApisHandler) CreateContentItem(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	createdItem, err := h.app.Services.CreateStudentGuide(item)
+	if len(item.Category) == 0 {
+		log.Printf("Unable to create content item: Missing category")
+		http.Error(w, "Unable to create content item: Missing category", http.StatusBadRequest)
+		return
+	}
+
+	createdItem, err := h.app.Services.CreateContentItem(&model.ContentItem{
+		Category: item.Category,
+		Data:     item.Data,
+	})
 	if err != nil {
 		log.Printf("Error on creating content item: %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
