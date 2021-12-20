@@ -86,8 +86,8 @@ func (we Adapter) Start() {
 	contentRouter.HandleFunc("/student_guides/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuide)).Methods("GET")
 	contentRouter.HandleFunc("/health_locations", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetHealthLocations)).Methods("GET")
 	contentRouter.HandleFunc("/health_locations/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetHealthLocation)).Methods("GET")
-	contentRouter.HandleFunc("/content_items", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuides)).Methods("GET")
-	contentRouter.HandleFunc("/content_items/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuide)).Methods("GET")
+	contentRouter.HandleFunc("/content_items", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetContentItems)).Methods("GET")
+	contentRouter.HandleFunc("/content_items/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetContentItem)).Methods("GET")
 	contentRouter.HandleFunc("/image", we.userAuthWrapFunc(we.apisHandler.UploadImage)).Methods("POST")
 	contentRouter.HandleFunc("/twitter/users/{user_id}/tweets", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetTweeterPosts)).Methods("GET")
 

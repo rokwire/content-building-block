@@ -197,6 +197,7 @@ func (h ApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Request) {
 // @Param ids query string false "Coma separated IDs of the desired records"
 // @Tags Client
 // @ID GetContentItems
+// @Param category query string false "limit - Filters by category. Supports query array. Warning: Consider to use as getContentItemsRequestBody json body if you plan to use long list of categories!"
 // @Param offset query string false "offset"
 // @Param limit query string false "limit - limit the result"
 // @Param order query string false "order - Possible values: asc, desc. Default: desc"
@@ -208,11 +209,10 @@ func (h ApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Request) {
 // @Security AdminUserAuth
 // @Router /admin/content_items [get]
 func (h ApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
-
-	var category *string
-	categories, ok := r.URL.Query()["category"]
-	if ok && len(categories[0]) > 0 {
-		category = &categories[0]
+	var categoryList []string
+	getCategories, ok := r.URL.Query()["category"]
+	if ok && len(getCategories) > 0 {
+		categoryList = getCategories
 	}
 
 	var offset *int64
@@ -246,10 +246,17 @@ func (h ApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
 		bodyErr := json.Unmarshal(bodyData, &body)
 		if bodyErr == nil {
 			itemIDs = body.IDs
+			if len(body.Categories) > 0 {
+				if categoryList == nil {
+					categoryList = body.Categories
+				} else {
+					categoryList = append(categoryList, body.Categories...)
+				}
+			}
 		}
 	}
 
-	resData, err := h.app.Services.GetContentItems(itemIDs, category, offset, limit, order)
+	resData, err := h.app.Services.GetContentItems(itemIDs, categoryList, offset, limit, order)
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

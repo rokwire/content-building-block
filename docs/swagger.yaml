@@ -2,6 +2,10 @@ basePath: /content
 definitions:
   getContentItemsRequestBody:
     properties:
+      category_list:
+        items:
+          type: string
+        type: array
       ids:
         items:
           type: string
@@ -27,6 +31,12 @@ paths:
       - description: Coma separated IDs of the desired records
         in: query
         name: ids
+        type: string
+      - description: 'limit - Filters by category. Supports query array. Warning:
+          Consider to use as getContentItemsRequestBody json body if you plan to use
+          long list of categories!'
+        in: query
+        name: category
         type: string
       - description: offset
         in: query

@@ -243,14 +243,14 @@ func (m *database) onDataChanged(changeDoc map[string]interface{}) {
 }
 
 // GetContentItems retrieves all content items
-func (sa *Adapter) GetContentItems(ids []string, category *string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error) {
+func (sa *Adapter) GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error) {
 
 	filter := bson.D{}
 	if len(ids) > 0 {
 		filter = append(filter, primitive.E{Key: "_id", Value: bson.M{"$in": ids}})
 	}
-	if category != nil {
-		filter = append(filter, primitive.E{Key: "category", Value: *category})
+	if categoryList != nil && len(categoryList) > 0 {
+		filter = append(filter, primitive.E{Key: "category", Value: bson.M{"$in": categoryList}})
 	}
 
 	findOptions := options.Find()

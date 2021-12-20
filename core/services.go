@@ -108,8 +108,8 @@ func (app *Application) deleteHealthLocation(id string) error {
 
 // Content Items
 
-func (app *Application) getContentItems(ids []string, category *string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error) {
-	return app.storage.GetContentItems(ids, category, offset, limit, order)
+func (app *Application) getContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error) {
+	return app.storage.GetContentItems(ids, categoryList, offset, limit, order)
 }
 
 func (app *Application) getContentItem(id string) (*model.ContentItem, error) {

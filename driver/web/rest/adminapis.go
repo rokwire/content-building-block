@@ -476,7 +476,8 @@ func (h AdminApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 }
 
 type getContentItemsRequestBody struct {
-	IDs []string `json:"ids"`
+	IDs        []string `json:"ids"`
+	Categories []string `json:"category_list"`
 } // @name getContentItemsRequestBody
 
 // GetContentItems Retrieves  all content items
@@ -484,6 +485,7 @@ type getContentItemsRequestBody struct {
 // @Param ids query string false "Coma separated IDs of the desired records"
 // @Tags Admin
 // @ID AdminGetContentItems
+// @Param category query string false "limit - Filters by category. Supports query array. Warning: Consider to use as getContentItemsRequestBody json body if you plan to use long list of categories!"
 // @Param offset query string false "offset"
 // @Param limit query string false "limit - limit the result"
 // @Param order query string false "order - Possible values: asc, desc. Default: desc"
@@ -496,10 +498,10 @@ type getContentItemsRequestBody struct {
 // @Router /admin/content_items [get]
 func (h AdminApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
 
-	var category *string
-	categories, ok := r.URL.Query()["category"]
-	if ok && len(categories[0]) > 0 {
-		category = &categories[0]
+	var categoryList []string
+	getCategories, ok := r.URL.Query()["category"]
+	if ok && len(getCategories) > 0 {
+		categoryList = getCategories
 	}
 
 	var offset *int64
@@ -533,10 +535,17 @@ func (h AdminApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request
 		bodyErr := json.Unmarshal(bodyData, &body)
 		if bodyErr == nil {
 			itemIDs = body.IDs
+			if len(body.Categories) > 0 {
+				if categoryList == nil {
+					categoryList = body.Categories
+				} else {
+					categoryList = append(categoryList, body.Categories...)
+				}
+			}
 		}
 	}
 
-	resData, err := h.app.Services.GetContentItems(itemIDs, category, offset, limit, order)
+	resData, err := h.app.Services.GetContentItems(itemIDs, categoryList, offset, limit, order)
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -52,6 +52,12 @@ var doc = `{
                     },
                     {
                         "type": "string",
+                        "description": "limit - Filters by category. Supports query array. Warning: Consider to use as getContentItemsRequestBody json body if you plan to use long list of categories!",
+                        "name": "category",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "offset",
                         "name": "offset",
                         "in": "query"
@@ -712,6 +718,12 @@ var doc = `{
         "getContentItemsRequestBody": {
             "type": "object",
             "properties": {
+                "category_list": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "ids": {
                     "type": "array",
                     "items": {
