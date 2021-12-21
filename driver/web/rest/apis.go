@@ -206,7 +206,7 @@ func (h ApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Request) {
 // @Param data body getContentItemsRequestBody false "body json of the all items ids that need to be filtered"
 // @Accept json
 // @Success 200
-// @Security AdminUserAuth
+// @Security UserAuth
 // @Router /admin/content_items [get]
 func (h ApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
 	var categoryList []string
@@ -286,7 +286,7 @@ func (h ApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Success 200
-// @Security AdminUserAuth
+// @Security UserAuth
 // @Router /admin/content_items/{id} [get]
 func (h ApisHandler) GetContentItem(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -302,6 +302,37 @@ func (h ApisHandler) GetContentItem(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(resData)
 	if err != nil {
 		log.Println("Error on marshal the content item")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// GetContentItemsCategories Retrieves  all content item categories that have in the database
+// @Description Retrieves  all content item categories that have in the database
+// @Tags Client
+// @ID GetContentItemsCategories
+// @Success 200
+// @Security UserAuth
+// @Router /content_item/categories [get]
+func (h ApisHandler) GetContentItemsCategories(w http.ResponseWriter, r *http.Request) {
+	resData, err := h.app.Services.GetContentItemsCategories()
+	if err != nil {
+		log.Printf("Error on cgetting content items - %s\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if resData == nil {
+		resData = []string{}
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal all content items")
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}

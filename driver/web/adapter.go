@@ -88,6 +88,7 @@ func (we Adapter) Start() {
 	contentRouter.HandleFunc("/health_locations/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetHealthLocation)).Methods("GET")
 	contentRouter.HandleFunc("/content_items", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetContentItems)).Methods("GET")
 	contentRouter.HandleFunc("/content_items/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetContentItem)).Methods("GET")
+	contentRouter.HandleFunc("/content_item/categories", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetContentItemsCategories)).Methods("GET")
 	contentRouter.HandleFunc("/image", we.userAuthWrapFunc(we.apisHandler.UploadImage)).Methods("POST")
 	contentRouter.HandleFunc("/twitter/users/{user_id}/tweets", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetTweeterPosts)).Methods("GET")
 
@@ -110,6 +111,7 @@ func (we Adapter) Start() {
 	adminSubRouter.HandleFunc("/content_items/{id}", we.adminAuthWrapFunc(we.adminApisHandler.GetContentItem)).Methods("GET")
 	adminSubRouter.HandleFunc("/content_items/{id}", we.adminAuthWrapFunc(we.adminApisHandler.UpdateContentItem)).Methods("PUT")
 	adminSubRouter.HandleFunc("/content_items/{id}", we.adminAuthWrapFunc(we.adminApisHandler.DeleteContentItem)).Methods("DELETE")
+	adminSubRouter.HandleFunc("/content_item/categories", we.adminAuthWrapFunc(we.adminApisHandler.GetContentItemsCategories)).Methods("GET")
 
 	adminSubRouter.HandleFunc("/image", we.adminAuthWrapFunc(we.adminApisHandler.UploadImage)).Methods("POST")
 

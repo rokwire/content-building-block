@@ -221,25 +221,32 @@ func (sa *Adapter) DeleteHealthLocation(id string) error {
 
 }
 
-// Event
+// Content Items
 
-func (m *database) onDataChanged(changeDoc map[string]interface{}) {
-	if changeDoc == nil {
-		return
-	}
-	log.Printf("onDataChanged: %+v\n", changeDoc)
-	ns := changeDoc["ns"]
-	if ns == nil {
-		return
-	}
-	nsMap := ns.(map[string]interface{})
-	coll := nsMap["coll"]
+type getContentItemsCategoriesData struct {
+	CategoryName string `json:"_id" bson:"_id"`
+}
 
-	if "configs" == coll {
-		log.Println("configs collection changed")
-	} else {
-		log.Println("other collection changed")
+// GetContentItemsCategories  retrieve all content item categories
+func (sa *Adapter) GetContentItemsCategories() ([]string, error) {
+
+	pipeline := primitive.A{bson.M{"$group": bson.M{
+		"_id": "$category",
+	}}}
+	var data []getContentItemsCategoriesData
+	categories := []string{}
+
+	err := sa.db.contentItems.Aggregate(pipeline, &data, &options.AggregateOptions{})
+	if err != nil {
+		return nil, err
 	}
+	if data != nil && len(data) > 0 {
+		for _, dataEntry := range data {
+			categories = append(categories, dataEntry.CategoryName)
+		}
+	}
+
+	return categories, nil
 }
 
 // GetContentItems retrieves all content items
@@ -345,4 +352,25 @@ func (sa *Adapter) DeleteContentItem(id string) error {
 		return fmt.Errorf("error occured while deleting a resource item with id " + id)
 	}
 	return nil
+}
+
+// Event
+
+func (m *database) onDataChanged(changeDoc map[string]interface{}) {
+	if changeDoc == nil {
+		return
+	}
+	log.Printf("onDataChanged: %+v\n", changeDoc)
+	ns := changeDoc["ns"]
+	if ns == nil {
+		return
+	}
+	nsMap := ns.(map[string]interface{})
+	coll := nsMap["coll"]
+
+	if "configs" == coll {
+		log.Println("configs collection changed")
+	} else {
+		log.Println("other collection changed")
+	}
 }

@@ -28,11 +28,30 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin/content_items": {
+        "/admin/content_item/categories": {
             "get": {
                 "security": [
                     {
                         "AdminUserAuth": []
+                    }
+                ],
+                "description": "Retrieves  all content item categories that have in the database",
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGetContentItemsCategories",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/admin/content_items": {
+            "get": {
+                "security": [
+                    {
+                        "UserAuth": []
                     }
                 ],
                 "description": "Retrieves  all content items",
@@ -40,9 +59,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Admin"
+                    "Client"
                 ],
-                "operationId": "AdminGetContentItems",
+                "operationId": "GetContentItems",
                 "parameters": [
                     {
                         "type": "string",
@@ -126,7 +145,7 @@ var doc = `{
             "get": {
                 "security": [
                     {
-                        "AdminUserAuth": []
+                        "UserAuth": []
                     }
                 ],
                 "description": "Retrieves a content item by id",
@@ -137,9 +156,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Admin"
+                    "Client"
                 ],
-                "operationId": "AdminGetContentItem",
+                "operationId": "GetContentItem",
                 "responses": {
                     "200": {
                         "description": ""
@@ -480,6 +499,25 @@ var doc = `{
                     "Admin"
                 ],
                 "operationId": "AdminDeleteStudentGuide",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/content_item/categories": {
+            "get": {
+                "security": [
+                    {
+                        "UserAuth": []
+                    }
+                ],
+                "description": "Retrieves  all content item categories that have in the database",
+                "tags": [
+                    "Client"
+                ],
+                "operationId": "GetContentItemsCategories",
                 "responses": {
                     "200": {
                         "description": ""

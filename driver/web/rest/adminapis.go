@@ -739,3 +739,34 @@ func (h AdminApisHandler) DeleteContentItem(w http.ResponseWriter, r *http.Reque
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 }
+
+// GetContentItemsCategories Retrieves  all content item categories that have in the database
+// @Description Retrieves  all content item categories that have in the database
+// @Tags Admin
+// @ID AdminGetContentItemsCategories
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/content_item/categories [get]
+func (h AdminApisHandler) GetContentItemsCategories(w http.ResponseWriter, r *http.Request) {
+	resData, err := h.app.Services.GetContentItemsCategories()
+	if err != nil {
+		log.Printf("Error on cgetting content items - %s\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if resData == nil {
+		resData = []string{}
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal all content items")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}

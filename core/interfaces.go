@@ -37,6 +37,7 @@ type Services interface {
 	UpdateHealthLocation(id string, item bson.M) (bson.M, error)
 	DeleteHealthLocation(id string) error
 
+	GetContentItemsCategories() ([]string, error)
 	GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error)
 	GetContentItem(id string) (*model.ContentItem, error)
 	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)
@@ -101,6 +102,10 @@ func (s *servicesImpl) DeleteHealthLocation(id string) error {
 
 // Content Items
 
+func (s *servicesImpl) GetContentItemsCategories() ([]string, error) {
+	return s.app.getContentItemsCategories()
+}
+
 func (s *servicesImpl) GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error) {
 	return s.app.getContentItems(ids, categoryList, offset, limit, order)
 }
@@ -145,6 +150,7 @@ type Storage interface {
 	UpdateHealthLocation(id string, item bson.M) (bson.M, error)
 	DeleteHealthLocation(id string) error
 
+	GetContentItemsCategories() ([]string, error)
 	GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error)
 	GetContentItem(id string) (*model.ContentItem, error)
 	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)

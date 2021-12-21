@@ -21,12 +21,23 @@ info:
   title: Rokwire Content Building Block API
   version: 1.1.1
 paths:
+  /admin/content_item/categories:
+    get:
+      description: Retrieves  all content item categories that have in the database
+      operationId: AdminGetContentItemsCategories
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
   /admin/content_items:
     get:
       consumes:
       - application/json
       description: Retrieves  all content items
-      operationId: AdminGetContentItems
+      operationId: GetContentItems
       parameters:
       - description: Coma separated IDs of the desired records
         in: query
@@ -69,9 +80,9 @@ paths:
         "200":
           description: ""
       security:
-      - AdminUserAuth: []
+      - UserAuth: []
       tags:
-      - Admin
+      - Client
     post:
       consumes:
       - application/json
@@ -99,16 +110,16 @@ paths:
       consumes:
       - application/json
       description: Retrieves a content item by id
-      operationId: AdminGetContentItem
+      operationId: GetContentItem
       produces:
       - application/json
       responses:
         "200":
           description: ""
       security:
-      - AdminUserAuth: []
+      - UserAuth: []
       tags:
-      - Admin
+      - Client
     put:
       consumes:
       - application/json
@@ -306,6 +317,17 @@ paths:
       - AdminUserAuth: []
       tags:
       - Admin
+  /content_item/categories:
+    get:
+      description: Retrieves  all content item categories that have in the database
+      operationId: GetContentItemsCategories
+      responses:
+        "200":
+          description: ""
+      security:
+      - UserAuth: []
+      tags:
+      - Client
   /health_locations:
     get:
       consumes:
