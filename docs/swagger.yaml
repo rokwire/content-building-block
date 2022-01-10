@@ -1,4 +1,16 @@
 basePath: /content
+definitions:
+  getContentItemsRequestBody:
+    properties:
+      category_list:
+        items:
+          type: string
+        type: array
+      ids:
+        items:
+          type: string
+        type: array
+    type: object
 host: localhost
 info:
   contact: {}
@@ -7,8 +19,121 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   title: Rokwire Content Building Block API
-  version: 1.0.8
+  version: 1.1.1
 paths:
+  /admin/content_item/categories:
+    get:
+      description: Retrieves  all content item categories that have in the database
+      operationId: AdminGetContentItemsCategories
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/content_items:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves  all content items
+      operationId: GetContentItems
+      parameters:
+      - description: Coma separated IDs of the desired records
+        in: query
+        name: ids
+        type: string
+      - description: 'limit - Filters by category. Supports query array. Warning:
+          Consider to use as getContentItemsRequestBody json body if you plan to use
+          long list of categories!'
+        in: query
+        name: category
+        type: string
+      - description: offset
+        in: query
+        name: offset
+        type: string
+      - description: limit - limit the result
+        in: query
+        name: limit
+        type: string
+      - description: 'order - Possible values: asc, desc. Default: desc'
+        in: query
+        name: order
+        type: string
+      - description: start_date - Start date filter in milliseconds as an integer
+          epoch value
+        in: query
+        name: start_date
+        type: string
+      - description: end_date - End date filter in milliseconds as an integer epoch
+          value
+        in: query
+        name: end_date
+        type: string
+      - description: body json of the all items ids that need to be filtered
+        in: body
+        name: data
+        schema:
+          $ref: '#/definitions/getContentItemsRequestBody'
+      responses:
+        "200":
+          description: ""
+      security:
+      - UserAuth: []
+      tags:
+      - Client
+    post:
+      consumes:
+      - application/json
+      description: Creates a new content item
+      operationId: AdminCreateContentItem
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/content_items/{id}:
+    delete:
+      description: Deletes a content item with the specified id
+      operationId: AdminDeleteContentItem
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a content item by id
+      operationId: GetContentItem
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - UserAuth: []
+      tags:
+      - Client
+    put:
+      consumes:
+      - application/json
+      description: Updates a content item with the specified id
+      operationId: AdminUpdateContentItem
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
   /admin/health_location/{id}:
     delete:
       description: Deletes a health location with the specified id
@@ -24,7 +149,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieves  all items
+      description: Retrieves  all health locations
       operationId: AdminGetHealthLocations
       parameters:
       - description: Coma separated IDs of the desired records
@@ -41,7 +166,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create a health location
+      description: Create a new health location
       operationId: AdminCreateHealthLocation
       responses:
         "200":
@@ -54,7 +179,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieves  all items
+      description: Retrieves a health location by id
       operationId: AdminGetHealthLocation
       produces:
       - application/json
@@ -127,7 +252,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieves  all items
+      description: Retrieves  all student guides
       operationId: AdminGetStudentGuides
       parameters:
       - description: Coma separated IDs of the desired records
@@ -144,7 +269,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Retrieves  all items
+      description: Creates a student guide item
       operationId: AdminCreateStudentGuide
       responses:
         "200":
@@ -155,7 +280,7 @@ paths:
       - Admin
   /admin/student_guides/{id}:
     delete:
-      description: Deletes a student guide with the specified id
+      description: Deletes a student guide item with the specified id
       operationId: AdminDeleteStudentGuide
       responses:
         "200":
@@ -192,6 +317,17 @@ paths:
       - AdminUserAuth: []
       tags:
       - Admin
+  /content_item/categories:
+    get:
+      description: Retrieves  all content item categories that have in the database
+      operationId: GetContentItemsCategories
+      responses:
+        "200":
+          description: ""
+      security:
+      - UserAuth: []
+      tags:
+      - Client
   /health_locations:
     get:
       consumes:

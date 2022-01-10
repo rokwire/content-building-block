@@ -19,6 +19,8 @@ package storage
 
 import (
 	"context"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
 	"time"
 
@@ -36,6 +38,7 @@ type database struct {
 
 	studentGuides   *collectionWrapper
 	healthLocations *collectionWrapper
+	contentItems    *collectionWrapper
 }
 
 func (m *database) start() error {
@@ -72,6 +75,11 @@ func (m *database) start() error {
 		return err
 	}
 
+	contentItems := &collectionWrapper{database: m, coll: db.Collection("content_items")}
+	if err != nil {
+		return err
+	}
+
 	//asign the db, db client and the collections
 	m.db = db
 	m.dbClient = client
@@ -79,5 +87,47 @@ func (m *database) start() error {
 	m.studentGuides = studentGuides
 	m.healthLocations = healthLocations
 
+	err = m.applyContentItemsChecks(contentItems)
+	if err != nil {
+		log.Printf("error on applyContentItemsChecks: %s", err)
+		return err
+	}
+	m.contentItems = contentItems
+
+	return nil
+}
+
+func (m *database) applyContentItemsChecks(posts *collectionWrapper) error {
+	log.Println("apply content_items checks.....")
+
+	indexes, _ := posts.ListIndexes()
+	indexMapping := map[string]interface{}{}
+	if indexes != nil {
+
+		for _, index := range indexes {
+			name := index["name"].(string)
+			indexMapping[name] = index
+		}
+	}
+	if indexMapping["category_1"] == nil {
+		err := posts.AddIndex(
+			bson.D{
+				primitive.E{Key: "category", Value: 1},
+			}, false)
+		if err != nil {
+			return err
+		}
+	}
+	if indexMapping["date_created_1"] == nil {
+		err := posts.AddIndex(
+			bson.D{
+				primitive.E{Key: "date_created", Value: 1},
+			}, false)
+		if err != nil {
+			return err
+		}
+	}
+
+	log.Println("content_items checks passed")
 	return nil
 }

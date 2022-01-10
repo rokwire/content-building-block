@@ -47,7 +47,7 @@ type Adapter struct {
 
 // @title Rokwire Content Building Block API
 // @description Rokwire Content Building Block API Documentation.
-// @version 1.0.8
+// @version 1.1.1
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host localhost
@@ -86,6 +86,9 @@ func (we Adapter) Start() {
 	contentRouter.HandleFunc("/student_guides/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuide)).Methods("GET")
 	contentRouter.HandleFunc("/health_locations", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetHealthLocations)).Methods("GET")
 	contentRouter.HandleFunc("/health_locations/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetHealthLocation)).Methods("GET")
+	contentRouter.HandleFunc("/content_items", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetContentItems)).Methods("GET")
+	contentRouter.HandleFunc("/content_items/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetContentItem)).Methods("GET")
+	contentRouter.HandleFunc("/content_item/categories", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetContentItemsCategories)).Methods("GET")
 	contentRouter.HandleFunc("/image", we.userAuthWrapFunc(we.apisHandler.UploadImage)).Methods("POST")
 	contentRouter.HandleFunc("/twitter/users/{user_id}/tweets", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetTweeterPosts)).Methods("GET")
 
@@ -96,11 +99,20 @@ func (we Adapter) Start() {
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAuthWrapFunc(we.adminApisHandler.GetStudentGuide)).Methods("GET")
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAuthWrapFunc(we.adminApisHandler.UpdateStudentGuide)).Methods("PUT")
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAuthWrapFunc(we.adminApisHandler.DeleteStudentGuide)).Methods("DELETE")
+
 	adminSubRouter.HandleFunc("/health_locations", we.adminAuthWrapFunc(we.adminApisHandler.GetHealthLocations)).Methods("GET")
 	adminSubRouter.HandleFunc("/health_locations", we.adminAuthWrapFunc(we.adminApisHandler.CreateHealthLocation)).Methods("POST")
 	adminSubRouter.HandleFunc("/health_location/{id}", we.adminAuthWrapFunc(we.adminApisHandler.GetHealthLocation)).Methods("GET")
 	adminSubRouter.HandleFunc("/health_location/{id}", we.adminAuthWrapFunc(we.adminApisHandler.UpdateHealthLocation)).Methods("PUT")
 	adminSubRouter.HandleFunc("/health_location/{id}", we.adminAuthWrapFunc(we.adminApisHandler.DeleteHealthLocation)).Methods("DELETE")
+
+	adminSubRouter.HandleFunc("/content_items", we.adminAuthWrapFunc(we.adminApisHandler.GetContentItems)).Methods("GET")
+	adminSubRouter.HandleFunc("/content_items", we.adminAuthWrapFunc(we.adminApisHandler.CreateContentItem)).Methods("POST")
+	adminSubRouter.HandleFunc("/content_items/{id}", we.adminAuthWrapFunc(we.adminApisHandler.GetContentItem)).Methods("GET")
+	adminSubRouter.HandleFunc("/content_items/{id}", we.adminAuthWrapFunc(we.adminApisHandler.UpdateContentItem)).Methods("PUT")
+	adminSubRouter.HandleFunc("/content_items/{id}", we.adminAuthWrapFunc(we.adminApisHandler.DeleteContentItem)).Methods("DELETE")
+	adminSubRouter.HandleFunc("/content_item/categories", we.adminAuthWrapFunc(we.adminApisHandler.GetContentItemsCategories)).Methods("GET")
+
 	adminSubRouter.HandleFunc("/image", we.adminAuthWrapFunc(we.adminApisHandler.UploadImage)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+we.port, router))

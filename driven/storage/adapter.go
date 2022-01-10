@@ -18,10 +18,12 @@
 package storage
 
 import (
+	"content/core/model"
 	"fmt"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"strconv"
 	"time"
@@ -217,6 +219,139 @@ func (sa *Adapter) DeleteHealthLocation(id string) error {
 	}
 	return nil
 
+}
+
+// Content Items
+
+type getContentItemsCategoriesData struct {
+	CategoryName string `json:"_id" bson:"_id"`
+}
+
+// GetContentItemsCategories  retrieve all content item categories
+func (sa *Adapter) GetContentItemsCategories() ([]string, error) {
+
+	pipeline := primitive.A{bson.M{"$group": bson.M{
+		"_id": "$category",
+	}}}
+	var data []getContentItemsCategoriesData
+	categories := []string{}
+
+	err := sa.db.contentItems.Aggregate(pipeline, &data, &options.AggregateOptions{})
+	if err != nil {
+		return nil, err
+	}
+	if data != nil && len(data) > 0 {
+		for _, dataEntry := range data {
+			categories = append(categories, dataEntry.CategoryName)
+		}
+	}
+
+	return categories, nil
+}
+
+// GetContentItems retrieves all content items
+func (sa *Adapter) GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error) {
+
+	filter := bson.D{}
+	if len(ids) > 0 {
+		filter = append(filter, primitive.E{Key: "_id", Value: bson.M{"$in": ids}})
+	}
+	if categoryList != nil && len(categoryList) > 0 {
+		filter = append(filter, primitive.E{Key: "category", Value: bson.M{"$in": categoryList}})
+	}
+
+	findOptions := options.Find()
+	if order != nil && "desc" == *order {
+		findOptions.SetSort(bson.D{{"date_created", -1}})
+	} else {
+		findOptions.SetSort(bson.D{{"date_created", 1}})
+	}
+	if limit != nil {
+		findOptions.SetLimit(*limit)
+	}
+	if offset != nil {
+		findOptions.SetSkip(*offset)
+	}
+
+	var result []model.ContentItem
+	err := sa.db.contentItems.Find(filter, &result, findOptions)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// CreateContentItem creates a new content item record
+func (sa *Adapter) CreateContentItem(item *model.ContentItem) (*model.ContentItem, error) {
+	if item.ID == "" {
+		item.ID = uuid.NewString()
+	}
+
+	_, err := sa.db.contentItems.InsertOne(&item)
+	if err != nil {
+		log.Printf("error create content item: %s", err)
+		return nil, err
+	}
+	return item, nil
+}
+
+// GetContentItem retrieves a content item record by id
+func (sa *Adapter) GetContentItem(id string) (*model.ContentItem, error) {
+
+	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+	var result []model.ContentItem
+	err := sa.db.contentItems.Find(filter, &result, nil)
+	if err != nil {
+		return nil, err
+	}
+	if result == nil || len(result) == 0 {
+		//not found
+		log.Printf("content item with id: %s is not found", id)
+		return nil, fmt.Errorf("content item with id: %s is not found", id)
+	}
+	return &result[0], nil
+
+}
+
+// UpdateContentItem updates a content item record
+func (sa *Adapter) UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error) {
+	if item != nil {
+		if item.ID != id {
+			return nil, fmt.Errorf("attempt to override another object")
+		}
+
+		filter := bson.D{primitive.E{Key: "_id", Value: id}}
+		update := bson.D{
+			primitive.E{Key: "$set", Value: bson.D{
+				primitive.E{Key: "category", Value: item.Category},
+				primitive.E{Key: "data", Value: item.Data},
+				primitive.E{Key: "date_updated", Value: time.Now().UTC()},
+			}},
+		}
+		_, err := sa.db.contentItems.UpdateOne(filter, update, nil)
+		if err != nil {
+			log.Printf("error updating content item: %s", err)
+			return nil, err
+		}
+	}
+	return item, nil
+}
+
+// DeleteContentItem deletes a content item record with the desired id
+func (sa *Adapter) DeleteContentItem(id string) error {
+	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+	result, err := sa.db.contentItems.DeleteOne(filter, nil)
+	if err != nil {
+		return err
+	}
+	if result == nil {
+		return fmt.Errorf("result is nil for resource item with id " + id)
+	}
+	deletedCount := result.DeletedCount
+	if deletedCount != 1 {
+		return fmt.Errorf("error occured while deleting a resource item with id " + id)
+	}
+	return nil
 }
 
 // Event
