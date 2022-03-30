@@ -11,6 +11,11 @@ definitions:
           type: string
         type: array
     type: object
+  uploadImageResponse:
+    properties:
+      url:
+        type: string
+    type: object
 host: localhost
 info:
   contact: {}
@@ -243,7 +248,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            $ref: '#/definitions/uploadImageResponse'
       security:
       - AdminUserAuth: []
       tags:
@@ -366,7 +373,7 @@ paths:
       consumes:
       - multipart/form-data
       description: Uploads an image to AWS S3
-      operationId: AdminUpdateStudentGuide
+      operationId: UploadImage
       parameters:
       - description: path - path within the S3 bucket
         in: body
@@ -386,7 +393,7 @@ paths:
         name: height
         schema:
           type: string
-      - description: 'quality - quality of the image. Default: 90'
+      - description: 'quality - quality of the image. Default: 100'
         in: body
         name: quality
         schema:
@@ -403,6 +410,45 @@ paths:
           description: ""
       security:
       - UserAuth: []
+      tags:
+      - Client
+  /profile_photo:
+    get:
+      description: Deletes the profile photo of the user who request
+      operationId: DeleteProfilePhoto
+      responses:
+        "200":
+          description: ""
+      security:
+      - RokwireAuth: []
+      tags:
+      - Client
+    post:
+      consumes:
+      - application/json
+      description: Stores profile photo
+      operationId: StoreProfilePhoto
+      responses:
+        "200":
+          description: ""
+      security:
+      - RokwireAuth: []
+      tags:
+      - Client
+  /profile_photo/{user-id}:
+    get:
+      description: Retrieves the profile photo
+      operationId: GetProfilePhoto
+      parameters:
+      - description: 'Possible values: default, medium, small'
+        in: query
+        name: size
+        type: string
+      responses:
+        "200":
+          description: ""
+      security:
+      - RokwireAuth: []
       tags:
       - Client
   /student_guides:

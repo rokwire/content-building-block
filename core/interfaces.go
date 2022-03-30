@@ -44,7 +44,11 @@ type Services interface {
 	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
 	DeleteContentItem(id string) error
 
-	UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (bson.M, error)
+	UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (*string, error)
+	GetProfileImage(userID string, imageType string) ([]byte, error)
+	UploadProfileImage(userID string, filetype string, bytes []byte) error
+	DeleteProfileImage(userID string) error
+
 	GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error)
 }
 
@@ -128,8 +132,20 @@ func (s *servicesImpl) DeleteContentItem(id string) error {
 
 // Misc
 
-func (s *servicesImpl) UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (bson.M, error) {
-	return s.app.uploadImage(fileName, filetype, bytes, path, spec)
+func (s *servicesImpl) GetProfileImage(userID string, imageType string) ([]byte, error) {
+	return s.app.getProfileImage(userID, imageType)
+}
+
+func (s *servicesImpl) UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (*string, error) {
+	return s.app.uploadImage(fileName, filetype, bytes, path, nil, spec)
+}
+
+func (s *servicesImpl) UploadProfileImage(userID string, filetype string, fileBytes []byte) error {
+	return s.app.uploadProfileImage(userID, filetype, fileBytes)
+}
+
+func (s *servicesImpl) DeleteProfileImage(userID string) error {
+	return s.app.deleteProfileImage(userID)
 }
 
 func (s *servicesImpl) GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error) {

@@ -390,6 +390,11 @@ func (h AdminApisHandler) DeleteHealthLocation(w http.ResponseWriter, r *http.Re
 	w.WriteHeader(http.StatusOK)
 }
 
+// uploadImageResponse wrapper
+type uploadImageResponse struct {
+	URL string `json:"url"`
+} // @name uploadImageResponse
+
 // UploadImage Uploads an image to AWS S3
 // @Description Uploads an image to AWS S3
 // @Tags Admin
@@ -401,7 +406,7 @@ func (h AdminApisHandler) DeleteHealthLocation(w http.ResponseWriter, r *http.Re
 // @Param fileName body string false "fileName - the uploaded file name"
 // @Accept multipart/form-data
 // @Produce json
-// @Success 200
+// @Success 200 {object} uploadImageResponse
 // @Security AdminUserAuth
 // @Router /admin/image [post]
 func (h AdminApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
@@ -456,14 +461,15 @@ func (h AdminApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 
 	// pass the file to be processed by the use case handler
 	fileName := fileHeader.Filename
-	objectLocation, err := h.app.Services.UploadImage(fileName, filetype, fileBytes, path, imgSpec)
+	url, err := h.app.Services.UploadImage(fileName, filetype, fileBytes, path, imgSpec)
 	if err != nil {
 		log.Printf("Error converting image: %s\n", err)
 		http.Error(w, "Error converting image", http.StatusInternalServerError)
 		return
 	}
 
-	jsonData, err := json.Marshal(objectLocation)
+	jsonData := map[string]string{"url": *url}
+	jsonBynaryData, err := json.Marshal(jsonData)
 	if err != nil {
 		log.Println("Error on marshal s3 location data")
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -472,7 +478,7 @@ func (h AdminApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
-	w.Write(jsonData)
+	w.Write(jsonBynaryData)
 }
 
 type getContentItemsRequestBody struct {

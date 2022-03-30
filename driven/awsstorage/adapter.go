@@ -23,6 +23,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/google/uuid"
 	"log"
@@ -41,8 +42,54 @@ func NewAWSStorageAdapter(config *model.AWSConfig) *Adapter {
 	return &Adapter{config: config}
 }
 
+// LoadImage loads image at specific path
+func (a *Adapter) LoadImage(path string) ([]byte, error) {
+	s, err := a.createS3Session()
+	if err != nil {
+		log.Printf("Could not create S3 session")
+		return nil, err
+	}
+
+	buffer := aws.NewWriteAtBuffer([]byte{})
+
+	downloader := s3manager.NewDownloader(s)
+	_, err = downloader.Download(buffer,
+		&s3.GetObjectInput{
+			Bucket: aws.String(a.config.S3Bucket),
+			Key:    aws.String(path),
+		})
+	if err != nil {
+		return nil, err
+	}
+
+	return buffer.Bytes(), nil
+}
+
+// LoadProfileImage loads profile image at specific path
+func (a *Adapter) LoadProfileImage(path string) ([]byte, error) {
+	s, err := a.createS3Session()
+	if err != nil {
+		log.Printf("Could not create S3 session")
+		return nil, err
+	}
+
+	buffer := aws.NewWriteAtBuffer([]byte{})
+
+	downloader := s3manager.NewDownloader(s)
+	_, err = downloader.Download(buffer,
+		&s3.GetObjectInput{
+			Bucket: aws.String(a.config.S3ProfileImagesBucket),
+			Key:    aws.String(path),
+		})
+	if err != nil {
+		return nil, err
+	}
+
+	return buffer.Bytes(), nil
+}
+
 // CreateImage uploads an image instance from a file and image type
-func (a *Adapter) CreateImage(file *os.File, path string) (*string, error) {
+func (a *Adapter) CreateImage(file *os.File, path string, preferredFileName *string) (*string, error) {
 	log.Println("Create image")
 
 	s, err := a.createS3Session()
@@ -50,8 +97,8 @@ func (a *Adapter) CreateImage(file *os.File, path string) (*string, error) {
 		log.Printf("Could not create S3 session")
 		return nil, err
 	}
-	key := a.prepareKey(path)
-	objectLocation, err := a.uploadFileToS3(s, file, key)
+	key := a.prepareKey(path, preferredFileName)
+	objectLocation, err := a.uploadFileToS3(s, file, a.config.S3Bucket, key)
 	if err != nil {
 		log.Printf("Could not upload file")
 		return nil, err
@@ -60,8 +107,54 @@ func (a *Adapter) CreateImage(file *os.File, path string) (*string, error) {
 	return &objectLocation, nil
 }
 
-func (a *Adapter) prepareKey(path string) string {
-	fileName, _ := uuid.NewUUID() // add uuid for file name
+// CreateProfileImage uploads a profile image
+func (a *Adapter) CreateProfileImage(file *os.File, path string, preferredFileName *string) (*string, error) {
+	log.Println("Create profile image")
+
+	s, err := a.createS3Session()
+	if err != nil {
+		log.Printf("Could not create S3 session")
+		return nil, err
+	}
+	key := a.prepareKey(path, preferredFileName)
+	objectLocation, err := a.uploadFileToS3(s, file, a.config.S3ProfileImagesBucket, key)
+	if err != nil {
+		log.Printf("Could not upload file")
+		return nil, err
+	}
+
+	return &objectLocation, nil
+}
+
+// DeleteProfileImage deletes profile image at specific path
+func (a *Adapter) DeleteProfileImage(path string) error {
+	s, err := a.createS3Session()
+	if err != nil {
+		log.Printf("Could not create S3 session")
+		return err
+	}
+
+	session := s3.New(s)
+	_, err = session.DeleteObject(&s3.DeleteObjectInput{
+		Bucket: &a.config.S3ProfileImagesBucket,
+		Key:    &path,
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (a *Adapter) prepareKey(path string, preferredFileName *string) string {
+	var fileName string
+	if preferredFileName == nil {
+		uuid, _ := uuid.NewUUID() // add uuid for file name
+		fileName = uuid.String()
+	} else {
+		fileName = *preferredFileName
+	}
+
 	if strings.HasSuffix(path, "/") {
 		return path + fmt.Sprintf("%s", fileName) + ".webp"
 	}
@@ -87,9 +180,8 @@ func (a *Adapter) createS3Session() (*session.Session, error) {
 }
 
 // UploadFileToS3 saves a file to aws bucket and returns the url to the file and an error if there's any
-func (a *Adapter) uploadFileToS3(s *session.Session, file *os.File, key string) (string, error) {
+func (a *Adapter) uploadFileToS3(s *session.Session, file *os.File, bucket string, key string) (string, error) {
 	uploader := s3manager.NewUploader(s)
-	bucket := a.config.S3Bucket
 	result, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(bucket),
 		ACL:    aws.String("public-read"),

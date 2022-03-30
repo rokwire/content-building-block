@@ -374,7 +374,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/uploadImageResponse"
+                        }
                     }
                 }
             }
@@ -585,7 +588,7 @@
                 "tags": [
                     "Client"
                 ],
-                "operationId": "AdminUpdateStudentGuide",
+                "operationId": "UploadImage",
                 "parameters": [
                     {
                         "description": "path - path within the S3 bucket",
@@ -613,7 +616,7 @@
                         }
                     },
                     {
-                        "description": "quality - quality of the image. Default: 90",
+                        "description": "quality - quality of the image. Default: 100",
                         "name": "quality",
                         "in": "body",
                         "schema": {
@@ -627,6 +630,72 @@
                         "schema": {
                             "type": "string"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/profile_photo": {
+            "get": {
+                "security": [
+                    {
+                        "RokwireAuth": []
+                    }
+                ],
+                "description": "Deletes the profile photo of the user who request",
+                "tags": [
+                    "Client"
+                ],
+                "operationId": "DeleteProfilePhoto",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "RokwireAuth": []
+                    }
+                ],
+                "description": "Stores profile photo",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Client"
+                ],
+                "operationId": "StoreProfilePhoto",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/profile_photo/{user-id}": {
+            "get": {
+                "security": [
+                    {
+                        "RokwireAuth": []
+                    }
+                ],
+                "description": "Retrieves the profile photo",
+                "tags": [
+                    "Client"
+                ],
+                "operationId": "GetProfilePhoto",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Possible values: default, medium, small",
+                        "name": "size",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -755,6 +824,14 @@
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "uploadImageResponse": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
                 }
             }
         }
