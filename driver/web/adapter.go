@@ -23,6 +23,7 @@ import (
 	"content/driver/web/rest"
 	"content/utils"
 	"fmt"
+	"github.com/rokmetro/auth-library/tokenauth"
 	"log"
 	"net/http"
 	"strings"
@@ -80,6 +81,11 @@ func (we Adapter) Start() {
 	contentRouter.PathPrefix("/doc/ui").Handler(we.serveDocUI())
 	contentRouter.HandleFunc("/doc", we.serveDoc)
 	contentRouter.HandleFunc("/version", we.wrapFunc(we.apisHandler.Version)).Methods("GET")
+
+	contentRouter.HandleFunc("/profile_photo/{user-id}", we.coreUserAuthWrapFunc(we.apisHandler.GetProfilePhoto)).Methods("GET")
+	contentRouter.HandleFunc("/profile_photo", we.coreUserAuthWrapFunc(we.apisHandler.GetUserProfilePhoto)).Methods("GET")
+	contentRouter.HandleFunc("/profile_photo", we.coreUserAuthWrapFunc(we.apisHandler.StoreProfilePhoto)).Methods("POST")
+	contentRouter.HandleFunc("/profile_photo", we.coreUserAuthWrapFunc(we.apisHandler.DeleteProfilePhoto)).Methods("DELETE")
 
 	// handle student guide client apis
 	contentRouter.HandleFunc("/student_guides", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuides)).Methods("GET")
@@ -168,6 +174,21 @@ func (we Adapter) apiKeyOrTokenWrapFunc(handler apiKeysAuthFunc) http.HandlerFun
 			return
 		}
 
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+	}
+}
+
+type coreUserAuthFunc = func(*tokenauth.Claims, http.ResponseWriter, *http.Request)
+
+func (we Adapter) coreUserAuthWrapFunc(handler coreUserAuthFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		utils.LogRequest(req)
+
+		coreAuth, claims := we.auth.coreAuth.Check(req)
+		if coreAuth && claims != nil && !claims.Anonymous {
+			handler(claims, w, req)
+			return
+		}
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 	}
 }

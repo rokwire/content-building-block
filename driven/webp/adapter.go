@@ -26,7 +26,7 @@ func (a *Adapter) Convert(inputFileName string, outputFileName string, spec mode
 		args = append(args, "-resize", fmt.Sprintf("%d", spec.Width), fmt.Sprintf("%d", spec.Height))
 	}
 	if spec.Quality > 0 {
-		args = append(args, "-q", "90")
+		args = append(args, "-q", fmt.Sprintf("%d", spec.Quality))
 	}
 	args = append(args, inputFileName, "-o", outputFileName)
 	cmd = exec.Command("cwebp", args...)

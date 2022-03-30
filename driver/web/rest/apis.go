@@ -22,6 +22,7 @@ import (
 	"content/core/model"
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"github.com/rokmetro/auth-library/tokenauth"
 	"go.mongodb.org/mongo-driver/bson"
 	"io/ioutil"
 	"log"
@@ -46,6 +47,153 @@ type ApisHandler struct {
 // @Router /version [get]
 func (h ApisHandler) Version(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(h.app.Services.GetVersion()))
+}
+
+// GetProfilePhoto Retrieves the profile photo
+// @Description Retrieves the profile photo
+// @Tags Client
+// @ID GetProfilePhoto
+// @Param size query string false "Possible values: default, medium, small"
+// @Success 200
+// @Security RokwireAuth
+// @Router /profile_photo/{user-id} [get]
+func (h ApisHandler) GetProfilePhoto(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	userID := vars["user-id"]
+	size := getStringQueryParam(r, "size")
+	var sizeType string
+	if size != nil {
+		if *size == "small" || *size == "medium" || *size == "default" {
+			sizeType = *size
+		}
+	} else {
+		sizeType = "default"
+	}
+
+	imageBytes, err := h.app.Services.GetProfileImage(userID, sizeType)
+	if err != nil || len(imageBytes) == 0 {
+		if err != nil {
+			log.Printf("error on retrieve AWS image: %s", err)
+		} else {
+			log.Printf("profile photo not found for user %s", userID)
+		}
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "image/webp")
+	w.WriteHeader(http.StatusOK)
+	w.Write(imageBytes)
+}
+
+// GetUserProfilePhoto Retrieves the profile photo of the requested user
+// @Description Retrieves the profile photo of the requested user
+// @Tags Client
+// @ID GetUserProfilePhoto
+// @Param size query string false "Possible values: default, medium, small"
+// @Success 200
+// @Security RokwireAuth
+// @Router /profile_photo [get]
+func (h ApisHandler) GetUserProfilePhoto(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	size := getStringQueryParam(r, "size")
+	var sizeType string
+	if size != nil {
+		if *size == "small" || *size == "medium" || *size == "default" {
+			sizeType = *size
+		}
+	} else {
+		sizeType = "default"
+	}
+
+	imageBytes, err := h.app.Services.GetProfileImage(claims.Subject, sizeType)
+	if err != nil || len(imageBytes) == 0 {
+		if err != nil {
+			log.Printf("error on retrieve AWS image: %s", err)
+		} else {
+			log.Printf("profile photo not found for user %s", claims.Subject)
+		}
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "image/webp")
+	w.WriteHeader(http.StatusOK)
+	w.Write(imageBytes)
+}
+
+// StoreProfilePhoto Stores profile photo
+// @Description Stores profile photo
+// @Tags Client
+// @ID StoreProfilePhoto
+// @Accept json
+// @Success 200
+// @Security RokwireAuth
+// @Router /profile_photo [post]
+func (h ApisHandler) StoreProfilePhoto(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	// validate file size
+	r.Body = http.MaxBytesReader(w, r.Body, maxUploadSize)
+	if err := r.ParseMultipartForm(maxUploadSize); err != nil {
+		log.Print("File is too big\n")
+		http.Error(w, "File is too big", http.StatusBadRequest)
+		return
+	}
+
+	// parse and validate file and post parameters
+	file, _, err := r.FormFile("fileName")
+	if err != nil {
+		log.Print("Invalid file\n")
+		http.Error(w, "Invalid file", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+	fileBytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Print("Invalid file\n")
+		http.Error(w, "Invalid file", http.StatusBadRequest)
+		return
+	}
+
+	// check file type, detectcontenttype only needs the first 512 bytes
+	filetype := http.DetectContentType(fileBytes)
+	switch filetype {
+	case "image/jpeg", "image/jpg":
+	case "image/gif", "image/png":
+	default:
+		log.Print("Invalid file type\n")
+		http.Error(w, "Invalid file type. Expected jpeg, png or gif!", http.StatusBadRequest)
+		return
+	}
+
+	err = h.app.Services.UploadProfileImage(claims.Subject, filetype, fileBytes)
+	if err != nil {
+		log.Printf("Error converting image: %s\n", err)
+		http.Error(w, "Error converting image", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+}
+
+// DeleteProfilePhoto Deletes the profile photo of the user who request
+// @Description Deletes the profile photo of the user who request
+// @Tags Client
+// @ID DeleteProfilePhoto
+// @Success 200
+// @Security RokwireAuth
+// @Router /profile_photo [get]
+func (h ApisHandler) DeleteProfilePhoto(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	err := h.app.Services.DeleteProfileImage(claims.Subject)
+	if err != nil {
+		if err != nil {
+			log.Printf("error on delete AWS profile image: %s", err)
+		}
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
 }
 
 // GetStudentGuides retrieves  all student guides
@@ -345,11 +493,11 @@ func (h ApisHandler) GetContentItemsCategories(w http.ResponseWriter, r *http.Re
 // UploadImage Uploads an image to AWS S3
 // @Description Uploads an image to AWS S3
 // @Tags Client
-// @ID AdminUpdateStudentGuide
+// @ID UploadImage
 // @Param path body string true "path - path within the S3 bucket"
 // @Param width body string false "width - width of the image to resize. If width and height are missing - then the new image will use the original size"
 // @Param height body string false "height - height of the image to resize. If width and height are missing - then the new image will use the original size"
-// @Param quality body string false "quality - quality of the image. Default: 90"
+// @Param quality body string false "quality - quality of the image. Default: 100"
 // @Param fileName body string false "fileName - the uploaded file name"
 // @Accept multipart/form-data
 // @Produce json
