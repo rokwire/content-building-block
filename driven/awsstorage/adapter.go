@@ -98,7 +98,7 @@ func (a *Adapter) CreateImage(file *os.File, path string, preferredFileName *str
 		return nil, err
 	}
 	key := a.prepareKey(path, preferredFileName)
-	objectLocation, err := a.uploadFileToS3(s, file, a.config.S3Bucket, key)
+	objectLocation, err := a.uploadFileToS3(s, file, a.config.S3Bucket, key, "public-read")
 	if err != nil {
 		log.Printf("Could not upload file")
 		return nil, err
@@ -117,7 +117,7 @@ func (a *Adapter) CreateProfileImage(file *os.File, path string, preferredFileNa
 		return nil, err
 	}
 	key := a.prepareKey(path, preferredFileName)
-	objectLocation, err := a.uploadFileToS3(s, file, a.config.S3ProfileImagesBucket, key)
+	objectLocation, err := a.uploadFileToS3(s, file, a.config.S3ProfileImagesBucket, key, "authenticated-read")
 	if err != nil {
 		log.Printf("Could not upload file")
 		return nil, err
@@ -180,11 +180,11 @@ func (a *Adapter) createS3Session() (*session.Session, error) {
 }
 
 // UploadFileToS3 saves a file to aws bucket and returns the url to the file and an error if there's any
-func (a *Adapter) uploadFileToS3(s *session.Session, file *os.File, bucket string, key string) (string, error) {
+func (a *Adapter) uploadFileToS3(s *session.Session, file *os.File, bucket string, key string, cannedACL string) (string, error) {
 	uploader := s3manager.NewUploader(s)
 	result, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(bucket),
-		ACL:    aws.String("public-read"),
+		ACL:    aws.String(cannedACL),
 		Key:    aws.String(key),
 		Body:   file,
 	})

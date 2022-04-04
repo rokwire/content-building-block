@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.3] - 2021-04-04
+- Additional fix for setting appropriate ACL permission [#38](https://github.com/rokwire/content-building-block/issues/38)
+
 ## [1.1.2] - 2021-03-30
 - Introduce CRUD of profile photos [#38](https://github.com/rokwire/content-building-block/issues/38)
 
