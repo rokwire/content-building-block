@@ -634,15 +634,6 @@ const docTemplate = `{
                         "schema": {
                             "type": "string"
                         }
-                    },
-                    {
-                        "description": "version - possible value: 2. Fixes the response which previously was a quoted string. The param is marked as required in order to encourage migration to v2.",
-                        "name": "version",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
                     }
                 ],
                 "responses": {
