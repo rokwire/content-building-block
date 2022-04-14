@@ -24,7 +24,7 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   title: Rokwire Content Building Block API
-  version: 1.1.1
+  version: 1.1.6
 paths:
   /admin/content_item/categories:
     get:
@@ -401,6 +401,14 @@ paths:
       - description: fileName - the uploaded file name
         in: body
         name: fileName
+        schema:
+          type: string
+      - description: 'version - possible value: 2. Fixes the response which previously
+          was a quoted string. The param is marked as required in order to encourage
+          migration to v2.'
+        in: body
+        name: version
+        required: true
         schema:
           type: string
       produces:

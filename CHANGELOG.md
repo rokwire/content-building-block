@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.6] - 2021-04-04
+- Bad response after requesting POST /image [#41](https://github.com/rokwire/content-building-block/issues/41)
+
 ## [1.1.5] - 2021-04-04
 - Additional fix for setting appropriate ACL permission [#38](https://github.com/rokwire/content-building-block/issues/38)
 
