@@ -516,6 +516,7 @@ func (h ApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 	heightParam := intPostValueFromString(r.PostFormValue("height"))
 	widthParam := intPostValueFromString(r.PostFormValue("width"))
 	qualityParam := intPostValueFromString(r.PostFormValue("quality"))
+	version := intPostValueFromString(r.PostFormValue("version"))
 	imgSpec := model.ImageSpec{Height: heightParam, Width: widthParam, Quality: qualityParam}
 
 	// validate file size
@@ -563,11 +564,23 @@ func (h ApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jsonData, err := json.Marshal(objectLocation)
-	if err != nil {
-		log.Println("Error on marshal s3 location data")
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
+	var jsonData []byte
+	if version == 2 {
+		jsonData, err = json.Marshal(map[string]interface{}{
+			"url": objectLocation,
+		})
+		if err != nil {
+			log.Println("Error on marshal s3 location data")
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		jsonData, err = json.Marshal(objectLocation)
+		if err != nil {
+			log.Println("Error on marshal s3 location data")
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
