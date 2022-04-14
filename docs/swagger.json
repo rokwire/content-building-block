@@ -11,7 +11,7 @@
             "name": "Apache 2.0",
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         },
-        "version": "1.1.1"
+        "version": "1.1.6"
     },
     "host": "localhost",
     "basePath": "/content",
@@ -627,6 +627,15 @@
                         "description": "fileName - the uploaded file name",
                         "name": "fileName",
                         "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "version - possible value: 2. Fixes the response which previously was a quoted string. The param is marked as required in order to encourage migration to v2.",
+                        "name": "version",
+                        "in": "body",
+                        "required": true,
                         "schema": {
                             "type": "string"
                         }

@@ -499,6 +499,7 @@ func (h ApisHandler) GetContentItemsCategories(w http.ResponseWriter, r *http.Re
 // @Param height body string false "height - height of the image to resize. If width and height are missing - then the new image will use the original size"
 // @Param quality body string false "quality - quality of the image. Default: 100"
 // @Param fileName body string false "fileName - the uploaded file name"
+// @Param version body string true "version - possible value: 2. Fixes the response which previously was a quoted string. The param is marked as required in order to encourage migration to v2."
 // @Accept multipart/form-data
 // @Produce json
 // @Success 200
@@ -565,7 +566,7 @@ func (h ApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var jsonData []byte
-	if version == 2 {
+	if version >= 2 {
 		jsonData, err = json.Marshal(map[string]interface{}{
 			"url": objectLocation,
 		})
