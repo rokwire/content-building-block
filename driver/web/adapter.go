@@ -23,7 +23,7 @@ import (
 	"content/driver/web/rest"
 	"content/utils"
 	"fmt"
-	"github.com/rokmetro/auth-library/tokenauth"
+	"github.com/rokwire/core-auth-library-go/tokenauth"
 	"log"
 	"net/http"
 	"strings"
