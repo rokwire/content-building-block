@@ -389,7 +389,7 @@ func (h ApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
 
 	var itemIDs []string
 	bodyData, _ := ioutil.ReadAll(r.Body)
-	if bodyData != nil {
+	if len(bodyData) > 0 {
 		var body getContentItemsRequestBody
 		bodyErr := json.Unmarshal(bodyData, &body)
 		if bodyErr == nil {
