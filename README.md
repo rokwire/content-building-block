@@ -25,6 +25,7 @@ CONTENT_MONGO_TIMEOUT | < value > | no | MongoDB timeout in milliseconds. Set de
 CONTENT_OIDC_CLIENT_IDS | < value > | yes | OIDC admin client id
 CONTENT_OIDC_PROVIDER | < value > | yes | OIDC provider
 CONTENT_PHONE_SECRET | < value > | yes | Phone secret
+CORE_BB_HOST | < value > | yes | Core BB host url
 ROKWIRE_API_KEYS | <value1,value2,value3> | yes | Comma separated list of rokwire api keys
 AWS_ACCESS_KEY_ID | < value > | yes | AWS Access key ID
 AWS_SECRET_ACCESS_KEY | < value > | yes | AWS Secret access ket
