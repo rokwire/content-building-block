@@ -3,8 +3,9 @@ package web
 import (
 	"content/core"
 	"content/core/model"
-	"github.com/rokmetro/auth-library/authservice"
-	"github.com/rokmetro/auth-library/tokenauth"
+	"github.com/rokwire/core-auth-library-go/authservice"
+	"github.com/rokwire/core-auth-library-go/tokenauth"
+	"github.com/rokwire/logging-library-go/logs"
 	"log"
 	"net/http"
 )
@@ -19,7 +20,11 @@ type CoreAuth struct {
 // NewCoreAuth creates new CoreAuth
 func NewCoreAuth(app *core.Application, config model.Config) *CoreAuth {
 
-	serviceLoader := authservice.NewRemoteServiceRegLoader(config.CoreServiceRegLoaderURL, []string{"core"})
+	remoteConfig := authservice.RemoteAuthDataLoaderConfig{
+		AuthServicesHost: config.CoreBBHost,
+	}
+
+	serviceLoader, err := authservice.NewRemoteAuthDataLoader(remoteConfig, []string{"core"}, logs.NewLogger("content", &logs.LoggerOpts{}))
 	authService, err := authservice.NewAuthService("content", config.ContentServiceURL, serviceLoader)
 	if err != nil {
 		log.Fatalf("Error initializing auth service: %v", err)

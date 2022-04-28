@@ -22,7 +22,7 @@ import (
 	"content/core/model"
 	"encoding/json"
 	"github.com/gorilla/mux"
-	"github.com/rokmetro/auth-library/tokenauth"
+	"github.com/rokwire/core-auth-library-go/tokenauth"
 	"go.mongodb.org/mongo-driver/bson"
 	"io/ioutil"
 	"log"
