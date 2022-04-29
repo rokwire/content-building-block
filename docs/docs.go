@@ -57,12 +57,6 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Coma separated IDs of the desired records",
-                        "name": "ids",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
                         "description": "offset",
                         "name": "offset",
                         "in": "query"

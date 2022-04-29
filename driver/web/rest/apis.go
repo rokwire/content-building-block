@@ -342,7 +342,6 @@ func (h ApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Request) {
 
 // GetContentItems Retrieves  all content items
 // @Description Retrieves  all content items
-// @Param ids query string false "Coma separated IDs of the desired records"
 // @Tags Client
 // @ID GetContentItems
 // @Param offset query string false "offset"

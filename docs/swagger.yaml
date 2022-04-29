@@ -59,10 +59,6 @@ paths:
       description: Retrieves  all content items
       operationId: GetContentItems
       parameters:
-      - description: Coma separated IDs of the desired records
-        in: query
-        name: ids
-        type: string
       - description: offset
         in: query
         name: offset
