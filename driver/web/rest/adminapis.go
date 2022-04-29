@@ -488,7 +488,6 @@ type getContentItemsRequestBody struct {
 
 // GetContentItems Retrieves  all content items
 // @Description Retrieves  all content items
-// @Param ids query string false "Coma separated IDs of the desired records"
 // @Tags Admin
 // @ID AdminGetContentItems
 // @Param offset query string false "offset"
