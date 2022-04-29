@@ -286,6 +286,7 @@ func (sa *Adapter) CreateContentItem(item *model.ContentItem) (*model.ContentIte
 	if item.ID == "" {
 		item.ID = uuid.NewString()
 	}
+	item.DateCreated = time.Now().UTC()
 
 	_, err := sa.db.contentItems.InsertOne(&item)
 	if err != nil {

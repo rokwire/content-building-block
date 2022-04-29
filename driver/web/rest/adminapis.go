@@ -482,8 +482,8 @@ func (h AdminApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 }
 
 type getContentItemsRequestBody struct {
-	IDs        []string `json:"ids"`
-	Categories []string `json:"category_list"`
+	IDs        []string `json:"ids,omitempty"`        // List of IDs for the filter. Optional and may be null or missing.
+	Categories []string `json:"categories,omitempty"` // List of Categories for the filter. Optional and may be null or missing.
 } // @name getContentItemsRequestBody
 
 // GetContentItems Retrieves  all content items
@@ -491,24 +491,15 @@ type getContentItemsRequestBody struct {
 // @Param ids query string false "Coma separated IDs of the desired records"
 // @Tags Admin
 // @ID AdminGetContentItems
-// @Param category query string false "limit - Filters by category. Supports query array. Warning: Consider to use as getContentItemsRequestBody json body if you plan to use long list of categories!"
 // @Param offset query string false "offset"
 // @Param limit query string false "limit - limit the result"
 // @Param order query string false "order - Possible values: asc, desc. Default: desc"
-// @Param start_date query string false "start_date - Start date filter in milliseconds as an integer epoch value"
-// @Param end_date query string false "end_date - End date filter in milliseconds as an integer epoch value"
-// @Param data body getContentItemsRequestBody false "body json of the all items ids that need to be filtered"
+// @Param data body getContentItemsRequestBody false "Optional - body json of the all items ids that need to be filtered. NOTE: Bad/broken json will be interpreted as an empty filter and the request will be proceeded further."
 // @Accept json
-// @Success 200
+// @Success 200 {array} model.ContentItem
 // @Security AdminUserAuth
 // @Router /admin/content_items [get]
 func (h AdminApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
-
-	var categoryList []string
-	getCategories, ok := r.URL.Query()["category"]
-	if ok && len(getCategories) > 0 {
-		categoryList = getCategories
-	}
 
 	var offset *int64
 	offsets, ok := r.URL.Query()["offset"]
@@ -534,24 +525,16 @@ func (h AdminApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request
 		order = &orders[0]
 	}
 
-	var itemIDs []string
+	var body getContentItemsRequestBody
 	bodyData, _ := ioutil.ReadAll(r.Body)
-	if bodyData != nil {
-		var body getContentItemsRequestBody
+	if len(bodyData) > 0 {
 		bodyErr := json.Unmarshal(bodyData, &body)
-		if bodyErr == nil {
-			itemIDs = body.IDs
-			if len(body.Categories) > 0 {
-				if categoryList == nil {
-					categoryList = body.Categories
-				} else {
-					categoryList = append(categoryList, body.Categories...)
-				}
-			}
+		if bodyErr != nil {
+			log.Printf("Warning: bad getContentItemsRequestBody request: %s", bodyErr)
 		}
 	}
 
-	resData, err := h.app.Services.GetContentItems(itemIDs, categoryList, offset, limit, order)
+	resData, err := h.app.Services.GetContentItems(body.IDs, body.Categories, offset, limit, order)
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -580,7 +563,7 @@ func (h AdminApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request
 // @ID AdminGetContentItem
 // @Accept json
 // @Produce json
-// @Success 200
+// @Success 200 {object} model.ContentItem
 // @Security AdminUserAuth
 // @Router /admin/content_items/{id} [get]
 func (h AdminApisHandler) GetContentItem(w http.ResponseWriter, r *http.Request) {
@@ -612,7 +595,7 @@ func (h AdminApisHandler) GetContentItem(w http.ResponseWriter, r *http.Request)
 // @ID AdminUpdateContentItem
 // @Accept json
 // @Produce json
-// @Success 200
+// @Success 200 {object} model.ContentItem
 // @Security AdminUserAuth
 // @Router /admin/content_items/{id} [put]
 func (h AdminApisHandler) UpdateContentItem(w http.ResponseWriter, r *http.Request) {
@@ -676,7 +659,7 @@ type createContentItemRequestBody struct {
 // @Tags Admin
 // @ID AdminCreateContentItem
 // @Accept json
-// @Success 200
+// @Success 200 {object} model.ContentItem
 // @Security AdminUserAuth
 // @Router /admin/content_items [post]
 func (h AdminApisHandler) CreateContentItem(w http.ResponseWriter, r *http.Request) {

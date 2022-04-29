@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.10] - 2021-04-29
+- Fix content item API inconsistencies [#52](https://github.com/rokwire/content-building-block/issues/52)
+
 ## [1.1.9] - 2021-04-28
 - Update Core auth library to the latest version and repo [#49](https://github.com/rokwire/content-building-block/issues/49)
 

@@ -63,12 +63,6 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "limit - Filters by category. Supports query array. Warning: Consider to use as getContentItemsRequestBody json body if you plan to use long list of categories!",
-                        "name": "category",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
                         "description": "offset",
                         "name": "offset",
                         "in": "query"
@@ -86,19 +80,7 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "start_date - Start date filter in milliseconds as an integer epoch value",
-                        "name": "start_date",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "end_date - End date filter in milliseconds as an integer epoch value",
-                        "name": "end_date",
-                        "in": "query"
-                    },
-                    {
-                        "description": "body json of the all items ids that need to be filtered",
+                        "description": "Optional - body json of the all items ids that need to be filtered. NOTE: Bad/broken json will be interpreted as an empty filter and the request will be proceeded further.",
                         "name": "data",
                         "in": "body",
                         "schema": {
@@ -108,7 +90,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ContentItem"
+                            }
+                        }
                     }
                 }
             },
@@ -128,7 +116,10 @@ const docTemplate = `{
                 "operationId": "AdminCreateContentItem",
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
                     }
                 }
             }
@@ -153,7 +144,10 @@ const docTemplate = `{
                 "operationId": "GetContentItem",
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
                     }
                 }
             },
@@ -176,7 +170,10 @@ const docTemplate = `{
                 "operationId": "AdminUpdateContentItem",
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
                     }
                 }
             },
@@ -814,16 +811,36 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "ContentItem": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "data": {},
+                "date_created": {
+                    "type": "string"
+                },
+                "date_updated": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
         "getContentItemsRequestBody": {
             "type": "object",
             "properties": {
-                "category_list": {
+                "categories": {
+                    "description": "List of Categories for the filter. Optional and may be null or missing.",
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
                 },
                 "ids": {
+                    "description": "List of IDs for the filter. Optional and may be null or missing.",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -866,7 +883,7 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.1.6",
+	Version:          "1.1.10",
 	Host:             "localhost",
 	BasePath:         "/content",
 	Schemes:          []string{"https"},
