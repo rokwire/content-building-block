@@ -1,12 +1,27 @@
 basePath: /content
 definitions:
+  ContentItem:
+    properties:
+      category:
+        type: string
+      data: {}
+      date_created:
+        type: string
+      date_updated:
+        type: string
+      id:
+        type: string
+    type: object
   getContentItemsRequestBody:
     properties:
-      category_list:
+      categories:
+        description: List of Categories for the filter. Optional and may be null or
+          missing.
         items:
           type: string
         type: array
       ids:
+        description: List of IDs for the filter. Optional and may be null or missing.
         items:
           type: string
         type: array
@@ -24,7 +39,7 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   title: Rokwire Content Building Block API
-  version: 1.1.6
+  version: 1.1.10
 paths:
   /admin/content_item/categories:
     get:
@@ -48,12 +63,6 @@ paths:
         in: query
         name: ids
         type: string
-      - description: 'limit - Filters by category. Supports query array. Warning:
-          Consider to use as getContentItemsRequestBody json body if you plan to use
-          long list of categories!'
-        in: query
-        name: category
-        type: string
       - description: offset
         in: query
         name: offset
@@ -66,24 +75,20 @@ paths:
         in: query
         name: order
         type: string
-      - description: start_date - Start date filter in milliseconds as an integer
-          epoch value
-        in: query
-        name: start_date
-        type: string
-      - description: end_date - End date filter in milliseconds as an integer epoch
-          value
-        in: query
-        name: end_date
-        type: string
-      - description: body json of the all items ids that need to be filtered
+      - description: 'Optional - body json of the all items ids that need to be filtered.
+          NOTE: Bad/broken json will be interpreted as an empty filter and the request
+          will be proceeded further.'
         in: body
         name: data
         schema:
           $ref: '#/definitions/getContentItemsRequestBody'
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ContentItem'
+            type: array
       security:
       - UserAuth: []
       tags:
@@ -95,7 +100,9 @@ paths:
       operationId: AdminCreateContentItem
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
       security:
       - AdminUserAuth: []
       tags:
@@ -120,7 +127,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
       security:
       - UserAuth: []
       tags:
@@ -134,7 +143,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
       security:
       - AdminUserAuth: []
       tags:
