@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Multi-tenancy [#55](https://github.com/rokwire/content-building-block/issues/55)
 
 ## [1.1.10] - 2021-04-29
 - Fix content item API inconsistencies [#52](https://github.com/rokwire/content-building-block/issues/52)
