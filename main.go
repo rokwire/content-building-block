@@ -87,7 +87,6 @@ func main() {
 	oidcClientIDs := getEnvKeyAsList("CONTENT_OIDC_CLIENT_IDS", true)
 	phoneSecret := getEnvKey("CONTENT_PHONE_SECRET", true)
 	authKeys := getEnvKey("CONTENT_AUTH_KEYS", true)
-	authIssuer := getEnvKey("CONTENT_AUTH_ISSUER", true)
 	coreAuthPrivateKey := getEnvKey("CORE_AUTH_PRIVATE_KEY", true)
 	coreBBHost := getEnvKey("CORE_BB_HOST", true)
 	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
@@ -98,7 +97,6 @@ func main() {
 		OidcClientIDs:      oidcClientIDs,
 		PhoneAuthSecret:    phoneSecret,
 		AuthKeys:           authKeys,
-		AuthIssuer:         authIssuer,
 		CoreAuthPrivateKey: coreAuthPrivateKey,
 		CoreBBHost:         coreBBHost,
 		ContentServiceURL:  contentServiceURL,

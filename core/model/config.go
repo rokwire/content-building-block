@@ -7,7 +7,6 @@ type Config struct {
 	OidcClientIDs      []string
 	PhoneAuthSecret    string
 	AuthKeys           string
-	AuthIssuer         string
 	CoreAuthPrivateKey string
 	CoreBBHost         string
 	ContentServiceURL  string
