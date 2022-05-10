@@ -81,7 +81,6 @@ func main() {
 	application.Start()
 
 	// web adapter
-	apiKeys := getAPIKeys()
 	host := getEnvKey("CONTENT_HOST", true)
 	oidcProvider := getEnvKey("CONTENT_OIDC_PROVIDER", true)
 	oidcClientIDs := getEnvKeyAsList("CONTENT_OIDC_CLIENT_IDS", true)
@@ -89,7 +88,6 @@ func main() {
 	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
 
 	config := model.Config{
-		AppKeys:           apiKeys,
 		OidcProvider:      oidcProvider,
 		OidcClientIDs:     oidcClientIDs,
 		CoreBBHost:        coreBBHost,
@@ -99,19 +97,6 @@ func main() {
 	webAdapter := driver.NewWebAdapter(host, port, application, config)
 
 	webAdapter.Start()
-}
-
-func getAPIKeys() []string {
-	// get from the environment
-	rokwireAPIKeys := getEnvKey("ROKWIRE_API_KEYS", true)
-
-	// it is comma separated format
-	rokwireAPIKeysList := strings.Split(rokwireAPIKeys, ",")
-	if len(rokwireAPIKeysList) <= 0 {
-		log.Fatal("For some reasons the apis keys list is empty")
-	}
-
-	return rokwireAPIKeysList
 }
 
 func getEnvKeyAsList(key string, required bool) []string {

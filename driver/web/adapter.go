@@ -23,10 +23,11 @@ import (
 	"content/driver/web/rest"
 	"content/utils"
 	"fmt"
-	"github.com/rokwire/core-auth-library-go/tokenauth"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/rokwire/core-auth-library-go/tokenauth"
 
 	"github.com/casbin/casbin"
 	"github.com/gorilla/mux"
@@ -88,15 +89,15 @@ func (we Adapter) Start() {
 	contentRouter.HandleFunc("/profile_photo", we.coreUserAuthWrapFunc(we.apisHandler.DeleteProfilePhoto)).Methods("DELETE")
 
 	// handle student guide client apis
-	contentRouter.HandleFunc("/student_guides", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuides)).Methods("GET")
-	contentRouter.HandleFunc("/student_guides/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetStudentGuide)).Methods("GET")
-	contentRouter.HandleFunc("/health_locations", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetHealthLocations)).Methods("GET")
-	contentRouter.HandleFunc("/health_locations/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetHealthLocation)).Methods("GET")
-	contentRouter.HandleFunc("/content_items", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetContentItems)).Methods("GET")
-	contentRouter.HandleFunc("/content_items/{id}", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetContentItem)).Methods("GET")
-	contentRouter.HandleFunc("/content_item/categories", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetContentItemsCategories)).Methods("GET")
+	contentRouter.HandleFunc("/student_guides", we.tokenWrapFunc(we.apisHandler.GetStudentGuides)).Methods("GET")
+	contentRouter.HandleFunc("/student_guides/{id}", we.tokenWrapFunc(we.apisHandler.GetStudentGuide)).Methods("GET")
+	contentRouter.HandleFunc("/health_locations", we.tokenWrapFunc(we.apisHandler.GetHealthLocations)).Methods("GET")
+	contentRouter.HandleFunc("/health_locations/{id}", we.tokenWrapFunc(we.apisHandler.GetHealthLocation)).Methods("GET")
+	contentRouter.HandleFunc("/content_items", we.tokenWrapFunc(we.apisHandler.GetContentItems)).Methods("GET")
+	contentRouter.HandleFunc("/content_items/{id}", we.tokenWrapFunc(we.apisHandler.GetContentItem)).Methods("GET")
+	contentRouter.HandleFunc("/content_item/categories", we.tokenWrapFunc(we.apisHandler.GetContentItemsCategories)).Methods("GET")
 	contentRouter.HandleFunc("/image", we.userAuthWrapFunc(we.apisHandler.UploadImage)).Methods("POST")
-	contentRouter.HandleFunc("/twitter/users/{user_id}/tweets", we.apiKeyOrTokenWrapFunc(we.apisHandler.GetTweeterPosts)).Methods("GET")
+	contentRouter.HandleFunc("/twitter/users/{user_id}/tweets", we.tokenWrapFunc(we.apisHandler.GetTweeterPosts)).Methods("GET")
 
 	// handle student guide admin apis
 	adminSubRouter := contentRouter.PathPrefix("/admin").Subrouter()
@@ -144,21 +145,9 @@ func (we Adapter) wrapFunc(handler http.HandlerFunc) http.HandlerFunc {
 
 type apiKeysAuthFunc = func(http.ResponseWriter, *http.Request)
 
-func (we Adapter) apiKeyOrTokenWrapFunc(handler apiKeysAuthFunc) http.HandlerFunc {
+func (we Adapter) tokenWrapFunc(handler apiKeysAuthFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		utils.LogRequest(req)
-
-		apiKey := req.Header.Get("ROKWIRE-API-KEY")
-		// apply api key check
-		if len(apiKey) > 0 {
-			authenticated := we.auth.apiKeyCheck(w, req)
-			if !authenticated {
-				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-				return
-			}
-			handler(w, req)
-			return
-		}
 
 		// apply shibboleth token check
 		shibbolethAuthenticated, _ := we.auth.shibbolethCheck(w, req)
