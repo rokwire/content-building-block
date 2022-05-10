@@ -86,20 +86,16 @@ func main() {
 	oidcProvider := getEnvKey("CONTENT_OIDC_PROVIDER", true)
 	oidcClientIDs := getEnvKeyAsList("CONTENT_OIDC_CLIENT_IDS", true)
 	phoneSecret := getEnvKey("CONTENT_PHONE_SECRET", true)
-	authKeys := getEnvKey("CONTENT_AUTH_KEYS", true)
-	coreAuthPrivateKey := getEnvKey("CORE_AUTH_PRIVATE_KEY", true)
 	coreBBHost := getEnvKey("CORE_BB_HOST", true)
 	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
 
 	config := model.Config{
-		AppKeys:            apiKeys,
-		OidcProvider:       oidcProvider,
-		OidcClientIDs:      oidcClientIDs,
-		PhoneAuthSecret:    phoneSecret,
-		AuthKeys:           authKeys,
-		CoreAuthPrivateKey: coreAuthPrivateKey,
-		CoreBBHost:         coreBBHost,
-		ContentServiceURL:  contentServiceURL,
+		AppKeys:           apiKeys,
+		OidcProvider:      oidcProvider,
+		OidcClientIDs:     oidcClientIDs,
+		PhoneAuthSecret:   phoneSecret,
+		CoreBBHost:        coreBBHost,
+		ContentServiceURL: contentServiceURL,
 	}
 
 	webAdapter := driver.NewWebAdapter(host, port, application, config)

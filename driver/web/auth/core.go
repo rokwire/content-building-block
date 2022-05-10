@@ -3,18 +3,18 @@ package web
 import (
 	"content/core"
 	"content/core/model"
+	"log"
+	"net/http"
+
 	"github.com/rokwire/core-auth-library-go/authservice"
 	"github.com/rokwire/core-auth-library-go/tokenauth"
 	"github.com/rokwire/logging-library-go/logs"
-	"log"
-	"net/http"
 )
 
 // CoreAuth implementation
 type CoreAuth struct {
-	app                *core.Application
-	tokenAuth          *tokenauth.TokenAuth
-	coreAuthPrivateKey *string
+	app       *core.Application
+	tokenAuth *tokenauth.TokenAuth
 }
 
 // NewCoreAuth creates new CoreAuth
@@ -34,7 +34,7 @@ func NewCoreAuth(app *core.Application, config model.Config) *CoreAuth {
 		log.Fatalf("Error intitializing token auth: %v", err)
 	}
 
-	auth := CoreAuth{app: app, tokenAuth: tokenAuth, coreAuthPrivateKey: &config.CoreAuthPrivateKey}
+	auth := CoreAuth{app: app, tokenAuth: tokenAuth}
 	return &auth
 }
 

@@ -16,7 +16,6 @@ The following Environment variables are supported. The service will not start un
 Name|Value|Required|Description
 ---|---|---|---
 CONTENT_PORT | < value > | yes | The port number of the listening port
-CONTENT_AUTH_KEYS | < value > | yes | Auth keys
 CONTENT_HOST | < value > | yes | Host name
 CONTENT_MONGO_AUTH | <mongodb://USER:PASSWORD@HOST:PORT/DATABASE NAME> | yes | MongoDB authentication string. The user must have read/write privileges.
 CONTENT_MONGO_DATABASE | < value > | yes | MongoDB database name
