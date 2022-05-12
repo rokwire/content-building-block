@@ -11,7 +11,7 @@ require (
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/rokwire/core-auth-library-go v1.0.9
-	github.com/rokwire/logging-library-go v1.0.0
+	github.com/rokwire/logging-library-go v1.0.3
 	github.com/swaggo/http-swagger v1.2.6
 	github.com/swaggo/swag v1.8.1
 	go.mongodb.org/mongo-driver v1.8.4

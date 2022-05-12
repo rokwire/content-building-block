@@ -8,5 +8,5 @@ type ContentItem struct {
 	Category    string      `json:"category" bson:"category"`
 	DateCreated time.Time   `json:"date_created" bson:"date_created"`
 	DateUpdated time.Time   `json:"date_updated" bson:"date_updated"`
-	Data        interface{} `json:"data" bson:"data"`
+	Data        interface{} `json:"data" bson:"data"` // could be eigther a primitive or nested json or array
 } // @name ContentItem

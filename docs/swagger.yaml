@@ -4,13 +4,20 @@ definitions:
     properties:
       category:
         type: string
-      data: {}
+      data:
+        description: could be eigther a primitive or nested json or array
       date_created:
         type: string
       date_updated:
         type: string
       id:
         type: string
+    type: object
+  createContentItemRequestBody:
+    properties:
+      category:
+        type: string
+      data: {}
     type: object
   getContentItemsRequestBody:
     properties:
@@ -56,8 +63,9 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieves  all content items
-      operationId: GetContentItems
+      description: Retrieves  all content items.<b> The data element could be either
+        a primitive or nested json or array.</b>
+      operationId: AdminGetContentItems
       parameters:
       - description: offset
         in: query
@@ -86,19 +94,20 @@ paths:
               $ref: '#/definitions/ContentItem'
             type: array
       security:
-      - UserAuth: []
+      - AdminUserAuth: []
       tags:
-      - Client
+      - Admin
     post:
       consumes:
       - application/json
-      description: Creates a new content item
+      description: Creates a new content item. <b> The data element could be either
+        a primitive or nested json or array.</b>
       operationId: AdminCreateContentItem
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/ContentItem'
+            $ref: '#/definitions/createContentItemRequestBody'
       security:
       - AdminUserAuth: []
       tags:
@@ -117,8 +126,9 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieves a content item by id
-      operationId: GetContentItem
+      description: Retrieves a content item by id. <b> The data element could be either
+        a primitive or nested json or array.</b>
+      operationId: AdminGetContentItem
       produces:
       - application/json
       responses:
@@ -127,13 +137,14 @@ paths:
           schema:
             $ref: '#/definitions/ContentItem'
       security:
-      - UserAuth: []
+      - AdminUserAuth: []
       tags:
-      - Client
+      - Admin
     put:
       consumes:
       - application/json
-      description: Updates a content item with the specified id
+      description: Updates a content item with the specified id. <b> The data element
+        could be either a primitive or nested json or array.</b>
       operationId: AdminUpdateContentItem
       produces:
       - application/json
@@ -338,6 +349,62 @@ paths:
       responses:
         "200":
           description: ""
+      security:
+      - UserAuth: []
+      tags:
+      - Client
+  /content_items:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves  all content items. <b> The data element could be either
+        a primitive or nested json or array.</b>
+      operationId: GetContentItems
+      parameters:
+      - description: offset
+        in: query
+        name: offset
+        type: string
+      - description: limit - limit the result
+        in: query
+        name: limit
+        type: string
+      - description: 'order - Possible values: asc, desc. Default: desc'
+        in: query
+        name: order
+        type: string
+      - description: 'Optional - body json of the all items ids that need to be filtered.
+          NOTE: Bad/broken json will be interpreted as an empty filter and the request
+          will be proceeded further.'
+        in: body
+        name: data
+        schema:
+          $ref: '#/definitions/getContentItemsRequestBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ContentItem'
+            type: array
+      security:
+      - UserAuth: []
+      tags:
+      - Client
+  /content_items/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a content item by id. <b> The data element could be either
+        a primitive or nested json or array.</b>
+      operationId: GetContentItem
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
       security:
       - UserAuth: []
       tags:
