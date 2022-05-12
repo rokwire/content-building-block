@@ -486,8 +486,8 @@ type getContentItemsRequestBody struct {
 	Categories []string `json:"categories,omitempty"` // List of Categories for the filter. Optional and may be null or missing.
 } // @name getContentItemsRequestBody
 
-// GetContentItems Retrieves  all content items
-// @Description Retrieves  all content items
+// GetContentItems Retrieves  all content items. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Retrieves  all content items.<b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Admin
 // @ID AdminGetContentItems
 // @Param offset query string false "offset"
@@ -556,8 +556,8 @@ func (h AdminApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request
 	w.Write(data)
 }
 
-// GetContentItem Retrieves a content item by id
-// @Description Retrieves a content item by id
+// GetContentItem Retrieves a content item by id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Retrieves a content item by id. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Admin
 // @ID AdminGetContentItem
 // @Accept json
@@ -588,8 +588,8 @@ func (h AdminApisHandler) GetContentItem(w http.ResponseWriter, r *http.Request)
 	w.Write(data)
 }
 
-// UpdateContentItem Updates a content item with the specified id
-// @Description Updates a content item with the specified id
+// UpdateContentItem Updates a content item with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Updates a content item with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Admin
 // @ID AdminUpdateContentItem
 // @Accept json
@@ -649,16 +649,16 @@ func (h AdminApisHandler) UpdateContentItem(w http.ResponseWriter, r *http.Reque
 
 // createContentItemRequestBody Expected body while creating a new content item
 type createContentItemRequestBody struct {
-	Category string                 `json:"category" bson:"category"`
-	Data     map[string]interface{} `json:"data" bson:"data"`
+	Category string      `json:"category" bson:"category"`
+	Data     interface{} `json:"data" bson:"data"`
 } // @name createContentItemRequestBody
 
-// CreateContentItem creates a new content item
-// @Description Creates a new content item
+// CreateContentItem creates a new content item. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Creates a new content item. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Admin
 // @ID AdminCreateContentItem
 // @Accept json
-// @Success 200 {object} model.ContentItem
+// @Success 200 {object} createContentItemRequestBody
 // @Security AdminUserAuth
 // @Router /admin/content_items [post]
 func (h AdminApisHandler) CreateContentItem(w http.ResponseWriter, r *http.Request) {

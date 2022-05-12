@@ -340,8 +340,8 @@ func (h ApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// GetContentItems Retrieves  all content items
-// @Description Retrieves  all content items
+// GetContentItems Retrieves  all content items. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Retrieves  all content items. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Client
 // @ID GetContentItems
 // @Param offset query string false "offset"
@@ -351,7 +351,7 @@ func (h ApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Success 200 {array} model.ContentItem
 // @Security UserAuth
-// @Router /admin/content_items [get]
+// @Router /content_items [get]
 func (h ApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
 	var offset *int64
 	offsets, ok := r.URL.Query()["offset"]
@@ -409,15 +409,15 @@ func (h ApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// GetContentItem Retrieves a content item by id
-// @Description Retrieves a content item by id
+// GetContentItem Retrieves a content item by id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Retrieves a content item by id. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Client
 // @ID GetContentItem
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.ContentItem
 // @Security UserAuth
-// @Router /admin/content_items/{id} [get]
+// @Router /content_items/{id} [get]
 func (h ApisHandler) GetContentItem(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
