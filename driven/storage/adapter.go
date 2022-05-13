@@ -250,7 +250,7 @@ func (sa *Adapter) GetContentItemsCategories() ([]string, error) {
 }
 
 // GetContentItems retrieves all content items
-func (sa *Adapter) GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error) {
+func (sa *Adapter) GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
 
 	filter := bson.D{}
 	if len(ids) > 0 {
@@ -273,7 +273,7 @@ func (sa *Adapter) GetContentItems(ids []string, categoryList []string, offset *
 		findOptions.SetSkip(*offset)
 	}
 
-	var result []model.ContentItem
+	var result []model.ContentItemResponse
 	err := sa.db.contentItems.Find(filter, &result, findOptions)
 	if err != nil {
 		return nil, err
@@ -297,10 +297,10 @@ func (sa *Adapter) CreateContentItem(item *model.ContentItem) (*model.ContentIte
 }
 
 // GetContentItem retrieves a content item record by id
-func (sa *Adapter) GetContentItem(id string) (*model.ContentItem, error) {
+func (sa *Adapter) GetContentItem(id string) (*model.ContentItemResponse, error) {
 
 	filter := bson.D{primitive.E{Key: "_id", Value: id}}
-	var result []model.ContentItem
+	var result []model.ContentItemResponse
 	err := sa.db.contentItems.Find(filter, &result, nil)
 	if err != nil {
 		return nil, err

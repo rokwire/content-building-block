@@ -38,8 +38,8 @@ type Services interface {
 	DeleteHealthLocation(id string) error
 
 	GetContentItemsCategories() ([]string, error)
-	GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error)
-	GetContentItem(id string) (*model.ContentItem, error)
+	GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
+	GetContentItem(id string) (*model.ContentItemResponse, error)
 	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)
 	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
 	DeleteContentItem(id string) error
@@ -110,11 +110,11 @@ func (s *servicesImpl) GetContentItemsCategories() ([]string, error) {
 	return s.app.getContentItemsCategories()
 }
 
-func (s *servicesImpl) GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error) {
+func (s *servicesImpl) GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
 	return s.app.getContentItems(ids, categoryList, offset, limit, order)
 }
 
-func (s *servicesImpl) GetContentItem(id string) (*model.ContentItem, error) {
+func (s *servicesImpl) GetContentItem(id string) (*model.ContentItemResponse, error) {
 	return s.app.getContentItem(id)
 }
 
@@ -167,8 +167,8 @@ type Storage interface {
 	DeleteHealthLocation(id string) error
 
 	GetContentItemsCategories() ([]string, error)
-	GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error)
-	GetContentItem(id string) (*model.ContentItem, error)
+	GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
+	GetContentItem(id string) (*model.ContentItemResponse, error)
 	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)
 	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
 	DeleteContentItem(id string) error

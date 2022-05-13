@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.12] - 2021-05-13
+### Fixed
+- Fix broken decode of content item [#60](https://github.com/rokwire/content-building-block/issues/60)
+
 ## [1.1.11] - 2021-05-12
 ### Fixed
 - Fix bad documentation for content item APIs [#56](https://github.com/rokwire/content-building-block/issues/56)
