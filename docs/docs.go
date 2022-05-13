@@ -43,17 +43,17 @@ const docTemplate = `{
             "get": {
                 "security": [
                     {
-                        "UserAuth": []
+                        "AdminUserAuth": []
                     }
                 ],
-                "description": "Retrieves  all content items",
+                "description": "Retrieves  all content items.\u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
-                    "Client"
+                    "Admin"
                 ],
-                "operationId": "GetContentItems",
+                "operationId": "AdminGetContentItems",
                 "parameters": [
                     {
                         "type": "string",
@@ -100,7 +100,7 @@ const docTemplate = `{
                         "AdminUserAuth": []
                     }
                 ],
-                "description": "Creates a new content item",
+                "description": "Creates a new content item. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
                 "consumes": [
                     "application/json"
                 ],
@@ -112,7 +112,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ContentItem"
+                            "$ref": "#/definitions/createContentItemRequestBody"
                         }
                     }
                 }
@@ -122,10 +122,10 @@ const docTemplate = `{
             "get": {
                 "security": [
                     {
-                        "UserAuth": []
+                        "AdminUserAuth": []
                     }
                 ],
-                "description": "Retrieves a content item by id",
+                "description": "Retrieves a content item by id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
                 "consumes": [
                     "application/json"
                 ],
@@ -133,9 +133,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Client"
+                    "Admin"
                 ],
-                "operationId": "GetContentItem",
+                "operationId": "AdminGetContentItem",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -151,7 +151,7 @@ const docTemplate = `{
                         "AdminUserAuth": []
                     }
                 ],
-                "description": "Updates a content item with the specified id",
+                "description": "Updates a content item with the specified id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
                 "consumes": [
                     "application/json"
                 ],
@@ -511,6 +511,90 @@ const docTemplate = `{
                 }
             }
         },
+        "/content_items": {
+            "get": {
+                "security": [
+                    {
+                        "UserAuth": []
+                    }
+                ],
+                "description": "Retrieves  all content items. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Client"
+                ],
+                "operationId": "GetContentItems",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit - limit the result",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order - Possible values: asc, desc. Default: desc",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "description": "Optional - body json of the all items ids that need to be filtered. NOTE: Bad/broken json will be interpreted as an empty filter and the request will be proceeded further.",
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/getContentItemsRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ContentItem"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/content_items/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "UserAuth": []
+                    }
+                ],
+                "description": "Retrieves a content item by id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Client"
+                ],
+                "operationId": "GetContentItem",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            }
+        },
         "/health_locations": {
             "get": {
                 "security": [
@@ -811,7 +895,9 @@ const docTemplate = `{
                 "category": {
                     "type": "string"
                 },
-                "data": {},
+                "data": {
+                    "description": "could be eigther a primitive or nested json or array"
+                },
                 "date_created": {
                     "type": "string"
                 },
@@ -821,6 +907,15 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 }
+            }
+        },
+        "createContentItemRequestBody": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "data": {}
             }
         },
         "getContentItemsRequestBody": {
