@@ -394,7 +394,7 @@ func (h ApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if resData == nil {
-		resData = []model.ContentItemResponse{}
+		resData = []model.ContentItem{}
 	}
 
 	data, err := json.Marshal(resData)

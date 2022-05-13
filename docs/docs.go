@@ -88,7 +88,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/ContentItem"
+                                "$ref": "#/definitions/model.ContentItem"
                             }
                         }
                     }
@@ -140,7 +140,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ContentItem"
+                            "$ref": "#/definitions/model.ContentItem"
                         }
                     }
                 }
@@ -166,7 +166,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ContentItem"
+                            "$ref": "#/definitions/model.ContentItem"
                         }
                     }
                 }
@@ -560,7 +560,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/ContentItem"
+                                "$ref": "#/definitions/model.ContentItem"
                             }
                         }
                     }
@@ -589,7 +589,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ContentItem"
+                            "$ref": "#/definitions/model.ContentItem"
                         }
                     }
                 }
@@ -889,33 +889,16 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "ContentItem": {
-            "type": "object",
-            "properties": {
-                "category": {
-                    "type": "string"
-                },
-                "data": {
-                    "description": "could be eigther a primitive or nested json or array"
-                },
-                "date_created": {
-                    "type": "string"
-                },
-                "date_updated": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                }
-            }
-        },
         "createContentItemRequestBody": {
             "type": "object",
             "properties": {
                 "category": {
                     "type": "string"
                 },
-                "data": {}
+                "data": {},
+                "id": {
+                    "type": "string"
+                }
             }
         },
         "getContentItemsRequestBody": {
@@ -936,6 +919,10 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "model.ContentItem": {
+            "type": "object",
+            "additionalProperties": true
         },
         "uploadImageResponse": {
             "type": "object",

@@ -250,7 +250,7 @@ func (sa *Adapter) GetContentItemsCategories() ([]string, error) {
 }
 
 // GetContentItems retrieves all content items
-func (sa *Adapter) GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
+func (sa *Adapter) GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error) {
 
 	filter := bson.D{}
 	if len(ids) > 0 {
@@ -273,34 +273,46 @@ func (sa *Adapter) GetContentItems(ids []string, categoryList []string, offset *
 		findOptions.SetSkip(*offset)
 	}
 
-	var result []model.ContentItemResponse
+	var result []model.ContentItem
 	err := sa.db.contentItems.Find(filter, &result, findOptions)
 	if err != nil {
 		return nil, err
 	}
+
+	if len(result) > 0 {
+		for i, item := range result {
+			bsonIDtoJSONID(item)
+			result[i] = item
+		}
+	}
+
 	return result, nil
 }
 
 // CreateContentItem creates a new content item record
-func (sa *Adapter) CreateContentItem(item *model.ContentItem) (*model.ContentItem, error) {
-	if item.ID == "" {
-		item.ID = uuid.NewString()
+func (sa *Adapter) CreateContentItem(item model.ContentItem) (model.ContentItem, error) {
+	if item["id"] == nil {
+		item["id"] = uuid.NewString()
 	}
-	item.DateCreated = time.Now().UTC()
+	item["date_created"] = time.Now().UTC()
+
+	jsonIDtoBsonID(item)
 
 	_, err := sa.db.contentItems.InsertOne(&item)
 	if err != nil {
 		log.Printf("error create content item: %s", err)
 		return nil, err
 	}
+
+	bsonIDtoJSONID(item)
 	return item, nil
 }
 
 // GetContentItem retrieves a content item record by id
-func (sa *Adapter) GetContentItem(id string) (*model.ContentItemResponse, error) {
+func (sa *Adapter) GetContentItem(id string) (model.ContentItem, error) {
 
 	filter := bson.D{primitive.E{Key: "_id", Value: id}}
-	var result []model.ContentItemResponse
+	var result []model.ContentItem
 	err := sa.db.contentItems.Find(filter, &result, nil)
 	if err != nil {
 		return nil, err
@@ -310,23 +322,31 @@ func (sa *Adapter) GetContentItem(id string) (*model.ContentItemResponse, error)
 		log.Printf("content item with id: %s is not found", id)
 		return nil, fmt.Errorf("content item with id: %s is not found", id)
 	}
-	return &result[0], nil
+
+	item := result[0]
+	bsonIDtoJSONID(item)
+
+	return item, nil
 
 }
 
 // UpdateContentItem updates a content item record
-func (sa *Adapter) UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error) {
+func (sa *Adapter) UpdateContentItem(id string, item model.ContentItem) (model.ContentItem, error) {
 	if item != nil {
-		if item.ID != id {
+		jsonID := jsonIDFromData(item)
+		if jsonID == nil || *jsonID != id {
 			return nil, fmt.Errorf("attempt to override another object")
 		}
+
+		now := time.Now().UTC()
+		item["date_updated"] = now
 
 		filter := bson.D{primitive.E{Key: "_id", Value: id}}
 		update := bson.D{
 			primitive.E{Key: "$set", Value: bson.D{
-				primitive.E{Key: "category", Value: item.Category},
-				primitive.E{Key: "data", Value: item.Data},
-				primitive.E{Key: "date_updated", Value: time.Now().UTC()},
+				primitive.E{Key: "category", Value: item["category"]},
+				primitive.E{Key: "data", Value: item["data"]},
+				primitive.E{Key: "date_updated", Value: now},
 			}},
 		}
 		_, err := sa.db.contentItems.UpdateOne(filter, update, nil)
@@ -373,5 +393,38 @@ func (m *database) onDataChanged(changeDoc map[string]interface{}) {
 		log.Println("configs collection changed")
 	} else {
 		log.Println("other collection changed")
+	}
+}
+
+func bsonIDFromData(data model.ContentItem) *string {
+	id := data["_id"]
+	if id != nil {
+		return id.(*string)
+	}
+	return nil
+}
+
+func jsonIDFromData(data model.ContentItem) *string {
+	id := data["id"]
+	if id != nil {
+		idVal := id.(string)
+		return &idVal
+	}
+	return nil
+}
+
+func bsonIDtoJSONID(data model.ContentItem) {
+	id := data["_id"]
+	if id != nil {
+		delete(data, "_id")
+		data["id"] = id
+	}
+}
+
+func jsonIDtoBsonID(data model.ContentItem) {
+	id := data["id"]
+	if id != nil {
+		delete(data, "id")
+		data["_id"] = id
 	}
 }

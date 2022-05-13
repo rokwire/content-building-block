@@ -541,7 +541,7 @@ func (h AdminApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request
 	}
 
 	if resData == nil {
-		resData = []model.ContentItemResponse{}
+		resData = []model.ContentItem{}
 	}
 
 	data, err := json.Marshal(resData)
@@ -616,19 +616,13 @@ func (h AdminApisHandler) UpdateContentItem(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	if item.ID != id {
-		log.Printf("Inconsistent attempt to update: path id is not equal to json ID")
-		http.Error(w, "Inconsistent attempt to update: path id is not equal to json ID", http.StatusBadRequest)
-		return
-	}
-
-	if len(item.Category) == 0 {
+	if item["category"] == nil {
 		log.Printf("Unable to update content item: Missing category")
 		http.Error(w, "Unable to create content item: Missing category", http.StatusBadRequest)
 		return
 	}
 
-	resData, err := h.app.Services.UpdateContentItem(id, &item)
+	resData, err := h.app.Services.UpdateContentItem(id, item)
 	if err != nil {
 		log.Printf("Error on updating content item with id - %s\n %s", id, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -649,6 +643,7 @@ func (h AdminApisHandler) UpdateContentItem(w http.ResponseWriter, r *http.Reque
 
 // createContentItemRequestBody Expected body while creating a new content item
 type createContentItemRequestBody struct {
+	ID       *string     `json:"id" bson:"_id"`
 	Category string      `json:"category" bson:"category"`
 	Data     interface{} `json:"data" bson:"data"`
 } // @name createContentItemRequestBody
@@ -684,10 +679,15 @@ func (h AdminApisHandler) CreateContentItem(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	createdItem, err := h.app.Services.CreateContentItem(&model.ContentItem{
-		Category: item.Category,
-		Data:     item.Data,
-	})
+	contentItem := model.ContentItem{
+		"category": item.Category,
+		"data":     item.Data,
+	}
+	if item.ID != nil {
+		contentItem["id"] = item.ID
+	}
+
+	createdItem, err := h.app.Services.CreateContentItem(contentItem)
 	if err != nil {
 		log.Printf("Error on creating content item: %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

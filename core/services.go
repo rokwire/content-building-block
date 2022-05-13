@@ -118,19 +118,19 @@ func (app *Application) getContentItemsCategories() ([]string, error) {
 	return app.storage.GetContentItemsCategories()
 }
 
-func (app *Application) getContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
+func (app *Application) getContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error) {
 	return app.storage.GetContentItems(ids, categoryList, offset, limit, order)
 }
 
-func (app *Application) getContentItem(id string) (*model.ContentItemResponse, error) {
+func (app *Application) getContentItem(id string) (model.ContentItem, error) {
 	return app.storage.GetContentItem(id)
 }
 
-func (app *Application) createContentItem(item *model.ContentItem) (*model.ContentItem, error) {
+func (app *Application) createContentItem(item model.ContentItem) (model.ContentItem, error) {
 	return app.storage.CreateContentItem(item)
 }
 
-func (app *Application) updateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error) {
+func (app *Application) updateContentItem(id string, item model.ContentItem) (model.ContentItem, error) {
 	return app.storage.UpdateContentItem(id, item)
 }
 

@@ -1,23 +1,12 @@
 basePath: /content
 definitions:
-  ContentItem:
-    properties:
-      category:
-        type: string
-      data:
-        description: could be eigther a primitive or nested json or array
-      date_created:
-        type: string
-      date_updated:
-        type: string
-      id:
-        type: string
-    type: object
   createContentItemRequestBody:
     properties:
       category:
         type: string
       data: {}
+      id:
+        type: string
     type: object
   getContentItemsRequestBody:
     properties:
@@ -32,6 +21,9 @@ definitions:
         items:
           type: string
         type: array
+    type: object
+  model.ContentItem:
+    additionalProperties: true
     type: object
   uploadImageResponse:
     properties:
@@ -91,7 +83,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/ContentItem'
+              $ref: '#/definitions/model.ContentItem'
             type: array
       security:
       - AdminUserAuth: []
@@ -135,7 +127,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/ContentItem'
+            $ref: '#/definitions/model.ContentItem'
       security:
       - AdminUserAuth: []
       tags:
@@ -152,7 +144,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/ContentItem'
+            $ref: '#/definitions/model.ContentItem'
       security:
       - AdminUserAuth: []
       tags:
@@ -385,7 +377,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/ContentItem'
+              $ref: '#/definitions/model.ContentItem'
             type: array
       security:
       - UserAuth: []
@@ -404,7 +396,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/ContentItem'
+            $ref: '#/definitions/model.ContentItem'
       security:
       - UserAuth: []
       tags:
