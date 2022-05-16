@@ -27,10 +27,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/rokwire/core-auth-library-go/tokenauth"
-
 	"github.com/casbin/casbin"
 	"github.com/gorilla/mux"
+	"github.com/rokwire/core-auth-library-go/tokenauth"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
@@ -83,44 +82,44 @@ func (we Adapter) Start() {
 	contentRouter.HandleFunc("/doc", we.serveDoc)
 	contentRouter.HandleFunc("/version", we.wrapFunc(we.apisHandler.Version)).Methods("GET")
 
-	contentRouter.HandleFunc("/profile_photo/{user-id}", we.coreUserAuthWrapFunc(we.apisHandler.GetProfilePhoto)).Methods("GET")
-	contentRouter.HandleFunc("/profile_photo", we.coreUserAuthWrapFunc(we.apisHandler.GetUserProfilePhoto)).Methods("GET")
-	contentRouter.HandleFunc("/profile_photo", we.coreUserAuthWrapFunc(we.apisHandler.StoreProfilePhoto)).Methods("POST")
-	contentRouter.HandleFunc("/profile_photo", we.coreUserAuthWrapFunc(we.apisHandler.DeleteProfilePhoto)).Methods("DELETE")
+	contentRouter.HandleFunc("/profile_photo/{user-id}", we.coreAuthWrapFunc(we.apisHandler.GetProfilePhoto)).Methods("GET")
+	contentRouter.HandleFunc("/profile_photo", we.coreAuthWrapFunc(we.apisHandler.GetUserProfilePhoto)).Methods("GET")
+	contentRouter.HandleFunc("/profile_photo", we.coreAuthWrapFunc(we.apisHandler.StoreProfilePhoto)).Methods("POST")
+	contentRouter.HandleFunc("/profile_photo", we.coreAuthWrapFunc(we.apisHandler.DeleteProfilePhoto)).Methods("DELETE")
 
 	// handle student guide client apis
-	contentRouter.HandleFunc("/student_guides", we.tokenWrapFunc(we.apisHandler.GetStudentGuides)).Methods("GET")
-	contentRouter.HandleFunc("/student_guides/{id}", we.tokenWrapFunc(we.apisHandler.GetStudentGuide)).Methods("GET")
-	contentRouter.HandleFunc("/health_locations", we.tokenWrapFunc(we.apisHandler.GetHealthLocations)).Methods("GET")
-	contentRouter.HandleFunc("/health_locations/{id}", we.tokenWrapFunc(we.apisHandler.GetHealthLocation)).Methods("GET")
-	contentRouter.HandleFunc("/content_items", we.tokenWrapFunc(we.apisHandler.GetContentItems)).Methods("GET")
-	contentRouter.HandleFunc("/content_items/{id}", we.tokenWrapFunc(we.apisHandler.GetContentItem)).Methods("GET")
-	contentRouter.HandleFunc("/content_item/categories", we.tokenWrapFunc(we.apisHandler.GetContentItemsCategories)).Methods("GET")
-	contentRouter.HandleFunc("/image", we.userAuthWrapFunc(we.apisHandler.UploadImage)).Methods("POST")
-	contentRouter.HandleFunc("/twitter/users/{user_id}/tweets", we.tokenWrapFunc(we.apisHandler.GetTweeterPosts)).Methods("GET")
+	contentRouter.HandleFunc("/student_guides", we.coreAuthWrapFunc(we.apisHandler.GetStudentGuides)).Methods("GET")
+	contentRouter.HandleFunc("/student_guides/{id}", we.coreAuthWrapFunc(we.apisHandler.GetStudentGuide)).Methods("GET")
+	contentRouter.HandleFunc("/health_locations", we.coreAuthWrapFunc(we.apisHandler.GetHealthLocations)).Methods("GET")
+	contentRouter.HandleFunc("/health_locations/{id}", we.coreAuthWrapFunc(we.apisHandler.GetHealthLocation)).Methods("GET")
+	contentRouter.HandleFunc("/content_items", we.coreAuthWrapFunc(we.apisHandler.GetContentItems)).Methods("GET")
+	contentRouter.HandleFunc("/content_items/{id}", we.coreAuthWrapFunc(we.apisHandler.GetContentItem)).Methods("GET")
+	contentRouter.HandleFunc("/content_item/categories", we.coreAuthWrapFunc(we.apisHandler.GetContentItemsCategories)).Methods("GET")
+	contentRouter.HandleFunc("/image", we.coreAuthWrapFunc(we.apisHandler.UploadImage)).Methods("POST")
+	contentRouter.HandleFunc("/twitter/users/{user_id}/tweets", we.coreAuthWrapFunc(we.apisHandler.GetTweeterPosts)).Methods("GET")
 
 	// handle student guide admin apis
 	adminSubRouter := contentRouter.PathPrefix("/admin").Subrouter()
-	adminSubRouter.HandleFunc("/student_guides", we.adminAuthWrapFunc(we.adminApisHandler.GetStudentGuides)).Methods("GET")
-	adminSubRouter.HandleFunc("/student_guides", we.adminAuthWrapFunc(we.adminApisHandler.CreateStudentGuide)).Methods("POST")
-	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAuthWrapFunc(we.adminApisHandler.GetStudentGuide)).Methods("GET")
-	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAuthWrapFunc(we.adminApisHandler.UpdateStudentGuide)).Methods("PUT")
-	adminSubRouter.HandleFunc("/student_guides/{id}", we.adminAuthWrapFunc(we.adminApisHandler.DeleteStudentGuide)).Methods("DELETE")
+	adminSubRouter.HandleFunc("/student_guides", we.coreAuthWrapFunc(we.adminApisHandler.GetStudentGuides)).Methods("GET")
+	adminSubRouter.HandleFunc("/student_guides", we.coreAuthWrapFunc(we.adminApisHandler.CreateStudentGuide)).Methods("POST")
+	adminSubRouter.HandleFunc("/student_guides/{id}", we.coreAuthWrapFunc(we.adminApisHandler.GetStudentGuide)).Methods("GET")
+	adminSubRouter.HandleFunc("/student_guides/{id}", we.coreAuthWrapFunc(we.adminApisHandler.UpdateStudentGuide)).Methods("PUT")
+	adminSubRouter.HandleFunc("/student_guides/{id}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteStudentGuide)).Methods("DELETE")
 
-	adminSubRouter.HandleFunc("/health_locations", we.adminAuthWrapFunc(we.adminApisHandler.GetHealthLocations)).Methods("GET")
-	adminSubRouter.HandleFunc("/health_locations", we.adminAuthWrapFunc(we.adminApisHandler.CreateHealthLocation)).Methods("POST")
-	adminSubRouter.HandleFunc("/health_location/{id}", we.adminAuthWrapFunc(we.adminApisHandler.GetHealthLocation)).Methods("GET")
-	adminSubRouter.HandleFunc("/health_location/{id}", we.adminAuthWrapFunc(we.adminApisHandler.UpdateHealthLocation)).Methods("PUT")
-	adminSubRouter.HandleFunc("/health_location/{id}", we.adminAuthWrapFunc(we.adminApisHandler.DeleteHealthLocation)).Methods("DELETE")
+	adminSubRouter.HandleFunc("/health_locations", we.coreAuthWrapFunc(we.adminApisHandler.GetHealthLocations)).Methods("GET")
+	adminSubRouter.HandleFunc("/health_locations", we.coreAuthWrapFunc(we.adminApisHandler.CreateHealthLocation)).Methods("POST")
+	adminSubRouter.HandleFunc("/health_location/{id}", we.coreAuthWrapFunc(we.adminApisHandler.GetHealthLocation)).Methods("GET")
+	adminSubRouter.HandleFunc("/health_location/{id}", we.coreAuthWrapFunc(we.adminApisHandler.UpdateHealthLocation)).Methods("PUT")
+	adminSubRouter.HandleFunc("/health_location/{id}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteHealthLocation)).Methods("DELETE")
 
-	adminSubRouter.HandleFunc("/content_items", we.adminAuthWrapFunc(we.adminApisHandler.GetContentItems)).Methods("GET")
-	adminSubRouter.HandleFunc("/content_items", we.adminAuthWrapFunc(we.adminApisHandler.CreateContentItem)).Methods("POST")
-	adminSubRouter.HandleFunc("/content_items/{id}", we.adminAuthWrapFunc(we.adminApisHandler.GetContentItem)).Methods("GET")
-	adminSubRouter.HandleFunc("/content_items/{id}", we.adminAuthWrapFunc(we.adminApisHandler.UpdateContentItem)).Methods("PUT")
-	adminSubRouter.HandleFunc("/content_items/{id}", we.adminAuthWrapFunc(we.adminApisHandler.DeleteContentItem)).Methods("DELETE")
-	adminSubRouter.HandleFunc("/content_item/categories", we.adminAuthWrapFunc(we.adminApisHandler.GetContentItemsCategories)).Methods("GET")
+	adminSubRouter.HandleFunc("/content_items", we.coreAuthWrapFunc(we.adminApisHandler.GetContentItems)).Methods("GET")
+	adminSubRouter.HandleFunc("/content_items", we.coreAuthWrapFunc(we.adminApisHandler.CreateContentItem)).Methods("POST")
+	adminSubRouter.HandleFunc("/content_items/{id}", we.coreAuthWrapFunc(we.adminApisHandler.GetContentItem)).Methods("GET")
+	adminSubRouter.HandleFunc("/content_items/{id}", we.coreAuthWrapFunc(we.adminApisHandler.UpdateContentItem)).Methods("PUT")
+	adminSubRouter.HandleFunc("/content_items/{id}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteContentItem)).Methods("DELETE")
+	adminSubRouter.HandleFunc("/content_item/categories", we.coreAuthWrapFunc(we.adminApisHandler.GetContentItemsCategories)).Methods("GET")
 
-	adminSubRouter.HandleFunc("/image", we.adminAuthWrapFunc(we.adminApisHandler.UploadImage)).Methods("POST")
+	adminSubRouter.HandleFunc("/image", we.coreAuthWrapFunc(we.adminApisHandler.UploadImage)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+we.port, router))
 }
@@ -143,92 +142,14 @@ func (we Adapter) wrapFunc(handler http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-type apiKeysAuthFunc = func(http.ResponseWriter, *http.Request)
+type coreAuthFunc = func(*tokenauth.Claims, http.ResponseWriter, *http.Request)
 
-func (we Adapter) tokenWrapFunc(handler apiKeysAuthFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
-		utils.LogRequest(req)
-
-		// apply shibboleth token check
-		shibbolethAuthenticated, _ := we.auth.shibbolethCheck(w, req)
-		if shibbolethAuthenticated {
-			handler(w, req)
-			return
-		}
-
-		// apply core token check
-		coreAuth, _ := we.auth.coreAuth.Check(req)
-		if coreAuth {
-			handler(w, req)
-			return
-		}
-
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-	}
-}
-
-type coreUserAuthFunc = func(*tokenauth.Claims, http.ResponseWriter, *http.Request)
-
-func (we Adapter) coreUserAuthWrapFunc(handler coreUserAuthFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
-		utils.LogRequest(req)
-
-		coreAuth, claims := we.auth.coreAuth.Check(req)
-		if coreAuth && claims != nil && !claims.Anonymous {
-			handler(claims, w, req)
-			return
-		}
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-	}
-}
-
-type userAuthFunc = func(http.ResponseWriter, *http.Request)
-
-func (we Adapter) userAuthWrapFunc(handler userAuthFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
-		utils.LogRequest(req)
-
-		shibbolethOk, _ := we.auth.shibbolethAuth.Check(req)
-		if shibbolethOk {
-			handler(w, req)
-			return
-		}
-
-		coreAuth, claims := we.auth.coreAuth.Check(req)
-		if coreAuth && claims != nil && !claims.Anonymous {
-			handler(w, req)
-			return
-		}
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-	}
-}
-
-type adminAuthFunc = func(http.ResponseWriter, *http.Request)
-
-func (we Adapter) adminAuthWrapFunc(handler adminAuthFunc) http.HandlerFunc {
+func (we Adapter) coreAuthWrapFunc(handler coreAuthFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		utils.LogRequest(req)
 
 		obj := req.URL.Path // the resource that is going to be accessed.
 		act := req.Method   // the operation that the user performs on the resource.
-
-		shibbolethAuth, shibbolethUser := we.auth.adminCheck(req)
-		if shibbolethAuth {
-			HasAccess := false
-			for _, s := range *shibbolethUser.IsMemberOf {
-				HasAccess = we.authorization.Enforce(s, obj, act)
-				if HasAccess {
-					break
-				}
-			}
-			if HasAccess {
-				handler(w, req)
-				return
-			}
-			log.Printf("Access control error - UIN: %s is trying to apply %s operation for %s\n", shibbolethUser.Uin, act, obj)
-			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
-			return
-		}
 
 		coreAuth, claims := we.auth.coreAuth.Check(req)
 		if coreAuth {
@@ -242,7 +163,7 @@ func (we Adapter) adminAuthWrapFunc(handler adminAuthFunc) http.HandlerFunc {
 				}
 			}
 			if HasAccess {
-				handler(w, req)
+				handler(claims, w, req)
 				return
 			}
 			log.Printf("Access control error - Core Subject: %s is trying to apply %s operation for %s\n", claims.Subject, act, obj)
@@ -252,10 +173,6 @@ func (we Adapter) adminAuthWrapFunc(handler adminAuthFunc) http.HandlerFunc {
 
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 	}
-}
-
-func (auth *Auth) adminCheck(r *http.Request) (bool, *model.ShibbolethToken) {
-	return auth.shibbolethAuth.Check(r)
 }
 
 // NewWebAdapter creates new WebAdapter instance

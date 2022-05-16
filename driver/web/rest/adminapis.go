@@ -4,13 +4,15 @@ import (
 	"content/core"
 	"content/core/model"
 	"encoding/json"
-	"github.com/gorilla/mux"
-	"go.mongodb.org/mongo-driver/bson"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/gorilla/mux"
+	"github.com/rokwire/core-auth-library-go/tokenauth"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 //AdminApisHandler handles the rest Admin APIs implementation
@@ -27,7 +29,7 @@ type AdminApisHandler struct {
 // @Success 200
 // @Security AdminUserAuth
 // @Router /admin/student_guides [get]
-func (h AdminApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) GetStudentGuides(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
 	IDs := []string{}
 	IDskeys, ok := r.URL.Query()["ids"]
@@ -68,7 +70,7 @@ func (h AdminApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Reques
 // @Success 200
 // @Security AdminUserAuth
 // @Router /admin/student_guides/{id} [get]
-func (h AdminApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) GetStudentGuide(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
@@ -100,7 +102,7 @@ func (h AdminApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request
 // @Success 200
 // @Security AdminUserAuth
 // @Router /admin/student_guides/{id} [put]
-func (h AdminApisHandler) UpdateStudentGuide(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) UpdateStudentGuide(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
@@ -146,7 +148,7 @@ func (h AdminApisHandler) UpdateStudentGuide(w http.ResponseWriter, r *http.Requ
 // @Success 200
 // @Security AdminUserAuth
 // @Router /admin/student_guides [post]
-func (h AdminApisHandler) CreateStudentGuide(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) CreateStudentGuide(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -189,7 +191,7 @@ func (h AdminApisHandler) CreateStudentGuide(w http.ResponseWriter, r *http.Requ
 // @Success 200
 // @Security AdminUserAuth
 // @Router /admin/student_guides/{id} [delete]
-func (h AdminApisHandler) DeleteStudentGuide(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) DeleteStudentGuide(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
@@ -213,7 +215,7 @@ func (h AdminApisHandler) DeleteStudentGuide(w http.ResponseWriter, r *http.Requ
 // @Success 200
 // @Security AdminUserAuth
 // @Router /admin/health_locations [get]
-func (h AdminApisHandler) GetHealthLocations(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) GetHealthLocations(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
 	IDs := []string{}
 	IDskeys, ok := r.URL.Query()["ids"]
@@ -254,7 +256,7 @@ func (h AdminApisHandler) GetHealthLocations(w http.ResponseWriter, r *http.Requ
 // @Success 200
 // @Security AdminUserAuth
 // @Router /admin/health_locations/{id} [get]
-func (h AdminApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) GetHealthLocation(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	locationID := vars["id"]
 
@@ -286,7 +288,7 @@ func (h AdminApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Reque
 // @Success 200
 // @Security AdminUserAuth
 // @Router /admin/health_locations/{id} [put]
-func (h AdminApisHandler) UpdateHealthLocation(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) UpdateHealthLocation(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	locationID := vars["id"]
 
@@ -332,7 +334,7 @@ func (h AdminApisHandler) UpdateHealthLocation(w http.ResponseWriter, r *http.Re
 // @Success 200
 // @Security AdminUserAuth
 // @Router /admin/health_locations [post]
-func (h AdminApisHandler) CreateHealthLocation(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) CreateHealthLocation(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -375,7 +377,7 @@ func (h AdminApisHandler) CreateHealthLocation(w http.ResponseWriter, r *http.Re
 // @Success 200
 // @Security AdminUserAuth
 // @Router /admin/health_location/{id} [delete]
-func (h AdminApisHandler) DeleteHealthLocation(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) DeleteHealthLocation(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	locationID := vars["id"]
 
@@ -409,7 +411,7 @@ type uploadImageResponse struct {
 // @Success 200 {object} uploadImageResponse
 // @Security AdminUserAuth
 // @Router /admin/image [post]
-func (h AdminApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) UploadImage(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	//validate the image type
 	path := r.PostFormValue("path")
 	if len(path) <= 0 {
@@ -498,7 +500,7 @@ type getContentItemsRequestBody struct {
 // @Success 200 {array} model.ContentItem
 // @Security AdminUserAuth
 // @Router /admin/content_items [get]
-func (h AdminApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) GetContentItems(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
 	var offset *int64
 	offsets, ok := r.URL.Query()["offset"]
@@ -565,7 +567,7 @@ func (h AdminApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request
 // @Success 200 {object} model.ContentItem
 // @Security AdminUserAuth
 // @Router /admin/content_items/{id} [get]
-func (h AdminApisHandler) GetContentItem(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) GetContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
@@ -597,7 +599,7 @@ func (h AdminApisHandler) GetContentItem(w http.ResponseWriter, r *http.Request)
 // @Success 200 {object} model.ContentItem
 // @Security AdminUserAuth
 // @Router /admin/content_items/{id} [put]
-func (h AdminApisHandler) UpdateContentItem(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) UpdateContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
@@ -661,7 +663,7 @@ type createContentItemRequestBody struct {
 // @Success 200 {object} createContentItemRequestBody
 // @Security AdminUserAuth
 // @Router /admin/content_items [post]
-func (h AdminApisHandler) CreateContentItem(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) CreateContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -713,7 +715,7 @@ func (h AdminApisHandler) CreateContentItem(w http.ResponseWriter, r *http.Reque
 // @Success 200
 // @Security AdminUserAuth
 // @Router /admin/content_items/{id} [delete]
-func (h AdminApisHandler) DeleteContentItem(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) DeleteContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
@@ -735,7 +737,7 @@ func (h AdminApisHandler) DeleteContentItem(w http.ResponseWriter, r *http.Reque
 // @Success 200
 // @Security AdminUserAuth
 // @Router /admin/content_item/categories [get]
-func (h AdminApisHandler) GetContentItemsCategories(w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) GetContentItemsCategories(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	resData, err := h.app.Services.GetContentItemsCategories()
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)

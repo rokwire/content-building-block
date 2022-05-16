@@ -21,14 +21,15 @@ import (
 	"content/core"
 	"content/core/model"
 	"encoding/json"
-	"github.com/gorilla/mux"
-	"github.com/rokwire/core-auth-library-go/tokenauth"
-	"go.mongodb.org/mongo-driver/bson"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/gorilla/mux"
+	"github.com/rokwire/core-auth-library-go/tokenauth"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 const maxUploadSize = 15 * 1024 * 1024 // 15 mb
@@ -205,7 +206,7 @@ func (h ApisHandler) DeleteProfilePhoto(claims *tokenauth.Claims, w http.Respons
 // @Success 200
 // @Security RokwireAuth
 // @Router /student_guides [get]
-func (h ApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) GetStudentGuides(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	IDs := []string{}
 	IDskeys, ok := r.URL.Query()["ids"]
 	if ok && len(IDskeys[0]) > 0 {
@@ -245,7 +246,7 @@ func (h ApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Security RokwireAuth
 // @Router /student_guides/{id} [get]
-func (h ApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) GetStudentGuide(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
@@ -277,7 +278,7 @@ func (h ApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Security RokwireAuth
 // @Router /health_locations [get]
-func (h ApisHandler) GetHealthLocations(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) GetHealthLocations(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	IDs := []string{}
 	IDskeys, ok := r.URL.Query()["ids"]
 	if ok && len(IDskeys[0]) > 0 {
@@ -317,7 +318,7 @@ func (h ApisHandler) GetHealthLocations(w http.ResponseWriter, r *http.Request) 
 // @Success 200
 // @Security RokwireAuth
 // @Router /health_locations/{id} [get]
-func (h ApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) GetHealthLocation(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
@@ -352,7 +353,7 @@ func (h ApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} model.ContentItem
 // @Security UserAuth
 // @Router /content_items [get]
-func (h ApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) GetContentItems(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	var offset *int64
 	offsets, ok := r.URL.Query()["offset"]
 	if ok && len(offsets[0]) > 0 {
@@ -418,7 +419,7 @@ func (h ApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} model.ContentItem
 // @Security UserAuth
 // @Router /content_items/{id} [get]
-func (h ApisHandler) GetContentItem(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) GetContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
@@ -448,7 +449,7 @@ func (h ApisHandler) GetContentItem(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Security UserAuth
 // @Router /content_item/categories [get]
-func (h ApisHandler) GetContentItemsCategories(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) GetContentItemsCategories(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	resData, err := h.app.Services.GetContentItemsCategories()
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)
@@ -486,7 +487,7 @@ func (h ApisHandler) GetContentItemsCategories(w http.ResponseWriter, r *http.Re
 // @Success 200
 // @Security UserAuth
 // @Router /image [post]
-func (h ApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) UploadImage(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	// validate the image type
 	path := r.PostFormValue("path")
 	if len(path) == 0 {
@@ -568,7 +569,7 @@ func (h ApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Security RokwireAuth
 // @Router /twitter/users/{user_id}/tweets [get]
-func (h ApisHandler) GetTweeterPosts(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) GetTweeterPosts(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID := vars["user_id"]
 
