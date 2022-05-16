@@ -118,11 +118,11 @@ func (app *Application) getContentItemsCategories() ([]string, error) {
 	return app.storage.GetContentItemsCategories()
 }
 
-func (app *Application) getContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error) {
+func (app *Application) getContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
 	return app.storage.GetContentItems(ids, categoryList, offset, limit, order)
 }
 
-func (app *Application) getContentItem(id string) (*model.ContentItem, error) {
+func (app *Application) getContentItem(id string) (*model.ContentItemResponse, error) {
 	return app.storage.GetContentItem(id)
 }
 

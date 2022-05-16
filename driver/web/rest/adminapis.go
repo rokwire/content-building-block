@@ -541,7 +541,7 @@ func (h AdminApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request
 	}
 
 	if resData == nil {
-		resData = []model.ContentItem{}
+		resData = []model.ContentItemResponse{}
 	}
 
 	data, err := json.Marshal(resData)
