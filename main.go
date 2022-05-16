@@ -82,14 +82,10 @@ func main() {
 
 	// web adapter
 	host := getEnvKey("CONTENT_HOST", true)
-	oidcProvider := getEnvKey("CONTENT_OIDC_PROVIDER", true)
-	oidcClientIDs := getEnvKeyAsList("CONTENT_OIDC_CLIENT_IDS", true)
 	coreBBHost := getEnvKey("CORE_BB_HOST", true)
 	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
 
 	config := model.Config{
-		OidcProvider:      oidcProvider,
-		OidcClientIDs:     oidcClientIDs,
 		CoreBBHost:        coreBBHost,
 		ContentServiceURL: contentServiceURL,
 	}

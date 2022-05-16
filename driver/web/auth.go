@@ -28,8 +28,7 @@ import (
 
 // Auth handler
 type Auth struct {
-	shibbolethAuth *web.ShibbolethAuth
-	coreAuth       *web.CoreAuth
+	coreAuth *web.CoreAuth
 }
 
 func (auth *Auth) clientIDCheck(w http.ResponseWriter, r *http.Request) bool {
@@ -44,15 +43,10 @@ func (auth *Auth) clientIDCheck(w http.ResponseWriter, r *http.Request) bool {
 	return false
 }
 
-func (auth *Auth) shibbolethCheck(w http.ResponseWriter, r *http.Request) (bool, *model.ShibbolethToken) {
-	return auth.shibbolethAuth.Check(r)
-}
-
 // NewAuth creates new auth handler
 func NewAuth(app *core.Application, config model.Config) *Auth {
-	shibbolethAuth := web.NewShibbolethAuth(app, config)
 	coreAuth := web.NewCoreAuth(app, config)
 
-	auth := Auth{shibbolethAuth: shibbolethAuth, coreAuth: coreAuth}
+	auth := Auth{coreAuth: coreAuth}
 	return &auth
 }
