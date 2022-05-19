@@ -246,6 +246,17 @@ type getContentItemsCategoriesData struct {
 	CategoryName string `json:"_id" bson:"_id"`
 }
 
+// FindAllContentItems  finds all content items
+func (sa *Adapter) FindAllContentItems() ([]model.ContentItemResponse, error) {
+	filter := bson.D{}
+	var result []model.ContentItemResponse
+	err := sa.db.contentItems.Find(filter, &result, nil)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 // GetContentItemsCategories  retrieve all content item categories
 func (sa *Adapter) GetContentItemsCategories() ([]string, error) {
 

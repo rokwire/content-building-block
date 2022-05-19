@@ -55,14 +55,35 @@ func (app *Application) Start() {
 
 //as the service starts supporting multi-tenancy we need to add the needed multi-tenancy fields for the existing data,
 func (app *Application) storeMultiTenancyData() error {
+	log.Println("storeMultiTenancyData...")
 	//in transaction
 	transaction := func(context storage.TransactionContext) error {
 
-		sg, err := app.storage.GetStudentGuides(nil)
+		//check if we need to apply multi-tenancy data
+		var applyData bool
+		items, err := app.storage.FindAllContentItems()
 		if err != nil {
 			return err
 		}
-		log.Println(sg)
+		for _, current := range items {
+			if val, ok := current["app_id"]; ok {
+				log.Printf("\thas already app_id:%s", val)
+				applyData = false
+				break
+			} else {
+				log.Print("\tno app_id")
+				applyData = true
+				break
+			}
+		}
+
+		//apply data if necessary
+		if applyData {
+			log.Print("\tapplying multi-tenancy data..")
+			//TODO
+		} else {
+			log.Print("\tno need to apply multi-tenancy data, so do nothing")
+		}
 
 		return nil
 	}

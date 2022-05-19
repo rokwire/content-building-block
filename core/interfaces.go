@@ -170,6 +170,7 @@ type Storage interface {
 	UpdateHealthLocation(id string, item bson.M) (bson.M, error)
 	DeleteHealthLocation(id string) error
 
+	FindAllContentItems() ([]model.ContentItemResponse, error)
 	GetContentItemsCategories() ([]string, error)
 	GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
 	GetContentItem(id string) (*model.ContentItemResponse, error)
