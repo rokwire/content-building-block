@@ -170,11 +170,16 @@ type Storage interface {
 	UpdateHealthLocation(id string, item bson.M) (bson.M, error)
 	DeleteHealthLocation(id string) error
 
-	FindAllContentItems() ([]model.ContentItemResponse, error)
 	GetContentItemsCategories() ([]string, error)
 	GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
 	GetContentItem(id string) (*model.ContentItemResponse, error)
 	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)
 	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
 	DeleteContentItem(id string) error
+
+	//Used for multi-tenancy for already exisiting data.
+	//To be removed when this is applied to all environments.
+	FindAllContentItems(context storage.TransactionContext) ([]model.ContentItemResponse, error)
+	StoreMultiTenancyData(context storage.TransactionContext, appID string, orgID string) error
+	///
 }

@@ -246,17 +246,6 @@ type getContentItemsCategoriesData struct {
 	CategoryName string `json:"_id" bson:"_id"`
 }
 
-// FindAllContentItems  finds all content items
-func (sa *Adapter) FindAllContentItems() ([]model.ContentItemResponse, error) {
-	filter := bson.D{}
-	var result []model.ContentItemResponse
-	err := sa.db.contentItems.Find(filter, &result, nil)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
 // GetContentItemsCategories  retrieve all content item categories
 func (sa *Adapter) GetContentItemsCategories() ([]string, error) {
 
@@ -382,6 +371,36 @@ func (sa *Adapter) DeleteContentItem(id string) error {
 	if deletedCount != 1 {
 		return fmt.Errorf("error occured while deleting a resource item with id " + id)
 	}
+	return nil
+}
+
+//FindAllContentItems finds all content items
+func (sa *Adapter) FindAllContentItems(context TransactionContext) ([]model.ContentItemResponse, error) {
+	filter := bson.D{}
+	var result []model.ContentItemResponse
+	err := sa.db.contentItems.FindWithContext(context, filter, &result, nil)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+//StoreMultiTenancyData stores multi-tenancy to already exisiting data in the collections
+func (sa *Adapter) StoreMultiTenancyData(context TransactionContext, appID string, orgID string) error {
+	//TODO
+
+	filter := bson.D{}
+	update := bson.D{
+		primitive.E{Key: "$set", Value: bson.D{
+			primitive.E{Key: "app_id", Value: appID},
+			primitive.E{Key: "org_id", Value: orgID},
+		}},
+	}
+	_, err := sa.db.healthLocations.UpdateManyWithContext(context, filter, update, nil)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

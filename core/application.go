@@ -43,10 +43,16 @@ type Application struct {
 	webpAdapter        *webp.Adapter
 	twitterAdapter     *twitter.Adapter
 	cacheAdapter       *cacheadapter.CacheAdapter
+
+	//TODO - remove this when applied to all environemnts
+	multiTenancyAppID string
+	multiTenancyOrgID string
 }
 
 // Start starts the core part of the application
 func (app *Application) Start() {
+
+	//TODO - remove this when applied to all environemnts
 	err := app.storeMultiTenancyData()
 	if err != nil {
 		log.Fatalf("error initializing multi-tenancy data: %s", err.Error())
@@ -61,7 +67,7 @@ func (app *Application) storeMultiTenancyData() error {
 
 		//check if we need to apply multi-tenancy data
 		var applyData bool
-		items, err := app.storage.FindAllContentItems()
+		items, err := app.storage.FindAllContentItems(context)
 		if err != nil {
 			return err
 		}
@@ -80,7 +86,11 @@ func (app *Application) storeMultiTenancyData() error {
 		//apply data if necessary
 		if applyData {
 			log.Print("\tapplying multi-tenancy data..")
-			//TODO
+
+			err := app.storage.StoreMultiTenancyData(context, app.multiTenancyAppID, app.multiTenancyOrgID)
+			if err != nil {
+				return err
+			}
 		} else {
 			log.Print("\tno need to apply multi-tenancy data, so do nothing")
 		}
@@ -97,9 +107,13 @@ func (app *Application) storeMultiTenancyData() error {
 }
 
 // NewApplication creates new Application
-func NewApplication(version string, build string, storage Storage, awsAdapter *awsstorage.Adapter, tempStorageAdapter *tempstorage.Adapter, webpAdapter *webp.Adapter, twitterAdapter *twitter.Adapter, cacheadapter *cacheadapter.CacheAdapter) *Application {
+func NewApplication(version string, build string, storage Storage, awsAdapter *awsstorage.Adapter,
+	tempStorageAdapter *tempstorage.Adapter, webpAdapter *webp.Adapter, twitterAdapter *twitter.Adapter,
+	cacheadapter *cacheadapter.CacheAdapter, mtAppID string, mtOrgID string) *Application {
 	cacheLock := &sync.Mutex{}
-	application := Application{version: version, build: build, cacheLock: cacheLock, storage: storage, awsAdapter: awsAdapter, tempStorageAdapter: tempStorageAdapter, webpAdapter: webpAdapter, twitterAdapter: twitterAdapter, cacheAdapter: cacheadapter}
+	application := Application{version: version, build: build, cacheLock: cacheLock, storage: storage,
+		awsAdapter: awsAdapter, tempStorageAdapter: tempStorageAdapter, webpAdapter: webpAdapter,
+		twitterAdapter: twitterAdapter, cacheAdapter: cacheadapter, multiTenancyAppID: mtAppID, multiTenancyOrgID: mtOrgID}
 
 	// add the drivers ports/interfaces
 	application.Services = &servicesImpl{app: &application}

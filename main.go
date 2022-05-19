@@ -76,8 +76,12 @@ func main() {
 	twitterAccessToken := getEnvKey("TWITTER_ACCESS_TOKEN", true)
 	twitterAdapter := twitter.NewTwitterAdapter(twitterFeedURL, twitterAccessToken)
 
+	mtAppID := getEnvKey("CONTENT_MULTI_TENANCY_APP_ID", true)
+	mtOrgID := getEnvKey("CONTENT_MULTI_TENANCY_ORG_ID", true)
+
 	// application
-	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, tempStorageAdapter, webpAdapter, twitterAdapter, cacheAdapter)
+	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, tempStorageAdapter,
+		webpAdapter, twitterAdapter, cacheAdapter, mtAppID, mtOrgID)
 	application.Start()
 
 	// web adapter

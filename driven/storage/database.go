@@ -142,39 +142,22 @@ func (m *database) applyContentItemsChecks(contentItems *collectionWrapper) erro
 		return err
 	}
 
-	// Add orgp_id index
+	// Add org_id index
 	err = contentItems.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1}}, false)
 	if err != nil {
 		return err
 	}
 
-	indexes, _ := contentItems.ListIndexes()
-	indexMapping := map[string]interface{}{}
-	if indexes != nil {
-
-		for _, index := range indexes {
-			name := index["name"].(string)
-			indexMapping[name] = index
-		}
+	// Add category index
+	err = contentItems.AddIndex(bson.D{primitive.E{Key: "category", Value: 1}}, false)
+	if err != nil {
+		return err
 	}
-	if indexMapping["category_1"] == nil {
 
-		err := contentItems.AddIndex(
-			bson.D{
-				primitive.E{Key: "category", Value: 1},
-			}, false)
-		if err != nil {
-			return err
-		}
-	}
-	if indexMapping["date_created_1"] == nil {
-		err := contentItems.AddIndex(
-			bson.D{
-				primitive.E{Key: "date_created", Value: 1},
-			}, false)
-		if err != nil {
-			return err
-		}
+	// Add date_created index
+	err = contentItems.AddIndex(bson.D{primitive.E{Key: "date_created", Value: 1}}, false)
+	if err != nil {
+		return err
 	}
 
 	log.Println("content_items checks passed")
