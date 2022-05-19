@@ -12,4 +12,6 @@ type ContentItem struct {
 	DateCreated time.Time   `json:"date_created" bson:"date_created"`
 	DateUpdated *time.Time  `json:"date_updated,omitempty" bson:"date_updated,omitempty"`
 	Data        interface{} `json:"data" bson:"data"` // could be eigther a primitive or nested json or array
+	AppID       string      `json:"app_id" bson:"app_id"`
+	OrgID       string      `json:"org_id" bson:"org_id"`
 } // @name ContentItem
