@@ -19,10 +19,11 @@ package storage
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -66,16 +67,19 @@ func (m *database) start() error {
 	db := client.Database(m.mongoDBName)
 
 	studentGuides := &collectionWrapper{database: m, coll: db.Collection("student_guides")}
+	err = m.applyStudentGuidesChecks(studentGuides)
 	if err != nil {
 		return err
 	}
 
 	healthLocations := &collectionWrapper{database: m, coll: db.Collection("health_locations")}
+	err = m.applyHealthLocationsChecks(healthLocations)
 	if err != nil {
 		return err
 	}
 
 	contentItems := &collectionWrapper{database: m, coll: db.Collection("content_items")}
+	err = m.applyContentItemsChecks(contentItems)
 	if err != nil {
 		return err
 	}
@@ -86,21 +90,66 @@ func (m *database) start() error {
 
 	m.studentGuides = studentGuides
 	m.healthLocations = healthLocations
-
-	err = m.applyContentItemsChecks(contentItems)
-	if err != nil {
-		log.Printf("error on applyContentItemsChecks: %s", err)
-		return err
-	}
 	m.contentItems = contentItems
 
 	return nil
 }
 
-func (m *database) applyContentItemsChecks(posts *collectionWrapper) error {
+func (m *database) applyStudentGuidesChecks(studentGuides *collectionWrapper) error {
+	log.Println("apply student guides checks.....")
+
+	// Add app_id index
+	err := studentGuides.AddIndex(bson.D{primitive.E{Key: "app_id", Value: 1}}, false)
+	if err != nil {
+		return err
+	}
+
+	// Add orgp_id index
+	err = studentGuides.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1}}, false)
+	if err != nil {
+		return err
+	}
+
+	log.Println("student guides checks passed")
+	return nil
+}
+
+func (m *database) applyHealthLocationsChecks(healthLocations *collectionWrapper) error {
+	log.Println("health locations guides checks.....")
+
+	// Add app_id index
+	err := healthLocations.AddIndex(bson.D{primitive.E{Key: "app_id", Value: 1}}, false)
+	if err != nil {
+		return err
+	}
+
+	// Add orgp_id index
+	err = healthLocations.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1}}, false)
+	if err != nil {
+		return err
+	}
+
+	log.Println("health locations checks passed")
+	return nil
+}
+
+func (m *database) applyContentItemsChecks(contentItems *collectionWrapper) error {
 	log.Println("apply content_items checks.....")
 
-	indexes, _ := posts.ListIndexes()
+	// Add app_id index
+	err := contentItems.AddIndex(bson.D{primitive.E{Key: "app_id", Value: 1}}, false)
+	if err != nil {
+		return err
+	}
+
+	// Add orgp_id index
+	err = contentItems.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1}}, false)
+	if err != nil {
+		return err
+	}
+
+	//PS: Do we need this?
+	indexes, _ := contentItems.ListIndexes()
 	indexMapping := map[string]interface{}{}
 	if indexes != nil {
 
@@ -110,7 +159,8 @@ func (m *database) applyContentItemsChecks(posts *collectionWrapper) error {
 		}
 	}
 	if indexMapping["category_1"] == nil {
-		err := posts.AddIndex(
+
+		err := contentItems.AddIndex(
 			bson.D{
 				primitive.E{Key: "category", Value: 1},
 			}, false)
@@ -119,7 +169,7 @@ func (m *database) applyContentItemsChecks(posts *collectionWrapper) error {
 		}
 	}
 	if indexMapping["date_created_1"] == nil {
-		err := posts.AddIndex(
+		err := contentItems.AddIndex(
 			bson.D{
 				primitive.E{Key: "date_created", Value: 1},
 			}, false)
