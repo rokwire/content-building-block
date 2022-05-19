@@ -148,7 +148,6 @@ func (m *database) applyContentItemsChecks(contentItems *collectionWrapper) erro
 		return err
 	}
 
-	//PS: Do we need this?
 	indexes, _ := contentItems.ListIndexes()
 	indexMapping := map[string]interface{}{}
 	if indexes != nil {
@@ -180,4 +179,25 @@ func (m *database) applyContentItemsChecks(contentItems *collectionWrapper) erro
 
 	log.Println("content_items checks passed")
 	return nil
+}
+
+// Event
+
+func (m *database) onDataChanged(changeDoc map[string]interface{}) {
+	if changeDoc == nil {
+		return
+	}
+	log.Printf("onDataChanged: %+v\n", changeDoc)
+	ns := changeDoc["ns"]
+	if ns == nil {
+		return
+	}
+	nsMap := ns.(map[string]interface{})
+	coll := nsMap["coll"]
+
+	if "configs" == coll {
+		log.Println("configs collection changed")
+	} else {
+		log.Println("other collection changed")
+	}
 }

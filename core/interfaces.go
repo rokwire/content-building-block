@@ -19,6 +19,8 @@ package core
 
 import (
 	"content/core/model"
+	"content/driven/storage"
+
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -154,6 +156,8 @@ func (s *servicesImpl) GetTwitterPosts(userID string, twitterQueryParams string,
 
 // Storage is used by core to storage data - DB storage adapter, file storage adapter etc
 type Storage interface {
+	PerformTransaction(func(context storage.TransactionContext) error) error
+
 	GetStudentGuides(ids []string) ([]bson.M, error)
 	GetStudentGuide(id string) (bson.M, error)
 	CreateStudentGuide(item bson.M) (bson.M, error)
