@@ -387,7 +387,6 @@ func (sa *Adapter) FindAllContentItems(context TransactionContext) ([]model.Cont
 
 //StoreMultiTenancyData stores multi-tenancy to already exisiting data in the collections
 func (sa *Adapter) StoreMultiTenancyData(context TransactionContext, appID string, orgID string) error {
-	//TODO
 
 	filter := bson.D{}
 	update := bson.D{
@@ -396,7 +395,18 @@ func (sa *Adapter) StoreMultiTenancyData(context TransactionContext, appID strin
 			primitive.E{Key: "org_id", Value: orgID},
 		}},
 	}
-	_, err := sa.db.healthLocations.UpdateManyWithContext(context, filter, update, nil)
+	//content items
+	_, err := sa.db.contentItems.UpdateManyWithContext(context, filter, update, nil)
+	if err != nil {
+		return err
+	}
+	//health locations
+	_, err = sa.db.healthLocations.UpdateManyWithContext(context, filter, update, nil)
+	if err != nil {
+		return err
+	}
+	//student guides
+	_, err = sa.db.studentGuides.UpdateManyWithContext(context, filter, update, nil)
 	if err != nil {
 		return err
 	}
