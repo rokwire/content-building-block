@@ -21,13 +21,14 @@ import (
 	"bytes"
 	"content/core/model"
 	"fmt"
-	"github.com/nfnt/resize"
-	"go.mongodb.org/mongo-driver/bson"
 	"image"
 	"image/gif"
 	jpeg "image/jpeg"
 	"image/png"
 	"strings"
+
+	"github.com/nfnt/resize"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func (app *Application) getVersion() string {
@@ -36,8 +37,8 @@ func (app *Application) getVersion() string {
 
 // Student guides
 
-func (app *Application) getStudentGuides(ids []string) ([]bson.M, error) {
-	items, err := app.storage.GetStudentGuides(ids)
+func (app *Application) getStudentGuides(appID string, orgID string, ids []string) ([]bson.M, error) {
+	items, err := app.storage.GetStudentGuides(appID, orgID, ids)
 	if err != nil {
 		return nil, err
 	}

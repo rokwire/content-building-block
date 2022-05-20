@@ -73,8 +73,9 @@ func (sa *Adapter) PerformTransaction(transaction func(context TransactionContex
 }
 
 // GetStudentGuides retrieves all content items
-func (sa *Adapter) GetStudentGuides(ids []string) ([]bson.M, error) {
-	filter := bson.D{}
+func (sa *Adapter) GetStudentGuides(appID string, orgID string, ids []string) ([]bson.M, error) {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID}}
 	if len(ids) > 0 {
 		filter = bson.D{
 			primitive.E{Key: "_id", Value: bson.M{"$in": ids}},

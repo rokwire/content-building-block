@@ -214,7 +214,7 @@ func (h ApisHandler) GetStudentGuides(claims *tokenauth.Claims, w http.ResponseW
 		IDs = strings.Split(extIDs, ",")
 	}
 
-	resData, err := h.app.Services.GetStudentGuides(IDs)
+	resData, err := h.app.Services.GetStudentGuides(claims.AppID, claims.OrgID, IDs)
 	if err != nil {
 		log.Printf("Error on getting student guides by ids - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

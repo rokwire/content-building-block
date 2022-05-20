@@ -27,7 +27,7 @@ import (
 // Services exposes APIs for the driver adapters
 type Services interface {
 	GetVersion() string
-	GetStudentGuides(ids []string) ([]bson.M, error)
+	GetStudentGuides(appID string, orgID string, ids []string) ([]bson.M, error)
 	GetStudentGuide(id string) (bson.M, error)
 	CreateStudentGuide(item bson.M) (bson.M, error)
 	UpdateStudentGuide(id string, item bson.M) (bson.M, error)
@@ -64,8 +64,8 @@ func (s *servicesImpl) GetVersion() string {
 
 // Student Guides
 
-func (s *servicesImpl) GetStudentGuides(ids []string) ([]bson.M, error) {
-	return s.app.getStudentGuides(ids)
+func (s *servicesImpl) GetStudentGuides(appID string, orgID string, ids []string) ([]bson.M, error) {
+	return s.app.getStudentGuides(appID, orgID, ids)
 }
 
 func (s *servicesImpl) CreateStudentGuide(item bson.M) (bson.M, error) {
@@ -158,7 +158,7 @@ func (s *servicesImpl) GetTwitterPosts(userID string, twitterQueryParams string,
 type Storage interface {
 	PerformTransaction(func(context storage.TransactionContext) error) error
 
-	GetStudentGuides(ids []string) ([]bson.M, error)
+	GetStudentGuides(appID string, orgID string, ids []string) ([]bson.M, error)
 	GetStudentGuide(id string) (bson.M, error)
 	CreateStudentGuide(item bson.M) (bson.M, error)
 	UpdateStudentGuide(id string, item bson.M) (bson.M, error)
