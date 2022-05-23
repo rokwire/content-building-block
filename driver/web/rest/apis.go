@@ -250,7 +250,7 @@ func (h ApisHandler) GetStudentGuide(claims *tokenauth.Claims, w http.ResponseWr
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
-	resData, err := h.app.Services.GetStudentGuide(guideID)
+	resData, err := h.app.Services.GetStudentGuide(claims.AppID, claims.OrgID, guideID)
 	if err != nil {
 		log.Printf("Error on getting student guide id - %s\n %s", guideID, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

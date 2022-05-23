@@ -28,10 +28,10 @@ import (
 type Services interface {
 	GetVersion() string
 	GetStudentGuides(appID string, orgID string, ids []string) ([]bson.M, error)
-	GetStudentGuide(id string) (bson.M, error)
-	CreateStudentGuide(item bson.M) (bson.M, error)
-	UpdateStudentGuide(id string, item bson.M) (bson.M, error)
-	DeleteStudentGuide(id string) error
+	GetStudentGuide(appID string, orgID string, id string) (bson.M, error)
+	CreateStudentGuide(appID string, orgID string, item bson.M) (bson.M, error)
+	UpdateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error)
+	DeleteStudentGuide(appID string, orgID string, id string) error
 
 	GetHealthLocations(ids []string) ([]bson.M, error)
 	GetHealthLocation(id string) (bson.M, error)
@@ -68,20 +68,20 @@ func (s *servicesImpl) GetStudentGuides(appID string, orgID string, ids []string
 	return s.app.getStudentGuides(appID, orgID, ids)
 }
 
-func (s *servicesImpl) CreateStudentGuide(item bson.M) (bson.M, error) {
-	return s.app.createStudentGuide(item)
+func (s *servicesImpl) CreateStudentGuide(appID string, orgID string, item bson.M) (bson.M, error) {
+	return s.app.createStudentGuide(appID, orgID, item)
 }
 
-func (s *servicesImpl) GetStudentGuide(id string) (bson.M, error) {
-	return s.app.getStudentGuide(id)
+func (s *servicesImpl) GetStudentGuide(appID string, orgID string, id string) (bson.M, error) {
+	return s.app.getStudentGuide(appID, orgID, id)
 }
 
-func (s *servicesImpl) UpdateStudentGuide(id string, item bson.M) (bson.M, error) {
-	return s.app.updateStudentGuide(id, item)
+func (s *servicesImpl) UpdateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error) {
+	return s.app.updateStudentGuide(appID, orgID, id, item)
 }
 
-func (s *servicesImpl) DeleteStudentGuide(id string) error {
-	return s.app.deleteStudentGuide(id)
+func (s *servicesImpl) DeleteStudentGuide(appID string, orgID string, id string) error {
+	return s.app.deleteStudentGuide(appID, orgID, id)
 }
 
 // Health Locations
@@ -159,10 +159,10 @@ type Storage interface {
 	PerformTransaction(func(context storage.TransactionContext) error) error
 
 	GetStudentGuides(appID string, orgID string, ids []string) ([]bson.M, error)
-	GetStudentGuide(id string) (bson.M, error)
-	CreateStudentGuide(item bson.M) (bson.M, error)
-	UpdateStudentGuide(id string, item bson.M) (bson.M, error)
-	DeleteStudentGuide(id string) error
+	GetStudentGuide(appID string, orgID string, id string) (bson.M, error)
+	CreateStudentGuide(appID string, orgID string, item bson.M) (bson.M, error)
+	UpdateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error)
+	DeleteStudentGuide(appID string, orgID string, id string) error
 
 	GetHealthLocations(ids []string) ([]bson.M, error)
 	GetHealthLocation(id string) (bson.M, error)

@@ -74,7 +74,7 @@ func (h AdminApisHandler) GetStudentGuide(claims *tokenauth.Claims, w http.Respo
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
-	resData, err := h.app.Services.GetStudentGuide(guideID)
+	resData, err := h.app.Services.GetStudentGuide(claims.AppID, claims.OrgID, guideID)
 	if err != nil {
 		log.Printf("Error on getting student guide id - %s\n %s", guideID, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -121,7 +121,7 @@ func (h AdminApisHandler) UpdateStudentGuide(claims *tokenauth.Claims, w http.Re
 		return
 	}
 
-	resData, err := h.app.Services.UpdateStudentGuide(guideID, item)
+	resData, err := h.app.Services.UpdateStudentGuide(claims.AppID, claims.OrgID, guideID, item)
 	if err != nil {
 		log.Printf("Error on updating student guide with id - %s\n %s", guideID, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -165,7 +165,7 @@ func (h AdminApisHandler) CreateStudentGuide(claims *tokenauth.Claims, w http.Re
 		return
 	}
 
-	createdItem, err := h.app.Services.CreateStudentGuide(item)
+	createdItem, err := h.app.Services.CreateStudentGuide(claims.AppID, claims.OrgID, item)
 	if err != nil {
 		log.Printf("Error on creating student guide: %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -195,7 +195,7 @@ func (h AdminApisHandler) DeleteStudentGuide(claims *tokenauth.Claims, w http.Re
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
-	err := h.app.Services.DeleteStudentGuide(guideID)
+	err := h.app.Services.DeleteStudentGuide(claims.AppID, claims.OrgID, guideID)
 	if err != nil {
 		log.Printf("Error on deleting student guide with id - %s\n %s", guideID, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

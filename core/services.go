@@ -45,32 +45,32 @@ func (app *Application) getStudentGuides(appID string, orgID string, ids []strin
 	return items, nil
 }
 
-func (app *Application) getStudentGuide(id string) (bson.M, error) {
-	item, err := app.storage.GetStudentGuide(id)
+func (app *Application) getStudentGuide(appID string, orgID string, id string) (bson.M, error) {
+	item, err := app.storage.GetStudentGuide(appID, orgID, id)
 	if err != nil {
 		return nil, err
 	}
 	return item, nil
 }
 
-func (app *Application) createStudentGuide(item bson.M) (bson.M, error) {
-	items, err := app.storage.CreateStudentGuide(item)
+func (app *Application) createStudentGuide(appID string, orgID string, item bson.M) (bson.M, error) {
+	items, err := app.storage.CreateStudentGuide(appID, orgID, item)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) updateStudentGuide(id string, item bson.M) (bson.M, error) {
-	items, err := app.storage.UpdateStudentGuide(id, item)
+func (app *Application) updateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error) {
+	items, err := app.storage.UpdateStudentGuide(appID, orgID, id, item)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) deleteStudentGuide(id string) error {
-	err := app.storage.DeleteStudentGuide(id)
+func (app *Application) deleteStudentGuide(appID string, orgID string, id string) error {
+	err := app.storage.DeleteStudentGuide(appID, orgID, id)
 	return err
 }
 

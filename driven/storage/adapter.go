@@ -91,12 +91,14 @@ func (sa *Adapter) GetStudentGuides(appID string, orgID string, ids []string) ([
 }
 
 // CreateStudentGuide creates a new student guide record
-func (sa *Adapter) CreateStudentGuide(item bson.M) (bson.M, error) {
+func (sa *Adapter) CreateStudentGuide(appID string, orgID string, item bson.M) (bson.M, error) {
 
 	id := item["_id"]
 	if id == nil {
 		item["_id"] = uuid.NewString()
 	}
+	item["app_id"] = appID
+	item["org_id"] = orgID
 
 	_, err := sa.db.studentGuides.InsertOne(&item)
 	if err != nil {
@@ -106,9 +108,11 @@ func (sa *Adapter) CreateStudentGuide(item bson.M) (bson.M, error) {
 }
 
 // GetStudentGuide retrieves a student guide record by id
-func (sa *Adapter) GetStudentGuide(id string) (bson.M, error) {
+func (sa *Adapter) GetStudentGuide(appID string, orgID string, id string) (bson.M, error) {
 
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	var result []bson.M
 	err := sa.db.studentGuides.Find(filter, &result, nil)
 	if err != nil {
@@ -123,14 +127,16 @@ func (sa *Adapter) GetStudentGuide(id string) (bson.M, error) {
 }
 
 // UpdateStudentGuide updates a student guide record
-func (sa *Adapter) UpdateStudentGuide(id string, item bson.M) (bson.M, error) {
+func (sa *Adapter) UpdateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error) {
 
 	jsonID := item["_id"]
 	if jsonID == nil && jsonID != id {
 		return nil, fmt.Errorf("attempt to override another object")
 	}
 
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	err := sa.db.studentGuides.ReplaceOne(filter, item, nil)
 	if err != nil {
 		return nil, err
@@ -139,8 +145,10 @@ func (sa *Adapter) UpdateStudentGuide(id string, item bson.M) (bson.M, error) {
 }
 
 // DeleteStudentGuide deletes a student guide record with the desired id
-func (sa *Adapter) DeleteStudentGuide(id string) error {
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+func (sa *Adapter) DeleteStudentGuide(appID string, orgID string, id string) error {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	result, err := sa.db.studentGuides.DeleteOne(filter, nil)
 	if err != nil {
 		return err
