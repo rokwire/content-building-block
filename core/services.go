@@ -76,40 +76,40 @@ func (app *Application) deleteStudentGuide(appID string, orgID string, id string
 
 // Health Locations
 
-func (app *Application) getHealthLocations(ids []string) ([]bson.M, error) {
-	items, err := app.storage.GetHealthLocations(ids)
+func (app *Application) getHealthLocations(appID string, orgID string, ids []string) ([]bson.M, error) {
+	items, err := app.storage.GetHealthLocations(appID, orgID, ids)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) getHealthLocation(id string) (bson.M, error) {
-	item, err := app.storage.GetHealthLocation(id)
+func (app *Application) getHealthLocation(appID string, orgID string, id string) (bson.M, error) {
+	item, err := app.storage.GetHealthLocation(appID, orgID, id)
 	if err != nil {
 		return nil, err
 	}
 	return item, nil
 }
 
-func (app *Application) createHealthLocation(item bson.M) (bson.M, error) {
-	items, err := app.storage.CreateHealthLocation(item)
+func (app *Application) createHealthLocation(appID string, orgID string, item bson.M) (bson.M, error) {
+	items, err := app.storage.CreateHealthLocation(appID, orgID, item)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) updateHealthLocation(id string, item bson.M) (bson.M, error) {
-	items, err := app.storage.UpdateHealthLocation(id, item)
+func (app *Application) updateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error) {
+	items, err := app.storage.UpdateHealthLocation(appID, orgID, id, item)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) deleteHealthLocation(id string) error {
-	err := app.storage.DeleteHealthLocation(id)
+func (app *Application) deleteHealthLocation(appID string, orgID string, id string) error {
+	err := app.storage.DeleteHealthLocation(appID, orgID, id)
 	return err
 }
 

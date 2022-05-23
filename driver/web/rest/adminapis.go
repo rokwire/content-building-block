@@ -224,7 +224,7 @@ func (h AdminApisHandler) GetHealthLocations(claims *tokenauth.Claims, w http.Re
 		IDs = strings.Split(extIDs, ",")
 	}
 
-	resData, err := h.app.Services.GetHealthLocations(IDs)
+	resData, err := h.app.Services.GetHealthLocations(claims.AppID, claims.OrgID, IDs)
 	if err != nil {
 		log.Printf("Error on health location items by id - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -260,7 +260,7 @@ func (h AdminApisHandler) GetHealthLocation(claims *tokenauth.Claims, w http.Res
 	vars := mux.Vars(r)
 	locationID := vars["id"]
 
-	resData, err := h.app.Services.GetHealthLocation(locationID)
+	resData, err := h.app.Services.GetHealthLocation(claims.AppID, claims.OrgID, locationID)
 	if err != nil {
 		log.Printf("Error on getting health location id - %s\n %s", locationID, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -307,7 +307,7 @@ func (h AdminApisHandler) UpdateHealthLocation(claims *tokenauth.Claims, w http.
 		return
 	}
 
-	resData, err := h.app.Services.UpdateHealthLocation(locationID, item)
+	resData, err := h.app.Services.UpdateHealthLocation(claims.AppID, claims.OrgID, locationID, item)
 	if err != nil {
 		log.Printf("Error on updating health location with id - %s\n %s", locationID, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -351,7 +351,7 @@ func (h AdminApisHandler) CreateHealthLocation(claims *tokenauth.Claims, w http.
 		return
 	}
 
-	createdItem, err := h.app.Services.CreateHealthLocation(item)
+	createdItem, err := h.app.Services.CreateHealthLocation(claims.AppID, claims.OrgID, item)
 	if err != nil {
 		log.Printf("Error on creating health location: %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -381,7 +381,7 @@ func (h AdminApisHandler) DeleteHealthLocation(claims *tokenauth.Claims, w http.
 	vars := mux.Vars(r)
 	locationID := vars["id"]
 
-	err := h.app.Services.DeleteHealthLocation(locationID)
+	err := h.app.Services.DeleteHealthLocation(claims.AppID, claims.OrgID, locationID)
 	if err != nil {
 		log.Printf("Error on deleting health location with id - %s\n %s", locationID, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

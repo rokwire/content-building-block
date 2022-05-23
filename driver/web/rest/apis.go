@@ -286,7 +286,7 @@ func (h ApisHandler) GetHealthLocations(claims *tokenauth.Claims, w http.Respons
 		IDs = strings.Split(extIDs, ",")
 	}
 
-	resData, err := h.app.Services.GetHealthLocations(IDs)
+	resData, err := h.app.Services.GetHealthLocations(claims.AppID, claims.OrgID, IDs)
 	if err != nil {
 		log.Printf("Error on getting health locations by ids - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -322,7 +322,7 @@ func (h ApisHandler) GetHealthLocation(claims *tokenauth.Claims, w http.Response
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
-	resData, err := h.app.Services.GetHealthLocation(guideID)
+	resData, err := h.app.Services.GetHealthLocation(claims.AppID, claims.OrgID, guideID)
 	if err != nil {
 		log.Printf("Error on getting health location id - %s\n %s", guideID, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -33,11 +33,11 @@ type Services interface {
 	UpdateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error)
 	DeleteStudentGuide(appID string, orgID string, id string) error
 
-	GetHealthLocations(ids []string) ([]bson.M, error)
-	GetHealthLocation(id string) (bson.M, error)
-	CreateHealthLocation(item bson.M) (bson.M, error)
-	UpdateHealthLocation(id string, item bson.M) (bson.M, error)
-	DeleteHealthLocation(id string) error
+	GetHealthLocations(appID string, orgID string, ids []string) ([]bson.M, error)
+	GetHealthLocation(appID string, orgID string, id string) (bson.M, error)
+	CreateHealthLocation(appID string, orgID string, item bson.M) (bson.M, error)
+	UpdateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error)
+	DeleteHealthLocation(appID string, orgID string, id string) error
 
 	GetContentItemsCategories() ([]string, error)
 	GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
@@ -86,24 +86,24 @@ func (s *servicesImpl) DeleteStudentGuide(appID string, orgID string, id string)
 
 // Health Locations
 
-func (s *servicesImpl) GetHealthLocations(ids []string) ([]bson.M, error) {
-	return s.app.getHealthLocations(ids)
+func (s *servicesImpl) GetHealthLocations(appID string, orgID string, ids []string) ([]bson.M, error) {
+	return s.app.getHealthLocations(appID, orgID, ids)
 }
 
-func (s *servicesImpl) CreateHealthLocation(item bson.M) (bson.M, error) {
-	return s.app.createHealthLocation(item)
+func (s *servicesImpl) CreateHealthLocation(appID string, orgID string, item bson.M) (bson.M, error) {
+	return s.app.createHealthLocation(appID, orgID, item)
 }
 
-func (s *servicesImpl) GetHealthLocation(id string) (bson.M, error) {
-	return s.app.getHealthLocation(id)
+func (s *servicesImpl) GetHealthLocation(appID string, orgID string, id string) (bson.M, error) {
+	return s.app.getHealthLocation(appID, orgID, id)
 }
 
-func (s *servicesImpl) UpdateHealthLocation(id string, item bson.M) (bson.M, error) {
-	return s.app.updateHealthLocation(id, item)
+func (s *servicesImpl) UpdateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error) {
+	return s.app.updateHealthLocation(appID, orgID, id, item)
 }
 
-func (s *servicesImpl) DeleteHealthLocation(id string) error {
-	return s.app.deleteHealthLocation(id)
+func (s *servicesImpl) DeleteHealthLocation(appID string, orgID string, id string) error {
+	return s.app.deleteHealthLocation(appID, orgID, id)
 }
 
 // Content Items
@@ -164,11 +164,11 @@ type Storage interface {
 	UpdateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error)
 	DeleteStudentGuide(appID string, orgID string, id string) error
 
-	GetHealthLocations(ids []string) ([]bson.M, error)
-	GetHealthLocation(id string) (bson.M, error)
-	CreateHealthLocation(item bson.M) (bson.M, error)
-	UpdateHealthLocation(id string, item bson.M) (bson.M, error)
-	DeleteHealthLocation(id string) error
+	GetHealthLocations(appID string, orgID string, ids []string) ([]bson.M, error)
+	GetHealthLocation(appID string, orgID string, id string) (bson.M, error)
+	CreateHealthLocation(appID string, orgID string, item bson.M) (bson.M, error)
+	UpdateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error)
+	DeleteHealthLocation(appID string, orgID string, id string) error
 
 	GetContentItemsCategories() ([]string, error)
 	GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)

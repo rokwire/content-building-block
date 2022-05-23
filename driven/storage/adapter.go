@@ -167,8 +167,9 @@ func (sa *Adapter) DeleteStudentGuide(appID string, orgID string, id string) err
 //// Health locations
 
 // GetHealthLocations retrieves all content items
-func (sa *Adapter) GetHealthLocations(ids []string) ([]bson.M, error) {
-	filter := bson.D{}
+func (sa *Adapter) GetHealthLocations(appID string, orgID string, ids []string) ([]bson.M, error) {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID}}
 	if len(ids) > 0 {
 		filter = bson.D{
 			primitive.E{Key: "_id", Value: bson.M{"$in": ids}},
@@ -184,12 +185,14 @@ func (sa *Adapter) GetHealthLocations(ids []string) ([]bson.M, error) {
 }
 
 // CreateHealthLocation creates a new health location record
-func (sa *Adapter) CreateHealthLocation(item bson.M) (bson.M, error) {
+func (sa *Adapter) CreateHealthLocation(appID string, orgID string, item bson.M) (bson.M, error) {
 
 	id := item["_id"]
 	if id == nil {
 		item["_id"] = uuid.NewString()
 	}
+	item["app_id"] = appID
+	item["org_id"] = orgID
 
 	_, err := sa.db.healthLocations.InsertOne(&item)
 	if err != nil {
@@ -199,9 +202,11 @@ func (sa *Adapter) CreateHealthLocation(item bson.M) (bson.M, error) {
 }
 
 // GetHealthLocation retrieves a health location record by id
-func (sa *Adapter) GetHealthLocation(id string) (bson.M, error) {
+func (sa *Adapter) GetHealthLocation(appID string, orgID string, id string) (bson.M, error) {
 
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	var result []bson.M
 	err := sa.db.healthLocations.Find(filter, &result, nil)
 	if err != nil {
@@ -216,14 +221,16 @@ func (sa *Adapter) GetHealthLocation(id string) (bson.M, error) {
 }
 
 // UpdateHealthLocation updates a health location record
-func (sa *Adapter) UpdateHealthLocation(id string, item bson.M) (bson.M, error) {
+func (sa *Adapter) UpdateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error) {
 
 	jsonID := item["_id"]
 	if jsonID == nil && jsonID != id {
 		return nil, fmt.Errorf("attempt to override another object")
 	}
 
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	err := sa.db.healthLocations.ReplaceOne(filter, item, nil)
 	if err != nil {
 		return nil, err
@@ -232,8 +239,10 @@ func (sa *Adapter) UpdateHealthLocation(id string, item bson.M) (bson.M, error) 
 }
 
 // DeleteHealthLocation deletes a health location record with the desired id
-func (sa *Adapter) DeleteHealthLocation(id string) error {
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+func (sa *Adapter) DeleteHealthLocation(appID string, orgID string, id string) error {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	result, err := sa.db.healthLocations.DeleteOne(filter, nil)
 	if err != nil {
 		return err
