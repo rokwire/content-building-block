@@ -265,7 +265,9 @@ type getContentItemsCategoriesData struct {
 }
 
 // GetContentItemsCategories  retrieve all content item categories
-func (sa *Adapter) GetContentItemsCategories() ([]string, error) {
+func (sa *Adapter) GetContentItemsCategories(appID string, orgID string) ([]string, error) {
+
+	//TODO
 
 	pipeline := primitive.A{bson.M{"$group": bson.M{
 		"_id": "$category",
@@ -287,9 +289,10 @@ func (sa *Adapter) GetContentItemsCategories() ([]string, error) {
 }
 
 // GetContentItems retrieves all content items
-func (sa *Adapter) GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
+func (sa *Adapter) GetContentItems(appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
 
-	filter := bson.D{}
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID}}
 	if len(ids) > 0 {
 		filter = append(filter, primitive.E{Key: "_id", Value: bson.M{"$in": ids}})
 	}
@@ -334,9 +337,11 @@ func (sa *Adapter) CreateContentItem(item *model.ContentItem) (*model.ContentIte
 }
 
 // GetContentItem retrieves a content item record by id
-func (sa *Adapter) GetContentItem(id string) (*model.ContentItemResponse, error) {
+func (sa *Adapter) GetContentItem(appID string, orgID string, id string) (*model.ContentItemResponse, error) {
 
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	var result []model.ContentItemResponse
 	err := sa.db.contentItems.Find(filter, &result, nil)
 	if err != nil {
@@ -358,7 +363,9 @@ func (sa *Adapter) UpdateContentItem(id string, item *model.ContentItem) (*model
 			return nil, fmt.Errorf("attempt to override another object")
 		}
 
-		filter := bson.D{primitive.E{Key: "_id", Value: id}}
+		filter := bson.D{primitive.E{Key: "app_id", Value: item.AppID},
+			primitive.E{Key: "org_id", Value: item.OrgID},
+			primitive.E{Key: "_id", Value: id}}
 		update := bson.D{
 			primitive.E{Key: "$set", Value: bson.D{
 				primitive.E{Key: "category", Value: item.Category},
@@ -376,8 +383,10 @@ func (sa *Adapter) UpdateContentItem(id string, item *model.ContentItem) (*model
 }
 
 // DeleteContentItem deletes a content item record with the desired id
-func (sa *Adapter) DeleteContentItem(id string) error {
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+func (sa *Adapter) DeleteContentItem(appID string, orgID string, id string) error {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	result, err := sa.db.contentItems.DeleteOne(filter, nil)
 	if err != nil {
 		return err

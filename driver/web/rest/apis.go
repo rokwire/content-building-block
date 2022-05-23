@@ -387,7 +387,7 @@ func (h ApisHandler) GetContentItems(claims *tokenauth.Claims, w http.ResponseWr
 		}
 	}
 
-	resData, err := h.app.Services.GetContentItems(body.IDs, body.Categories, offset, limit, order)
+	resData, err := h.app.Services.GetContentItems(claims.AppID, claims.OrgID, body.IDs, body.Categories, offset, limit, order)
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -423,7 +423,7 @@ func (h ApisHandler) GetContentItem(claims *tokenauth.Claims, w http.ResponseWri
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	resData, err := h.app.Services.GetContentItem(id)
+	resData, err := h.app.Services.GetContentItem(claims.AppID, claims.OrgID, id)
 	if err != nil {
 		log.Printf("Error on getting content item id - %s\n %s", id, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -450,7 +450,7 @@ func (h ApisHandler) GetContentItem(claims *tokenauth.Claims, w http.ResponseWri
 // @Security UserAuth
 // @Router /content_item/categories [get]
 func (h ApisHandler) GetContentItemsCategories(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	resData, err := h.app.Services.GetContentItemsCategories()
+	resData, err := h.app.Services.GetContentItemsCategories(claims.AppID, claims.OrgID)
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

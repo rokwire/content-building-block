@@ -115,16 +115,16 @@ func (app *Application) deleteHealthLocation(appID string, orgID string, id stri
 
 // Content Items
 
-func (app *Application) getContentItemsCategories() ([]string, error) {
-	return app.storage.GetContentItemsCategories()
+func (app *Application) getContentItemsCategories(appID string, orgID string) ([]string, error) {
+	return app.storage.GetContentItemsCategories(appID, orgID)
 }
 
-func (app *Application) getContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
-	return app.storage.GetContentItems(ids, categoryList, offset, limit, order)
+func (app *Application) getContentItems(appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
+	return app.storage.GetContentItems(appID, orgID, ids, categoryList, offset, limit, order)
 }
 
-func (app *Application) getContentItem(id string) (*model.ContentItemResponse, error) {
-	return app.storage.GetContentItem(id)
+func (app *Application) getContentItem(appID string, orgID string, id string) (*model.ContentItemResponse, error) {
+	return app.storage.GetContentItem(appID, orgID, id)
 }
 
 func (app *Application) createContentItem(item *model.ContentItem) (*model.ContentItem, error) {
@@ -135,8 +135,8 @@ func (app *Application) updateContentItem(id string, item *model.ContentItem) (*
 	return app.storage.UpdateContentItem(id, item)
 }
 
-func (app *Application) deleteContentItem(id string) error {
-	return app.storage.DeleteContentItem(id)
+func (app *Application) deleteContentItem(appID string, orgID string, id string) error {
+	return app.storage.DeleteContentItem(appID, orgID, id)
 }
 
 // Misc

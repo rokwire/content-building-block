@@ -39,12 +39,12 @@ type Services interface {
 	UpdateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error)
 	DeleteHealthLocation(appID string, orgID string, id string) error
 
-	GetContentItemsCategories() ([]string, error)
-	GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
-	GetContentItem(id string) (*model.ContentItemResponse, error)
+	GetContentItemsCategories(appID string, orgID string) ([]string, error)
+	GetContentItems(appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
+	GetContentItem(appID string, orgID string, id string) (*model.ContentItemResponse, error)
 	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)
 	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
-	DeleteContentItem(id string) error
+	DeleteContentItem(appID string, orgID string, id string) error
 
 	UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (*string, error)
 	GetProfileImage(userID string, imageType string) ([]byte, error)
@@ -108,16 +108,16 @@ func (s *servicesImpl) DeleteHealthLocation(appID string, orgID string, id strin
 
 // Content Items
 
-func (s *servicesImpl) GetContentItemsCategories() ([]string, error) {
-	return s.app.getContentItemsCategories()
+func (s *servicesImpl) GetContentItemsCategories(appID string, orgID string) ([]string, error) {
+	return s.app.getContentItemsCategories(appID, orgID)
 }
 
-func (s *servicesImpl) GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
-	return s.app.getContentItems(ids, categoryList, offset, limit, order)
+func (s *servicesImpl) GetContentItems(appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
+	return s.app.getContentItems(appID, orgID, ids, categoryList, offset, limit, order)
 }
 
-func (s *servicesImpl) GetContentItem(id string) (*model.ContentItemResponse, error) {
-	return s.app.getContentItem(id)
+func (s *servicesImpl) GetContentItem(appID string, orgID string, id string) (*model.ContentItemResponse, error) {
+	return s.app.getContentItem(appID, orgID, id)
 }
 
 func (s *servicesImpl) CreateContentItem(item *model.ContentItem) (*model.ContentItem, error) {
@@ -128,8 +128,8 @@ func (s *servicesImpl) UpdateContentItem(id string, item *model.ContentItem) (*m
 	return s.app.updateContentItem(id, item)
 }
 
-func (s *servicesImpl) DeleteContentItem(id string) error {
-	return s.app.deleteContentItem(id)
+func (s *servicesImpl) DeleteContentItem(appID string, orgID string, id string) error {
+	return s.app.deleteContentItem(appID, orgID, id)
 }
 
 // Misc
@@ -170,12 +170,12 @@ type Storage interface {
 	UpdateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error)
 	DeleteHealthLocation(appID string, orgID string, id string) error
 
-	GetContentItemsCategories() ([]string, error)
-	GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
-	GetContentItem(id string) (*model.ContentItemResponse, error)
+	GetContentItemsCategories(appID string, orgID string) ([]string, error)
+	GetContentItems(appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
+	GetContentItem(appID string, orgID string, id string) (*model.ContentItemResponse, error)
 	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)
 	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
-	DeleteContentItem(id string) error
+	DeleteContentItem(appID string, orgID string, id string) error
 
 	//Used for multi-tenancy for already exisiting data.
 	//To be removed when this is applied to all environments.

@@ -535,7 +535,7 @@ func (h AdminApisHandler) GetContentItems(claims *tokenauth.Claims, w http.Respo
 		}
 	}
 
-	resData, err := h.app.Services.GetContentItems(body.IDs, body.Categories, offset, limit, order)
+	resData, err := h.app.Services.GetContentItems(claims.AppID, claims.OrgID, body.IDs, body.Categories, offset, limit, order)
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -571,7 +571,7 @@ func (h AdminApisHandler) GetContentItem(claims *tokenauth.Claims, w http.Respon
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	resData, err := h.app.Services.GetContentItem(id)
+	resData, err := h.app.Services.GetContentItem(claims.AppID, claims.OrgID, id)
 	if err != nil {
 		log.Printf("Error on getting content item id - %s\n %s", id, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -630,6 +630,8 @@ func (h AdminApisHandler) UpdateContentItem(claims *tokenauth.Claims, w http.Res
 		return
 	}
 
+	item.AppID = claims.AppID
+	item.OrgID = claims.OrgID
 	resData, err := h.app.Services.UpdateContentItem(id, &item)
 	if err != nil {
 		log.Printf("Error on updating content item with id - %s\n %s", id, err)
@@ -687,6 +689,8 @@ func (h AdminApisHandler) CreateContentItem(claims *tokenauth.Claims, w http.Res
 	}
 
 	createdItem, err := h.app.Services.CreateContentItem(&model.ContentItem{
+		AppID:    claims.AppID,
+		OrgID:    claims.OrgID,
 		Category: item.Category,
 		Data:     item.Data,
 	})
@@ -719,7 +723,7 @@ func (h AdminApisHandler) DeleteContentItem(claims *tokenauth.Claims, w http.Res
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
-	err := h.app.Services.DeleteContentItem(guideID)
+	err := h.app.Services.DeleteContentItem(claims.AppID, claims.OrgID, guideID)
 	if err != nil {
 		log.Printf("Error on deleting content item with id - %s\n %s", guideID, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -738,7 +742,7 @@ func (h AdminApisHandler) DeleteContentItem(claims *tokenauth.Claims, w http.Res
 // @Security AdminUserAuth
 // @Router /admin/content_item/categories [get]
 func (h AdminApisHandler) GetContentItemsCategories(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	resData, err := h.app.Services.GetContentItemsCategories()
+	resData, err := h.app.Services.GetContentItemsCategories(claims.AppID, claims.OrgID)
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
