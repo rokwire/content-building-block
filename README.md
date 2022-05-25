@@ -31,6 +31,8 @@ S3_REGION | < value > | yes | AWS S3 region name
 TWITTER_FEED_URL | < value > | yes | Twitter Feed base URL
 TWITTER_ACCESS_TOKEN | < value > | yes | Twitter Bearer access token
 DEFAULT_CACHE_EXPIRATION_SECONDS | < value > | false | Default cache expiration time in seconds. Default: 120
+CONTENT_MULTI_TENANCY_APP_ID | < value > | yes | Application ID for moving from single to multi tenancy for the already exisiting data
+CONTENT_MULTI_TENANCY_ORG_ID | < value > | yes | Organization ID for moving from single to multi tenancy for the already exisiting data
 ### Run Application
 
 #### Run locally without Docker
