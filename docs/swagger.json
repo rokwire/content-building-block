@@ -29,9 +29,7 @@
                 ],
                 "operationId": "AdminGetContentItemsCategories",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -179,9 +177,7 @@
                 ],
                 "operationId": "AdminDeleteContentItem",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -198,9 +194,7 @@
                 ],
                 "operationId": "AdminDeleteHealthLocation",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -228,9 +222,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             },
             "post": {
@@ -248,9 +240,7 @@
                 ],
                 "operationId": "AdminCreateHealthLocation",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -273,9 +263,7 @@
                 ],
                 "operationId": "AdminGetHealthLocation",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             },
             "put": {
@@ -296,9 +284,7 @@
                 ],
                 "operationId": "AdminUpdateHealthLocation",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -397,9 +383,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             },
             "post": {
@@ -417,9 +401,7 @@
                 ],
                 "operationId": "AdminCreateStudentGuide",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -442,9 +424,7 @@
                 ],
                 "operationId": "AdminGetStudentGuide",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             },
             "put": {
@@ -465,9 +445,7 @@
                 ],
                 "operationId": "AdminUpdateStudentGuide",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             },
             "delete": {
@@ -482,9 +460,7 @@
                 ],
                 "operationId": "AdminDeleteStudentGuide",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -501,9 +477,7 @@
                 ],
                 "operationId": "GetContentItemsCategories",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -615,9 +589,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -640,9 +612,7 @@
                 ],
                 "operationId": "GetHealthLocation",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -708,9 +678,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -727,9 +695,7 @@
                 ],
                 "operationId": "DeleteProfilePhoto",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             },
             "post": {
@@ -747,9 +713,7 @@
                 ],
                 "operationId": "StoreProfilePhoto",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -774,9 +738,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -804,9 +766,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -829,9 +789,7 @@
                 ],
                 "operationId": "GetStudentGuide",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -860,9 +818,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -877,9 +833,7 @@
                 ],
                 "operationId": "Version",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         }
@@ -888,11 +842,15 @@
         "ContentItem": {
             "type": "object",
             "properties": {
+                "app_id": {
+                    "type": "string"
+                },
                 "category": {
                     "type": "string"
                 },
                 "data": {
-                    "description": "could be eigther a primitive or nested json or array"
+                    "description": "could be eigther a primitive or nested json or array",
+                    "type": "object"
                 },
                 "date_created": {
                     "type": "string"
@@ -901,6 +859,9 @@
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "org_id": {
                     "type": "string"
                 }
             }
@@ -911,7 +872,9 @@
                 "category": {
                     "type": "string"
                 },
-                "data": {}
+                "data": {
+                    "type": "object"
+                }
             }
         },
         "getContentItemsRequestBody": {

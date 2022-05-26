@@ -2,22 +2,28 @@ basePath: /content
 definitions:
   ContentItem:
     properties:
+      app_id:
+        type: string
       category:
         type: string
       data:
         description: could be eigther a primitive or nested json or array
+        type: object
       date_created:
         type: string
       date_updated:
         type: string
       id:
         type: string
+      org_id:
+        type: string
     type: object
   createContentItemRequestBody:
     properties:
       category:
         type: string
-      data: {}
+      data:
+        type: object
     type: object
   getContentItemsRequestBody:
     properties:
@@ -53,8 +59,7 @@ paths:
       description: Retrieves  all content item categories that have in the database
       operationId: AdminGetContentItemsCategories
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -117,8 +122,7 @@ paths:
       description: Deletes a content item with the specified id
       operationId: AdminDeleteContentItem
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -162,8 +166,7 @@ paths:
       description: Deletes a health location with the specified id
       operationId: AdminDeleteHealthLocation
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -180,8 +183,7 @@ paths:
         name: ids
         type: string
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -192,8 +194,7 @@ paths:
       description: Create a new health location
       operationId: AdminCreateHealthLocation
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -207,8 +208,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -221,8 +221,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -285,8 +284,7 @@ paths:
         name: ids
         type: string
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -297,8 +295,7 @@ paths:
       description: Creates a student guide item
       operationId: AdminCreateStudentGuide
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -308,8 +305,7 @@ paths:
       description: Deletes a student guide item with the specified id
       operationId: AdminDeleteStudentGuide
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -322,8 +318,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -336,8 +331,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -347,8 +341,7 @@ paths:
       description: Retrieves  all content item categories that have in the database
       operationId: GetContentItemsCategories
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - UserAuth: []
       tags:
@@ -421,8 +414,7 @@ paths:
         name: ids
         type: string
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -436,8 +428,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -480,8 +471,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - UserAuth: []
       tags:
@@ -491,8 +481,7 @@ paths:
       description: Deletes the profile photo of the user who request
       operationId: DeleteProfilePhoto
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -503,8 +492,7 @@ paths:
       description: Stores profile photo
       operationId: StoreProfilePhoto
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -519,8 +507,7 @@ paths:
         name: size
         type: string
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -537,8 +524,7 @@ paths:
         name: ids
         type: string
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -552,8 +538,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -572,8 +557,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -585,8 +569,7 @@ paths:
       produces:
       - text/plain
       responses:
-        "200":
-          description: ""
+        "200": {}
       tags:
       - Client
 schemes:
