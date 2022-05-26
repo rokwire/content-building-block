@@ -85,15 +85,15 @@ func (we Adapter) Start() {
 	contentRouter.HandleFunc("/profile_photo", we.coreAuthWrapFunc(we.apisHandler.DeleteProfilePhoto, we.auth.coreAuth.userAuth)).Methods("DELETE")
 
 	// handle student guide client apis
-	contentRouter.HandleFunc("/student_guides", we.coreAuthWrapFunc(we.apisHandler.GetStudentGuides, we.auth.coreAuth.userAuth)).Methods("GET")
-	contentRouter.HandleFunc("/student_guides/{id}", we.coreAuthWrapFunc(we.apisHandler.GetStudentGuide, we.auth.coreAuth.userAuth)).Methods("GET")
-	contentRouter.HandleFunc("/health_locations", we.coreAuthWrapFunc(we.apisHandler.GetHealthLocations, we.auth.coreAuth.userAuth)).Methods("GET")
-	contentRouter.HandleFunc("/health_locations/{id}", we.coreAuthWrapFunc(we.apisHandler.GetHealthLocation, we.auth.coreAuth.userAuth)).Methods("GET")
-	contentRouter.HandleFunc("/content_items", we.coreAuthWrapFunc(we.apisHandler.GetContentItems, we.auth.coreAuth.userAuth)).Methods("GET")
-	contentRouter.HandleFunc("/content_items/{id}", we.coreAuthWrapFunc(we.apisHandler.GetContentItem, we.auth.coreAuth.userAuth)).Methods("GET")
-	contentRouter.HandleFunc("/content_item/categories", we.coreAuthWrapFunc(we.apisHandler.GetContentItemsCategories, we.auth.coreAuth.userAuth)).Methods("GET")
+	contentRouter.HandleFunc("/student_guides", we.coreAuthWrapFunc(we.apisHandler.GetStudentGuides, we.auth.coreAuth.standardAuth)).Methods("GET")
+	contentRouter.HandleFunc("/student_guides/{id}", we.coreAuthWrapFunc(we.apisHandler.GetStudentGuide, we.auth.coreAuth.standardAuth)).Methods("GET")
+	contentRouter.HandleFunc("/health_locations", we.coreAuthWrapFunc(we.apisHandler.GetHealthLocations, we.auth.coreAuth.standardAuth)).Methods("GET")
+	contentRouter.HandleFunc("/health_locations/{id}", we.coreAuthWrapFunc(we.apisHandler.GetHealthLocation, we.auth.coreAuth.standardAuth)).Methods("GET")
+	contentRouter.HandleFunc("/content_items", we.coreAuthWrapFunc(we.apisHandler.GetContentItems, we.auth.coreAuth.standardAuth)).Methods("GET")
+	contentRouter.HandleFunc("/content_items/{id}", we.coreAuthWrapFunc(we.apisHandler.GetContentItem, we.auth.coreAuth.standardAuth)).Methods("GET")
+	contentRouter.HandleFunc("/content_item/categories", we.coreAuthWrapFunc(we.apisHandler.GetContentItemsCategories, we.auth.coreAuth.standardAuth)).Methods("GET")
 	contentRouter.HandleFunc("/image", we.coreAuthWrapFunc(we.apisHandler.UploadImage, we.auth.coreAuth.userAuth)).Methods("POST")
-	contentRouter.HandleFunc("/twitter/users/{user_id}/tweets", we.coreAuthWrapFunc(we.apisHandler.GetTweeterPosts, we.auth.coreAuth.userAuth)).Methods("GET")
+	contentRouter.HandleFunc("/twitter/users/{user_id}/tweets", we.coreAuthWrapFunc(we.apisHandler.GetTweeterPosts, we.auth.coreAuth.standardAuth)).Methods("GET")
 
 	// handle student guide admin apis
 	adminSubRouter := contentRouter.PathPrefix("/admin").Subrouter()

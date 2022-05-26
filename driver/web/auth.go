@@ -57,6 +57,7 @@ type CoreAuth struct {
 
 	permissionsAuth *PermissionsAuth
 	userAuth        *UserAuth
+	standardAuth    *StandardAuth
 }
 
 // NewCoreAuth creates new CoreAuth
@@ -79,8 +80,10 @@ func NewCoreAuth(app *core.Application, config model.Config) *CoreAuth {
 	}
 	permissionsAuth := newPermissionsAuth(tokenAuth)
 	usersAuth := newUserAuth(tokenAuth)
+	standardAuth := newStandardAuth(tokenAuth)
 
-	auth := CoreAuth{app: app, tokenAuth: tokenAuth, permissionsAuth: permissionsAuth, userAuth: usersAuth}
+	auth := CoreAuth{app: app, tokenAuth: tokenAuth, permissionsAuth: permissionsAuth,
+		userAuth: usersAuth, standardAuth: standardAuth}
 	return &auth
 }
 
@@ -139,4 +142,26 @@ func (a *UserAuth) check(req *http.Request) (int, *tokenauth.Claims, error) {
 func newUserAuth(tokenAuth *tokenauth.TokenAuth) *UserAuth {
 	userAuth := UserAuth{tokenAuth: tokenAuth}
 	return &userAuth
+}
+
+//StandardAuth entity
+// This enforces standard auth check
+type StandardAuth struct {
+	tokenAuth *tokenauth.TokenAuth
+}
+
+func (a *StandardAuth) start() {}
+
+func (a *StandardAuth) check(req *http.Request) (int, *tokenauth.Claims, error) {
+	claims, err := a.tokenAuth.CheckRequestTokens(req)
+	if err != nil {
+		return http.StatusUnauthorized, nil, errors.WrapErrorAction("typeCheckServicesAuthRequestToken", logutils.TypeToken, nil, err)
+	}
+
+	return http.StatusOK, claims, err
+}
+
+func newStandardAuth(tokenAuth *tokenauth.TokenAuth) *StandardAuth {
+	standartAuth := StandardAuth{tokenAuth: tokenAuth}
+	return &standartAuth
 }
