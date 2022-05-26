@@ -205,6 +205,7 @@ func (h ApisHandler) DeleteProfilePhoto(claims *tokenauth.Claims, w http.Respons
 // @Accept json
 // @Success 200
 // @Security RokwireAuth
+// @Deprecated true
 // @Router /student_guides [get]
 func (h ApisHandler) GetStudentGuides(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	IDs := []string{}
@@ -245,6 +246,7 @@ func (h ApisHandler) GetStudentGuides(claims *tokenauth.Claims, w http.ResponseW
 // @Produce json
 // @Success 200
 // @Security RokwireAuth
+// @Deprecated true
 // @Router /student_guides/{id} [get]
 func (h ApisHandler) GetStudentGuide(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -277,6 +279,7 @@ func (h ApisHandler) GetStudentGuide(claims *tokenauth.Claims, w http.ResponseWr
 // @Accept json
 // @Success 200
 // @Security RokwireAuth
+// @Deprecated true
 // @Router /health_locations [get]
 func (h ApisHandler) GetHealthLocations(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	IDs := []string{}
@@ -317,6 +320,7 @@ func (h ApisHandler) GetHealthLocations(claims *tokenauth.Claims, w http.Respons
 // @Produce json
 // @Success 200
 // @Security RokwireAuth
+// @Deprecated true
 // @Router /health_locations/{id} [get]
 func (h ApisHandler) GetHealthLocation(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)

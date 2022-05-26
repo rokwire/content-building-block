@@ -28,6 +28,7 @@ type AdminApisHandler struct {
 // @Accept json
 // @Success 200
 // @Security AdminUserAuth
+// @Deprecated true
 // @Router /admin/student_guides [get]
 func (h AdminApisHandler) GetStudentGuides(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
@@ -69,6 +70,7 @@ func (h AdminApisHandler) GetStudentGuides(claims *tokenauth.Claims, w http.Resp
 // @Produce json
 // @Success 200
 // @Security AdminUserAuth
+// @Deprecated true
 // @Router /admin/student_guides/{id} [get]
 func (h AdminApisHandler) GetStudentGuide(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -101,6 +103,7 @@ func (h AdminApisHandler) GetStudentGuide(claims *tokenauth.Claims, w http.Respo
 // @Produce json
 // @Success 200
 // @Security AdminUserAuth
+// @Deprecated true
 // @Router /admin/student_guides/{id} [put]
 func (h AdminApisHandler) UpdateStudentGuide(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -147,6 +150,7 @@ func (h AdminApisHandler) UpdateStudentGuide(claims *tokenauth.Claims, w http.Re
 // @Accept json
 // @Success 200
 // @Security AdminUserAuth
+// @Deprecated true
 // @Router /admin/student_guides [post]
 func (h AdminApisHandler) CreateStudentGuide(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
@@ -190,6 +194,7 @@ func (h AdminApisHandler) CreateStudentGuide(claims *tokenauth.Claims, w http.Re
 // @ID AdminDeleteStudentGuide
 // @Success 200
 // @Security AdminUserAuth
+// @Deprecated true
 // @Router /admin/student_guides/{id} [delete]
 func (h AdminApisHandler) DeleteStudentGuide(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -214,6 +219,7 @@ func (h AdminApisHandler) DeleteStudentGuide(claims *tokenauth.Claims, w http.Re
 // @Accept json
 // @Success 200
 // @Security AdminUserAuth
+// @Deprecated true
 // @Router /admin/health_locations [get]
 func (h AdminApisHandler) GetHealthLocations(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
@@ -255,6 +261,7 @@ func (h AdminApisHandler) GetHealthLocations(claims *tokenauth.Claims, w http.Re
 // @Produce json
 // @Success 200
 // @Security AdminUserAuth
+// @Deprecated true
 // @Router /admin/health_locations/{id} [get]
 func (h AdminApisHandler) GetHealthLocation(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -287,6 +294,7 @@ func (h AdminApisHandler) GetHealthLocation(claims *tokenauth.Claims, w http.Res
 // @Produce json
 // @Success 200
 // @Security AdminUserAuth
+// @Deprecated true
 // @Router /admin/health_locations/{id} [put]
 func (h AdminApisHandler) UpdateHealthLocation(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -333,6 +341,7 @@ func (h AdminApisHandler) UpdateHealthLocation(claims *tokenauth.Claims, w http.
 // @Accept json
 // @Success 200
 // @Security AdminUserAuth
+// @Deprecated true
 // @Router /admin/health_locations [post]
 func (h AdminApisHandler) CreateHealthLocation(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
@@ -376,6 +385,7 @@ func (h AdminApisHandler) CreateHealthLocation(claims *tokenauth.Claims, w http.
 // @ID AdminDeleteHealthLocation
 // @Success 200
 // @Security AdminUserAuth
+// @Deprecated true
 // @Router /admin/health_location/{id} [delete]
 func (h AdminApisHandler) DeleteHealthLocation(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)

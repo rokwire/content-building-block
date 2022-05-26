@@ -163,6 +163,7 @@ paths:
       - Admin
   /admin/health_location/{id}:
     delete:
+      deprecated: true
       description: Deletes a health location with the specified id
       operationId: AdminDeleteHealthLocation
       responses:
@@ -175,6 +176,7 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves  all health locations
       operationId: AdminGetHealthLocations
       parameters:
@@ -191,6 +193,7 @@ paths:
     post:
       consumes:
       - application/json
+      deprecated: true
       description: Create a new health location
       operationId: AdminCreateHealthLocation
       responses:
@@ -203,6 +206,7 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves a health location by id
       operationId: AdminGetHealthLocation
       produces:
@@ -216,6 +220,7 @@ paths:
     put:
       consumes:
       - application/json
+      deprecated: true
       description: Updates a health location with the specified id
       operationId: AdminUpdateHealthLocation
       produces:
@@ -276,6 +281,7 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves  all student guides
       operationId: AdminGetStudentGuides
       parameters:
@@ -292,6 +298,7 @@ paths:
     post:
       consumes:
       - application/json
+      deprecated: true
       description: Creates a student guide item
       operationId: AdminCreateStudentGuide
       responses:
@@ -302,6 +309,7 @@ paths:
       - Admin
   /admin/student_guides/{id}:
     delete:
+      deprecated: true
       description: Deletes a student guide item with the specified id
       operationId: AdminDeleteStudentGuide
       responses:
@@ -313,6 +321,7 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves  all items
       operationId: AdminGetStudentGuide
       produces:
@@ -326,6 +335,7 @@ paths:
     put:
       consumes:
       - application/json
+      deprecated: true
       description: Updates a student guide with the specified id
       operationId: AdminUpdateStudentGuide
       produces:
@@ -406,6 +416,7 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves  all health locations
       operationId: GetHealthLocations
       parameters:
@@ -423,6 +434,7 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves a health location by id
       operationId: GetHealthLocation
       produces:
@@ -516,6 +528,7 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves  all student guides
       operationId: GetStudentGuides
       parameters:
@@ -533,6 +546,7 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves a student guide by id
       operationId: GetStudentGuide
       produces:

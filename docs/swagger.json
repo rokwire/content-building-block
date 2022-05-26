@@ -193,6 +193,7 @@
                     "Admin"
                 ],
                 "operationId": "AdminDeleteHealthLocation",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -213,6 +214,7 @@
                     "Admin"
                 ],
                 "operationId": "AdminGetHealthLocations",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -239,6 +241,7 @@
                     "Admin"
                 ],
                 "operationId": "AdminCreateHealthLocation",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -262,6 +265,7 @@
                     "Admin"
                 ],
                 "operationId": "AdminGetHealthLocation",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -283,6 +287,7 @@
                     "Admin"
                 ],
                 "operationId": "AdminUpdateHealthLocation",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -374,6 +379,7 @@
                     "Admin"
                 ],
                 "operationId": "AdminGetStudentGuides",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -400,6 +406,7 @@
                     "Admin"
                 ],
                 "operationId": "AdminCreateStudentGuide",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -423,6 +430,7 @@
                     "Admin"
                 ],
                 "operationId": "AdminGetStudentGuide",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -444,6 +452,7 @@
                     "Admin"
                 ],
                 "operationId": "AdminUpdateStudentGuide",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -459,6 +468,7 @@
                     "Admin"
                 ],
                 "operationId": "AdminDeleteStudentGuide",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -580,6 +590,7 @@
                     "Client"
                 ],
                 "operationId": "GetHealthLocations",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -611,6 +622,7 @@
                     "Client"
                 ],
                 "operationId": "GetHealthLocation",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -757,6 +769,7 @@
                     "Client"
                 ],
                 "operationId": "GetStudentGuides",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -788,6 +801,7 @@
                     "Client"
                 ],
                 "operationId": "GetStudentGuide",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }

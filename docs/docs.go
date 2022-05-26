@@ -205,6 +205,7 @@ var doc = `{
                     "Admin"
                 ],
                 "operationId": "AdminDeleteHealthLocation",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -225,6 +226,7 @@ var doc = `{
                     "Admin"
                 ],
                 "operationId": "AdminGetHealthLocations",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -251,6 +253,7 @@ var doc = `{
                     "Admin"
                 ],
                 "operationId": "AdminCreateHealthLocation",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -274,6 +277,7 @@ var doc = `{
                     "Admin"
                 ],
                 "operationId": "AdminGetHealthLocation",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -295,6 +299,7 @@ var doc = `{
                     "Admin"
                 ],
                 "operationId": "AdminUpdateHealthLocation",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -386,6 +391,7 @@ var doc = `{
                     "Admin"
                 ],
                 "operationId": "AdminGetStudentGuides",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -412,6 +418,7 @@ var doc = `{
                     "Admin"
                 ],
                 "operationId": "AdminCreateStudentGuide",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -435,6 +442,7 @@ var doc = `{
                     "Admin"
                 ],
                 "operationId": "AdminGetStudentGuide",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -456,6 +464,7 @@ var doc = `{
                     "Admin"
                 ],
                 "operationId": "AdminUpdateStudentGuide",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -471,6 +480,7 @@ var doc = `{
                     "Admin"
                 ],
                 "operationId": "AdminDeleteStudentGuide",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -592,6 +602,7 @@ var doc = `{
                     "Client"
                 ],
                 "operationId": "GetHealthLocations",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -623,6 +634,7 @@ var doc = `{
                     "Client"
                 ],
                 "operationId": "GetHealthLocation",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
@@ -769,6 +781,7 @@ var doc = `{
                     "Client"
                 ],
                 "operationId": "GetStudentGuides",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -800,6 +813,7 @@ var doc = `{
                     "Client"
                 ],
                 "operationId": "GetStudentGuide",
+                "deprecated": true,
                 "responses": {
                     "200": {}
                 }
