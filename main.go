@@ -57,11 +57,11 @@ func main() {
 	}
 
 	// S3 Adapter
-	s3Bucket := getEnvKey("S3_BUCKET", true)
-	s3ProfileImagesBucket := getEnvKey("S3_PROFILE_IMAGES_BUCKET", true)
-	s3Region := getEnvKey("S3_REGION", true)
-	awsAccessKeyID := getEnvKey("AWS_ACCESS_KEY_ID", true)
-	awsSecretAccessKey := getEnvKey("AWS_SECRET_ACCESS_KEY", true)
+	s3Bucket := getEnvKey("CONTENT_S3_BUCKET", true)
+	s3ProfileImagesBucket := getEnvKey("CONTENT_S3_PROFILE_IMAGES_BUCKET", true)
+	s3Region := getEnvKey("CONTENT_S3_REGION", true)
+	awsAccessKeyID := getEnvKey("CONTENT_AWS_ACCESS_KEY_ID", true)
+	awsSecretAccessKey := getEnvKey("CONTENT_AWS_SECRET_ACCESS_KEY", true)
 	awsConfig := &model.AWSConfig{S3Bucket: s3Bucket, S3ProfileImagesBucket: s3ProfileImagesBucket, S3Region: s3Region, AWSAccessKeyID: awsAccessKeyID, AWSSecretAccessKey: awsSecretAccessKey}
 	awsAdapter := awsstorage.NewAWSStorageAdapter(awsConfig)
 
@@ -69,11 +69,11 @@ func main() {
 
 	webpAdapter := webp.NewWebpAdapter()
 
-	defaultCacheExpirationSeconds := getEnvKey("DEFAULT_CACHE_EXPIRATION_SECONDS", false)
+	defaultCacheExpirationSeconds := getEnvKey("CONTENT_DEFAULT_CACHE_EXPIRATION_SECONDS", false)
 	cacheAdapter := cacheadapter.NewCacheAdapter(defaultCacheExpirationSeconds)
 
-	twitterFeedURL := getEnvKey("TWITTER_FEED_URL", true)
-	twitterAccessToken := getEnvKey("TWITTER_ACCESS_TOKEN", true)
+	twitterFeedURL := getEnvKey("CONTENT_TWITTER_FEED_URL", true)
+	twitterAccessToken := getEnvKey("CONTENT_TWITTER_ACCESS_TOKEN", true)
 	twitterAdapter := twitter.NewTwitterAdapter(twitterFeedURL, twitterAccessToken)
 
 	mtAppID := getEnvKey("CONTENT_MULTI_TENANCY_APP_ID", true)
@@ -86,7 +86,7 @@ func main() {
 
 	// web adapter
 	host := getEnvKey("CONTENT_HOST", true)
-	coreBBHost := getEnvKey("CORE_BB_HOST", true)
+	coreBBHost := getEnvKey("CONTENT_CORE_BB_HOST", true)
 	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
 
 	config := model.Config{
