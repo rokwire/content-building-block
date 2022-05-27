@@ -753,8 +753,14 @@ func (h AdminApisHandler) DeleteContentItem(claims *tokenauth.Claims, w http.Res
 // @Security AdminUserAuth
 // @Router /admin/content_item/categories [get]
 func (h AdminApisHandler) GetContentItemsCategories(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	//TODO
-	resData, err := h.app.Services.GetContentItemsCategories(true, claims.AppID, claims.OrgID)
+	//get all-apps param value
+	allApps := false //false by defautl
+	allAppsParam := r.URL.Query().Get("all-apps")
+	if allAppsParam != "" {
+		allApps, _ = strconv.ParseBool(allAppsParam)
+	}
+
+	resData, err := h.app.Services.GetContentItemsCategories(allApps, claims.AppID, claims.OrgID)
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
