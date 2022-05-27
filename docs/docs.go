@@ -43,7 +43,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "boolean",
-                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
                         "name": "all-apps",
                         "in": "query"
                     }
@@ -506,6 +506,14 @@ var doc = `{
                     "Client"
                 ],
                 "operationId": "GetContentItemsCategories",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {}
                 }

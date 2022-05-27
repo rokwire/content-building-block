@@ -60,7 +60,7 @@ paths:
       operationId: AdminGetContentItemsCategories
       parameters:
       - description: It says if the data is associated with the current app or it
-          is for all the apps within the organization. It is 'false' by default
+          is for all the apps within the organization. It is 'false' by default.
         in: query
         name: all-apps
         type: boolean
@@ -356,6 +356,12 @@ paths:
     get:
       description: Retrieves  all content item categories that have in the database
       operationId: GetContentItemsCategories
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
       responses:
         "200": {}
       security:

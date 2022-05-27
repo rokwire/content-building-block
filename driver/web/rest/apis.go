@@ -450,31 +450,39 @@ func (h ApisHandler) GetContentItem(claims *tokenauth.Claims, w http.ResponseWri
 // @Description Retrieves  all content item categories that have in the database
 // @Tags Client
 // @ID GetContentItemsCategories
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
 // @Success 200
 // @Security UserAuth
 // @Router /content_item/categories [get]
 func (h ApisHandler) GetContentItemsCategories(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	/*	resData, err := h.app.Services.GetContentItemsCategories(claims.AppID, claims.OrgID)
-		if err != nil {
-			log.Printf("Error on cgetting content items - %s\n", err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	//get all-apps param value
+	allApps := false //false by defautl
+	allAppsParam := r.URL.Query().Get("all-apps")
+	if allAppsParam != "" {
+		allApps, _ = strconv.ParseBool(allAppsParam)
+	}
 
-		if resData == nil {
-			resData = []string{}
-		}
+	resData, err := h.app.Services.GetContentItemsCategories(allApps, claims.AppID, claims.OrgID)
+	if err != nil {
+		log.Printf("Error on cgetting content items - %s\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-		data, err := json.Marshal(resData)
-		if err != nil {
-			log.Println("Error on marshal all content items")
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-			return
-		}
+	if resData == nil {
+		resData = []string{}
+	}
 
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(http.StatusOK)
-		w.Write(data) */
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal all content items")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // UploadImage Uploads an image to AWS S3
