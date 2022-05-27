@@ -748,11 +748,13 @@ func (h AdminApisHandler) DeleteContentItem(claims *tokenauth.Claims, w http.Res
 // @Description Retrieves  all content item categories that have in the database
 // @Tags Admin
 // @ID AdminGetContentItemsCategories
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
 // @Success 200
 // @Security AdminUserAuth
 // @Router /admin/content_item/categories [get]
 func (h AdminApisHandler) GetContentItemsCategories(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	resData, err := h.app.Services.GetContentItemsCategories(claims.AppID, claims.OrgID)
+	//TODO
+	resData, err := h.app.Services.GetContentItemsCategories(true, claims.AppID, claims.OrgID)
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

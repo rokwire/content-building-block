@@ -454,27 +454,27 @@ func (h ApisHandler) GetContentItem(claims *tokenauth.Claims, w http.ResponseWri
 // @Security UserAuth
 // @Router /content_item/categories [get]
 func (h ApisHandler) GetContentItemsCategories(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	resData, err := h.app.Services.GetContentItemsCategories(claims.AppID, claims.OrgID)
-	if err != nil {
-		log.Printf("Error on cgetting content items - %s\n", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	/*	resData, err := h.app.Services.GetContentItemsCategories(claims.AppID, claims.OrgID)
+		if err != nil {
+			log.Printf("Error on cgetting content items - %s\n", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
-	if resData == nil {
-		resData = []string{}
-	}
+		if resData == nil {
+			resData = []string{}
+		}
 
-	data, err := json.Marshal(resData)
-	if err != nil {
-		log.Println("Error on marshal all content items")
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
-	}
+		data, err := json.Marshal(resData)
+		if err != nil {
+			log.Println("Error on marshal all content items")
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
 
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-	w.Write(data)
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(http.StatusOK)
+		w.Write(data) */
 }
 
 // UploadImage Uploads an image to AWS S3

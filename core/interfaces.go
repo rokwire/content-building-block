@@ -39,7 +39,8 @@ type Services interface {
 	UpdateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error)
 	DeleteHealthLocation(appID string, orgID string, id string) error
 
-	GetContentItemsCategories(appID string, orgID string) ([]string, error)
+	//allApps says if the data is associated with the current app or it is for all the apps within the organization
+	GetContentItemsCategories(allApps bool, appID string, orgID string) ([]string, error)
 	GetContentItems(appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
 	GetContentItem(appID string, orgID string, id string) (*model.ContentItemResponse, error)
 	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)
@@ -108,8 +109,8 @@ func (s *servicesImpl) DeleteHealthLocation(appID string, orgID string, id strin
 
 // Content Items
 
-func (s *servicesImpl) GetContentItemsCategories(appID string, orgID string) ([]string, error) {
-	return s.app.getContentItemsCategories(appID, orgID)
+func (s *servicesImpl) GetContentItemsCategories(allApps bool, appID string, orgID string) ([]string, error) {
+	return s.app.getContentItemsCategories(allApps, appID, orgID)
 }
 
 func (s *servicesImpl) GetContentItems(appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {

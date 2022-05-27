@@ -115,7 +115,8 @@ func (app *Application) deleteHealthLocation(appID string, orgID string, id stri
 
 // Content Items
 
-func (app *Application) getContentItemsCategories(appID string, orgID string) ([]string, error) {
+func (app *Application) getContentItemsCategories(allApps bool, appID string, orgID string) ([]string, error) {
+	//TODO
 	return app.storage.GetContentItemsCategories(appID, orgID)
 }
 
