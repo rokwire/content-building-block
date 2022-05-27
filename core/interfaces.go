@@ -171,7 +171,7 @@ type Storage interface {
 	UpdateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error)
 	DeleteHealthLocation(appID string, orgID string, id string) error
 
-	GetContentItemsCategories(appID string, orgID string) ([]string, error)
+	GetContentItemsCategories(appID *string, orgID string) ([]string, error)
 	GetContentItems(appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
 	GetContentItem(appID string, orgID string, id string) (*model.ContentItemResponse, error)
 	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)

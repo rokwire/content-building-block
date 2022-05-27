@@ -265,7 +265,7 @@ type getContentItemsCategoriesData struct {
 }
 
 // GetContentItemsCategories  retrieve all content item categories
-func (sa *Adapter) GetContentItemsCategories(appID string, orgID string) ([]string, error) {
+func (sa *Adapter) GetContentItemsCategories(appID *string, orgID string) ([]string, error) {
 	pipeline := primitive.A{
 		bson.M{"$match": bson.M{"app_id": appID, "org_id": orgID}},
 		bson.M{"$group": bson.M{"_id": "$category"}},

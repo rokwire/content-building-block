@@ -640,7 +640,7 @@ func (h AdminApisHandler) UpdateContentItem(claims *tokenauth.Claims, w http.Res
 		return
 	}
 
-	item.AppID = claims.AppID
+	item.AppID = nil //TODO
 	item.OrgID = claims.OrgID
 	resData, err := h.app.Services.UpdateContentItem(id, &item)
 	if err != nil {
@@ -699,7 +699,7 @@ func (h AdminApisHandler) CreateContentItem(claims *tokenauth.Claims, w http.Res
 	}
 
 	createdItem, err := h.app.Services.CreateContentItem(&model.ContentItem{
-		AppID:    claims.AppID,
+		AppID:    nil, //TODO
 		OrgID:    claims.OrgID,
 		Category: item.Category,
 		Data:     item.Data,

@@ -116,8 +116,12 @@ func (app *Application) deleteHealthLocation(appID string, orgID string, id stri
 // Content Items
 
 func (app *Application) getContentItemsCategories(allApps bool, appID string, orgID string) ([]string, error) {
-	//TODO
-	return app.storage.GetContentItemsCategories(appID, orgID)
+	//logic
+	var appIDParam *string
+	if !allApps {
+		appIDParam = &appID //associated with current app
+	}
+	return app.storage.GetContentItemsCategories(appIDParam, orgID)
 }
 
 func (app *Application) getContentItems(appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
