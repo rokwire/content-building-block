@@ -1,6 +1,11 @@
-# Content building block
+# Content Building Block
+The Content Building Block handles the management of application content for the Rokwire platform.
 
-Go project to provide rest service for rokwire building block content results.
+## Documentation
+
+The functionality provided by this application is documented in the [Wiki](https://github.com/rokwire/content-building-block/wiki).
+
+The API documentation is available here: https://api-dev.rokwire.illinois.edu/content/doc/ui/
 
 ## Set Up
 
@@ -13,27 +18,28 @@ Go v1.16+
 ### Environment variables
 The following Environment variables are supported. The service will not start unless those marked as Required are supplied.
 
-Name|Value|Required|Description
+Name|Format|Required|Description
 ---|---|---|---
-CONTENT_PORT | < value > | yes | The port number of the listening port
-CONTENT_AUTH_ISSUER | < value > | yes | Auth issuer base uri
-CONTENT_AUTH_KEYS | < value > | yes | Auth keys
-CONTENT_HOST | < value > | yes | Host name
+CONTENT_PORT | < int > | yes | Port to be used by this application.
 CONTENT_MONGO_AUTH | <mongodb://USER:PASSWORD@HOST:PORT/DATABASE NAME> | yes | MongoDB authentication string. The user must have read/write privileges.
-CONTENT_MONGO_DATABASE | < value > | yes | MongoDB database name
-CONTENT_MONGO_TIMEOUT | < value > | no | MongoDB timeout in milliseconds. Set default value(500 milliseconds) if omitted
-CONTENT_OIDC_CLIENT_IDS | < value > | yes | OIDC admin client id
+CONTENT_MONGO_DATABASE | < value > | yes | MongoDB database name.
+CONTENT_MONGO_TIMEOUT | < int > | no | MongoDB timeout in milliseconds. Defaults to 500.
+S3_BUCKET | < string > | yes | AWS S3 bucket name for storing content.
+S3_PROFILE_IMAGES_BUCKET | < string > | yes | AWS S3 bucket name for storing profile images.
+S3_REGION | < string > | yes | AWS S3 region name.
+AWS_ACCESS_KEY_ID | < string > | yes | AWS access key ID
+AWS_SECRET_ACCESS_KEY | < string > | yes | AWS secret access key
+DEFAULT_CACHE_EXPIRATION_SECONDS | < int > | false | Default cache expiration time in seconds. Defaults to 120
+TWITTER_FEED_URL | < string > | yes | Twitter Feed base URL
+TWITTER_ACCESS_TOKEN | < string > | yes | Twitter Bearer access token
+CONTENT_HOST | < string > | yes | URL where this application is being hosted.
 CONTENT_OIDC_PROVIDER | < value > | yes | OIDC provider
+CONTENT_OIDC_CLIENT_IDS | < value > | yes | OIDC admin client id
 CONTENT_PHONE_SECRET | < value > | yes | Phone secret
-CORE_BB_HOST | < value > | yes | Core BB host url
+CONTENT_AUTH_KEYS | < value > | yes | Auth keys
+CONTENT_AUTH_ISSUER | < value > | yes | Auth issuer base uri
+CORE_BB_HOST | < string > | yes | Core BB host URL
 ROKWIRE_API_KEYS | <value1,value2,value3> | yes | Comma separated list of rokwire api keys
-AWS_ACCESS_KEY_ID | < value > | yes | AWS Access key ID
-AWS_SECRET_ACCESS_KEY | < value > | yes | AWS Secret access ket
-S3_BUCKET | < value > | yes | AWS S3 bucket name
-S3_REGION | < value > | yes | AWS S3 region name
-TWITTER_FEED_URL | < value > | yes | Twitter Feed base URL
-TWITTER_ACCESS_TOKEN | < value > | yes | Twitter Bearer access token
-DEFAULT_CACHE_EXPIRATION_SECONDS | < value > | false | Default cache expiration time in seconds. Default: 120
 ### Run Application
 
 #### Run locally without Docker
@@ -124,8 +130,15 @@ Response
 1.9.0
 ```
 
-## Documentation
+## Contributing
+If you would like to contribute to this project, please be sure to read the [Contributing Guidelines](CONTRIBUTING.md), [Code of Conduct](CODE_OF_CONDUCT.md), and [Conventions](CONVENTIONS.md) before beginning.
 
-The documentation is placed here - https://api-dev.rokwire.illinois.edu/docs/
+### Secret Detection
+This repository is configured with a [pre-commit](https://pre-commit.com/) hook that runs [Yelp's Detect Secrets](https://github.com/Yelp/detect-secrets). If you intend to contribute directly to this repository, you must install pre-commit on your local machine to ensure that no secrets are pushed accidentally.
 
-Alternatively the documentation is served by the service on the following url - https://api-dev.rokwire.illinois.edu/content/doc/ui/
+```
+# Install software 
+$ git pull  # Pull in pre-commit configuration & baseline 
+$ pip install pre-commit 
+$ pre-commit install
+```
