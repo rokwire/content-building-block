@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Patches for **Rokwire Building Blocks** in this repository will only be applied to the following versions:
+Patches for **Content Building Block** in this repository will only be applied to the following versions:
 
 | Version  | Supported          |
 |----------| ------------------ |
@@ -10,7 +10,9 @@ Patches for **Rokwire Building Blocks** in this repository will only be applied 
 | <= 1.1.11 | :x: |
 
 
-## Reporting a Vulnerability
+## Reporting a Bug or Vulnerability
 
-Vulnerabilities can be responsibly disclosed to [securitysupport@illinois.edu](mailto:securitysupport@illinois.edu).
-Bugs can be reported by creating a [GitHub issue](https://github.com/rokwire/rokwire-building-blocks-api/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBUG%5D).
+Vulnerabilities can be responsibly disclosed through the process
+ documented at https://go.illinois.edu/vulnerability
+
+Bugs can be reported by creating a [GitHub issue](https://github.com/rokwire/content-building-block/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBUG%5D+).
