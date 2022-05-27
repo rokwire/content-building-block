@@ -98,14 +98,9 @@ func (m *database) start() error {
 func (m *database) applyStudentGuidesChecks(studentGuides *collectionWrapper) error {
 	log.Println("apply student guides checks.....")
 
-	// Add app_id index
-	err := studentGuides.AddIndex(bson.D{primitive.E{Key: "app_id", Value: 1}}, false)
-	if err != nil {
-		return err
-	}
-
-	// Add orgp_id index
-	err = studentGuides.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1}}, false)
+	//Add org_id + app_id index
+	err := studentGuides.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1},
+		primitive.E{Key: "app_id", Value: 1}}, false)
 	if err != nil {
 		return err
 	}
@@ -117,14 +112,9 @@ func (m *database) applyStudentGuidesChecks(studentGuides *collectionWrapper) er
 func (m *database) applyHealthLocationsChecks(healthLocations *collectionWrapper) error {
 	log.Println("health locations guides checks.....")
 
-	// Add app_id index
-	err := healthLocations.AddIndex(bson.D{primitive.E{Key: "app_id", Value: 1}}, false)
-	if err != nil {
-		return err
-	}
-
-	// Add orgp_id index
-	err = healthLocations.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1}}, false)
+	//Add org_id + app_id index
+	err := healthLocations.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1},
+		primitive.E{Key: "app_id", Value: 1}}, false)
 	if err != nil {
 		return err
 	}
@@ -136,14 +126,9 @@ func (m *database) applyHealthLocationsChecks(healthLocations *collectionWrapper
 func (m *database) applyContentItemsChecks(contentItems *collectionWrapper) error {
 	log.Println("apply content_items checks.....")
 
-	// Add app_id index
-	err := contentItems.AddIndex(bson.D{primitive.E{Key: "app_id", Value: 1}}, false)
-	if err != nil {
-		return err
-	}
-
-	// Add org_id index
-	err = contentItems.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1}}, false)
+	//Add org_id + app_id index
+	err := contentItems.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1},
+		primitive.E{Key: "app_id", Value: 1}}, false)
 	if err != nil {
 		return err
 	}
