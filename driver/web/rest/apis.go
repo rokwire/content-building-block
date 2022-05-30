@@ -426,16 +426,24 @@ func (h ApisHandler) GetContentItems(claims *tokenauth.Claims, w http.ResponseWr
 // @Description Retrieves a content item by id. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Client
 // @ID GetContentItem
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.ContentItem
 // @Security UserAuth
 // @Router /content_items/{id} [get]
 func (h ApisHandler) GetContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	//get all-apps param value
+	allApps := false //false by defautl
+	allAppsParam := r.URL.Query().Get("all-apps")
+	if allAppsParam != "" {
+		allApps, _ = strconv.ParseBool(allAppsParam)
+	}
+
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	resData, err := h.app.Services.GetContentItem(claims.AppID, claims.OrgID, id)
+	resData, err := h.app.Services.GetContentItem(allApps, claims.AppID, claims.OrgID, id)
 	if err != nil {
 		log.Printf("Error on getting content item id - %s\n %s", id, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

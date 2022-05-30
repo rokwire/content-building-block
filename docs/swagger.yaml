@@ -144,6 +144,12 @@ paths:
       description: Retrieves a content item by id. <b> The data element could be either
         a primitive or nested json or array.</b>
       operationId: AdminGetContentItem
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
       produces:
       - application/json
       responses:
@@ -423,6 +429,12 @@ paths:
       description: Retrieves a content item by id. <b> The data element could be either
         a primitive or nested json or array.</b>
       operationId: GetContentItem
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
       produces:
       - application/json
       responses:

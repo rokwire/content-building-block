@@ -42,7 +42,7 @@ type Services interface {
 	//allApps says if the data is associated with the current app or it is for all the apps within the organization
 	GetContentItemsCategories(allApps bool, appID string, orgID string) ([]string, error)
 	GetContentItems(allApps bool, appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
-	GetContentItem(appID string, orgID string, id string) (*model.ContentItemResponse, error)
+	GetContentItem(allApps bool, appID string, orgID string, id string) (*model.ContentItemResponse, error)
 	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)
 	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
 	DeleteContentItem(appID string, orgID string, id string) error
@@ -117,8 +117,8 @@ func (s *servicesImpl) GetContentItems(allApps bool, appID string, orgID string,
 	return s.app.getContentItems(allApps, appID, orgID, ids, categoryList, offset, limit, order)
 }
 
-func (s *servicesImpl) GetContentItem(appID string, orgID string, id string) (*model.ContentItemResponse, error) {
-	return s.app.getContentItem(appID, orgID, id)
+func (s *servicesImpl) GetContentItem(allApps bool, appID string, orgID string, id string) (*model.ContentItemResponse, error) {
+	return s.app.getContentItem(allApps, appID, orgID, id)
 }
 
 func (s *servicesImpl) CreateContentItem(item *model.ContentItem) (*model.ContentItem, error) {
@@ -173,7 +173,7 @@ type Storage interface {
 
 	GetContentItemsCategories(appID *string, orgID string) ([]string, error)
 	GetContentItems(appID *string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
-	GetContentItem(appID string, orgID string, id string) (*model.ContentItemResponse, error)
+	GetContentItem(appID *string, orgID string, id string) (*model.ContentItemResponse, error)
 	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)
 	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
 	DeleteContentItem(appID string, orgID string, id string) error

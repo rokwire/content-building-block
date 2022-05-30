@@ -335,7 +335,7 @@ func (sa *Adapter) CreateContentItem(item *model.ContentItem) (*model.ContentIte
 }
 
 // GetContentItem retrieves a content item record by id
-func (sa *Adapter) GetContentItem(appID string, orgID string, id string) (*model.ContentItemResponse, error) {
+func (sa *Adapter) GetContentItem(appID *string, orgID string, id string) (*model.ContentItemResponse, error) {
 
 	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
 		primitive.E{Key: "org_id", Value: orgID},

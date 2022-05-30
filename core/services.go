@@ -133,8 +133,13 @@ func (app *Application) getContentItems(allApps bool, appID string, orgID string
 	return app.storage.GetContentItems(appIDParam, orgID, ids, categoryList, offset, limit, order)
 }
 
-func (app *Application) getContentItem(appID string, orgID string, id string) (*model.ContentItemResponse, error) {
-	return app.storage.GetContentItem(appID, orgID, id)
+func (app *Application) getContentItem(allApps bool, appID string, orgID string, id string) (*model.ContentItemResponse, error) {
+	//logic
+	var appIDParam *string
+	if !allApps {
+		appIDParam = &appID //associated with current app
+	}
+	return app.storage.GetContentItem(appIDParam, orgID, id)
 }
 
 func (app *Application) createContentItem(item *model.ContentItem) (*model.ContentItem, error) {
