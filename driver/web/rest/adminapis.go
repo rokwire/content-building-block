@@ -678,6 +678,7 @@ func (h AdminApisHandler) UpdateContentItem(claims *tokenauth.Claims, w http.Res
 
 // createContentItemRequestBody Expected body while creating a new content item
 type createContentItemRequestBody struct {
+	AllApps  bool        `json:"all_apps"`
 	Category string      `json:"category" bson:"category"`
 	Data     interface{} `json:"data" bson:"data"`
 } // @name createContentItemRequestBody
@@ -691,7 +692,6 @@ type createContentItemRequestBody struct {
 // @Security AdminUserAuth
 // @Router /admin/content_items [post]
 func (h AdminApisHandler) CreateContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Printf("Error on marshal create a content item - %s\n", err.Error())
@@ -713,12 +713,7 @@ func (h AdminApisHandler) CreateContentItem(claims *tokenauth.Claims, w http.Res
 		return
 	}
 
-	createdItem, err := h.app.Services.CreateContentItem(&model.ContentItem{
-		AppID:    nil, //TODO
-		OrgID:    claims.OrgID,
-		Category: item.Category,
-		Data:     item.Data,
-	})
+	createdItem, err := h.app.Services.CreateContentItem(item.AllApps, claims.AppID, claims.OrgID, item.Category, item.Data)
 	if err != nil {
 		log.Printf("Error on creating content item: %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

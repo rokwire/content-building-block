@@ -947,6 +947,9 @@ var doc = `{
         "createContentItemRequestBody": {
             "type": "object",
             "properties": {
+                "all_apps": {
+                    "type": "boolean"
+                },
                 "category": {
                     "type": "string"
                 },

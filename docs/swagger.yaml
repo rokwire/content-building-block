@@ -20,6 +20,8 @@ definitions:
     type: object
   createContentItemRequestBody:
     properties:
+      all_apps:
+        type: boolean
       category:
         type: string
       data:

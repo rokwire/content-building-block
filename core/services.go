@@ -26,7 +26,9 @@ import (
 	jpeg "image/jpeg"
 	"image/png"
 	"strings"
+	"time"
 
+	"github.com/google/uuid"
 	"github.com/nfnt/resize"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -142,8 +144,15 @@ func (app *Application) getContentItem(allApps bool, appID string, orgID string,
 	return app.storage.GetContentItem(appIDParam, orgID, id)
 }
 
-func (app *Application) createContentItem(item *model.ContentItem) (*model.ContentItem, error) {
-	return app.storage.CreateContentItem(item)
+func (app *Application) createContentItem(allApps bool, appID string, orgID string, category string, data interface{}) (*model.ContentItem, error) {
+	//logic
+	var appIDParam *string
+	if !allApps {
+		appIDParam = &appID //associated with current app
+	}
+	cItem := model.ContentItem{ID: uuid.NewString(), Category: category, DateCreated: time.Now().UTC(),
+		Data: data, OrgID: orgID, AppID: appIDParam}
+	return app.storage.CreateContentItem(cItem)
 }
 
 func (app *Application) updateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error) {

@@ -320,18 +320,13 @@ func (sa *Adapter) GetContentItems(appID *string, orgID string, ids []string, ca
 }
 
 // CreateContentItem creates a new content item record
-func (sa *Adapter) CreateContentItem(item *model.ContentItem) (*model.ContentItem, error) {
-	if item.ID == "" {
-		item.ID = uuid.NewString()
-	}
-	item.DateCreated = time.Now().UTC()
-
+func (sa *Adapter) CreateContentItem(item model.ContentItem) (*model.ContentItem, error) {
 	_, err := sa.db.contentItems.InsertOne(&item)
 	if err != nil {
 		log.Printf("error create content item: %s", err)
 		return nil, err
 	}
-	return item, nil
+	return &item, nil
 }
 
 // GetContentItem retrieves a content item record by id
