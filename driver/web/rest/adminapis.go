@@ -502,6 +502,7 @@ type getContentItemsRequestBody struct {
 // @Description Retrieves  all content items.<b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Admin
 // @ID AdminGetContentItems
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
 // @Param offset query string false "offset"
 // @Param limit query string false "limit - limit the result"
 // @Param order query string false "order - Possible values: asc, desc. Default: desc"
@@ -511,6 +512,12 @@ type getContentItemsRequestBody struct {
 // @Security AdminUserAuth
 // @Router /admin/content_items [get]
 func (h AdminApisHandler) GetContentItems(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	//get all-apps param value
+	allApps := false //false by defautl
+	allAppsParam := r.URL.Query().Get("all-apps")
+	if allAppsParam != "" {
+		allApps, _ = strconv.ParseBool(allAppsParam)
+	}
 
 	var offset *int64
 	offsets, ok := r.URL.Query()["offset"]
@@ -545,7 +552,7 @@ func (h AdminApisHandler) GetContentItems(claims *tokenauth.Claims, w http.Respo
 		}
 	}
 
-	resData, err := h.app.Services.GetContentItems(claims.AppID, claims.OrgID, body.IDs, body.Categories, offset, limit, order)
+	resData, err := h.app.Services.GetContentItems(allApps, claims.AppID, claims.OrgID, body.IDs, body.Categories, offset, limit, order)
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

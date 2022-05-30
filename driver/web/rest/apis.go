@@ -349,6 +349,7 @@ func (h ApisHandler) GetHealthLocation(claims *tokenauth.Claims, w http.Response
 // @Description Retrieves  all content items. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Client
 // @ID GetContentItems
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
 // @Param offset query string false "offset"
 // @Param limit query string false "limit - limit the result"
 // @Param order query string false "order - Possible values: asc, desc. Default: desc"
@@ -358,6 +359,13 @@ func (h ApisHandler) GetHealthLocation(claims *tokenauth.Claims, w http.Response
 // @Security UserAuth
 // @Router /content_items [get]
 func (h ApisHandler) GetContentItems(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	//get all-apps param value
+	allApps := false //false by defautl
+	allAppsParam := r.URL.Query().Get("all-apps")
+	if allAppsParam != "" {
+		allApps, _ = strconv.ParseBool(allAppsParam)
+	}
+
 	var offset *int64
 	offsets, ok := r.URL.Query()["offset"]
 	if ok && len(offsets[0]) > 0 {
@@ -391,7 +399,7 @@ func (h ApisHandler) GetContentItems(claims *tokenauth.Claims, w http.ResponseWr
 		}
 	}
 
-	resData, err := h.app.Services.GetContentItems(claims.AppID, claims.OrgID, body.IDs, body.Categories, offset, limit, order)
+	resData, err := h.app.Services.GetContentItems(allApps, claims.AppID, claims.OrgID, body.IDs, body.Categories, offset, limit, order)
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -464,7 +472,7 @@ func (h ApisHandler) GetContentItemsCategories(claims *tokenauth.Claims, w http.
 
 	resData, err := h.app.Services.GetContentItemsCategories(allApps, claims.AppID, claims.OrgID)
 	if err != nil {
-		log.Printf("Error on cgetting content items - %s\n", err)
+		log.Printf("Error on getting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
