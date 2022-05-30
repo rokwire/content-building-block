@@ -350,29 +350,36 @@ func (sa *Adapter) GetContentItem(appID *string, orgID string, id string) (*mode
 }
 
 // UpdateContentItem updates a content item record
-func (sa *Adapter) UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error) {
-	if item != nil {
-		if item.ID != id {
-			return nil, fmt.Errorf("attempt to override another object")
-		}
-
-		filter := bson.D{primitive.E{Key: "app_id", Value: item.AppID},
-			primitive.E{Key: "org_id", Value: item.OrgID},
-			primitive.E{Key: "_id", Value: id}}
-		update := bson.D{
-			primitive.E{Key: "$set", Value: bson.D{
-				primitive.E{Key: "category", Value: item.Category},
-				primitive.E{Key: "data", Value: item.Data},
-				primitive.E{Key: "date_updated", Value: time.Now().UTC()},
-			}},
-		}
-		_, err := sa.db.contentItems.UpdateOne(filter, update, nil)
-		if err != nil {
-			log.Printf("error updating content item: %s", err)
-			return nil, err
-		}
+func (sa *Adapter) UpdateContentItem(appID *string, orgID string, id string,
+	category string, data interface{}) (*model.ContentItem, error) {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
+	update := bson.D{
+		primitive.E{Key: "$set", Value: bson.D{
+			primitive.E{Key: "category", Value: category},
+			primitive.E{Key: "data", Value: data},
+			primitive.E{Key: "date_updated", Value: time.Now().UTC()},
+		}},
 	}
-	return item, nil
+	_, err := sa.db.contentItems.UpdateOne(filter, update, nil)
+	if err != nil {
+		log.Printf("error updating content item: %s", err)
+		return nil, err
+	}
+
+	//get it to return the updated object
+	var result []model.ContentItem
+	err = sa.db.contentItems.Find(filter, &result, nil)
+	if err != nil {
+		return nil, err
+	}
+	if result == nil || len(result) == 0 {
+		//not found
+		log.Printf("content item with id: %s is not found", id)
+		return nil, fmt.Errorf("content item with id: %s is not found", id)
+	}
+	return &result[0], nil
 }
 
 // DeleteContentItem deletes a content item record with the desired id

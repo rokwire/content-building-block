@@ -155,8 +155,20 @@ func (app *Application) createContentItem(allApps bool, appID string, orgID stri
 	return app.storage.CreateContentItem(cItem)
 }
 
-func (app *Application) updateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error) {
-	return app.storage.UpdateContentItem(id, item)
+func (app *Application) updateContentItem(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error) {
+	//logic
+	var appIDParam *string
+	if !allApps {
+		appIDParam = &appID //associated with current app
+	}
+
+	//update
+	item, err := app.storage.UpdateContentItem(appIDParam, orgID, id, category, data)
+	if err != nil {
+		return nil, err
+	}
+
+	return item, nil
 }
 
 func (app *Application) deleteContentItem(allApps bool, appID string, orgID string, id string) error {

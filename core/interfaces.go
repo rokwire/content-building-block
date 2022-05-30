@@ -44,7 +44,7 @@ type Services interface {
 	GetContentItems(allApps bool, appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
 	GetContentItem(allApps bool, appID string, orgID string, id string) (*model.ContentItemResponse, error)
 	CreateContentItem(allApps bool, appID string, orgID string, category string, data interface{}) (*model.ContentItem, error)
-	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
+	UpdateContentItem(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error)
 	DeleteContentItem(allApps bool, appID string, orgID string, id string) error
 
 	UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (*string, error)
@@ -125,8 +125,8 @@ func (s *servicesImpl) CreateContentItem(allApps bool, appID string, orgID strin
 	return s.app.createContentItem(allApps, appID, orgID, category, data)
 }
 
-func (s *servicesImpl) UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error) {
-	return s.app.updateContentItem(id, item)
+func (s *servicesImpl) UpdateContentItem(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error) {
+	return s.app.updateContentItem(allApps, appID, orgID, id, category, data)
 }
 
 func (s *servicesImpl) DeleteContentItem(allApps bool, appID string, orgID string, id string) error {
@@ -175,7 +175,7 @@ type Storage interface {
 	GetContentItems(appID *string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
 	GetContentItem(appID *string, orgID string, id string) (*model.ContentItemResponse, error)
 	CreateContentItem(item model.ContentItem) (*model.ContentItem, error)
-	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
+	UpdateContentItem(appID *string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error)
 	DeleteContentItem(appID *string, orgID string, id string) error
 
 	//Used for multi-tenancy for already exisiting data.

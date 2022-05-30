@@ -615,6 +615,13 @@ func (h AdminApisHandler) GetContentItem(claims *tokenauth.Claims, w http.Respon
 	w.Write(data)
 }
 
+// updateContentItemRequestBody Expected body while updating a new content item
+type updateContentItemRequestBody struct {
+	AllApps  bool        `json:"all_apps"`
+	Category string      `json:"category"`
+	Data     interface{} `json:"data"`
+} // @name updateContentItemRequestBody
+
 // UpdateContentItem Updates a content item with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
 // @Description Updates a content item with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Admin
@@ -635,29 +642,27 @@ func (h AdminApisHandler) UpdateContentItem(claims *tokenauth.Claims, w http.Res
 		return
 	}
 
-	var item model.ContentItem
-	err = json.Unmarshal(data, &item)
+	var request updateContentItemRequestBody
+	err = json.Unmarshal(data, &request)
 	if err != nil {
-		log.Printf("Error on unmarshal the create content item request data - %s\n", err.Error())
+		log.Printf("Error on unmarshal the update content item request data - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if item.ID != id {
-		log.Printf("Inconsistent attempt to update: path id is not equal to json ID")
-		http.Error(w, "Inconsistent attempt to update: path id is not equal to json ID", http.StatusBadRequest)
-		return
-	}
-
-	if len(item.Category) == 0 {
+	if len(request.Category) == 0 {
 		log.Printf("Unable to update content item: Missing category")
-		http.Error(w, "Unable to create content item: Missing category", http.StatusBadRequest)
+		http.Error(w, "Unable to update content item: Missing category", http.StatusBadRequest)
 		return
 	}
 
-	item.AppID = nil //TODO
-	item.OrgID = claims.OrgID
-	resData, err := h.app.Services.UpdateContentItem(id, &item)
+	if request.Data == nil {
+		log.Printf("Unable to update content item: Missing data")
+		http.Error(w, "Unable to update content item: Missing data", http.StatusBadRequest)
+		return
+	}
+
+	resData, err := h.app.Services.UpdateContentItem(request.AllApps, claims.AppID, claims.OrgID, id, request.Category, request.Data)
 	if err != nil {
 		log.Printf("Error on updating content item with id - %s\n %s", id, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
