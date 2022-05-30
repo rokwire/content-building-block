@@ -45,7 +45,7 @@ type Services interface {
 	GetContentItem(allApps bool, appID string, orgID string, id string) (*model.ContentItemResponse, error)
 	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)
 	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
-	DeleteContentItem(appID string, orgID string, id string) error
+	DeleteContentItem(allApps bool, appID string, orgID string, id string) error
 
 	UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (*string, error)
 	GetProfileImage(userID string, imageType string) ([]byte, error)
@@ -129,8 +129,8 @@ func (s *servicesImpl) UpdateContentItem(id string, item *model.ContentItem) (*m
 	return s.app.updateContentItem(id, item)
 }
 
-func (s *servicesImpl) DeleteContentItem(appID string, orgID string, id string) error {
-	return s.app.deleteContentItem(appID, orgID, id)
+func (s *servicesImpl) DeleteContentItem(allApps bool, appID string, orgID string, id string) error {
+	return s.app.deleteContentItem(allApps, appID, orgID, id)
 }
 
 // Misc
@@ -176,7 +176,7 @@ type Storage interface {
 	GetContentItem(appID *string, orgID string, id string) (*model.ContentItemResponse, error)
 	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)
 	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
-	DeleteContentItem(appID string, orgID string, id string) error
+	DeleteContentItem(appID *string, orgID string, id string) error
 
 	//Used for multi-tenancy for already exisiting data.
 	//To be removed when this is applied to all environments.

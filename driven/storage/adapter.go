@@ -381,7 +381,7 @@ func (sa *Adapter) UpdateContentItem(id string, item *model.ContentItem) (*model
 }
 
 // DeleteContentItem deletes a content item record with the desired id
-func (sa *Adapter) DeleteContentItem(appID string, orgID string, id string) error {
+func (sa *Adapter) DeleteContentItem(appID *string, orgID string, id string) error {
 	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
 		primitive.E{Key: "org_id", Value: orgID},
 		primitive.E{Key: "_id", Value: id}}

@@ -741,14 +741,22 @@ func (h AdminApisHandler) CreateContentItem(claims *tokenauth.Claims, w http.Res
 // @Description Deletes a content item with the specified id
 // @Tags Admin
 // @ID AdminDeleteContentItem
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
 // @Success 200
 // @Security AdminUserAuth
 // @Router /admin/content_items/{id} [delete]
 func (h AdminApisHandler) DeleteContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	//get all-apps param value
+	allApps := false //false by defautl
+	allAppsParam := r.URL.Query().Get("all-apps")
+	if allAppsParam != "" {
+		allApps, _ = strconv.ParseBool(allAppsParam)
+	}
+
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
-	err := h.app.Services.DeleteContentItem(claims.AppID, claims.OrgID, guideID)
+	err := h.app.Services.DeleteContentItem(allApps, claims.AppID, claims.OrgID, guideID)
 	if err != nil {
 		log.Printf("Error on deleting content item with id - %s\n %s", guideID, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

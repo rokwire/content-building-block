@@ -150,8 +150,13 @@ func (app *Application) updateContentItem(id string, item *model.ContentItem) (*
 	return app.storage.UpdateContentItem(id, item)
 }
 
-func (app *Application) deleteContentItem(appID string, orgID string, id string) error {
-	return app.storage.DeleteContentItem(appID, orgID, id)
+func (app *Application) deleteContentItem(allApps bool, appID string, orgID string, id string) error {
+	//logic
+	var appIDParam *string
+	if !allApps {
+		appIDParam = &appID //associated with current app
+	}
+	return app.storage.DeleteContentItem(appIDParam, orgID, id)
 }
 
 // Misc

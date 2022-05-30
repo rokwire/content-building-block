@@ -132,6 +132,12 @@ paths:
     delete:
       description: Deletes a content item with the specified id
       operationId: AdminDeleteContentItem
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
       responses:
         "200": {}
       security:
