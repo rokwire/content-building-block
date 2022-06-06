@@ -171,6 +171,17 @@ func (app *Application) updateContentItem(allApps bool, appID string, orgID stri
 	return item, nil
 }
 
+func (app *Application) updateContentItemData(allApps bool, appID *string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error) {
+	//TODO
+
+	//find the item
+
+	//update the data
+
+	//save it
+	return nil, nil
+}
+
 func (app *Application) deleteContentItem(allApps bool, appID string, orgID string, id string) error {
 	//logic
 	var appIDParam *string
