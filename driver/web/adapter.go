@@ -97,17 +97,22 @@ func (we Adapter) Start() {
 
 	// handle student guide admin apis
 	adminSubRouter := contentRouter.PathPrefix("/admin").Subrouter()
+
+	//deprecated
 	adminSubRouter.HandleFunc("/student_guides", we.coreAuthWrapFunc(we.adminApisHandler.GetStudentGuides, we.auth.coreAuth.permissionsAuth)).Methods("GET")
 	adminSubRouter.HandleFunc("/student_guides", we.coreAuthWrapFunc(we.adminApisHandler.CreateStudentGuide, we.auth.coreAuth.permissionsAuth)).Methods("POST")
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.coreAuthWrapFunc(we.adminApisHandler.GetStudentGuide, we.auth.coreAuth.permissionsAuth)).Methods("GET")
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.coreAuthWrapFunc(we.adminApisHandler.UpdateStudentGuide, we.auth.coreAuth.permissionsAuth)).Methods("PUT")
 	adminSubRouter.HandleFunc("/student_guides/{id}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteStudentGuide, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
+	//end deprecated
 
+	//deprecated
 	adminSubRouter.HandleFunc("/health_locations", we.coreAuthWrapFunc(we.adminApisHandler.GetHealthLocations, we.auth.coreAuth.permissionsAuth)).Methods("GET")
 	adminSubRouter.HandleFunc("/health_locations", we.coreAuthWrapFunc(we.adminApisHandler.CreateHealthLocation, we.auth.coreAuth.permissionsAuth)).Methods("POST")
 	adminSubRouter.HandleFunc("/health_location/{id}", we.coreAuthWrapFunc(we.adminApisHandler.GetHealthLocation, we.auth.coreAuth.permissionsAuth)).Methods("GET")
 	adminSubRouter.HandleFunc("/health_location/{id}", we.coreAuthWrapFunc(we.adminApisHandler.UpdateHealthLocation, we.auth.coreAuth.permissionsAuth)).Methods("PUT")
 	adminSubRouter.HandleFunc("/health_location/{id}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteHealthLocation, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
+	//end deprecated
 
 	adminSubRouter.HandleFunc("/content_items", we.coreAuthWrapFunc(we.adminApisHandler.GetContentItems, we.auth.coreAuth.permissionsAuth)).Methods("GET")
 	adminSubRouter.HandleFunc("/content_items", we.coreAuthWrapFunc(we.adminApisHandler.CreateContentItem, we.auth.coreAuth.permissionsAuth)).Methods("POST")
