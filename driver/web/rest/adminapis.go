@@ -402,6 +402,85 @@ func (h AdminApisHandler) DeleteHealthLocation(claims *tokenauth.Claims, w http.
 	w.WriteHeader(http.StatusOK)
 }
 
+// GetHealthLocations Retrieves health locations
+// @Description Retrieves Retrieves health locations
+// @Tags Admin
+// @ID AdminGetHealthLocationsV2
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Param ids query string false "Coma separated IDs of the desired records"
+// @Param offset query string false "offset"
+// @Param limit query string false "limit - limit the result"
+// @Param order query string false "order - Possible values: asc, desc. Default: desc"
+// @Accept json
+// @Success 200 {array} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/v2/health_locations [get]
+func (h AdminApisHandler) GetHealthLocationsV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	//get all-apps param value
+	allApps := false //false by defautl
+	allAppsParam := r.URL.Query().Get("all-apps")
+	if allAppsParam != "" {
+		allApps, _ = strconv.ParseBool(allAppsParam)
+	}
+
+	IDs := []string{}
+	IDskeys, ok := r.URL.Query()["ids"]
+	if ok && len(IDskeys[0]) > 0 {
+		extIDs := IDskeys[0]
+		IDs = strings.Split(extIDs, ",")
+	}
+
+	var offset *int64
+	offsets, ok := r.URL.Query()["offset"]
+	if ok && len(offsets[0]) > 0 {
+		val, err := strconv.ParseInt(offsets[0], 0, 64)
+		if err == nil {
+			offset = &val
+		}
+	}
+
+	var limit *int64
+	limits, ok := r.URL.Query()["limit"]
+	if ok && len(limits[0]) > 0 {
+		val, err := strconv.ParseInt(limits[0], 0, 64)
+		if err == nil {
+			limit = &val
+		}
+	}
+
+	var order *string
+	orders, ok := r.URL.Query()["order"]
+	if ok && len(orders[0]) > 0 {
+		order = &orders[0]
+	}
+
+	//category - health_location
+	categories := []string{"health_location"}
+
+	resData, err := h.app.Services.GetContentItems(allApps, claims.AppID, claims.OrgID, IDs, categories, offset, limit, order)
+	if err != nil {
+		log.Printf("Error on cgetting content items - %s\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if resData == nil {
+		resData = []model.ContentItemResponse{}
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal items")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // uploadImageResponse wrapper
 type uploadImageResponse struct {
 	URL string `json:"url"`
