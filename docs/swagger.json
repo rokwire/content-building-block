@@ -504,6 +504,66 @@
                 }
             }
         },
+        "/admin/v2/health_locations": {
+            "get": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Retrieves Retrieves health locations",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGetHealthLocationsV2",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Coma separated IDs of the desired records",
+                        "name": "ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit - limit the result",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order - Possible values: asc, desc. Default: desc",
+                        "name": "order",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ContentItem"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/content_item/categories": {
             "get": {
                 "security": [
