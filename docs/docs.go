@@ -574,6 +574,29 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Creates a new health location. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminCreateHealthLocationV2",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/createHealthLocationRequestBody"
+                        }
+                    }
+                }
             }
         },
         "/content_item/categories": {
@@ -1012,6 +1035,17 @@ var doc = `{
                 },
                 "category": {
                     "type": "string"
+                },
+                "data": {
+                    "type": "object"
+                }
+            }
+        },
+        "createHealthLocationRequestBody": {
+            "type": "object",
+            "properties": {
+                "all_apps": {
+                    "type": "boolean"
                 },
                 "data": {
                     "type": "object"

@@ -27,6 +27,13 @@ definitions:
       data:
         type: object
     type: object
+  createHealthLocationRequestBody:
+    properties:
+      all_apps:
+        type: boolean
+      data:
+        type: object
+    type: object
   getContentItemsRequestBody:
     properties:
       categories:
@@ -406,6 +413,21 @@ paths:
             items:
               $ref: '#/definitions/ContentItem'
             type: array
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Creates a new health location. <b> The data element could be either
+        a primitive or nested json or array.</b>
+      operationId: AdminCreateHealthLocationV2
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/createHealthLocationRequestBody'
       security:
       - AdminUserAuth: []
       tags:

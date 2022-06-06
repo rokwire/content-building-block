@@ -402,7 +402,7 @@ func (h AdminApisHandler) DeleteHealthLocation(claims *tokenauth.Claims, w http.
 	w.WriteHeader(http.StatusOK)
 }
 
-// GetHealthLocations Retrieves health locations
+// GetHealthLocationsV2 Retrieves health locations
 // @Description Retrieves Retrieves health locations
 // @Tags Admin
 // @ID AdminGetHealthLocationsV2
@@ -479,6 +479,57 @@ func (h AdminApisHandler) GetHealthLocationsV2(claims *tokenauth.Claims, w http.
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
+}
+
+// createHealthLocationRequestBody Expected body while creating a new health location
+type createHealthLocationRequestBody struct {
+	AllApps bool        `json:"all_apps"`
+	Data    interface{} `json:"data" bson:"data"`
+} // @name createHealthLocationRequestBody
+
+// CreateHealthLocationV2 creates a new health location. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Creates a new health location. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminCreateHealthLocationV2
+// @Accept json
+// @Success 200 {object} createHealthLocationRequestBody
+// @Security AdminUserAuth
+// @Router /admin/v2/health_locations [post]
+func (h AdminApisHandler) CreateHealthLocationV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("Error on marshal create a content item - %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	var item createHealthLocationRequestBody
+	err = json.Unmarshal(data, &item)
+	if err != nil {
+		log.Printf("Error on unmarshal the create content item request data - %s\n", err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	category := "health_location"
+
+	createdItem, err := h.app.Services.CreateContentItem(item.AllApps, claims.AppID, claims.OrgID, category, item.Data)
+	if err != nil {
+		log.Printf("Error on creating content item: %s\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, err := json.Marshal(createdItem)
+	if err != nil {
+		log.Println("Error on marshal the new content item")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonData)
 }
 
 // uploadImageResponse wrapper
