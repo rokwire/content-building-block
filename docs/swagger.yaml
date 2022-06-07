@@ -48,6 +48,13 @@ definitions:
           type: string
         type: array
     type: object
+  updateHealthLocationRequestBody:
+    properties:
+      all_apps:
+        type: boolean
+      data:
+        type: object
+    type: object
   uploadImageResponse:
     properties:
       url:
@@ -390,7 +397,7 @@ paths:
         in: query
         name: all-apps
         type: boolean
-      - description: Coma separated IDs of the desired records
+      - description: Comma separated IDs of the desired records
         in: query
         name: ids
         type: string
@@ -423,11 +430,18 @@ paths:
       description: Creates a new health location. <b> The data element could be either
         a primitive or nested json or array.</b>
       operationId: AdminCreateHealthLocationV2
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/createHealthLocationRequestBody'
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/createHealthLocationRequestBody'
+            $ref: '#/definitions/ContentItem'
       security:
       - AdminUserAuth: []
       tags:
@@ -439,6 +453,13 @@ paths:
       description: Updates a health location with the specified id. <b> The data element
         could be either a primitive or nested json or array.</b>
       operationId: AdminUpdateHealthLocationV2
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/updateHealthLocationRequestBody'
       produces:
       - application/json
       responses:

@@ -407,7 +407,7 @@ func (h AdminApisHandler) DeleteHealthLocation(claims *tokenauth.Claims, w http.
 // @Tags Admin
 // @ID AdminGetHealthLocationsV2
 // @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
-// @Param ids query string false "Coma separated IDs of the desired records"
+// @Param ids query string false "Comma separated IDs of the desired records"
 // @Param offset query string false "offset"
 // @Param limit query string false "limit - limit the result"
 // @Param order query string false "order - Possible values: asc, desc. Default: desc"
@@ -491,8 +491,9 @@ type createHealthLocationRequestBody struct {
 // @Description Creates a new health location. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Admin
 // @ID AdminCreateHealthLocationV2
+// @Param data body createHealthLocationRequestBody true "Params"
 // @Accept json
-// @Success 200 {object} createHealthLocationRequestBody
+// @Success 200 {object} model.ContentItem
 // @Security AdminUserAuth
 // @Router /admin/v2/health_locations [post]
 func (h AdminApisHandler) CreateHealthLocationV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
@@ -542,6 +543,7 @@ type updateHealthLocationRequestBody struct {
 // @Description Updates a health location with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Admin
 // @ID AdminUpdateHealthLocationV2
+// @Param data body updateHealthLocationRequestBody true "Params"
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.ContentItem

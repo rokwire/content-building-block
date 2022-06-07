@@ -540,7 +540,7 @@ var doc = `{
                     },
                     {
                         "type": "string",
-                        "description": "Coma separated IDs of the desired records",
+                        "description": "Comma separated IDs of the desired records",
                         "name": "ids",
                         "in": "query"
                     },
@@ -589,11 +589,22 @@ var doc = `{
                     "Admin"
                 ],
                 "operationId": "AdminCreateHealthLocationV2",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/createHealthLocationRequestBody"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/createHealthLocationRequestBody"
+                            "$ref": "#/definitions/ContentItem"
                         }
                     }
                 }
@@ -617,6 +628,17 @@ var doc = `{
                     "Admin"
                 ],
                 "operationId": "AdminUpdateHealthLocationV2",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/updateHealthLocationRequestBody"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1096,6 +1118,17 @@ var doc = `{
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "updateHealthLocationRequestBody": {
+            "type": "object",
+            "properties": {
+                "all_apps": {
+                    "type": "boolean"
+                },
+                "data": {
+                    "type": "object"
                 }
             }
         },
