@@ -532,6 +532,67 @@ func (h AdminApisHandler) CreateHealthLocationV2(claims *tokenauth.Claims, w htt
 	w.Write(jsonData)
 }
 
+// updateHealthLocationRequestBody Expected body while updating a health location
+type updateHealthLocationRequestBody struct {
+	AllApps bool        `json:"all_apps"`
+	Data    interface{} `json:"data"`
+} // @name updateHealthLocationRequestBody
+
+// UpdateHealthLocationV2 Updates a health location with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Updates a health location with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminUpdateHealthLocationV2
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/v2/health_locations/{id} [put]
+func (h AdminApisHandler) UpdateHealthLocationV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("Error on marshal create a content item - %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	var request updateHealthLocationRequestBody
+	err = json.Unmarshal(data, &request)
+	if err != nil {
+		log.Printf("Error on unmarshal the update content item request data - %s\n", err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if request.Data == nil {
+		log.Printf("Unable to update content item: Missing data")
+		http.Error(w, "Unable to update content item: Missing data", http.StatusBadRequest)
+		return
+	}
+
+	category := "health_location"
+
+	resData, err := h.app.Services.UpdateContentItemData(request.AllApps, claims.AppID, claims.OrgID, id, category, request.Data)
+	if err != nil {
+		log.Printf("Error on updating content item with id - %s\n %s", id, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal the updated content item")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonData)
+}
+
 // uploadImageResponse wrapper
 type uploadImageResponse struct {
 	URL string `json:"url"`

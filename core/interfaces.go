@@ -45,7 +45,7 @@ type Services interface {
 	GetContentItem(allApps bool, appID string, orgID string, id string) (*model.ContentItemResponse, error)
 	CreateContentItem(allApps bool, appID string, orgID string, category string, data interface{}) (*model.ContentItem, error)
 	UpdateContentItem(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error)
-	UpdateContentItemData(allApps bool, appID *string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error)
+	UpdateContentItemData(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error)
 	DeleteContentItem(allApps bool, appID string, orgID string, id string) error
 
 	UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (*string, error)
@@ -130,7 +130,7 @@ func (s *servicesImpl) UpdateContentItem(allApps bool, appID string, orgID strin
 	return s.app.updateContentItem(allApps, appID, orgID, id, category, data)
 }
 
-func (s *servicesImpl) UpdateContentItemData(allApps bool, appID *string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error) {
+func (s *servicesImpl) UpdateContentItemData(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error) {
 	return s.app.updateContentItemData(allApps, appID, orgID, id, category, data)
 }
 
@@ -177,11 +177,13 @@ type Storage interface {
 	DeleteHealthLocation(appID string, orgID string, id string) error
 
 	GetContentItemsCategories(appID *string, orgID string) ([]string, error)
+	FindContentItems(appID *string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error)
 	GetContentItems(appID *string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
 	GetContentItem(appID *string, orgID string, id string) (*model.ContentItemResponse, error)
 	CreateContentItem(item model.ContentItem) (*model.ContentItem, error)
 	UpdateContentItem(appID *string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error)
 	DeleteContentItem(appID *string, orgID string, id string) error
+	SaveContentItem(item model.ContentItem) error
 
 	//Used for multi-tenancy for already exisiting data.
 	//To be removed when this is applied to all environments.

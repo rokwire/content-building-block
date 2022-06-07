@@ -20,6 +20,7 @@ package core
 import (
 	"bytes"
 	"content/core/model"
+	"errors"
 	"fmt"
 	"image"
 	"image/gif"
@@ -171,15 +172,35 @@ func (app *Application) updateContentItem(allApps bool, appID string, orgID stri
 	return item, nil
 }
 
-func (app *Application) updateContentItemData(allApps bool, appID *string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error) {
-	//TODO
+func (app *Application) updateContentItemData(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error) {
+	//logic
+	var appIDParam *string
+	if !allApps {
+		appIDParam = &appID //associated with current app
+	}
 
 	//find the item
+	items, err := app.storage.FindContentItems(appIDParam, orgID, []string{id}, []string{category}, nil, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	if len(items) != 1 {
+		return nil, errors.New("not found")
+	}
+	item := items[0]
 
 	//update the data
+	item.Data = data
+	now := time.Now()
+	item.DateUpdated = &now
 
 	//save it
-	return nil, nil
+	err = app.storage.SaveContentItem(item)
+	if err != nil {
+		return nil, err
+	}
+
+	return &item, nil
 }
 
 func (app *Application) deleteContentItem(allApps bool, appID string, orgID string, id string) error {

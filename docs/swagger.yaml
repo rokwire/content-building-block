@@ -432,6 +432,24 @@ paths:
       - AdminUserAuth: []
       tags:
       - Admin
+  /admin/v2/health_locations/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Updates a health location with the specified id. <b> The data element
+        could be either a primitive or nested json or array.</b>
+      operationId: AdminUpdateHealthLocationV2
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
   /content_item/categories:
     get:
       description: Retrieves  all content item categories that have in the database

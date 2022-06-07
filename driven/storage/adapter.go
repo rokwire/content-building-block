@@ -286,6 +286,38 @@ func (sa *Adapter) GetContentItemsCategories(appID *string, orgID string) ([]str
 	return categories, nil
 }
 
+// FindContentItems finds content items
+func (sa *Adapter) FindContentItems(appID *string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error) {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID}}
+	if len(ids) > 0 {
+		filter = append(filter, primitive.E{Key: "_id", Value: bson.M{"$in": ids}})
+	}
+	if categoryList != nil && len(categoryList) > 0 {
+		filter = append(filter, primitive.E{Key: "category", Value: bson.M{"$in": categoryList}})
+	}
+
+	findOptions := options.Find()
+	if order != nil && "desc" == *order {
+		findOptions.SetSort(bson.D{{"date_created", -1}})
+	} else {
+		findOptions.SetSort(bson.D{{"date_created", 1}})
+	}
+	if limit != nil {
+		findOptions.SetLimit(*limit)
+	}
+	if offset != nil {
+		findOptions.SetSkip(*offset)
+	}
+
+	var result []model.ContentItem
+	err := sa.db.contentItems.Find(filter, &result, findOptions)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 // GetContentItems retrieves all content items
 func (sa *Adapter) GetContentItems(appID *string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
 
@@ -397,6 +429,17 @@ func (sa *Adapter) DeleteContentItem(appID *string, orgID string, id string) err
 	deletedCount := result.DeletedCount
 	if deletedCount != 1 {
 		return fmt.Errorf("error occured while deleting a resource item with id " + id)
+	}
+	return nil
+}
+
+// SaveContentItem saves content item
+func (sa *Adapter) SaveContentItem(item model.ContentItem) error {
+	filter := bson.M{"_id": item.ID}
+	opts := options.Replace().SetUpsert(true)
+	err := sa.db.contentItems.ReplaceOne(filter, item, opts)
+	if err != nil {
+		return err
 	}
 	return nil
 }
