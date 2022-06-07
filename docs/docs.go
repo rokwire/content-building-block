@@ -596,7 +596,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/createHealthLocationRequestBody"
+                            "$ref": "#/definitions/createContentItemByCategoryRequestBody"
                         }
                     }
                 ],
@@ -635,7 +635,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/updateHealthLocationRequestBody"
+                            "$ref": "#/definitions/updateContentItemByCategoryRequestBody"
                         }
                     }
                 ],
@@ -659,6 +659,162 @@ var doc = `{
                     "Admin"
                 ],
                 "operationId": "AdminDeleteHealthLocationV2",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {}
+                }
+            }
+        },
+        "/admin/v2/student_guides": {
+            "get": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Retrieves student guides",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGetStudentGuidesV2",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comma separated IDs of the desired records",
+                        "name": "ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit - limit the result",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order - Possible values: asc, desc. Default: desc",
+                        "name": "order",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ContentItem"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Creates a new student guide. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminCreateStudentGuidesV2",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/createContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/v2/student_guides/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Updates a student guide with the specified id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminUpdateStudentGuidesV2",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/updateContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Deletes a student guide with the specified id",
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminDeleteStudentGuidesV2",
                 "parameters": [
                     {
                         "type": "boolean",
@@ -1100,6 +1256,17 @@ var doc = `{
                 }
             }
         },
+        "createContentItemByCategoryRequestBody": {
+            "type": "object",
+            "properties": {
+                "all_apps": {
+                    "type": "boolean"
+                },
+                "data": {
+                    "type": "object"
+                }
+            }
+        },
         "createContentItemRequestBody": {
             "type": "object",
             "properties": {
@@ -1108,17 +1275,6 @@ var doc = `{
                 },
                 "category": {
                     "type": "string"
-                },
-                "data": {
-                    "type": "object"
-                }
-            }
-        },
-        "createHealthLocationRequestBody": {
-            "type": "object",
-            "properties": {
-                "all_apps": {
-                    "type": "boolean"
                 },
                 "data": {
                     "type": "object"
@@ -1144,7 +1300,7 @@ var doc = `{
                 }
             }
         },
-        "updateHealthLocationRequestBody": {
+        "updateContentItemByCategoryRequestBody": {
             "type": "object",
             "properties": {
                 "all_apps": {

@@ -18,19 +18,19 @@ definitions:
       org_id:
         type: string
     type: object
+  createContentItemByCategoryRequestBody:
+    properties:
+      all_apps:
+        type: boolean
+      data:
+        type: object
+    type: object
   createContentItemRequestBody:
     properties:
       all_apps:
         type: boolean
       category:
         type: string
-      data:
-        type: object
-    type: object
-  createHealthLocationRequestBody:
-    properties:
-      all_apps:
-        type: boolean
       data:
         type: object
     type: object
@@ -48,7 +48,7 @@ definitions:
           type: string
         type: array
     type: object
-  updateHealthLocationRequestBody:
+  updateContentItemByCategoryRequestBody:
     properties:
       all_apps:
         type: boolean
@@ -436,7 +436,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/createHealthLocationRequestBody'
+          $ref: '#/definitions/createContentItemByCategoryRequestBody'
       responses:
         "200":
           description: OK
@@ -474,7 +474,108 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/updateHealthLocationRequestBody'
+          $ref: '#/definitions/updateContentItemByCategoryRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/v2/student_guides:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves student guides
+      operationId: AdminGetStudentGuidesV2
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      - description: Comma separated IDs of the desired records
+        in: query
+        name: ids
+        type: string
+      - description: offset
+        in: query
+        name: offset
+        type: string
+      - description: limit - limit the result
+        in: query
+        name: limit
+        type: string
+      - description: 'order - Possible values: asc, desc. Default: desc'
+        in: query
+        name: order
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ContentItem'
+            type: array
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Creates a new student guide. <b> The data element could be either
+        a primitive or nested json or array.</b>
+      operationId: AdminCreateStudentGuidesV2
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/createContentItemByCategoryRequestBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/v2/student_guides/{id}:
+    delete:
+      description: Deletes a student guide with the specified id
+      operationId: AdminDeleteStudentGuidesV2
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      responses:
+        "200": {}
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    put:
+      consumes:
+      - application/json
+      description: Updates a student guide with the specified id. <b> The data element
+        could be either a primitive or nested json or array.</b>
+      operationId: AdminUpdateStudentGuidesV2
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/updateContentItemByCategoryRequestBody'
       produces:
       - application/json
       responses:

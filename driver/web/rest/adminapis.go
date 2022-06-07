@@ -416,7 +416,105 @@ func (h AdminApisHandler) DeleteHealthLocation(claims *tokenauth.Claims, w http.
 // @Security AdminUserAuth
 // @Router /admin/v2/health_locations [get]
 func (h AdminApisHandler) GetHealthLocationsV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.getContentItemsByCategory(claims, w, r, "health_location")
+}
 
+// CreateHealthLocationV2 creates a new health location. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Creates a new health location. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminCreateHealthLocationV2
+// @Param data body createContentItemByCategoryRequestBody true "Params"
+// @Accept json
+// @Success 200 {object} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/v2/health_locations [post]
+func (h AdminApisHandler) CreateHealthLocationV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.createContentItemByCategory(claims, w, r, "health_location")
+}
+
+// UpdateHealthLocationV2 Updates a health location with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Updates a health location with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminUpdateHealthLocationV2
+// @Param data body updateContentItemByCategoryRequestBody true "Params"
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/v2/health_locations/{id} [put]
+func (h AdminApisHandler) UpdateHealthLocationV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.updateContentItemByCategory(claims, w, r, "health_location")
+}
+
+// DeleteHealthLocationV2 Deletes a health location with the specified id
+// @Description Deletes a health location with the specified id
+// @Tags Admin
+// @ID AdminDeleteHealthLocationV2
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/v2/health_locations/{id} [delete]
+func (h AdminApisHandler) DeleteHealthLocationV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.deleteContentItemByCategory(claims, w, r, "health_location")
+}
+
+// GetStudentGuidesV2 Retrieves student guides
+// @Description Retrieves student guides
+// @Tags Admin
+// @ID AdminGetStudentGuidesV2
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Param ids query string false "Comma separated IDs of the desired records"
+// @Param offset query string false "offset"
+// @Param limit query string false "limit - limit the result"
+// @Param order query string false "order - Possible values: asc, desc. Default: desc"
+// @Accept json
+// @Success 200 {array} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/v2/student_guides [get]
+func (h AdminApisHandler) GetStudentGuidesV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.getContentItemsByCategory(claims, w, r, "student_guide")
+}
+
+// CreateStudentGuidesV2 creates a new student guide. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Creates a new student guide. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminCreateStudentGuidesV2
+// @Param data body createContentItemByCategoryRequestBody true "Params"
+// @Accept json
+// @Success 200 {object} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/v2/student_guides [post]
+func (h AdminApisHandler) CreateStudentGuidesV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.createContentItemByCategory(claims, w, r, "student_guide")
+}
+
+// UpdateStudentGuidesV2 Updates a student guide with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Updates a student guide with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminUpdateStudentGuidesV2
+// @Param data body updateContentItemByCategoryRequestBody true "Params"
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/v2/student_guides/{id} [put]
+func (h AdminApisHandler) UpdateStudentGuidesV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.updateContentItemByCategory(claims, w, r, "student_guide")
+}
+
+// DeleteStudentGuidesV2 Deletes a student guide with the specified id
+// @Description Deletes a student guide with the specified id
+// @Tags Admin
+// @ID AdminDeleteStudentGuidesV2
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/v2/student_guides/{id} [delete]
+func (h AdminApisHandler) DeleteStudentGuidesV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.deleteContentItemByCategory(claims, w, r, "student_guide")
+}
+
+func (h AdminApisHandler) getContentItemsByCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request, category string) {
 	//get all-apps param value
 	allApps := false //false by defautl
 	allAppsParam := r.URL.Query().Get("all-apps")
@@ -455,8 +553,7 @@ func (h AdminApisHandler) GetHealthLocationsV2(claims *tokenauth.Claims, w http.
 		order = &orders[0]
 	}
 
-	//category - health_location
-	categories := []string{"health_location"}
+	categories := []string{category}
 
 	resData, err := h.app.Services.GetContentItems(allApps, claims.AppID, claims.OrgID, IDs, categories, offset, limit, order)
 	if err != nil {
@@ -481,22 +578,13 @@ func (h AdminApisHandler) GetHealthLocationsV2(claims *tokenauth.Claims, w http.
 	w.Write(data)
 }
 
-// createHealthLocationRequestBody Expected body while creating a new health location
-type createHealthLocationRequestBody struct {
+// createContentItemByCategoryRequestBody Expected body while creating a new content item
+type createContentItemByCategoryRequestBody struct {
 	AllApps bool        `json:"all_apps"`
 	Data    interface{} `json:"data" bson:"data"`
-} // @name createHealthLocationRequestBody
+} // @name createContentItemByCategoryRequestBody
 
-// CreateHealthLocationV2 creates a new health location. <b> The data element could be either a primitive or nested json or array.</b>
-// @Description Creates a new health location. <b> The data element could be either a primitive or nested json or array.</b>
-// @Tags Admin
-// @ID AdminCreateHealthLocationV2
-// @Param data body createHealthLocationRequestBody true "Params"
-// @Accept json
-// @Success 200 {object} model.ContentItem
-// @Security AdminUserAuth
-// @Router /admin/v2/health_locations [post]
-func (h AdminApisHandler) CreateHealthLocationV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) createContentItemByCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request, category string) {
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Printf("Error on marshal create a content item - %s\n", err.Error())
@@ -504,15 +592,13 @@ func (h AdminApisHandler) CreateHealthLocationV2(claims *tokenauth.Claims, w htt
 		return
 	}
 
-	var item createHealthLocationRequestBody
+	var item createContentItemByCategoryRequestBody
 	err = json.Unmarshal(data, &item)
 	if err != nil {
 		log.Printf("Error on unmarshal the create content item request data - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
-	category := "health_location"
 
 	createdItem, err := h.app.Services.CreateContentItem(item.AllApps, claims.AppID, claims.OrgID, category, item.Data)
 	if err != nil {
@@ -533,23 +619,13 @@ func (h AdminApisHandler) CreateHealthLocationV2(claims *tokenauth.Claims, w htt
 	w.Write(jsonData)
 }
 
-// updateHealthLocationRequestBody Expected body while updating a health location
-type updateHealthLocationRequestBody struct {
+// updateContentItemByCategoryRequestBody Expected body while updating a content item
+type updateContentItemByCategoryRequestBody struct {
 	AllApps bool        `json:"all_apps"`
 	Data    interface{} `json:"data"`
-} // @name updateHealthLocationRequestBody
+} // @name updateContentItemByCategoryRequestBody
 
-// UpdateHealthLocationV2 Updates a health location with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
-// @Description Updates a health location with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
-// @Tags Admin
-// @ID AdminUpdateHealthLocationV2
-// @Param data body updateHealthLocationRequestBody true "Params"
-// @Accept json
-// @Produce json
-// @Success 200 {object} model.ContentItem
-// @Security AdminUserAuth
-// @Router /admin/v2/health_locations/{id} [put]
-func (h AdminApisHandler) UpdateHealthLocationV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) updateContentItemByCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request, category string) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
@@ -560,7 +636,7 @@ func (h AdminApisHandler) UpdateHealthLocationV2(claims *tokenauth.Claims, w htt
 		return
 	}
 
-	var request updateHealthLocationRequestBody
+	var request updateContentItemByCategoryRequestBody
 	err = json.Unmarshal(data, &request)
 	if err != nil {
 		log.Printf("Error on unmarshal the update content item request data - %s\n", err.Error())
@@ -573,8 +649,6 @@ func (h AdminApisHandler) UpdateHealthLocationV2(claims *tokenauth.Claims, w htt
 		http.Error(w, "Unable to update content item: Missing data", http.StatusBadRequest)
 		return
 	}
-
-	category := "health_location"
 
 	resData, err := h.app.Services.UpdateContentItemData(request.AllApps, claims.AppID, claims.OrgID, id, category, request.Data)
 	if err != nil {
@@ -595,15 +669,7 @@ func (h AdminApisHandler) UpdateHealthLocationV2(claims *tokenauth.Claims, w htt
 	w.Write(jsonData)
 }
 
-// DeleteHealthLocationV2 Deletes a health location with the specified id
-// @Description Deletes a health location with the specified id
-// @Tags Admin
-// @ID AdminDeleteHealthLocationV2
-// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
-// @Success 200
-// @Security AdminUserAuth
-// @Router /admin/v2/health_locations/{id} [delete]
-func (h AdminApisHandler) DeleteHealthLocationV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+func (h AdminApisHandler) deleteContentItemByCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request, category string) {
 	//get all-apps param value
 	allApps := false //false by defautl
 	allAppsParam := r.URL.Query().Get("all-apps")
@@ -613,8 +679,6 @@ func (h AdminApisHandler) DeleteHealthLocationV2(claims *tokenauth.Claims, w htt
 
 	vars := mux.Vars(r)
 	id := vars["id"]
-
-	category := "health_location"
 
 	err := h.app.Services.DeleteContentItemByCategory(allApps, claims.AppID, claims.OrgID, id, category)
 	if err != nil {
