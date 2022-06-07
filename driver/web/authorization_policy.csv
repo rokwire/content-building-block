@@ -1,6 +1,6 @@
-p, all_admin_content, /content/admin/*, (GET)|(POST)|(PUT)|(DELETE) #Access all Content BB admin endpoints
+p, all_admin_content, /content/admin/*, (GET)|(POST)|(PUT)|(DELETE)
 
-p, all_content-items, /content/admin/content_items, (GET)|(POST)|(DELETE)|(PUT) #All content items actions
+p, all_content-items, /content/admin/content_items, (GET)|(POST)|(DELETE)|(PUT)
 p, all_content-items, /content/admin/content_items/*, (GET)|(POST)|(DELETE)|(PUT)
 p, all_content-items, /content/admin/content_item/*, (GET)|(POST)|(DELETE)|(PUT)
 p, get_content-items, /content/admin/content_items, (GET)
