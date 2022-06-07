@@ -595,6 +595,38 @@ func (h AdminApisHandler) UpdateHealthLocationV2(claims *tokenauth.Claims, w htt
 	w.Write(jsonData)
 }
 
+// DeleteHealthLocationV2 Deletes a health location with the specified id
+// @Description Deletes a health location with the specified id
+// @Tags Admin
+// @ID AdminDeleteHealthLocationV2
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/v2/health_locations/{id} [delete]
+func (h AdminApisHandler) DeleteHealthLocationV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	//get all-apps param value
+	allApps := false //false by defautl
+	allAppsParam := r.URL.Query().Get("all-apps")
+	if allAppsParam != "" {
+		allApps, _ = strconv.ParseBool(allAppsParam)
+	}
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	category := "health_location"
+
+	err := h.app.Services.DeleteContentItemByCategory(allApps, claims.AppID, claims.OrgID, id, category)
+	if err != nil {
+		log.Printf("Error on deleting content item with id - %s\n %s", id, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+}
+
 // uploadImageResponse wrapper
 type uploadImageResponse struct {
 	URL string `json:"url"`

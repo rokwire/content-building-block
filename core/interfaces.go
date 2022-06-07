@@ -47,6 +47,7 @@ type Services interface {
 	UpdateContentItem(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error)
 	UpdateContentItemData(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error)
 	DeleteContentItem(allApps bool, appID string, orgID string, id string) error
+	DeleteContentItemByCategory(allApps bool, appID string, orgID string, id string, category string) error
 
 	UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (*string, error)
 	GetProfileImage(userID string, imageType string) ([]byte, error)
@@ -136,6 +137,10 @@ func (s *servicesImpl) UpdateContentItemData(allApps bool, appID string, orgID s
 
 func (s *servicesImpl) DeleteContentItem(allApps bool, appID string, orgID string, id string) error {
 	return s.app.deleteContentItem(allApps, appID, orgID, id)
+}
+
+func (s *servicesImpl) DeleteContentItemByCategory(allApps bool, appID string, orgID string, id string, category string) error {
+	return s.app.deleteContentItemByCategory(allApps, appID, orgID, id, category)
 }
 
 // Misc

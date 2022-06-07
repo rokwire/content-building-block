@@ -117,6 +117,7 @@ func (we Adapter) Start() {
 	adminSubRouter.HandleFunc("/v2/health_locations", we.coreAuthWrapFunc(we.adminApisHandler.GetHealthLocationsV2, we.auth.coreAuth.permissionsAuth)).Methods("GET")
 	adminSubRouter.HandleFunc("/v2/health_locations", we.coreAuthWrapFunc(we.adminApisHandler.CreateHealthLocationV2, we.auth.coreAuth.permissionsAuth)).Methods("POST")
 	adminSubRouter.HandleFunc("/v2/health_locations/{id}", we.coreAuthWrapFunc(we.adminApisHandler.UpdateHealthLocationV2, we.auth.coreAuth.permissionsAuth)).Methods("PUT")
+	adminSubRouter.HandleFunc("/v2/health_locations/{id}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteHealthLocationV2, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
 
 	adminSubRouter.HandleFunc("/content_items", we.coreAuthWrapFunc(we.adminApisHandler.GetContentItems, we.auth.coreAuth.permissionsAuth)).Methods("GET")
 	adminSubRouter.HandleFunc("/content_items", we.coreAuthWrapFunc(we.adminApisHandler.CreateContentItem, we.auth.coreAuth.permissionsAuth)).Methods("POST")

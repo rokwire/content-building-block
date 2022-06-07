@@ -447,6 +447,21 @@ paths:
       tags:
       - Admin
   /admin/v2/health_locations/{id}:
+    delete:
+      description: Deletes a health location with the specified id
+      operationId: AdminDeleteHealthLocationV2
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      responses:
+        "200": {}
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
     put:
       consumes:
       - application/json

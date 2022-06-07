@@ -212,6 +212,31 @@ func (app *Application) deleteContentItem(allApps bool, appID string, orgID stri
 	return app.storage.DeleteContentItem(appIDParam, orgID, id)
 }
 
+func (app *Application) deleteContentItemByCategory(allApps bool, appID string, orgID string, id string, category string) error {
+	//logic
+	var appIDParam *string
+	if !allApps {
+		appIDParam = &appID //associated with current app
+	}
+
+	//find the item
+	items, err := app.storage.FindContentItems(appIDParam, orgID, []string{id}, []string{category}, nil, nil, nil)
+	if err != nil {
+		return err
+	}
+	if len(items) != 1 {
+		return errors.New("not found")
+	}
+
+	//delete it
+	err = app.storage.DeleteContentItem(appIDParam, orgID, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Misc
 
 func (app *Application) uploadImage(fileName string, filetype string, bytes []byte, path string, preferredFileName *string, spec model.ImageSpec) (*string, error) {
