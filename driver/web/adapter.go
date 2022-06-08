@@ -124,6 +124,16 @@ func (we Adapter) Start() {
 	adminSubRouter.HandleFunc("/v2/student_guides/{id}", we.coreAuthWrapFunc(we.adminApisHandler.UpdateStudentGuidesV2, we.auth.coreAuth.permissionsAuth)).Methods("PUT")
 	adminSubRouter.HandleFunc("/v2/student_guides/{id}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteStudentGuidesV2, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
 
+	adminSubRouter.HandleFunc("/wellness", we.coreAuthWrapFunc(we.adminApisHandler.GetWellness, we.auth.coreAuth.permissionsAuth)).Methods("GET")
+	adminSubRouter.HandleFunc("/wellness", we.coreAuthWrapFunc(we.adminApisHandler.CreateWellness, we.auth.coreAuth.permissionsAuth)).Methods("POST")
+	adminSubRouter.HandleFunc("/wellness/{id}", we.coreAuthWrapFunc(we.adminApisHandler.UpdateWellness, we.auth.coreAuth.permissionsAuth)).Methods("PUT")
+	adminSubRouter.HandleFunc("/wellness/{id}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteWellness, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
+
+	//TODO Campus Reminders
+	//TODO Gies Onboarding Checklist
+	//TODO UIUC Onboarding Checklist
+	//TODO Gies Nudge Templates
+
 	adminSubRouter.HandleFunc("/content_items", we.coreAuthWrapFunc(we.adminApisHandler.GetContentItems, we.auth.coreAuth.permissionsAuth)).Methods("GET")
 	adminSubRouter.HandleFunc("/content_items", we.coreAuthWrapFunc(we.adminApisHandler.CreateContentItem, we.auth.coreAuth.permissionsAuth)).Methods("POST")
 	adminSubRouter.HandleFunc("/content_items/{id}", we.coreAuthWrapFunc(we.adminApisHandler.GetContentItem, we.auth.coreAuth.permissionsAuth)).Methods("GET")

@@ -587,6 +587,107 @@ paths:
       - AdminUserAuth: []
       tags:
       - Admin
+  /admin/wellness:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves wellness items
+      operationId: AdminGetWellness
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      - description: Comma separated IDs of the desired records
+        in: query
+        name: ids
+        type: string
+      - description: offset
+        in: query
+        name: offset
+        type: string
+      - description: limit - limit the result
+        in: query
+        name: limit
+        type: string
+      - description: 'order - Possible values: asc, desc. Default: desc'
+        in: query
+        name: order
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ContentItem'
+            type: array
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Creates a new wellness. <b> The data element could be either a
+        primitive or nested json or array.</b>
+      operationId: AdminCreateWellness
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/createContentItemByCategoryRequestBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/wellness/{id}:
+    delete:
+      description: Deletes a wellness with the specified id
+      operationId: AdminDeleteWellness
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      responses:
+        "200": {}
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    put:
+      consumes:
+      - application/json
+      description: Updates a wellness with the specified id. <b> The data element
+        could be either a primitive or nested json or array.</b>
+      operationId: AdminUpdateWellness
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/updateContentItemByCategoryRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
   /content_item/categories:
     get:
       description: Retrieves  all content item categories that have in the database

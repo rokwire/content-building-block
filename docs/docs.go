@@ -828,6 +828,162 @@ var doc = `{
                 }
             }
         },
+        "/admin/wellness": {
+            "get": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Retrieves wellness items",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGetWellness",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comma separated IDs of the desired records",
+                        "name": "ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit - limit the result",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order - Possible values: asc, desc. Default: desc",
+                        "name": "order",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ContentItem"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Creates a new wellness. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminCreateWellness",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/createContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/wellness/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Updates a wellness with the specified id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminUpdateWellness",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/updateContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Deletes a wellness with the specified id",
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminDeleteWellness",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {}
+                }
+            }
+        },
         "/content_item/categories": {
             "get": {
                 "security": [

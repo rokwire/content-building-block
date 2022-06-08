@@ -514,6 +514,62 @@ func (h AdminApisHandler) DeleteStudentGuidesV2(claims *tokenauth.Claims, w http
 	h.deleteContentItemByCategory(claims, w, r, "student_guide")
 }
 
+// GetWellness Retrieves wellness items
+// @Description Retrieves wellness items
+// @Tags Admin
+// @ID AdminGetWellness
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Param ids query string false "Comma separated IDs of the desired records"
+// @Param offset query string false "offset"
+// @Param limit query string false "limit - limit the result"
+// @Param order query string false "order - Possible values: asc, desc. Default: desc"
+// @Accept json
+// @Success 200 {array} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/wellness [get]
+func (h AdminApisHandler) GetWellness(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.getContentItemsByCategory(claims, w, r, "wellness")
+}
+
+// CreateWellness creates a new wellness. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Creates a new wellness. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminCreateWellness
+// @Param data body createContentItemByCategoryRequestBody true "Params"
+// @Accept json
+// @Success 200 {object} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/wellness [post]
+func (h AdminApisHandler) CreateWellness(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.createContentItemByCategory(claims, w, r, "wellness")
+}
+
+// UpdateWellness Updates a wellness with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Updates a wellness with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminUpdateWellness
+// @Param data body updateContentItemByCategoryRequestBody true "Params"
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/wellness/{id} [put]
+func (h AdminApisHandler) UpdateWellness(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.updateContentItemByCategory(claims, w, r, "wellness")
+}
+
+// DeleteWellness Deletes a wellness with the specified id
+// @Description Deletes a wellness with the specified id
+// @Tags Admin
+// @ID AdminDeleteWellness
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/wellness/{id} [delete]
+func (h AdminApisHandler) DeleteWellness(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.deleteContentItemByCategory(claims, w, r, "wellness")
+}
+
 func (h AdminApisHandler) getContentItemsByCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request, category string) {
 	//get all-apps param value
 	allApps := false //false by defautl
