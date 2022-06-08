@@ -570,6 +570,230 @@ func (h AdminApisHandler) DeleteWellness(claims *tokenauth.Claims, w http.Respon
 	h.deleteContentItemByCategory(claims, w, r, "wellness")
 }
 
+// GetCampusReminders Retrieves campus reminders
+// @Description Retrieves campus reminders
+// @Tags Admin
+// @ID AdminGetCampusReminders
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Param ids query string false "Comma separated IDs of the desired records"
+// @Param offset query string false "offset"
+// @Param limit query string false "limit - limit the result"
+// @Param order query string false "order - Possible values: asc, desc. Default: desc"
+// @Accept json
+// @Success 200 {array} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/campus_reminders [get]
+func (h AdminApisHandler) GetCampusReminders(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.getContentItemsByCategory(claims, w, r, "campus_reminder")
+}
+
+// CreateCampusReminder creates a new campus reminder. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Creates a new campus reminder. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminCreateCampusReminder
+// @Param data body createContentItemByCategoryRequestBody true "Params"
+// @Accept json
+// @Success 200 {object} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/campus_reminders [post]
+func (h AdminApisHandler) CreateCampusReminder(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.createContentItemByCategory(claims, w, r, "campus_reminder")
+}
+
+// CampusReminder Updates a campus reminder with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Updates a campus reminder with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminCampusReminder
+// @Param data body updateContentItemByCategoryRequestBody true "Params"
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/campus_reminders/{id} [put]
+func (h AdminApisHandler) UpdateCampusReminder(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.updateContentItemByCategory(claims, w, r, "campus_reminder")
+}
+
+// DeleteCampusReminder Deletes a campus reminder with the specified id
+// @Description Deletes a campus reminder with the specified id
+// @Tags Admin
+// @ID AdminDeleteCampusReminder
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/campus_reminders/{id} [delete]
+func (h AdminApisHandler) DeleteCampusReminder(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.deleteContentItemByCategory(claims, w, r, "campus_reminder")
+}
+
+// GetGiesOnboardingChecklists Retrieves gies onboarding checklists
+// @Description Retrieves gies onboarding checklists
+// @Tags Admin
+// @ID AdminGetGiesOnboardingChecklists
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Param ids query string false "Comma separated IDs of the desired records"
+// @Param offset query string false "offset"
+// @Param limit query string false "limit - limit the result"
+// @Param order query string false "order - Possible values: asc, desc. Default: desc"
+// @Accept json
+// @Success 200 {array} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/gies_onboarding_checklist [get]
+func (h AdminApisHandler) GetGiesOnboardingChecklists(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.getContentItemsByCategory(claims, w, r, "gies_onboarding_checklist")
+}
+
+// CreateGiesOnboardingChecklist creates a new gies onboarding checklist. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Creates a new gies onboarding checklist. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminCreateGiesOnboardingChecklist
+// @Param data body createContentItemByCategoryRequestBody true "Params"
+// @Accept json
+// @Success 200 {object} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/gies_onboarding_checklist [post]
+func (h AdminApisHandler) CreateGiesOnboardingChecklist(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.createContentItemByCategory(claims, w, r, "gies_onboarding_checklist")
+}
+
+// UpdateGiesOnboardingChecklist Updates a gies onboarding checklist with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Updates a gies onboarding checklist with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminUpdateGiesOnboardingChecklist
+// @Param data body updateContentItemByCategoryRequestBody true "Params"
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/gies_onboarding_checklist/{id} [put]
+func (h AdminApisHandler) UpdateGiesOnboardingChecklist(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.updateContentItemByCategory(claims, w, r, "gies_onboarding_checklist")
+}
+
+// DeleteGiesOnboardingChecklist Deletes a gies onboarding checklist with the specified id
+// @Description Deletes a gies onboarding checklist with the specified id
+// @Tags Admin
+// @ID AdminDeleteGiesOnboardingChecklist
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/gies_onboarding_checklist/{id} [delete]
+func (h AdminApisHandler) DeleteGiesOnboardingChecklist(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.deleteContentItemByCategory(claims, w, r, "gies_onboarding_checklist")
+}
+
+// GetUIUCOnboardingChecklists Retrieves uiuc onboarding checklist items
+// @Description Retrieves uiuc onboarding checklist items
+// @Tags Admin
+// @ID AdminGetUIUCOnboardingChecklists
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Param ids query string false "Comma separated IDs of the desired records"
+// @Param offset query string false "offset"
+// @Param limit query string false "limit - limit the result"
+// @Param order query string false "order - Possible values: asc, desc. Default: desc"
+// @Accept json
+// @Success 200 {array} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/uiuc_onboarding_checklists [get]
+func (h AdminApisHandler) GetUIUCOnboardingChecklists(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.getContentItemsByCategory(claims, w, r, "uiuc_onboarding_checklists")
+}
+
+// CreateUIUCOnboardingChecklist creates a new uiuc onboarding checklist. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Creates a new uiuc onboarding checklist. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminCreateUIUCOnboardingChecklist
+// @Param data body createContentItemByCategoryRequestBody true "Params"
+// @Accept json
+// @Success 200 {object} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/uiuc_onboarding_checklists [post]
+func (h AdminApisHandler) CreateUIUCOnboardingChecklist(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.createContentItemByCategory(claims, w, r, "uiuc_onboarding_checklists")
+}
+
+// UpdateUIUCOnboardingChecklist Updates a uiuc onboarding checklist with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Updates a uiuc onboarding checklist with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminUpdateUIUCOnboardingChecklist
+// @Param data body updateContentItemByCategoryRequestBody true "Params"
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/uiuc_onboarding_checklists/{id} [put]
+func (h AdminApisHandler) UpdateUIUCOnboardingChecklist(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.updateContentItemByCategory(claims, w, r, "uiuc_onboarding_checklists")
+}
+
+// DeleteUIUCOnboardingChecklist Deletes a uiuc onboarding checklist with the specified id
+// @Description Deletes a uiuc onboarding checklist with the specified id
+// @Tags Admin
+// @ID AdminDeleteUIUCOnboardingChecklist
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/uiuc_onboarding_checklists/{id} [delete]
+func (h AdminApisHandler) DeleteUIUCOnboardingChecklist(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.deleteContentItemByCategory(claims, w, r, "uiuc_onboarding_checklists")
+}
+
+// GiesNudgeTemplates Retrieves gies nudge template items
+// @Description Retrieves gies nudge template items
+// @Tags Admin
+// @ID AdminGiesNudgeTemplates
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Param ids query string false "Comma separated IDs of the desired records"
+// @Param offset query string false "offset"
+// @Param limit query string false "limit - limit the result"
+// @Param order query string false "order - Possible values: asc, desc. Default: desc"
+// @Accept json
+// @Success 200 {array} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/gies_nudge_templates [get]
+func (h AdminApisHandler) GetGiesNudgeTemplates(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.getContentItemsByCategory(claims, w, r, "gies_nudge_templates")
+}
+
+// GiesNudgeTemplate creates a new gies nudge template. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Creates a new gies nudge template. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminGiesNudgeTemplate
+// @Param data body createContentItemByCategoryRequestBody true "Params"
+// @Accept json
+// @Success 200 {object} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/gies_nudge_templates [post]
+func (h AdminApisHandler) CreateGiesNudgeTemplate(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.createContentItemByCategory(claims, w, r, "gies_nudge_templates")
+}
+
+// UpdateGiesNudgeTemplate Updates a gies nudge template with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Updates a gies nudge template with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Tags Admin
+// @ID AdminUpdateGiesNudgeTemplate
+// @Param data body updateContentItemByCategoryRequestBody true "Params"
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.ContentItem
+// @Security AdminUserAuth
+// @Router /admin/gies_nudge_templates/{id} [put]
+func (h AdminApisHandler) UpdateGiesNudgeTemplate(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.updateContentItemByCategory(claims, w, r, "gies_nudge_templates")
+}
+
+// GiesNudgeTemplate Deletes a gies nudge template with the specified id
+// @Description Deletes a gies nudge template with the specified id
+// @Tags Admin
+// @ID AdminGiesNudgeTemplate
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/gies_nudge_templates/{id} [delete]
+func (h AdminApisHandler) DeleteGiesNudgeTemplate(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.deleteContentItemByCategory(claims, w, r, "gies_nudge_templates")
+}
+
 func (h AdminApisHandler) getContentItemsByCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request, category string) {
 	//get all-apps param value
 	allApps := false //false by defautl
