@@ -73,7 +73,8 @@ func NewCoreAuth(app *core.Application, config model.Config) *CoreAuth {
 		log.Fatalf("Error initializing auth service: %v", err)
 	}
 
-	adminPermissionAuth := authorization.NewCasbinStringAuthorization("driver/web/authorization_policy.csv")
+	adminPermissionAuth := authorization.NewCasbinAuthorization("driver/web/authorization_model.conf",
+		"driver/web/authorization_policy.csv")
 	tokenAuth, err := tokenauth.NewTokenAuth(true, authService, adminPermissionAuth, nil)
 	if err != nil {
 		log.Fatalf("Error intitializing token auth: %v", err)
