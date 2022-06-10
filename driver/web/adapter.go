@@ -45,7 +45,7 @@ type Adapter struct {
 
 // @title Rokwire Content Building Block API
 // @description Rokwire Content Building Block API Documentation.
-// @version 1.1.10
+// @version 1.2.0
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host localhost
