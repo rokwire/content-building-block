@@ -600,7 +600,7 @@ func (h AdminApisHandler) CreateCampusReminder(claims *tokenauth.Claims, w http.
 	h.createContentItemByCategory(claims, w, r, "campus_reminder")
 }
 
-// CampusReminder Updates a campus reminder with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// UpdateCampusReminder Updates a campus reminder with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
 // @Description Updates a campus reminder with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Admin
 // @ID AdminCampusReminder
@@ -738,7 +738,7 @@ func (h AdminApisHandler) DeleteUIUCOnboardingChecklist(claims *tokenauth.Claims
 	h.deleteContentItemByCategory(claims, w, r, "uiuc_onboarding_checklists")
 }
 
-// GiesNudgeTemplates Retrieves gies nudge template items
+// GetGiesNudgeTemplates Retrieves gies nudge template items
 // @Description Retrieves gies nudge template items
 // @Tags Admin
 // @ID AdminGiesNudgeTemplates
@@ -755,7 +755,7 @@ func (h AdminApisHandler) GetGiesNudgeTemplates(claims *tokenauth.Claims, w http
 	h.getContentItemsByCategory(claims, w, r, "gies_nudge_templates")
 }
 
-// GiesNudgeTemplate creates a new gies nudge template. <b> The data element could be either a primitive or nested json or array.</b>
+// CreateGiesNudgeTemplate creates a new gies nudge template. <b> The data element could be either a primitive or nested json or array.</b>
 // @Description Creates a new gies nudge template. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Admin
 // @ID AdminGiesNudgeTemplate
@@ -782,7 +782,7 @@ func (h AdminApisHandler) UpdateGiesNudgeTemplate(claims *tokenauth.Claims, w ht
 	h.updateContentItemByCategory(claims, w, r, "gies_nudge_templates")
 }
 
-// GiesNudgeTemplate Deletes a gies nudge template with the specified id
+// DeleteGiesNudgeTemplate Deletes a gies nudge template with the specified id
 // @Description Deletes a gies nudge template with the specified id
 // @Tags Admin
 // @ID AdminGiesNudgeTemplate
