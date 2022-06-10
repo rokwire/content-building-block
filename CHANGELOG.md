@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
+- Update README file [#64](https://github.com/rokwire/content-building-block/issues/64)
 - Multi-tenancy [#55](https://github.com/rokwire/content-building-block/issues/55)
 
 ## [1.1.12] - 2021-05-13
