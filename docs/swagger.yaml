@@ -2,22 +2,37 @@ basePath: /content
 definitions:
   ContentItem:
     properties:
+      app_id:
+        type: string
       category:
         type: string
       data:
         description: could be eigther a primitive or nested json or array
+        type: object
       date_created:
         type: string
       date_updated:
         type: string
       id:
         type: string
+      org_id:
+        type: string
+    type: object
+  createContentItemByCategoryRequestBody:
+    properties:
+      all_apps:
+        type: boolean
+      data:
+        type: object
     type: object
   createContentItemRequestBody:
     properties:
+      all_apps:
+        type: boolean
       category:
         type: string
-      data: {}
+      data:
+        type: object
     type: object
   getContentItemsRequestBody:
     properties:
@@ -32,6 +47,13 @@ definitions:
         items:
           type: string
         type: array
+    type: object
+  updateContentItemByCategoryRequestBody:
+    properties:
+      all_apps:
+        type: boolean
+      data:
+        type: object
     type: object
   uploadImageResponse:
     properties:
@@ -48,13 +70,119 @@ info:
   title: Rokwire Content Building Block API
   version: 1.1.10
 paths:
+  /admin/campus_reminders:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves campus reminders
+      operationId: AdminGetCampusReminders
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      - description: Comma separated IDs of the desired records
+        in: query
+        name: ids
+        type: string
+      - description: offset
+        in: query
+        name: offset
+        type: string
+      - description: limit - limit the result
+        in: query
+        name: limit
+        type: string
+      - description: 'order - Possible values: asc, desc. Default: desc'
+        in: query
+        name: order
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ContentItem'
+            type: array
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Creates a new campus reminder. <b> The data element could be either
+        a primitive or nested json or array.</b>
+      operationId: AdminCreateCampusReminder
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/createContentItemByCategoryRequestBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/campus_reminders/{id}:
+    delete:
+      description: Deletes a campus reminder with the specified id
+      operationId: AdminDeleteCampusReminder
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      responses:
+        "200": {}
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    put:
+      consumes:
+      - application/json
+      description: Updates a campus reminder with the specified id. <b> The data element
+        could be either a primitive or nested json or array.</b>
+      operationId: AdminCampusReminder
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/updateContentItemByCategoryRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
   /admin/content_item/categories:
     get:
       description: Retrieves  all content item categories that have in the database
       operationId: AdminGetContentItemsCategories
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -67,6 +195,11 @@ paths:
         a primitive or nested json or array.</b>
       operationId: AdminGetContentItems
       parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
       - description: offset
         in: query
         name: offset
@@ -116,9 +249,14 @@ paths:
     delete:
       description: Deletes a content item with the specified id
       operationId: AdminDeleteContentItem
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -129,6 +267,12 @@ paths:
       description: Retrieves a content item by id. <b> The data element could be either
         a primitive or nested json or array.</b>
       operationId: AdminGetContentItem
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
       produces:
       - application/json
       responses:
@@ -157,13 +301,215 @@ paths:
       - AdminUserAuth: []
       tags:
       - Admin
+  /admin/gies_nudge_templates:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves gies nudge template items
+      operationId: AdminGiesNudgeTemplates
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      - description: Comma separated IDs of the desired records
+        in: query
+        name: ids
+        type: string
+      - description: offset
+        in: query
+        name: offset
+        type: string
+      - description: limit - limit the result
+        in: query
+        name: limit
+        type: string
+      - description: 'order - Possible values: asc, desc. Default: desc'
+        in: query
+        name: order
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ContentItem'
+            type: array
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Creates a new gies nudge template. <b> The data element could be
+        either a primitive or nested json or array.</b>
+      operationId: AdminGiesNudgeTemplate
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/createContentItemByCategoryRequestBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/gies_nudge_templates/{id}:
+    delete:
+      description: Deletes a gies nudge template with the specified id
+      operationId: AdminGiesNudgeTemplate
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      responses:
+        "200": {}
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    put:
+      consumes:
+      - application/json
+      description: Updates a gies nudge template with the specified id. <b> The data
+        element could be either a primitive or nested json or array.</b>
+      operationId: AdminUpdateGiesNudgeTemplate
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/updateContentItemByCategoryRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/gies_onboarding_checklist:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves gies onboarding checklists
+      operationId: AdminGetGiesOnboardingChecklists
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      - description: Comma separated IDs of the desired records
+        in: query
+        name: ids
+        type: string
+      - description: offset
+        in: query
+        name: offset
+        type: string
+      - description: limit - limit the result
+        in: query
+        name: limit
+        type: string
+      - description: 'order - Possible values: asc, desc. Default: desc'
+        in: query
+        name: order
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ContentItem'
+            type: array
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Creates a new gies onboarding checklist. <b> The data element could
+        be either a primitive or nested json or array.</b>
+      operationId: AdminCreateGiesOnboardingChecklist
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/createContentItemByCategoryRequestBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/gies_onboarding_checklist/{id}:
+    delete:
+      description: Deletes a gies onboarding checklist with the specified id
+      operationId: AdminDeleteGiesOnboardingChecklist
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      responses:
+        "200": {}
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    put:
+      consumes:
+      - application/json
+      description: Updates a gies onboarding checklist with the specified id. <b>
+        The data element could be either a primitive or nested json or array.</b>
+      operationId: AdminUpdateGiesOnboardingChecklist
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/updateContentItemByCategoryRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
   /admin/health_location/{id}:
     delete:
+      deprecated: true
       description: Deletes a health location with the specified id
       operationId: AdminDeleteHealthLocation
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -172,6 +518,7 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves  all health locations
       operationId: AdminGetHealthLocations
       parameters:
@@ -180,8 +527,7 @@ paths:
         name: ids
         type: string
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -189,11 +535,11 @@ paths:
     post:
       consumes:
       - application/json
+      deprecated: true
       description: Create a new health location
       operationId: AdminCreateHealthLocation
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -202,13 +548,13 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves a health location by id
       operationId: AdminGetHealthLocation
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -216,13 +562,13 @@ paths:
     put:
       consumes:
       - application/json
+      deprecated: true
       description: Updates a health location with the specified id
       operationId: AdminUpdateHealthLocation
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -277,6 +623,7 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves  all student guides
       operationId: AdminGetStudentGuides
       parameters:
@@ -285,8 +632,7 @@ paths:
         name: ids
         type: string
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -294,22 +640,22 @@ paths:
     post:
       consumes:
       - application/json
+      deprecated: true
       description: Creates a student guide item
       operationId: AdminCreateStudentGuide
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
       - Admin
   /admin/student_guides/{id}:
     delete:
+      deprecated: true
       description: Deletes a student guide item with the specified id
       operationId: AdminDeleteStudentGuide
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -317,13 +663,13 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves  all items
       operationId: AdminGetStudentGuide
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - AdminUserAuth: []
       tags:
@@ -331,13 +677,417 @@ paths:
     put:
       consumes:
       - application/json
+      deprecated: true
       description: Updates a student guide with the specified id
       operationId: AdminUpdateStudentGuide
       produces:
       - application/json
       responses:
+        "200": {}
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/uiuc_onboarding_checklists:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves uiuc onboarding checklist items
+      operationId: AdminGetUIUCOnboardingChecklists
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      - description: Comma separated IDs of the desired records
+        in: query
+        name: ids
+        type: string
+      - description: offset
+        in: query
+        name: offset
+        type: string
+      - description: limit - limit the result
+        in: query
+        name: limit
+        type: string
+      - description: 'order - Possible values: asc, desc. Default: desc'
+        in: query
+        name: order
+        type: string
+      responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ContentItem'
+            type: array
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Creates a new uiuc onboarding checklist. <b> The data element could
+        be either a primitive or nested json or array.</b>
+      operationId: AdminCreateUIUCOnboardingChecklist
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/createContentItemByCategoryRequestBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/uiuc_onboarding_checklists/{id}:
+    delete:
+      description: Deletes a uiuc onboarding checklist with the specified id
+      operationId: AdminDeleteUIUCOnboardingChecklist
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      responses:
+        "200": {}
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    put:
+      consumes:
+      - application/json
+      description: Updates a uiuc onboarding checklist with the specified id. <b>
+        The data element could be either a primitive or nested json or array.</b>
+      operationId: AdminUpdateUIUCOnboardingChecklist
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/updateContentItemByCategoryRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/v2/health_locations:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves Retrieves health locations
+      operationId: AdminGetHealthLocationsV2
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      - description: Comma separated IDs of the desired records
+        in: query
+        name: ids
+        type: string
+      - description: offset
+        in: query
+        name: offset
+        type: string
+      - description: limit - limit the result
+        in: query
+        name: limit
+        type: string
+      - description: 'order - Possible values: asc, desc. Default: desc'
+        in: query
+        name: order
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ContentItem'
+            type: array
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Creates a new health location. <b> The data element could be either
+        a primitive or nested json or array.</b>
+      operationId: AdminCreateHealthLocationV2
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/createContentItemByCategoryRequestBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/v2/health_locations/{id}:
+    delete:
+      description: Deletes a health location with the specified id
+      operationId: AdminDeleteHealthLocationV2
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      responses:
+        "200": {}
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    put:
+      consumes:
+      - application/json
+      description: Updates a health location with the specified id. <b> The data element
+        could be either a primitive or nested json or array.</b>
+      operationId: AdminUpdateHealthLocationV2
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/updateContentItemByCategoryRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/v2/student_guides:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves student guides
+      operationId: AdminGetStudentGuidesV2
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      - description: Comma separated IDs of the desired records
+        in: query
+        name: ids
+        type: string
+      - description: offset
+        in: query
+        name: offset
+        type: string
+      - description: limit - limit the result
+        in: query
+        name: limit
+        type: string
+      - description: 'order - Possible values: asc, desc. Default: desc'
+        in: query
+        name: order
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ContentItem'
+            type: array
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Creates a new student guide. <b> The data element could be either
+        a primitive or nested json or array.</b>
+      operationId: AdminCreateStudentGuidesV2
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/createContentItemByCategoryRequestBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/v2/student_guides/{id}:
+    delete:
+      description: Deletes a student guide with the specified id
+      operationId: AdminDeleteStudentGuidesV2
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      responses:
+        "200": {}
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    put:
+      consumes:
+      - application/json
+      description: Updates a student guide with the specified id. <b> The data element
+        could be either a primitive or nested json or array.</b>
+      operationId: AdminUpdateStudentGuidesV2
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/updateContentItemByCategoryRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/wellness:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves wellness items
+      operationId: AdminGetWellness
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      - description: Comma separated IDs of the desired records
+        in: query
+        name: ids
+        type: string
+      - description: offset
+        in: query
+        name: offset
+        type: string
+      - description: limit - limit the result
+        in: query
+        name: limit
+        type: string
+      - description: 'order - Possible values: asc, desc. Default: desc'
+        in: query
+        name: order
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ContentItem'
+            type: array
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Creates a new wellness. <b> The data element could be either a
+        primitive or nested json or array.</b>
+      operationId: AdminCreateWellness
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/createContentItemByCategoryRequestBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+  /admin/wellness/{id}:
+    delete:
+      description: Deletes a wellness with the specified id
+      operationId: AdminDeleteWellness
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
+      responses:
+        "200": {}
+      security:
+      - AdminUserAuth: []
+      tags:
+      - Admin
+    put:
+      consumes:
+      - application/json
+      description: Updates a wellness with the specified id. <b> The data element
+        could be either a primitive or nested json or array.</b>
+      operationId: AdminUpdateWellness
+      parameters:
+      - description: Params
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/updateContentItemByCategoryRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ContentItem'
       security:
       - AdminUserAuth: []
       tags:
@@ -346,9 +1096,14 @@ paths:
     get:
       description: Retrieves  all content item categories that have in the database
       operationId: GetContentItemsCategories
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - UserAuth: []
       tags:
@@ -361,6 +1116,11 @@ paths:
         a primitive or nested json or array.</b>
       operationId: GetContentItems
       parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
       - description: offset
         in: query
         name: offset
@@ -398,6 +1158,12 @@ paths:
       description: Retrieves a content item by id. <b> The data element could be either
         a primitive or nested json or array.</b>
       operationId: GetContentItem
+      parameters:
+      - description: It says if the data is associated with the current app or it
+          is for all the apps within the organization. It is 'false' by default.
+        in: query
+        name: all-apps
+        type: boolean
       produces:
       - application/json
       responses:
@@ -413,6 +1179,7 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves  all health locations
       operationId: GetHealthLocations
       parameters:
@@ -421,8 +1188,7 @@ paths:
         name: ids
         type: string
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -431,13 +1197,13 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves a health location by id
       operationId: GetHealthLocation
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -480,8 +1246,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - UserAuth: []
       tags:
@@ -491,8 +1256,7 @@ paths:
       description: Deletes the profile photo of the user who request
       operationId: DeleteProfilePhoto
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -503,8 +1267,7 @@ paths:
       description: Stores profile photo
       operationId: StoreProfilePhoto
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -519,8 +1282,7 @@ paths:
         name: size
         type: string
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -529,6 +1291,7 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves  all student guides
       operationId: GetStudentGuides
       parameters:
@@ -537,8 +1300,7 @@ paths:
         name: ids
         type: string
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -547,13 +1309,13 @@ paths:
     get:
       consumes:
       - application/json
+      deprecated: true
       description: Retrieves a student guide by id
       operationId: GetStudentGuide
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -572,8 +1334,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - RokwireAuth: []
       tags:
@@ -585,8 +1346,7 @@ paths:
       produces:
       - text/plain
       responses:
-        "200":
-          description: ""
+        "200": {}
       tags:
       - Client
 schemes:

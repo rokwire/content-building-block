@@ -20,45 +20,148 @@ package web
 import (
 	"content/core"
 	"content/core/model"
-	web "content/driver/web/auth"
-	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/rokwire/core-auth-library-go/authorization"
+	"github.com/rokwire/core-auth-library-go/authservice"
+	"github.com/rokwire/core-auth-library-go/tokenauth"
+	"github.com/rokwire/logging-library-go/errors"
+	"github.com/rokwire/logging-library-go/logs"
+	"github.com/rokwire/logging-library-go/logutils"
 )
+
+//Authorization is an interface for auth types
+type Authorization interface {
+	check(req *http.Request) (int, *tokenauth.Claims, error)
+	start()
+}
 
 // Auth handler
 type Auth struct {
-	apiKeysAuth    *web.APIKeysAuth
-	shibbolethAuth *web.ShibbolethAuth
-	coreAuth       *web.CoreAuth
-}
-
-func (auth *Auth) clientIDCheck(w http.ResponseWriter, r *http.Request) bool {
-	clientID := r.Header.Get("APP")
-	if len(clientID) == 0 {
-		clientID = "edu.illinois.rokwire"
-	}
-
-	log.Println(fmt.Sprintf("400 - Bad Request"))
-	w.WriteHeader(http.StatusBadRequest)
-	w.Write([]byte("Bad Request"))
-	return false
-}
-
-func (auth *Auth) apiKeyCheck(w http.ResponseWriter, r *http.Request) bool {
-	return auth.apiKeysAuth.Check(r)
-}
-
-func (auth *Auth) shibbolethCheck(w http.ResponseWriter, r *http.Request) (bool, *model.ShibbolethToken) {
-	return auth.shibbolethAuth.Check(r)
+	coreAuth *CoreAuth
 }
 
 // NewAuth creates new auth handler
 func NewAuth(app *core.Application, config model.Config) *Auth {
-	apiKeysAuth := web.NewAPIKeysAuth(config.AppKeys)
-	shibbolethAuth := web.NewShibbolethAuth(app, config)
-	coreAuth := web.NewCoreAuth(app, config)
+	coreAuth := NewCoreAuth(app, config)
 
-	auth := Auth{apiKeysAuth: apiKeysAuth, shibbolethAuth: shibbolethAuth, coreAuth: coreAuth}
+	auth := Auth{coreAuth: coreAuth}
 	return &auth
+}
+
+// CoreAuth implementation
+type CoreAuth struct {
+	app       *core.Application
+	tokenAuth *tokenauth.TokenAuth
+
+	permissionsAuth *PermissionsAuth
+	userAuth        *UserAuth
+	standardAuth    *StandardAuth
+}
+
+// NewCoreAuth creates new CoreAuth
+func NewCoreAuth(app *core.Application, config model.Config) *CoreAuth {
+
+	remoteConfig := authservice.RemoteAuthDataLoaderConfig{
+		AuthServicesHost: config.CoreBBHost,
+	}
+
+	serviceLoader, err := authservice.NewRemoteAuthDataLoader(remoteConfig, []string{"core"}, logs.NewLogger("content", &logs.LoggerOpts{}))
+	authService, err := authservice.NewAuthService("content", config.ContentServiceURL, serviceLoader)
+	if err != nil {
+		log.Fatalf("Error initializing auth service: %v", err)
+	}
+
+	adminPermissionAuth := authorization.NewCasbinStringAuthorization("driver/web/authorization_policy.csv")
+	tokenAuth, err := tokenauth.NewTokenAuth(true, authService, adminPermissionAuth, nil)
+	if err != nil {
+		log.Fatalf("Error intitializing token auth: %v", err)
+	}
+	permissionsAuth := newPermissionsAuth(tokenAuth)
+	usersAuth := newUserAuth(tokenAuth)
+	standardAuth := newStandardAuth(tokenAuth)
+
+	auth := CoreAuth{app: app, tokenAuth: tokenAuth, permissionsAuth: permissionsAuth,
+		userAuth: usersAuth, standardAuth: standardAuth}
+	return &auth
+}
+
+//PermissionsAuth entity
+//This enforces that the user has permissions matching the policy
+type PermissionsAuth struct {
+	tokenAuth *tokenauth.TokenAuth
+}
+
+func (a *PermissionsAuth) start() {}
+
+func (a *PermissionsAuth) check(req *http.Request) (int, *tokenauth.Claims, error) {
+	claims, err := a.tokenAuth.CheckRequestTokens(req)
+	if err != nil {
+		return http.StatusUnauthorized, nil, errors.WrapErrorAction("typeCheckServicesAuthRequestToken", logutils.TypeToken, nil, err)
+	}
+
+	if err == nil && claims != nil {
+		err = a.tokenAuth.AuthorizeRequestPermissions(claims, req)
+		if err != nil {
+			return http.StatusForbidden, nil, errors.WrapErrorAction("check permissions", logutils.TypeRequest, nil, err)
+		}
+	}
+
+	return http.StatusOK, claims, err
+}
+
+func newPermissionsAuth(tokenAuth *tokenauth.TokenAuth) *PermissionsAuth {
+	permissionsAuth := PermissionsAuth{tokenAuth: tokenAuth}
+	return &permissionsAuth
+}
+
+//UserAuth entity
+// This enforces that the user is not anonymous
+type UserAuth struct {
+	tokenAuth *tokenauth.TokenAuth
+}
+
+func (a *UserAuth) start() {}
+
+func (a *UserAuth) check(req *http.Request) (int, *tokenauth.Claims, error) {
+	claims, err := a.tokenAuth.CheckRequestTokens(req)
+	if err != nil {
+		return http.StatusUnauthorized, nil, errors.WrapErrorAction("typeCheckServicesAuthRequestToken", logutils.TypeToken, nil, err)
+	}
+
+	if err == nil && claims != nil {
+		if claims.Anonymous {
+			return http.StatusForbidden, nil, errors.New("token must not be anonymous")
+		}
+	}
+
+	return http.StatusOK, claims, err
+}
+
+func newUserAuth(tokenAuth *tokenauth.TokenAuth) *UserAuth {
+	userAuth := UserAuth{tokenAuth: tokenAuth}
+	return &userAuth
+}
+
+//StandardAuth entity
+// This enforces standard auth check
+type StandardAuth struct {
+	tokenAuth *tokenauth.TokenAuth
+}
+
+func (a *StandardAuth) start() {}
+
+func (a *StandardAuth) check(req *http.Request) (int, *tokenauth.Claims, error) {
+	claims, err := a.tokenAuth.CheckRequestTokens(req)
+	if err != nil {
+		return http.StatusUnauthorized, nil, errors.WrapErrorAction("typeCheckServicesAuthRequestToken", logutils.TypeToken, nil, err)
+	}
+
+	return http.StatusOK, claims, err
+}
+
+func newStandardAuth(tokenAuth *tokenauth.TokenAuth) *StandardAuth {
+	standartAuth := StandardAuth{tokenAuth: tokenAuth}
+	return &standartAuth
 }

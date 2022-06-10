@@ -57,11 +57,11 @@ func main() {
 	}
 
 	// S3 Adapter
-	s3Bucket := getEnvKey("S3_BUCKET", true)
-	s3ProfileImagesBucket := getEnvKey("S3_PROFILE_IMAGES_BUCKET", true)
-	s3Region := getEnvKey("S3_REGION", true)
-	awsAccessKeyID := getEnvKey("AWS_ACCESS_KEY_ID", true)
-	awsSecretAccessKey := getEnvKey("AWS_SECRET_ACCESS_KEY", true)
+	s3Bucket := getEnvKey("CONTENT_S3_BUCKET", true)
+	s3ProfileImagesBucket := getEnvKey("CONTENT_S3_PROFILE_IMAGES_BUCKET", true)
+	s3Region := getEnvKey("CONTENT_S3_REGION", true)
+	awsAccessKeyID := getEnvKey("CONTENT_AWS_ACCESS_KEY_ID", true)
+	awsSecretAccessKey := getEnvKey("CONTENT_AWS_SECRET_ACCESS_KEY", true)
 	awsConfig := &model.AWSConfig{S3Bucket: s3Bucket, S3ProfileImagesBucket: s3ProfileImagesBucket, S3Region: s3Region, AWSAccessKeyID: awsAccessKeyID, AWSSecretAccessKey: awsSecretAccessKey}
 	awsAdapter := awsstorage.NewAWSStorageAdapter(awsConfig)
 
@@ -69,57 +69,34 @@ func main() {
 
 	webpAdapter := webp.NewWebpAdapter()
 
-	defaultCacheExpirationSeconds := getEnvKey("DEFAULT_CACHE_EXPIRATION_SECONDS", false)
+	defaultCacheExpirationSeconds := getEnvKey("CONTENT_DEFAULT_CACHE_EXPIRATION_SECONDS", false)
 	cacheAdapter := cacheadapter.NewCacheAdapter(defaultCacheExpirationSeconds)
 
-	twitterFeedURL := getEnvKey("TWITTER_FEED_URL", true)
-	twitterAccessToken := getEnvKey("TWITTER_ACCESS_TOKEN", true)
+	twitterFeedURL := getEnvKey("CONTENT_TWITTER_FEED_URL", true)
+	twitterAccessToken := getEnvKey("CONTENT_TWITTER_ACCESS_TOKEN", true)
 	twitterAdapter := twitter.NewTwitterAdapter(twitterFeedURL, twitterAccessToken)
 
+	mtAppID := getEnvKey("CONTENT_MULTI_TENANCY_APP_ID", true)
+	mtOrgID := getEnvKey("CONTENT_MULTI_TENANCY_ORG_ID", true)
+
 	// application
-	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, tempStorageAdapter, webpAdapter, twitterAdapter, cacheAdapter)
+	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, tempStorageAdapter,
+		webpAdapter, twitterAdapter, cacheAdapter, mtAppID, mtOrgID)
 	application.Start()
 
 	// web adapter
-	apiKeys := getAPIKeys()
 	host := getEnvKey("CONTENT_HOST", true)
-	oidcProvider := getEnvKey("CONTENT_OIDC_PROVIDER", true)
-	oidcClientIDs := getEnvKeyAsList("CONTENT_OIDC_CLIENT_IDS", true)
-	phoneSecret := getEnvKey("CONTENT_PHONE_SECRET", true)
-	authKeys := getEnvKey("CONTENT_AUTH_KEYS", true)
-	authIssuer := getEnvKey("CONTENT_AUTH_ISSUER", true)
-	coreAuthPrivateKey := getEnvKey("CORE_AUTH_PRIVATE_KEY", true)
-	coreBBHost := getEnvKey("CORE_BB_HOST", true)
+	coreBBHost := getEnvKey("CONTENT_CORE_BB_HOST", true)
 	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
 
 	config := model.Config{
-		AppKeys:            apiKeys,
-		OidcProvider:       oidcProvider,
-		OidcClientIDs:      oidcClientIDs,
-		PhoneAuthSecret:    phoneSecret,
-		AuthKeys:           authKeys,
-		AuthIssuer:         authIssuer,
-		CoreAuthPrivateKey: coreAuthPrivateKey,
-		CoreBBHost:         coreBBHost,
-		ContentServiceURL:  contentServiceURL,
+		CoreBBHost:        coreBBHost,
+		ContentServiceURL: contentServiceURL,
 	}
 
 	webAdapter := driver.NewWebAdapter(host, port, application, config)
 
 	webAdapter.Start()
-}
-
-func getAPIKeys() []string {
-	// get from the environment
-	rokwireAPIKeys := getEnvKey("ROKWIRE_API_KEYS", true)
-
-	// it is comma separated format
-	rokwireAPIKeysList := strings.Split(rokwireAPIKeys, ",")
-	if len(rokwireAPIKeysList) <= 0 {
-		log.Fatal("For some reasons the apis keys list is empty")
-	}
-
-	return rokwireAPIKeysList
 }
 
 func getEnvKeyAsList(key string, required bool) []string {

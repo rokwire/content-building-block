@@ -21,14 +21,15 @@ import (
 	"content/core"
 	"content/core/model"
 	"encoding/json"
-	"github.com/gorilla/mux"
-	"github.com/rokwire/core-auth-library-go/tokenauth"
-	"go.mongodb.org/mongo-driver/bson"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/gorilla/mux"
+	"github.com/rokwire/core-auth-library-go/tokenauth"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 const maxUploadSize = 15 * 1024 * 1024 // 15 mb
@@ -204,8 +205,9 @@ func (h ApisHandler) DeleteProfilePhoto(claims *tokenauth.Claims, w http.Respons
 // @Accept json
 // @Success 200
 // @Security RokwireAuth
+// @Deprecated true
 // @Router /student_guides [get]
-func (h ApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) GetStudentGuides(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	IDs := []string{}
 	IDskeys, ok := r.URL.Query()["ids"]
 	if ok && len(IDskeys[0]) > 0 {
@@ -213,7 +215,7 @@ func (h ApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
 		IDs = strings.Split(extIDs, ",")
 	}
 
-	resData, err := h.app.Services.GetStudentGuides(IDs)
+	resData, err := h.app.Services.GetStudentGuides(claims.AppID, claims.OrgID, IDs)
 	if err != nil {
 		log.Printf("Error on getting student guides by ids - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -244,12 +246,13 @@ func (h ApisHandler) GetStudentGuides(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Success 200
 // @Security RokwireAuth
+// @Deprecated true
 // @Router /student_guides/{id} [get]
-func (h ApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) GetStudentGuide(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
-	resData, err := h.app.Services.GetStudentGuide(guideID)
+	resData, err := h.app.Services.GetStudentGuide(claims.AppID, claims.OrgID, guideID)
 	if err != nil {
 		log.Printf("Error on getting student guide id - %s\n %s", guideID, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -276,8 +279,9 @@ func (h ApisHandler) GetStudentGuide(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Success 200
 // @Security RokwireAuth
+// @Deprecated true
 // @Router /health_locations [get]
-func (h ApisHandler) GetHealthLocations(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) GetHealthLocations(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	IDs := []string{}
 	IDskeys, ok := r.URL.Query()["ids"]
 	if ok && len(IDskeys[0]) > 0 {
@@ -285,7 +289,7 @@ func (h ApisHandler) GetHealthLocations(w http.ResponseWriter, r *http.Request) 
 		IDs = strings.Split(extIDs, ",")
 	}
 
-	resData, err := h.app.Services.GetHealthLocations(IDs)
+	resData, err := h.app.Services.GetHealthLocations(claims.AppID, claims.OrgID, IDs)
 	if err != nil {
 		log.Printf("Error on getting health locations by ids - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -316,12 +320,13 @@ func (h ApisHandler) GetHealthLocations(w http.ResponseWriter, r *http.Request) 
 // @Produce json
 // @Success 200
 // @Security RokwireAuth
+// @Deprecated true
 // @Router /health_locations/{id} [get]
-func (h ApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) GetHealthLocation(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
-	resData, err := h.app.Services.GetHealthLocation(guideID)
+	resData, err := h.app.Services.GetHealthLocation(claims.AppID, claims.OrgID, guideID)
 	if err != nil {
 		log.Printf("Error on getting health location id - %s\n %s", guideID, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -344,6 +349,7 @@ func (h ApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Request) {
 // @Description Retrieves  all content items. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Client
 // @ID GetContentItems
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
 // @Param offset query string false "offset"
 // @Param limit query string false "limit - limit the result"
 // @Param order query string false "order - Possible values: asc, desc. Default: desc"
@@ -352,7 +358,14 @@ func (h ApisHandler) GetHealthLocation(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} model.ContentItem
 // @Security UserAuth
 // @Router /content_items [get]
-func (h ApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) GetContentItems(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	//get all-apps param value
+	allApps := false //false by defautl
+	allAppsParam := r.URL.Query().Get("all-apps")
+	if allAppsParam != "" {
+		allApps, _ = strconv.ParseBool(allAppsParam)
+	}
+
 	var offset *int64
 	offsets, ok := r.URL.Query()["offset"]
 	if ok && len(offsets[0]) > 0 {
@@ -386,7 +399,7 @@ func (h ApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	resData, err := h.app.Services.GetContentItems(body.IDs, body.Categories, offset, limit, order)
+	resData, err := h.app.Services.GetContentItems(allApps, claims.AppID, claims.OrgID, body.IDs, body.Categories, offset, limit, order)
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -413,16 +426,24 @@ func (h ApisHandler) GetContentItems(w http.ResponseWriter, r *http.Request) {
 // @Description Retrieves a content item by id. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Client
 // @ID GetContentItem
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.ContentItem
 // @Security UserAuth
 // @Router /content_items/{id} [get]
-func (h ApisHandler) GetContentItem(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) GetContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	//get all-apps param value
+	allApps := false //false by defautl
+	allAppsParam := r.URL.Query().Get("all-apps")
+	if allAppsParam != "" {
+		allApps, _ = strconv.ParseBool(allAppsParam)
+	}
+
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	resData, err := h.app.Services.GetContentItem(id)
+	resData, err := h.app.Services.GetContentItem(allApps, claims.AppID, claims.OrgID, id)
 	if err != nil {
 		log.Printf("Error on getting content item id - %s\n %s", id, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -445,13 +466,21 @@ func (h ApisHandler) GetContentItem(w http.ResponseWriter, r *http.Request) {
 // @Description Retrieves  all content item categories that have in the database
 // @Tags Client
 // @ID GetContentItemsCategories
+// @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
 // @Success 200
 // @Security UserAuth
 // @Router /content_item/categories [get]
-func (h ApisHandler) GetContentItemsCategories(w http.ResponseWriter, r *http.Request) {
-	resData, err := h.app.Services.GetContentItemsCategories()
+func (h ApisHandler) GetContentItemsCategories(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	//get all-apps param value
+	allApps := false //false by defautl
+	allAppsParam := r.URL.Query().Get("all-apps")
+	if allAppsParam != "" {
+		allApps, _ = strconv.ParseBool(allAppsParam)
+	}
+
+	resData, err := h.app.Services.GetContentItemsCategories(allApps, claims.AppID, claims.OrgID)
 	if err != nil {
-		log.Printf("Error on cgetting content items - %s\n", err)
+		log.Printf("Error on getting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -486,7 +515,7 @@ func (h ApisHandler) GetContentItemsCategories(w http.ResponseWriter, r *http.Re
 // @Success 200
 // @Security UserAuth
 // @Router /image [post]
-func (h ApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) UploadImage(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	// validate the image type
 	path := r.PostFormValue("path")
 	if len(path) == 0 {
@@ -568,7 +597,7 @@ func (h ApisHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Security RokwireAuth
 // @Router /twitter/users/{user_id}/tweets [get]
-func (h ApisHandler) GetTweeterPosts(w http.ResponseWriter, r *http.Request) {
+func (h ApisHandler) GetTweeterPosts(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID := vars["user_id"]
 

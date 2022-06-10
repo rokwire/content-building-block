@@ -16,15 +16,12 @@ The following Environment variables are supported. The service will not start un
 Name|Value|Required|Description
 ---|---|---|---
 CONTENT_PORT | < value > | yes | The port number of the listening port
-CONTENT_AUTH_ISSUER | < value > | yes | Auth issuer base uri
-CONTENT_AUTH_KEYS | < value > | yes | Auth keys
 CONTENT_HOST | < value > | yes | Host name
 CONTENT_MONGO_AUTH | <mongodb://USER:PASSWORD@HOST:PORT/DATABASE NAME> | yes | MongoDB authentication string. The user must have read/write privileges.
 CONTENT_MONGO_DATABASE | < value > | yes | MongoDB database name
 CONTENT_MONGO_TIMEOUT | < value > | no | MongoDB timeout in milliseconds. Set default value(500 milliseconds) if omitted
 CONTENT_OIDC_CLIENT_IDS | < value > | yes | OIDC admin client id
 CONTENT_OIDC_PROVIDER | < value > | yes | OIDC provider
-CONTENT_PHONE_SECRET | < value > | yes | Phone secret
 CORE_BB_HOST | < value > | yes | Core BB host url
 ROKWIRE_API_KEYS | <value1,value2,value3> | yes | Comma separated list of rokwire api keys
 AWS_ACCESS_KEY_ID | < value > | yes | AWS Access key ID
@@ -34,6 +31,8 @@ S3_REGION | < value > | yes | AWS S3 region name
 TWITTER_FEED_URL | < value > | yes | Twitter Feed base URL
 TWITTER_ACCESS_TOKEN | < value > | yes | Twitter Bearer access token
 DEFAULT_CACHE_EXPIRATION_SECONDS | < value > | false | Default cache expiration time in seconds. Default: 120
+CONTENT_MULTI_TENANCY_APP_ID | < value > | yes | Application ID for moving from single to multi tenancy for the already exisiting data
+CONTENT_MULTI_TENANCY_ORG_ID | < value > | yes | Organization ID for moving from single to multi tenancy for the already exisiting data
 ### Run Application
 
 #### Run locally without Docker

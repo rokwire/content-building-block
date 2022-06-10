@@ -19,30 +19,35 @@ package core
 
 import (
 	"content/core/model"
+	"content/driven/storage"
+
 	"go.mongodb.org/mongo-driver/bson"
 )
 
 // Services exposes APIs for the driver adapters
 type Services interface {
 	GetVersion() string
-	GetStudentGuides(ids []string) ([]bson.M, error)
-	GetStudentGuide(id string) (bson.M, error)
-	CreateStudentGuide(item bson.M) (bson.M, error)
-	UpdateStudentGuide(id string, item bson.M) (bson.M, error)
-	DeleteStudentGuide(id string) error
+	GetStudentGuides(appID string, orgID string, ids []string) ([]bson.M, error)
+	GetStudentGuide(appID string, orgID string, id string) (bson.M, error)
+	CreateStudentGuide(appID string, orgID string, item bson.M) (bson.M, error)
+	UpdateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error)
+	DeleteStudentGuide(appID string, orgID string, id string) error
 
-	GetHealthLocations(ids []string) ([]bson.M, error)
-	GetHealthLocation(id string) (bson.M, error)
-	CreateHealthLocation(item bson.M) (bson.M, error)
-	UpdateHealthLocation(id string, item bson.M) (bson.M, error)
-	DeleteHealthLocation(id string) error
+	GetHealthLocations(appID string, orgID string, ids []string) ([]bson.M, error)
+	GetHealthLocation(appID string, orgID string, id string) (bson.M, error)
+	CreateHealthLocation(appID string, orgID string, item bson.M) (bson.M, error)
+	UpdateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error)
+	DeleteHealthLocation(appID string, orgID string, id string) error
 
-	GetContentItemsCategories() ([]string, error)
-	GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
-	GetContentItem(id string) (*model.ContentItemResponse, error)
-	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)
-	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
-	DeleteContentItem(id string) error
+	//allApps says if the data is associated with the current app or it is for all the apps within the organization
+	GetContentItemsCategories(allApps bool, appID string, orgID string) ([]string, error)
+	GetContentItems(allApps bool, appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
+	GetContentItem(allApps bool, appID string, orgID string, id string) (*model.ContentItemResponse, error)
+	CreateContentItem(allApps bool, appID string, orgID string, category string, data interface{}) (*model.ContentItem, error)
+	UpdateContentItem(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error)
+	UpdateContentItemData(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error)
+	DeleteContentItem(allApps bool, appID string, orgID string, id string) error
+	DeleteContentItemByCategory(allApps bool, appID string, orgID string, id string, category string) error
 
 	UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (*string, error)
 	GetProfileImage(userID string, imageType string) ([]byte, error)
@@ -62,72 +67,80 @@ func (s *servicesImpl) GetVersion() string {
 
 // Student Guides
 
-func (s *servicesImpl) GetStudentGuides(ids []string) ([]bson.M, error) {
-	return s.app.getStudentGuides(ids)
+func (s *servicesImpl) GetStudentGuides(appID string, orgID string, ids []string) ([]bson.M, error) {
+	return s.app.getStudentGuides(appID, orgID, ids)
 }
 
-func (s *servicesImpl) CreateStudentGuide(item bson.M) (bson.M, error) {
-	return s.app.createStudentGuide(item)
+func (s *servicesImpl) CreateStudentGuide(appID string, orgID string, item bson.M) (bson.M, error) {
+	return s.app.createStudentGuide(appID, orgID, item)
 }
 
-func (s *servicesImpl) GetStudentGuide(id string) (bson.M, error) {
-	return s.app.getStudentGuide(id)
+func (s *servicesImpl) GetStudentGuide(appID string, orgID string, id string) (bson.M, error) {
+	return s.app.getStudentGuide(appID, orgID, id)
 }
 
-func (s *servicesImpl) UpdateStudentGuide(id string, item bson.M) (bson.M, error) {
-	return s.app.updateStudentGuide(id, item)
+func (s *servicesImpl) UpdateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error) {
+	return s.app.updateStudentGuide(appID, orgID, id, item)
 }
 
-func (s *servicesImpl) DeleteStudentGuide(id string) error {
-	return s.app.deleteStudentGuide(id)
+func (s *servicesImpl) DeleteStudentGuide(appID string, orgID string, id string) error {
+	return s.app.deleteStudentGuide(appID, orgID, id)
 }
 
 // Health Locations
 
-func (s *servicesImpl) GetHealthLocations(ids []string) ([]bson.M, error) {
-	return s.app.getHealthLocations(ids)
+func (s *servicesImpl) GetHealthLocations(appID string, orgID string, ids []string) ([]bson.M, error) {
+	return s.app.getHealthLocations(appID, orgID, ids)
 }
 
-func (s *servicesImpl) CreateHealthLocation(item bson.M) (bson.M, error) {
-	return s.app.createHealthLocation(item)
+func (s *servicesImpl) CreateHealthLocation(appID string, orgID string, item bson.M) (bson.M, error) {
+	return s.app.createHealthLocation(appID, orgID, item)
 }
 
-func (s *servicesImpl) GetHealthLocation(id string) (bson.M, error) {
-	return s.app.getHealthLocation(id)
+func (s *servicesImpl) GetHealthLocation(appID string, orgID string, id string) (bson.M, error) {
+	return s.app.getHealthLocation(appID, orgID, id)
 }
 
-func (s *servicesImpl) UpdateHealthLocation(id string, item bson.M) (bson.M, error) {
-	return s.app.updateHealthLocation(id, item)
+func (s *servicesImpl) UpdateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error) {
+	return s.app.updateHealthLocation(appID, orgID, id, item)
 }
 
-func (s *servicesImpl) DeleteHealthLocation(id string) error {
-	return s.app.deleteHealthLocation(id)
+func (s *servicesImpl) DeleteHealthLocation(appID string, orgID string, id string) error {
+	return s.app.deleteHealthLocation(appID, orgID, id)
 }
 
 // Content Items
 
-func (s *servicesImpl) GetContentItemsCategories() ([]string, error) {
-	return s.app.getContentItemsCategories()
+func (s *servicesImpl) GetContentItemsCategories(allApps bool, appID string, orgID string) ([]string, error) {
+	return s.app.getContentItemsCategories(allApps, appID, orgID)
 }
 
-func (s *servicesImpl) GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
-	return s.app.getContentItems(ids, categoryList, offset, limit, order)
+func (s *servicesImpl) GetContentItems(allApps bool, appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
+	return s.app.getContentItems(allApps, appID, orgID, ids, categoryList, offset, limit, order)
 }
 
-func (s *servicesImpl) GetContentItem(id string) (*model.ContentItemResponse, error) {
-	return s.app.getContentItem(id)
+func (s *servicesImpl) GetContentItem(allApps bool, appID string, orgID string, id string) (*model.ContentItemResponse, error) {
+	return s.app.getContentItem(allApps, appID, orgID, id)
 }
 
-func (s *servicesImpl) CreateContentItem(item *model.ContentItem) (*model.ContentItem, error) {
-	return s.app.createContentItem(item)
+func (s *servicesImpl) CreateContentItem(allApps bool, appID string, orgID string, category string, data interface{}) (*model.ContentItem, error) {
+	return s.app.createContentItem(allApps, appID, orgID, category, data)
 }
 
-func (s *servicesImpl) UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error) {
-	return s.app.updateContentItem(id, item)
+func (s *servicesImpl) UpdateContentItem(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error) {
+	return s.app.updateContentItem(allApps, appID, orgID, id, category, data)
 }
 
-func (s *servicesImpl) DeleteContentItem(id string) error {
-	return s.app.deleteContentItem(id)
+func (s *servicesImpl) UpdateContentItemData(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error) {
+	return s.app.updateContentItemData(allApps, appID, orgID, id, category, data)
+}
+
+func (s *servicesImpl) DeleteContentItem(allApps bool, appID string, orgID string, id string) error {
+	return s.app.deleteContentItem(allApps, appID, orgID, id)
+}
+
+func (s *servicesImpl) DeleteContentItemByCategory(allApps bool, appID string, orgID string, id string, category string) error {
+	return s.app.deleteContentItemByCategory(allApps, appID, orgID, id, category)
 }
 
 // Misc
@@ -154,22 +167,32 @@ func (s *servicesImpl) GetTwitterPosts(userID string, twitterQueryParams string,
 
 // Storage is used by core to storage data - DB storage adapter, file storage adapter etc
 type Storage interface {
-	GetStudentGuides(ids []string) ([]bson.M, error)
-	GetStudentGuide(id string) (bson.M, error)
-	CreateStudentGuide(item bson.M) (bson.M, error)
-	UpdateStudentGuide(id string, item bson.M) (bson.M, error)
-	DeleteStudentGuide(id string) error
+	PerformTransaction(func(context storage.TransactionContext) error) error
 
-	GetHealthLocations(ids []string) ([]bson.M, error)
-	GetHealthLocation(id string) (bson.M, error)
-	CreateHealthLocation(item bson.M) (bson.M, error)
-	UpdateHealthLocation(id string, item bson.M) (bson.M, error)
-	DeleteHealthLocation(id string) error
+	GetStudentGuides(appID string, orgID string, ids []string) ([]bson.M, error)
+	GetStudentGuide(appID string, orgID string, id string) (bson.M, error)
+	CreateStudentGuide(appID string, orgID string, item bson.M) (bson.M, error)
+	UpdateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error)
+	DeleteStudentGuide(appID string, orgID string, id string) error
 
-	GetContentItemsCategories() ([]string, error)
-	GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
-	GetContentItem(id string) (*model.ContentItemResponse, error)
-	CreateContentItem(item *model.ContentItem) (*model.ContentItem, error)
-	UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error)
-	DeleteContentItem(id string) error
+	GetHealthLocations(appID string, orgID string, ids []string) ([]bson.M, error)
+	GetHealthLocation(appID string, orgID string, id string) (bson.M, error)
+	CreateHealthLocation(appID string, orgID string, item bson.M) (bson.M, error)
+	UpdateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error)
+	DeleteHealthLocation(appID string, orgID string, id string) error
+
+	GetContentItemsCategories(appID *string, orgID string) ([]string, error)
+	FindContentItems(appID *string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error)
+	GetContentItems(appID *string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error)
+	GetContentItem(appID *string, orgID string, id string) (*model.ContentItemResponse, error)
+	CreateContentItem(item model.ContentItem) (*model.ContentItem, error)
+	UpdateContentItem(appID *string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error)
+	DeleteContentItem(appID *string, orgID string, id string) error
+	SaveContentItem(item model.ContentItem) error
+
+	//Used for multi-tenancy for already exisiting data.
+	//To be removed when this is applied to all environments.
+	FindAllContentItems(context storage.TransactionContext) ([]model.ContentItemResponse, error)
+	StoreMultiTenancyData(context storage.TransactionContext, appID string, orgID string) error
+	///
 }
