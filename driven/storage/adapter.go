@@ -16,14 +16,18 @@ package storage
 
 import (
 	"content/core/model"
+	"context"
 	"fmt"
 	"log"
 	"strconv"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/rokwire/logging-library-go/errors"
+	"github.com/rokwire/logging-library-go/logutils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -38,22 +42,37 @@ func (sa *Adapter) Start() error {
 	return err
 }
 
-// NewStorageAdapter creates a new storage adapter instance
-func NewStorageAdapter(mongoDBAuth string, mongoDBName string, mongoTimeout string) *Adapter {
-	timeout, err := strconv.Atoi(mongoTimeout)
-	if err != nil {
-		log.Println("Set default timeout - 500")
-		timeout = 500
-	}
-	timeoutMS := time.Millisecond * time.Duration(timeout)
+//PerformTransaction performs a transaction
+func (sa *Adapter) PerformTransaction(transaction func(context TransactionContext) error) error {
+	// transaction
+	err := sa.db.dbClient.UseSession(context.Background(), func(sessionContext mongo.SessionContext) error {
+		err := sessionContext.StartTransaction()
+		if err != nil {
+			sa.abortTransaction(sessionContext)
+			return errors.WrapErrorAction(logutils.ActionStart, logutils.TypeTransaction, nil, err)
+		}
 
-	db := &database{mongoDBAuth: mongoDBAuth, mongoDBName: mongoDBName, mongoTimeout: timeoutMS}
-	return &Adapter{db: db}
+		err = transaction(sessionContext)
+		if err != nil {
+			sa.abortTransaction(sessionContext)
+			return errors.WrapErrorAction("performing", logutils.TypeTransaction, nil, err)
+		}
+
+		err = sessionContext.CommitTransaction(sessionContext)
+		if err != nil {
+			sa.abortTransaction(sessionContext)
+			return errors.WrapErrorAction(logutils.ActionCommit, logutils.TypeTransaction, nil, err)
+		}
+		return nil
+	})
+
+	return err
 }
 
 // GetStudentGuides retrieves all content items
-func (sa *Adapter) GetStudentGuides(ids []string) ([]bson.M, error) {
-	filter := bson.D{}
+func (sa *Adapter) GetStudentGuides(appID string, orgID string, ids []string) ([]bson.M, error) {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID}}
 	if len(ids) > 0 {
 		filter = bson.D{
 			primitive.E{Key: "_id", Value: bson.M{"$in": ids}},
@@ -69,12 +88,14 @@ func (sa *Adapter) GetStudentGuides(ids []string) ([]bson.M, error) {
 }
 
 // CreateStudentGuide creates a new student guide record
-func (sa *Adapter) CreateStudentGuide(item bson.M) (bson.M, error) {
+func (sa *Adapter) CreateStudentGuide(appID string, orgID string, item bson.M) (bson.M, error) {
 
 	id := item["_id"]
 	if id == nil {
 		item["_id"] = uuid.NewString()
 	}
+	item["app_id"] = appID
+	item["org_id"] = orgID
 
 	_, err := sa.db.studentGuides.InsertOne(&item)
 	if err != nil {
@@ -84,9 +105,11 @@ func (sa *Adapter) CreateStudentGuide(item bson.M) (bson.M, error) {
 }
 
 // GetStudentGuide retrieves a student guide record by id
-func (sa *Adapter) GetStudentGuide(id string) (bson.M, error) {
+func (sa *Adapter) GetStudentGuide(appID string, orgID string, id string) (bson.M, error) {
 
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	var result []bson.M
 	err := sa.db.studentGuides.Find(filter, &result, nil)
 	if err != nil {
@@ -101,14 +124,16 @@ func (sa *Adapter) GetStudentGuide(id string) (bson.M, error) {
 }
 
 // UpdateStudentGuide updates a student guide record
-func (sa *Adapter) UpdateStudentGuide(id string, item bson.M) (bson.M, error) {
+func (sa *Adapter) UpdateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error) {
 
 	jsonID := item["_id"]
 	if jsonID == nil && jsonID != id {
 		return nil, fmt.Errorf("attempt to override another object")
 	}
 
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	err := sa.db.studentGuides.ReplaceOne(filter, item, nil)
 	if err != nil {
 		return nil, err
@@ -117,8 +142,10 @@ func (sa *Adapter) UpdateStudentGuide(id string, item bson.M) (bson.M, error) {
 }
 
 // DeleteStudentGuide deletes a student guide record with the desired id
-func (sa *Adapter) DeleteStudentGuide(id string) error {
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+func (sa *Adapter) DeleteStudentGuide(appID string, orgID string, id string) error {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	result, err := sa.db.studentGuides.DeleteOne(filter, nil)
 	if err != nil {
 		return err
@@ -137,8 +164,9 @@ func (sa *Adapter) DeleteStudentGuide(id string) error {
 //// Health locations
 
 // GetHealthLocations retrieves all content items
-func (sa *Adapter) GetHealthLocations(ids []string) ([]bson.M, error) {
-	filter := bson.D{}
+func (sa *Adapter) GetHealthLocations(appID string, orgID string, ids []string) ([]bson.M, error) {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID}}
 	if len(ids) > 0 {
 		filter = bson.D{
 			primitive.E{Key: "_id", Value: bson.M{"$in": ids}},
@@ -154,12 +182,14 @@ func (sa *Adapter) GetHealthLocations(ids []string) ([]bson.M, error) {
 }
 
 // CreateHealthLocation creates a new health location record
-func (sa *Adapter) CreateHealthLocation(item bson.M) (bson.M, error) {
+func (sa *Adapter) CreateHealthLocation(appID string, orgID string, item bson.M) (bson.M, error) {
 
 	id := item["_id"]
 	if id == nil {
 		item["_id"] = uuid.NewString()
 	}
+	item["app_id"] = appID
+	item["org_id"] = orgID
 
 	_, err := sa.db.healthLocations.InsertOne(&item)
 	if err != nil {
@@ -169,9 +199,11 @@ func (sa *Adapter) CreateHealthLocation(item bson.M) (bson.M, error) {
 }
 
 // GetHealthLocation retrieves a health location record by id
-func (sa *Adapter) GetHealthLocation(id string) (bson.M, error) {
+func (sa *Adapter) GetHealthLocation(appID string, orgID string, id string) (bson.M, error) {
 
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	var result []bson.M
 	err := sa.db.healthLocations.Find(filter, &result, nil)
 	if err != nil {
@@ -186,14 +218,16 @@ func (sa *Adapter) GetHealthLocation(id string) (bson.M, error) {
 }
 
 // UpdateHealthLocation updates a health location record
-func (sa *Adapter) UpdateHealthLocation(id string, item bson.M) (bson.M, error) {
+func (sa *Adapter) UpdateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error) {
 
 	jsonID := item["_id"]
 	if jsonID == nil && jsonID != id {
 		return nil, fmt.Errorf("attempt to override another object")
 	}
 
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	err := sa.db.healthLocations.ReplaceOne(filter, item, nil)
 	if err != nil {
 		return nil, err
@@ -202,8 +236,10 @@ func (sa *Adapter) UpdateHealthLocation(id string, item bson.M) (bson.M, error) 
 }
 
 // DeleteHealthLocation deletes a health location record with the desired id
-func (sa *Adapter) DeleteHealthLocation(id string) error {
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+func (sa *Adapter) DeleteHealthLocation(appID string, orgID string, id string) error {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	result, err := sa.db.healthLocations.DeleteOne(filter, nil)
 	if err != nil {
 		return err
@@ -226,11 +262,11 @@ type getContentItemsCategoriesData struct {
 }
 
 // GetContentItemsCategories  retrieve all content item categories
-func (sa *Adapter) GetContentItemsCategories() ([]string, error) {
-
-	pipeline := primitive.A{bson.M{"$group": bson.M{
-		"_id": "$category",
-	}}}
+func (sa *Adapter) GetContentItemsCategories(appID *string, orgID string) ([]string, error) {
+	pipeline := primitive.A{
+		bson.M{"$match": bson.M{"app_id": appID, "org_id": orgID}},
+		bson.M{"$group": bson.M{"_id": "$category"}},
+	}
 	var data []getContentItemsCategoriesData
 	categories := []string{}
 
@@ -247,10 +283,43 @@ func (sa *Adapter) GetContentItemsCategories() ([]string, error) {
 	return categories, nil
 }
 
-// GetContentItems retrieves all content items
-func (sa *Adapter) GetContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
+// FindContentItems finds content items
+func (sa *Adapter) FindContentItems(appID *string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItem, error) {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID}}
+	if len(ids) > 0 {
+		filter = append(filter, primitive.E{Key: "_id", Value: bson.M{"$in": ids}})
+	}
+	if categoryList != nil && len(categoryList) > 0 {
+		filter = append(filter, primitive.E{Key: "category", Value: bson.M{"$in": categoryList}})
+	}
 
-	filter := bson.D{}
+	findOptions := options.Find()
+	if order != nil && "desc" == *order {
+		findOptions.SetSort(bson.D{{"date_created", -1}})
+	} else {
+		findOptions.SetSort(bson.D{{"date_created", 1}})
+	}
+	if limit != nil {
+		findOptions.SetLimit(*limit)
+	}
+	if offset != nil {
+		findOptions.SetSkip(*offset)
+	}
+
+	var result []model.ContentItem
+	err := sa.db.contentItems.Find(filter, &result, findOptions)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// GetContentItems retrieves all content items
+func (sa *Adapter) GetContentItems(appID *string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
+
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID}}
 	if len(ids) > 0 {
 		filter = append(filter, primitive.E{Key: "_id", Value: bson.M{"$in": ids}})
 	}
@@ -280,24 +349,21 @@ func (sa *Adapter) GetContentItems(ids []string, categoryList []string, offset *
 }
 
 // CreateContentItem creates a new content item record
-func (sa *Adapter) CreateContentItem(item *model.ContentItem) (*model.ContentItem, error) {
-	if item.ID == "" {
-		item.ID = uuid.NewString()
-	}
-	item.DateCreated = time.Now().UTC()
-
+func (sa *Adapter) CreateContentItem(item model.ContentItem) (*model.ContentItem, error) {
 	_, err := sa.db.contentItems.InsertOne(&item)
 	if err != nil {
 		log.Printf("error create content item: %s", err)
 		return nil, err
 	}
-	return item, nil
+	return &item, nil
 }
 
 // GetContentItem retrieves a content item record by id
-func (sa *Adapter) GetContentItem(id string) (*model.ContentItemResponse, error) {
+func (sa *Adapter) GetContentItem(appID *string, orgID string, id string) (*model.ContentItemResponse, error) {
 
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	var result []model.ContentItemResponse
 	err := sa.db.contentItems.Find(filter, &result, nil)
 	if err != nil {
@@ -313,32 +379,43 @@ func (sa *Adapter) GetContentItem(id string) (*model.ContentItemResponse, error)
 }
 
 // UpdateContentItem updates a content item record
-func (sa *Adapter) UpdateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error) {
-	if item != nil {
-		if item.ID != id {
-			return nil, fmt.Errorf("attempt to override another object")
-		}
-
-		filter := bson.D{primitive.E{Key: "_id", Value: id}}
-		update := bson.D{
-			primitive.E{Key: "$set", Value: bson.D{
-				primitive.E{Key: "category", Value: item.Category},
-				primitive.E{Key: "data", Value: item.Data},
-				primitive.E{Key: "date_updated", Value: time.Now().UTC()},
-			}},
-		}
-		_, err := sa.db.contentItems.UpdateOne(filter, update, nil)
-		if err != nil {
-			log.Printf("error updating content item: %s", err)
-			return nil, err
-		}
+func (sa *Adapter) UpdateContentItem(appID *string, orgID string, id string,
+	category string, data interface{}) (*model.ContentItem, error) {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
+	update := bson.D{
+		primitive.E{Key: "$set", Value: bson.D{
+			primitive.E{Key: "category", Value: category},
+			primitive.E{Key: "data", Value: data},
+			primitive.E{Key: "date_updated", Value: time.Now().UTC()},
+		}},
 	}
-	return item, nil
+	_, err := sa.db.contentItems.UpdateOne(filter, update, nil)
+	if err != nil {
+		log.Printf("error updating content item: %s", err)
+		return nil, err
+	}
+
+	//get it to return the updated object
+	var result []model.ContentItem
+	err = sa.db.contentItems.Find(filter, &result, nil)
+	if err != nil {
+		return nil, err
+	}
+	if result == nil || len(result) == 0 {
+		//not found
+		log.Printf("content item with id: %s is not found", id)
+		return nil, fmt.Errorf("content item with id: %s is not found", id)
+	}
+	return &result[0], nil
 }
 
 // DeleteContentItem deletes a content item record with the desired id
-func (sa *Adapter) DeleteContentItem(id string) error {
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
+func (sa *Adapter) DeleteContentItem(appID *string, orgID string, id string) error {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: id}}
 	result, err := sa.db.contentItems.DeleteOne(filter, nil)
 	if err != nil {
 		return err
@@ -353,23 +430,78 @@ func (sa *Adapter) DeleteContentItem(id string) error {
 	return nil
 }
 
-// Event
+// SaveContentItem saves content item
+func (sa *Adapter) SaveContentItem(item model.ContentItem) error {
+	filter := bson.M{"_id": item.ID}
+	opts := options.Replace().SetUpsert(true)
+	err := sa.db.contentItems.ReplaceOne(filter, item, opts)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
-func (m *database) onDataChanged(changeDoc map[string]interface{}) {
-	if changeDoc == nil {
-		return
+//FindAllContentItems finds all content items
+func (sa *Adapter) FindAllContentItems(context TransactionContext) ([]model.ContentItemResponse, error) {
+	filter := bson.D{}
+	var result []model.ContentItemResponse
+	err := sa.db.contentItems.FindWithContext(context, filter, &result, nil)
+	if err != nil {
+		return nil, err
 	}
-	log.Printf("onDataChanged: %+v\n", changeDoc)
-	ns := changeDoc["ns"]
-	if ns == nil {
-		return
-	}
-	nsMap := ns.(map[string]interface{})
-	coll := nsMap["coll"]
+	return result, nil
+}
 
-	if "configs" == coll {
-		log.Println("configs collection changed")
-	} else {
-		log.Println("other collection changed")
+//StoreMultiTenancyData stores multi-tenancy to already exisiting data in the collections
+func (sa *Adapter) StoreMultiTenancyData(context TransactionContext, appID string, orgID string) error {
+
+	filter := bson.D{}
+	update := bson.D{
+		primitive.E{Key: "$set", Value: bson.D{
+			primitive.E{Key: "app_id", Value: appID},
+			primitive.E{Key: "org_id", Value: orgID},
+		}},
 	}
+	//content items
+	_, err := sa.db.contentItems.UpdateManyWithContext(context, filter, update, nil)
+	if err != nil {
+		return err
+	}
+	//health locations
+	_, err = sa.db.healthLocations.UpdateManyWithContext(context, filter, update, nil)
+	if err != nil {
+		return err
+	}
+	//student guides
+	_, err = sa.db.studentGuides.UpdateManyWithContext(context, filter, update, nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (sa *Adapter) abortTransaction(sessionContext mongo.SessionContext) {
+	err := sessionContext.AbortTransaction(sessionContext)
+	if err != nil {
+		log.Printf("error aborting a transaction - %s", err)
+	}
+}
+
+// NewStorageAdapter creates a new storage adapter instance
+func NewStorageAdapter(mongoDBAuth string, mongoDBName string, mongoTimeout string) *Adapter {
+	timeout, err := strconv.Atoi(mongoTimeout)
+	if err != nil {
+		log.Println("Set default timeout - 500")
+		timeout = 500
+	}
+	timeoutMS := time.Millisecond * time.Duration(timeout)
+
+	db := &database{mongoDBAuth: mongoDBAuth, mongoDBName: mongoDBName, mongoTimeout: timeoutMS}
+	return &Adapter{db: db}
+}
+
+//TransactionContext wraps mongo.SessionContext for use by external packages
+type TransactionContext interface {
+	mongo.SessionContext
 }

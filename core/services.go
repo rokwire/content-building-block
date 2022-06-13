@@ -17,13 +17,16 @@ package core
 import (
 	"bytes"
 	"content/core/model"
+	"errors"
 	"fmt"
 	"image"
 	"image/gif"
 	jpeg "image/jpeg"
 	"image/png"
 	"strings"
+	"time"
 
+	"github.com/google/uuid"
 	"github.com/nfnt/resize"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -34,106 +37,201 @@ func (app *Application) getVersion() string {
 
 // Student guides
 
-func (app *Application) getStudentGuides(ids []string) ([]bson.M, error) {
-	items, err := app.storage.GetStudentGuides(ids)
+func (app *Application) getStudentGuides(appID string, orgID string, ids []string) ([]bson.M, error) {
+	items, err := app.storage.GetStudentGuides(appID, orgID, ids)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) getStudentGuide(id string) (bson.M, error) {
-	item, err := app.storage.GetStudentGuide(id)
+func (app *Application) getStudentGuide(appID string, orgID string, id string) (bson.M, error) {
+	item, err := app.storage.GetStudentGuide(appID, orgID, id)
 	if err != nil {
 		return nil, err
 	}
 	return item, nil
 }
 
-func (app *Application) createStudentGuide(item bson.M) (bson.M, error) {
-	items, err := app.storage.CreateStudentGuide(item)
+func (app *Application) createStudentGuide(appID string, orgID string, item bson.M) (bson.M, error) {
+	items, err := app.storage.CreateStudentGuide(appID, orgID, item)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) updateStudentGuide(id string, item bson.M) (bson.M, error) {
-	items, err := app.storage.UpdateStudentGuide(id, item)
+func (app *Application) updateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error) {
+	items, err := app.storage.UpdateStudentGuide(appID, orgID, id, item)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) deleteStudentGuide(id string) error {
-	err := app.storage.DeleteStudentGuide(id)
+func (app *Application) deleteStudentGuide(appID string, orgID string, id string) error {
+	err := app.storage.DeleteStudentGuide(appID, orgID, id)
 	return err
 }
 
 // Health Locations
 
-func (app *Application) getHealthLocations(ids []string) ([]bson.M, error) {
-	items, err := app.storage.GetHealthLocations(ids)
+func (app *Application) getHealthLocations(appID string, orgID string, ids []string) ([]bson.M, error) {
+	items, err := app.storage.GetHealthLocations(appID, orgID, ids)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) getHealthLocation(id string) (bson.M, error) {
-	item, err := app.storage.GetHealthLocation(id)
+func (app *Application) getHealthLocation(appID string, orgID string, id string) (bson.M, error) {
+	item, err := app.storage.GetHealthLocation(appID, orgID, id)
 	if err != nil {
 		return nil, err
 	}
 	return item, nil
 }
 
-func (app *Application) createHealthLocation(item bson.M) (bson.M, error) {
-	items, err := app.storage.CreateHealthLocation(item)
+func (app *Application) createHealthLocation(appID string, orgID string, item bson.M) (bson.M, error) {
+	items, err := app.storage.CreateHealthLocation(appID, orgID, item)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) updateHealthLocation(id string, item bson.M) (bson.M, error) {
-	items, err := app.storage.UpdateHealthLocation(id, item)
+func (app *Application) updateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error) {
+	items, err := app.storage.UpdateHealthLocation(appID, orgID, id, item)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) deleteHealthLocation(id string) error {
-	err := app.storage.DeleteHealthLocation(id)
+func (app *Application) deleteHealthLocation(appID string, orgID string, id string) error {
+	err := app.storage.DeleteHealthLocation(appID, orgID, id)
 	return err
 }
 
 // Content Items
 
-func (app *Application) getContentItemsCategories() ([]string, error) {
-	return app.storage.GetContentItemsCategories()
+func (app *Application) getContentItemsCategories(allApps bool, appID string, orgID string) ([]string, error) {
+	//logic
+	var appIDParam *string
+	if !allApps {
+		appIDParam = &appID //associated with current app
+	}
+	return app.storage.GetContentItemsCategories(appIDParam, orgID)
 }
 
-func (app *Application) getContentItems(ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
-	return app.storage.GetContentItems(ids, categoryList, offset, limit, order)
+func (app *Application) getContentItems(allApps bool, appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
+	//logic
+	var appIDParam *string
+	if !allApps {
+		appIDParam = &appID //associated with current app
+	}
+	return app.storage.GetContentItems(appIDParam, orgID, ids, categoryList, offset, limit, order)
 }
 
-func (app *Application) getContentItem(id string) (*model.ContentItemResponse, error) {
-	return app.storage.GetContentItem(id)
+func (app *Application) getContentItem(allApps bool, appID string, orgID string, id string) (*model.ContentItemResponse, error) {
+	//logic
+	var appIDParam *string
+	if !allApps {
+		appIDParam = &appID //associated with current app
+	}
+	return app.storage.GetContentItem(appIDParam, orgID, id)
 }
 
-func (app *Application) createContentItem(item *model.ContentItem) (*model.ContentItem, error) {
-	return app.storage.CreateContentItem(item)
+func (app *Application) createContentItem(allApps bool, appID string, orgID string, category string, data interface{}) (*model.ContentItem, error) {
+	//logic
+	var appIDParam *string
+	if !allApps {
+		appIDParam = &appID //associated with current app
+	}
+	cItem := model.ContentItem{ID: uuid.NewString(), Category: category, DateCreated: time.Now().UTC(),
+		Data: data, OrgID: orgID, AppID: appIDParam}
+	return app.storage.CreateContentItem(cItem)
 }
 
-func (app *Application) updateContentItem(id string, item *model.ContentItem) (*model.ContentItem, error) {
-	return app.storage.UpdateContentItem(id, item)
+func (app *Application) updateContentItem(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error) {
+	//logic
+	var appIDParam *string
+	if !allApps {
+		appIDParam = &appID //associated with current app
+	}
+
+	//update
+	item, err := app.storage.UpdateContentItem(appIDParam, orgID, id, category, data)
+	if err != nil {
+		return nil, err
+	}
+
+	return item, nil
 }
 
-func (app *Application) deleteContentItem(id string) error {
-	return app.storage.DeleteContentItem(id)
+func (app *Application) updateContentItemData(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error) {
+	//logic
+	var appIDParam *string
+	if !allApps {
+		appIDParam = &appID //associated with current app
+	}
+
+	//find the item
+	items, err := app.storage.FindContentItems(appIDParam, orgID, []string{id}, []string{category}, nil, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	if len(items) != 1 {
+		return nil, errors.New("not found")
+	}
+	item := items[0]
+
+	//update the data
+	item.Data = data
+	now := time.Now()
+	item.DateUpdated = &now
+
+	//save it
+	err = app.storage.SaveContentItem(item)
+	if err != nil {
+		return nil, err
+	}
+
+	return &item, nil
+}
+
+func (app *Application) deleteContentItem(allApps bool, appID string, orgID string, id string) error {
+	//logic
+	var appIDParam *string
+	if !allApps {
+		appIDParam = &appID //associated with current app
+	}
+	return app.storage.DeleteContentItem(appIDParam, orgID, id)
+}
+
+func (app *Application) deleteContentItemByCategory(allApps bool, appID string, orgID string, id string, category string) error {
+	//logic
+	var appIDParam *string
+	if !allApps {
+		appIDParam = &appID //associated with current app
+	}
+
+	//find the item
+	items, err := app.storage.FindContentItems(appIDParam, orgID, []string{id}, []string{category}, nil, nil, nil)
+	if err != nil {
+		return err
+	}
+	if len(items) != 1 {
+		return errors.New("not found")
+	}
+
+	//delete it
+	err = app.storage.DeleteContentItem(appIDParam, orgID, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Misc

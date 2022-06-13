@@ -11,11 +11,167 @@
             "name": "Apache 2.0",
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         },
-        "version": "1.1.10"
+        "version": "1.2.0"
     },
     "host": "localhost",
     "basePath": "/content",
     "paths": {
+        "/admin/campus_reminders": {
+            "get": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Retrieves campus reminders",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGetCampusReminders",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comma separated IDs of the desired records",
+                        "name": "ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit - limit the result",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order - Possible values: asc, desc. Default: desc",
+                        "name": "order",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ContentItem"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Creates a new campus reminder. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminCreateCampusReminder",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/createContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/campus_reminders/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Updates a campus reminder with the specified id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminCampusReminder",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/updateContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Deletes a campus reminder with the specified id",
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminDeleteCampusReminder",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {}
+                }
+            }
+        },
         "/admin/content_item/categories": {
             "get": {
                 "security": [
@@ -28,10 +184,16 @@
                     "Admin"
                 ],
                 "operationId": "AdminGetContentItemsCategories",
-                "responses": {
-                    "200": {
-                        "description": ""
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
                     }
+                ],
+                "responses": {
+                    "200": {}
                 }
             }
         },
@@ -51,6 +213,12 @@
                 ],
                 "operationId": "AdminGetContentItems",
                 "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    },
                     {
                         "type": "string",
                         "description": "offset",
@@ -132,6 +300,14 @@
                     "Admin"
                 ],
                 "operationId": "AdminGetContentItem",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -178,10 +354,328 @@
                     "Admin"
                 ],
                 "operationId": "AdminDeleteContentItem",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {}
+                }
+            }
+        },
+        "/admin/gies_nudge_templates": {
+            "get": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Retrieves gies nudge template items",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGiesNudgeTemplates",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comma separated IDs of the desired records",
+                        "name": "ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit - limit the result",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order - Possible values: asc, desc. Default: desc",
+                        "name": "order",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ContentItem"
+                            }
+                        }
                     }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Creates a new gies nudge template. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGiesNudgeTemplate",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/createContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/gies_nudge_templates/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Updates a gies nudge template with the specified id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminUpdateGiesNudgeTemplate",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/updateContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Deletes a gies nudge template with the specified id",
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGiesNudgeTemplate",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {}
+                }
+            }
+        },
+        "/admin/gies_onboarding_checklist": {
+            "get": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Retrieves gies onboarding checklists",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGetGiesOnboardingChecklists",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comma separated IDs of the desired records",
+                        "name": "ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit - limit the result",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order - Possible values: asc, desc. Default: desc",
+                        "name": "order",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ContentItem"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Creates a new gies onboarding checklist. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminCreateGiesOnboardingChecklist",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/createContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/gies_onboarding_checklist/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Updates a gies onboarding checklist with the specified id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminUpdateGiesOnboardingChecklist",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/updateContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Deletes a gies onboarding checklist with the specified id",
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminDeleteGiesOnboardingChecklist",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {}
                 }
             }
         },
@@ -197,10 +691,9 @@
                     "Admin"
                 ],
                 "operationId": "AdminDeleteHealthLocation",
+                "deprecated": true,
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -219,6 +712,7 @@
                     "Admin"
                 ],
                 "operationId": "AdminGetHealthLocations",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -228,9 +722,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             },
             "post": {
@@ -247,10 +739,9 @@
                     "Admin"
                 ],
                 "operationId": "AdminCreateHealthLocation",
+                "deprecated": true,
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -272,10 +763,9 @@
                     "Admin"
                 ],
                 "operationId": "AdminGetHealthLocation",
+                "deprecated": true,
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             },
             "put": {
@@ -295,10 +785,9 @@
                     "Admin"
                 ],
                 "operationId": "AdminUpdateHealthLocation",
+                "deprecated": true,
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -388,6 +877,7 @@
                     "Admin"
                 ],
                 "operationId": "AdminGetStudentGuides",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -397,9 +887,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             },
             "post": {
@@ -416,10 +904,9 @@
                     "Admin"
                 ],
                 "operationId": "AdminCreateStudentGuide",
+                "deprecated": true,
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -441,10 +928,9 @@
                     "Admin"
                 ],
                 "operationId": "AdminGetStudentGuide",
+                "deprecated": true,
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             },
             "put": {
@@ -464,10 +950,9 @@
                     "Admin"
                 ],
                 "operationId": "AdminUpdateStudentGuide",
+                "deprecated": true,
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             },
             "delete": {
@@ -481,10 +966,633 @@
                     "Admin"
                 ],
                 "operationId": "AdminDeleteStudentGuide",
+                "deprecated": true,
+                "responses": {
+                    "200": {}
+                }
+            }
+        },
+        "/admin/uiuc_onboarding_checklists": {
+            "get": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Retrieves uiuc onboarding checklist items",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGetUIUCOnboardingChecklists",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comma separated IDs of the desired records",
+                        "name": "ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit - limit the result",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order - Possible values: asc, desc. Default: desc",
+                        "name": "order",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ContentItem"
+                            }
+                        }
                     }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Creates a new uiuc onboarding checklist. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminCreateUIUCOnboardingChecklist",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/createContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/uiuc_onboarding_checklists/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Updates a uiuc onboarding checklist with the specified id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminUpdateUIUCOnboardingChecklist",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/updateContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Deletes a uiuc onboarding checklist with the specified id",
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminDeleteUIUCOnboardingChecklist",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {}
+                }
+            }
+        },
+        "/admin/v2/health_locations": {
+            "get": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Retrieves Retrieves health locations",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGetHealthLocationsV2",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comma separated IDs of the desired records",
+                        "name": "ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit - limit the result",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order - Possible values: asc, desc. Default: desc",
+                        "name": "order",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ContentItem"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Creates a new health location. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminCreateHealthLocationV2",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/createContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/v2/health_locations/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Updates a health location with the specified id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminUpdateHealthLocationV2",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/updateContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Deletes a health location with the specified id",
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminDeleteHealthLocationV2",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {}
+                }
+            }
+        },
+        "/admin/v2/student_guides": {
+            "get": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Retrieves student guides",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGetStudentGuidesV2",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comma separated IDs of the desired records",
+                        "name": "ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit - limit the result",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order - Possible values: asc, desc. Default: desc",
+                        "name": "order",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ContentItem"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Creates a new student guide. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminCreateStudentGuidesV2",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/createContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/v2/student_guides/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Updates a student guide with the specified id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminUpdateStudentGuidesV2",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/updateContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Deletes a student guide with the specified id",
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminDeleteStudentGuidesV2",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {}
+                }
+            }
+        },
+        "/admin/wellness": {
+            "get": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Retrieves wellness items",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGetWellness",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comma separated IDs of the desired records",
+                        "name": "ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit - limit the result",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order - Possible values: asc, desc. Default: desc",
+                        "name": "order",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ContentItem"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Creates a new wellness. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminCreateWellness",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/createContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/wellness/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Updates a wellness with the specified id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminUpdateWellness",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/updateContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Deletes a wellness with the specified id",
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminDeleteWellness",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {}
                 }
             }
         },
@@ -500,10 +1608,16 @@
                     "Client"
                 ],
                 "operationId": "GetContentItemsCategories",
-                "responses": {
-                    "200": {
-                        "description": ""
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
                     }
+                ],
+                "responses": {
+                    "200": {}
                 }
             }
         },
@@ -523,6 +1637,12 @@
                 ],
                 "operationId": "GetContentItems",
                 "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    },
                     {
                         "type": "string",
                         "description": "offset",
@@ -581,6 +1701,14 @@
                     "Client"
                 ],
                 "operationId": "GetContentItem",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -606,6 +1734,7 @@
                     "Client"
                 ],
                 "operationId": "GetHealthLocations",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -615,9 +1744,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -639,10 +1766,9 @@
                     "Client"
                 ],
                 "operationId": "GetHealthLocation",
+                "deprecated": true,
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -708,9 +1834,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -727,9 +1851,7 @@
                 ],
                 "operationId": "DeleteProfilePhoto",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             },
             "post": {
@@ -747,9 +1869,7 @@
                 ],
                 "operationId": "StoreProfilePhoto",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -774,9 +1894,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -795,6 +1913,7 @@
                     "Client"
                 ],
                 "operationId": "GetStudentGuides",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -804,9 +1923,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -828,10 +1945,9 @@
                     "Client"
                 ],
                 "operationId": "GetStudentGuide",
+                "deprecated": true,
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -860,9 +1976,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -877,9 +1991,7 @@
                 ],
                 "operationId": "Version",
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         }
@@ -888,11 +2000,15 @@
         "ContentItem": {
             "type": "object",
             "properties": {
+                "app_id": {
+                    "type": "string"
+                },
                 "category": {
                     "type": "string"
                 },
                 "data": {
-                    "description": "could be eigther a primitive or nested json or array"
+                    "description": "could be eigther a primitive or nested json or array",
+                    "type": "object"
                 },
                 "date_created": {
                     "type": "string"
@@ -902,16 +2018,35 @@
                 },
                 "id": {
                     "type": "string"
+                },
+                "org_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "createContentItemByCategoryRequestBody": {
+            "type": "object",
+            "properties": {
+                "all_apps": {
+                    "type": "boolean"
+                },
+                "data": {
+                    "type": "object"
                 }
             }
         },
         "createContentItemRequestBody": {
             "type": "object",
             "properties": {
+                "all_apps": {
+                    "type": "boolean"
+                },
                 "category": {
                     "type": "string"
                 },
-                "data": {}
+                "data": {
+                    "type": "object"
+                }
             }
         },
         "getContentItemsRequestBody": {
@@ -930,6 +2065,17 @@
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "updateContentItemByCategoryRequestBody": {
+            "type": "object",
+            "properties": {
+                "all_apps": {
+                    "type": "boolean"
+                },
+                "data": {
+                    "type": "object"
                 }
             }
         },

@@ -21,25 +21,22 @@ The following Environment variables are supported. The service will not start un
 Name|Format|Required|Description
 ---|---|---|---
 CONTENT_PORT | < int > | yes | Port to be used by this application.
+CONTENT_HOST | < url > | yes | URL where this application is being hosted.
 CONTENT_MONGO_AUTH | <mongodb://USER:PASSWORD@HOST:PORT/DATABASE NAME> | yes | MongoDB authentication string. The user must have read/write privileges.
-CONTENT_MONGO_DATABASE | < value > | yes | MongoDB database name.
+CONTENT_MONGO_DATABASE | < url > | yes | MongoDB database name.
 CONTENT_MONGO_TIMEOUT | < int > | no | MongoDB timeout in milliseconds. Defaults to 500.
-S3_BUCKET | < string > | yes | AWS S3 bucket name for storing content.
-S3_PROFILE_IMAGES_BUCKET | < string > | yes | AWS S3 bucket name for storing profile images.
-S3_REGION | < string > | yes | AWS S3 region name.
-AWS_ACCESS_KEY_ID | < string > | yes | AWS access key ID
-AWS_SECRET_ACCESS_KEY | < string > | yes | AWS secret access key
-DEFAULT_CACHE_EXPIRATION_SECONDS | < int > | false | Default cache expiration time in seconds. Defaults to 120
-TWITTER_FEED_URL | < string > | yes | Twitter Feed base URL
-TWITTER_ACCESS_TOKEN | < string > | yes | Twitter Bearer access token
-CONTENT_HOST | < string > | yes | URL where this application is being hosted.
-CONTENT_OIDC_PROVIDER | < value > | yes | OIDC provider
-CONTENT_OIDC_CLIENT_IDS | < value > | yes | OIDC admin client id
-CONTENT_PHONE_SECRET | < value > | yes | Phone secret
-CONTENT_AUTH_KEYS | < value > | yes | Auth keys
-CONTENT_AUTH_ISSUER | < value > | yes | Auth issuer base uri
-CORE_BB_HOST | < string > | yes | Core BB host URL
-ROKWIRE_API_KEYS | <value1,value2,value3> | yes | Comma separated list of rokwire api keys
+CONTENT_CORE_BB_HOST | < url > | yes | Core BB host url
+CONTENT_SERVICE_URL | < url > | yes | The service host url
+CONTENT_AWS_ACCESS_KEY_ID | < string > | yes | AWS Access key ID
+CONTENT_AWS_SECRET_ACCESS_KEY | < string > | yes | AWS Secret access key
+CONTENT_S3_BUCKET | < string > | yes | AWS S3 bucket name
+CONTENT_S3_REGION | < string > | yes | AWS S3 region name
+CONTENT_S3_PROFILE_IMAGES_BUCKET | < string > | yes | Profile images S3 bucket name
+CONTENT_TWITTER_FEED_URL | < url > | yes | Twitter Feed base URL
+CONTENT_TWITTER_ACCESS_TOKEN | < string > | yes | Twitter Bearer access token
+CONTENT_DEFAULT_CACHE_EXPIRATION_SECONDS | < int > | false | Default cache expiration time in seconds. Defaults to 120
+CONTENT_MULTI_TENANCY_APP_ID | < string > | yes | Application ID for moving from single to multi tenancy for the already existing data
+CONTENT_MULTI_TENANCY_ORG_ID | < string > | yes | Organization ID for moving from single to multi tenancy for the already existing data
 ### Run Application
 
 #### Run locally without Docker
