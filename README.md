@@ -5,7 +5,7 @@ The Content Building Block handles the management of application content for the
 
 The functionality provided by this application is documented in the [Wiki](https://github.com/rokwire/content-building-block/wiki).
 
-The API documentation is available here: https://api-dev.rokwire.illinois.edu/content/doc/ui/
+The API documentation is available here: https://api.rokwire.illinois.edu/content/doc/ui/
 
 ## Set Up
 
