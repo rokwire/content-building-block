@@ -416,7 +416,7 @@ func (h AdminApisHandler) DeleteHealthLocation(claims *tokenauth.Claims, w http.
 // @Security AdminUserAuth
 // @Router /admin/v2/health_locations [get]
 func (h AdminApisHandler) GetHealthLocationsV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.getContentItemsByCategory(claims, w, r, "health_location")
+	h.getContentItemsByCategory(claims, w, r, "health_locations")
 }
 
 // CreateHealthLocationV2 creates a new health location. <b> The data element could be either a primitive or nested json or array.</b>
@@ -429,7 +429,7 @@ func (h AdminApisHandler) GetHealthLocationsV2(claims *tokenauth.Claims, w http.
 // @Security AdminUserAuth
 // @Router /admin/v2/health_locations [post]
 func (h AdminApisHandler) CreateHealthLocationV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.createContentItemByCategory(claims, w, r, "health_location")
+	h.createContentItemByCategory(claims, w, r, "health_locations")
 }
 
 // UpdateHealthLocationV2 Updates a health location with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
@@ -443,7 +443,7 @@ func (h AdminApisHandler) CreateHealthLocationV2(claims *tokenauth.Claims, w htt
 // @Security AdminUserAuth
 // @Router /admin/v2/health_locations/{id} [put]
 func (h AdminApisHandler) UpdateHealthLocationV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.updateContentItemByCategory(claims, w, r, "health_location")
+	h.updateContentItemByCategory(claims, w, r, "health_locations")
 }
 
 // DeleteHealthLocationV2 Deletes a health location with the specified id
@@ -455,7 +455,7 @@ func (h AdminApisHandler) UpdateHealthLocationV2(claims *tokenauth.Claims, w htt
 // @Security AdminUserAuth
 // @Router /admin/v2/health_locations/{id} [delete]
 func (h AdminApisHandler) DeleteHealthLocationV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.deleteContentItemByCategory(claims, w, r, "health_location")
+	h.deleteContentItemByCategory(claims, w, r, "health_locations")
 }
 
 // GetStudentGuidesV2 Retrieves student guides
@@ -472,7 +472,7 @@ func (h AdminApisHandler) DeleteHealthLocationV2(claims *tokenauth.Claims, w htt
 // @Security AdminUserAuth
 // @Router /admin/v2/student_guides [get]
 func (h AdminApisHandler) GetStudentGuidesV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.getContentItemsByCategory(claims, w, r, "student_guide")
+	h.getContentItemsByCategory(claims, w, r, "student_guides")
 }
 
 // CreateStudentGuidesV2 creates a new student guide. <b> The data element could be either a primitive or nested json or array.</b>
@@ -485,7 +485,7 @@ func (h AdminApisHandler) GetStudentGuidesV2(claims *tokenauth.Claims, w http.Re
 // @Security AdminUserAuth
 // @Router /admin/v2/student_guides [post]
 func (h AdminApisHandler) CreateStudentGuidesV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.createContentItemByCategory(claims, w, r, "student_guide")
+	h.createContentItemByCategory(claims, w, r, "student_guides")
 }
 
 // UpdateStudentGuidesV2 Updates a student guide with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
@@ -499,7 +499,7 @@ func (h AdminApisHandler) CreateStudentGuidesV2(claims *tokenauth.Claims, w http
 // @Security AdminUserAuth
 // @Router /admin/v2/student_guides/{id} [put]
 func (h AdminApisHandler) UpdateStudentGuidesV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.updateContentItemByCategory(claims, w, r, "student_guide")
+	h.updateContentItemByCategory(claims, w, r, "student_guides")
 }
 
 // DeleteStudentGuidesV2 Deletes a student guide with the specified id
@@ -511,13 +511,13 @@ func (h AdminApisHandler) UpdateStudentGuidesV2(claims *tokenauth.Claims, w http
 // @Security AdminUserAuth
 // @Router /admin/v2/student_guides/{id} [delete]
 func (h AdminApisHandler) DeleteStudentGuidesV2(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.deleteContentItemByCategory(claims, w, r, "student_guide")
+	h.deleteContentItemByCategory(claims, w, r, "student_guides")
 }
 
-// GetWellness Retrieves wellness items
-// @Description Retrieves wellness items
+// GetWellnessTips Retrieves wellness tip item
+// @Description Retrieves wellness tip items
 // @Tags Admin
-// @ID AdminGetWellness
+// @ID AdminGetWellnessTip
 // @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
 // @Param ids query string false "Comma separated IDs of the desired records"
 // @Param offset query string false "offset"
@@ -526,48 +526,48 @@ func (h AdminApisHandler) DeleteStudentGuidesV2(claims *tokenauth.Claims, w http
 // @Accept json
 // @Success 200 {array} model.ContentItem
 // @Security AdminUserAuth
-// @Router /admin/wellness [get]
-func (h AdminApisHandler) GetWellness(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.getContentItemsByCategory(claims, w, r, "wellness")
+// @Router /admin/wellness_tips [get]
+func (h AdminApisHandler) GetWellnessTips(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.getContentItemsByCategory(claims, w, r, "wellness_tips")
 }
 
-// CreateWellness creates a new wellness. <b> The data element could be either a primitive or nested json or array.</b>
-// @Description Creates a new wellness. <b> The data element could be either a primitive or nested json or array.</b>
+// CreateWellnessTips creates a new wellness tip. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Creates a new wellness tip. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Admin
-// @ID AdminCreateWellness
+// @ID AdminCreateWellnessTip
 // @Param data body createContentItemByCategoryRequestBody true "Params"
 // @Accept json
 // @Success 200 {object} model.ContentItem
 // @Security AdminUserAuth
-// @Router /admin/wellness [post]
-func (h AdminApisHandler) CreateWellness(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.createContentItemByCategory(claims, w, r, "wellness")
+// @Router /admin/wellness_tips [post]
+func (h AdminApisHandler) CreateWellnessTips(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.createContentItemByCategory(claims, w, r, "wellness_tips")
 }
 
-// UpdateWellness Updates a wellness with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
-// @Description Updates a wellness with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// UpdateWellnessTips Updates a wellness tip with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Updates a wellness tip with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Admin
-// @ID AdminUpdateWellness
+// @ID AdminUpdateWellnessTip
 // @Param data body updateContentItemByCategoryRequestBody true "Params"
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.ContentItem
 // @Security AdminUserAuth
-// @Router /admin/wellness/{id} [put]
-func (h AdminApisHandler) UpdateWellness(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.updateContentItemByCategory(claims, w, r, "wellness")
+// @Router /admin/wellness_tips/{id} [put]
+func (h AdminApisHandler) UpdateWellnessTips(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.updateContentItemByCategory(claims, w, r, "wellness_tips")
 }
 
-// DeleteWellness Deletes a wellness with the specified id
-// @Description Deletes a wellness with the specified id
+// DeleteWellnessTips Deletes a wellness tip with the specified id
+// @Description Deletes a wellness tip with the specified id
 // @Tags Admin
-// @ID AdminDeleteWellness
+// @ID AdminDeleteWellnessTip
 // @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
 // @Success 200
 // @Security AdminUserAuth
-// @Router /admin/wellness/{id} [delete]
-func (h AdminApisHandler) DeleteWellness(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.deleteContentItemByCategory(claims, w, r, "wellness")
+// @Router /admin/wellness_tips/{id} [delete]
+func (h AdminApisHandler) DeleteWellnessTips(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.deleteContentItemByCategory(claims, w, r, "wellness_tips")
 }
 
 // GetCampusReminders Retrieves campus reminders
@@ -584,7 +584,7 @@ func (h AdminApisHandler) DeleteWellness(claims *tokenauth.Claims, w http.Respon
 // @Security AdminUserAuth
 // @Router /admin/campus_reminders [get]
 func (h AdminApisHandler) GetCampusReminders(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.getContentItemsByCategory(claims, w, r, "campus_reminder")
+	h.getContentItemsByCategory(claims, w, r, "campus_reminders")
 }
 
 // CreateCampusReminder creates a new campus reminder. <b> The data element could be either a primitive or nested json or array.</b>
@@ -597,7 +597,7 @@ func (h AdminApisHandler) GetCampusReminders(claims *tokenauth.Claims, w http.Re
 // @Security AdminUserAuth
 // @Router /admin/campus_reminders [post]
 func (h AdminApisHandler) CreateCampusReminder(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.createContentItemByCategory(claims, w, r, "campus_reminder")
+	h.createContentItemByCategory(claims, w, r, "campus_reminders")
 }
 
 // UpdateCampusReminder Updates a campus reminder with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
@@ -611,7 +611,7 @@ func (h AdminApisHandler) CreateCampusReminder(claims *tokenauth.Claims, w http.
 // @Security AdminUserAuth
 // @Router /admin/campus_reminders/{id} [put]
 func (h AdminApisHandler) UpdateCampusReminder(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.updateContentItemByCategory(claims, w, r, "campus_reminder")
+	h.updateContentItemByCategory(claims, w, r, "campus_reminders")
 }
 
 // DeleteCampusReminder Deletes a campus reminder with the specified id
@@ -623,7 +623,7 @@ func (h AdminApisHandler) UpdateCampusReminder(claims *tokenauth.Claims, w http.
 // @Security AdminUserAuth
 // @Router /admin/campus_reminders/{id} [delete]
 func (h AdminApisHandler) DeleteCampusReminder(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.deleteContentItemByCategory(claims, w, r, "campus_reminder")
+	h.deleteContentItemByCategory(claims, w, r, "campus_reminders")
 }
 
 // GetGiesOnboardingChecklists Retrieves gies onboarding checklists
@@ -638,9 +638,9 @@ func (h AdminApisHandler) DeleteCampusReminder(claims *tokenauth.Claims, w http.
 // @Accept json
 // @Success 200 {array} model.ContentItem
 // @Security AdminUserAuth
-// @Router /admin/gies_onboarding_checklist [get]
+// @Router /admin/gies_onboarding_checklists [get]
 func (h AdminApisHandler) GetGiesOnboardingChecklists(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.getContentItemsByCategory(claims, w, r, "gies_onboarding_checklist")
+	h.getContentItemsByCategory(claims, w, r, "gies_onboarding_checklists")
 }
 
 // CreateGiesOnboardingChecklist creates a new gies onboarding checklist. <b> The data element could be either a primitive or nested json or array.</b>
@@ -651,9 +651,9 @@ func (h AdminApisHandler) GetGiesOnboardingChecklists(claims *tokenauth.Claims, 
 // @Accept json
 // @Success 200 {object} model.ContentItem
 // @Security AdminUserAuth
-// @Router /admin/gies_onboarding_checklist [post]
+// @Router /admin/gies_onboarding_checklists [post]
 func (h AdminApisHandler) CreateGiesOnboardingChecklist(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.createContentItemByCategory(claims, w, r, "gies_onboarding_checklist")
+	h.createContentItemByCategory(claims, w, r, "gies_onboarding_checklists")
 }
 
 // UpdateGiesOnboardingChecklist Updates a gies onboarding checklist with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
@@ -665,9 +665,9 @@ func (h AdminApisHandler) CreateGiesOnboardingChecklist(claims *tokenauth.Claims
 // @Produce json
 // @Success 200 {object} model.ContentItem
 // @Security AdminUserAuth
-// @Router /admin/gies_onboarding_checklist/{id} [put]
+// @Router /admin/gies_onboarding_checklists/{id} [put]
 func (h AdminApisHandler) UpdateGiesOnboardingChecklist(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.updateContentItemByCategory(claims, w, r, "gies_onboarding_checklist")
+	h.updateContentItemByCategory(claims, w, r, "gies_onboarding_checklists")
 }
 
 // DeleteGiesOnboardingChecklist Deletes a gies onboarding checklist with the specified id
@@ -677,9 +677,9 @@ func (h AdminApisHandler) UpdateGiesOnboardingChecklist(claims *tokenauth.Claims
 // @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
 // @Success 200
 // @Security AdminUserAuth
-// @Router /admin/gies_onboarding_checklist/{id} [delete]
+// @Router /admin/gies_onboarding_checklists/{id} [delete]
 func (h AdminApisHandler) DeleteGiesOnboardingChecklist(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.deleteContentItemByCategory(claims, w, r, "gies_onboarding_checklist")
+	h.deleteContentItemByCategory(claims, w, r, "gies_onboarding_checklists")
 }
 
 // GetUIUCOnboardingChecklists Retrieves uiuc onboarding checklist items
@@ -738,10 +738,10 @@ func (h AdminApisHandler) DeleteUIUCOnboardingChecklist(claims *tokenauth.Claims
 	h.deleteContentItemByCategory(claims, w, r, "uiuc_onboarding_checklists")
 }
 
-// GetGiesNudgeTemplates Retrieves gies nudge template items
-// @Description Retrieves gies nudge template items
+// GetGiesPostTemplates Retrieves gies post template items
+// @Description Retrieves gies post template items
 // @Tags Admin
-// @ID AdminGiesNudgeTemplates
+// @ID AdminGiesPostTemplates
 // @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
 // @Param ids query string false "Comma separated IDs of the desired records"
 // @Param offset query string false "offset"
@@ -750,48 +750,48 @@ func (h AdminApisHandler) DeleteUIUCOnboardingChecklist(claims *tokenauth.Claims
 // @Accept json
 // @Success 200 {array} model.ContentItem
 // @Security AdminUserAuth
-// @Router /admin/gies_nudge_templates [get]
-func (h AdminApisHandler) GetGiesNudgeTemplates(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.getContentItemsByCategory(claims, w, r, "gies_nudge_templates")
+// @Router /admin/gies_post_templates [get]
+func (h AdminApisHandler) GetGiesPostTemplates(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.getContentItemsByCategory(claims, w, r, "gies_post_templates")
 }
 
-// CreateGiesNudgeTemplate creates a new gies nudge template. <b> The data element could be either a primitive or nested json or array.</b>
-// @Description Creates a new gies nudge template. <b> The data element could be either a primitive or nested json or array.</b>
+// CreateGiesPostTemplate creates a new gies post template. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Creates a new gies post template. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Admin
-// @ID AdminGiesNudgeTemplate
+// @ID AdminGiesPostTemplate
 // @Param data body createContentItemByCategoryRequestBody true "Params"
 // @Accept json
 // @Success 200 {object} model.ContentItem
 // @Security AdminUserAuth
-// @Router /admin/gies_nudge_templates [post]
-func (h AdminApisHandler) CreateGiesNudgeTemplate(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.createContentItemByCategory(claims, w, r, "gies_nudge_templates")
+// @Router /admin/gies_post_templates [post]
+func (h AdminApisHandler) CreateGiesPostTemplate(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.createContentItemByCategory(claims, w, r, "gies_post_templates")
 }
 
-// UpdateGiesNudgeTemplate Updates a gies nudge template with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
-// @Description Updates a gies nudge template with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// UpdateGiesPostTemplate Updates a gies post template with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
+// @Description Updates a gies post template with the specified id. <b> The data element could be either a primitive or nested json or array.</b>
 // @Tags Admin
-// @ID AdminUpdateGiesNudgeTemplate
+// @ID AdminUpdateGiesPostTemplate
 // @Param data body updateContentItemByCategoryRequestBody true "Params"
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.ContentItem
 // @Security AdminUserAuth
-// @Router /admin/gies_nudge_templates/{id} [put]
-func (h AdminApisHandler) UpdateGiesNudgeTemplate(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.updateContentItemByCategory(claims, w, r, "gies_nudge_templates")
+// @Router /admin/gies_post_templates/{id} [put]
+func (h AdminApisHandler) UpdateGiesPostTemplate(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.updateContentItemByCategory(claims, w, r, "gies_post_templates")
 }
 
-// DeleteGiesNudgeTemplate Deletes a gies nudge template with the specified id
-// @Description Deletes a gies nudge template with the specified id
+// DeleteGiesPostTemplate Deletes a gies post template with the specified id
+// @Description Deletes a gies post template with the specified id
 // @Tags Admin
-// @ID AdminGiesNudgeTemplate
+// @ID AdminGiesPostTemplate
 // @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
 // @Success 200
 // @Security AdminUserAuth
-// @Router /admin/gies_nudge_templates/{id} [delete]
-func (h AdminApisHandler) DeleteGiesNudgeTemplate(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	h.deleteContentItemByCategory(claims, w, r, "gies_nudge_templates")
+// @Router /admin/gies_post_templates/{id} [delete]
+func (h AdminApisHandler) DeleteGiesPostTemplate(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	h.deleteContentItemByCategory(claims, w, r, "gies_post_templates")
 }
 
 func (h AdminApisHandler) getContentItemsByCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request, category string) {

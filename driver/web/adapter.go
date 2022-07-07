@@ -124,10 +124,10 @@ func (we Adapter) Start() {
 	adminSubRouter.HandleFunc("/v2/student_guides/{id}", we.coreAuthWrapFunc(we.adminApisHandler.UpdateStudentGuidesV2, we.auth.coreAuth.permissionsAuth)).Methods("PUT")
 	adminSubRouter.HandleFunc("/v2/student_guides/{id}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteStudentGuidesV2, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
 
-	adminSubRouter.HandleFunc("/wellness", we.coreAuthWrapFunc(we.adminApisHandler.GetWellness, we.auth.coreAuth.permissionsAuth)).Methods("GET")
-	adminSubRouter.HandleFunc("/wellness", we.coreAuthWrapFunc(we.adminApisHandler.CreateWellness, we.auth.coreAuth.permissionsAuth)).Methods("POST")
-	adminSubRouter.HandleFunc("/wellness/{id}", we.coreAuthWrapFunc(we.adminApisHandler.UpdateWellness, we.auth.coreAuth.permissionsAuth)).Methods("PUT")
-	adminSubRouter.HandleFunc("/wellness/{id}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteWellness, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
+	adminSubRouter.HandleFunc("/wellness_tips", we.coreAuthWrapFunc(we.adminApisHandler.GetWellnessTips, we.auth.coreAuth.permissionsAuth)).Methods("GET")
+	adminSubRouter.HandleFunc("/wellness_tips", we.coreAuthWrapFunc(we.adminApisHandler.CreateWellnessTips, we.auth.coreAuth.permissionsAuth)).Methods("POST")
+	adminSubRouter.HandleFunc("/wellness_tips/{id}", we.coreAuthWrapFunc(we.adminApisHandler.UpdateWellnessTips, we.auth.coreAuth.permissionsAuth)).Methods("PUT")
+	adminSubRouter.HandleFunc("/wellness_tips/{id}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteWellnessTips, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
 
 	adminSubRouter.HandleFunc("/campus_reminders", we.coreAuthWrapFunc(we.adminApisHandler.GetCampusReminders, we.auth.coreAuth.permissionsAuth)).Methods("GET")
 	adminSubRouter.HandleFunc("/campus_reminders", we.coreAuthWrapFunc(we.adminApisHandler.CreateCampusReminder, we.auth.coreAuth.permissionsAuth)).Methods("POST")
@@ -144,10 +144,10 @@ func (we Adapter) Start() {
 	adminSubRouter.HandleFunc("/uiuc_onboarding_checklists/{id}", we.coreAuthWrapFunc(we.adminApisHandler.UpdateUIUCOnboardingChecklist, we.auth.coreAuth.permissionsAuth)).Methods("PUT")
 	adminSubRouter.HandleFunc("/uiuc_onboarding_checklists/{id}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteUIUCOnboardingChecklist, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
 
-	adminSubRouter.HandleFunc("/gies_nudge_templates", we.coreAuthWrapFunc(we.adminApisHandler.GetGiesNudgeTemplates, we.auth.coreAuth.permissionsAuth)).Methods("GET")
-	adminSubRouter.HandleFunc("/gies_nudge_templates", we.coreAuthWrapFunc(we.adminApisHandler.CreateGiesNudgeTemplate, we.auth.coreAuth.permissionsAuth)).Methods("POST")
-	adminSubRouter.HandleFunc("/gies_nudge_templates/{id}", we.coreAuthWrapFunc(we.adminApisHandler.UpdateGiesNudgeTemplate, we.auth.coreAuth.permissionsAuth)).Methods("PUT")
-	adminSubRouter.HandleFunc("/gies_nudge_templates/{id}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteGiesNudgeTemplate, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
+	adminSubRouter.HandleFunc("/gies_post_templates", we.coreAuthWrapFunc(we.adminApisHandler.GetGiesPostTemplates, we.auth.coreAuth.permissionsAuth)).Methods("GET")
+	adminSubRouter.HandleFunc("/gies_post_templates", we.coreAuthWrapFunc(we.adminApisHandler.CreateGiesPostTemplate, we.auth.coreAuth.permissionsAuth)).Methods("POST")
+	adminSubRouter.HandleFunc("/gies_post_templates/{id}", we.coreAuthWrapFunc(we.adminApisHandler.UpdateGiesPostTemplate, we.auth.coreAuth.permissionsAuth)).Methods("PUT")
+	adminSubRouter.HandleFunc("/gies_post_templates/{id}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteGiesPostTemplate, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
 
 	adminSubRouter.HandleFunc("/content_items", we.coreAuthWrapFunc(we.adminApisHandler.GetContentItems, we.auth.coreAuth.permissionsAuth)).Methods("GET")
 	adminSubRouter.HandleFunc("/content_items", we.coreAuthWrapFunc(we.adminApisHandler.CreateContentItem, we.auth.coreAuth.permissionsAuth)).Methods("POST")
