@@ -22,6 +22,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/rokwire/logging-library-go/logs"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
@@ -40,6 +41,8 @@ type database struct {
 	studentGuides   *collectionWrapper
 	healthLocations *collectionWrapper
 	contentItems    *collectionWrapper
+
+	logger *logs.Logger
 }
 
 func (m *database) start() error {
