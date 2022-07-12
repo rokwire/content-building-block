@@ -30,6 +30,8 @@ import (
 	"log"
 	"os"
 	"strings"
+
+	"github.com/rokwire/logging-library-go/logs"
 )
 
 var (
@@ -44,13 +46,16 @@ func main() {
 		Version = "dev"
 	}
 
+	loggerOpts := logs.LoggerOpts{SuppressRequests: []logs.HttpRequestProperties{logs.NewAwsHealthCheckHttpRequestProperties("/lms/version")}}
+	logger := logs.NewLogger("core", &loggerOpts)
+
 	port := getEnvKey("CONTENT_PORT", true)
 
 	//mongoDB adapter
 	mongoDBAuth := getEnvKey("CONTENT_MONGO_AUTH", true)
 	mongoDBName := getEnvKey("CONTENT_MONGO_DATABASE", true)
 	mongoTimeout := getEnvKey("CONTENT_MONGO_TIMEOUT", false)
-	storageAdapter := storage.NewStorageAdapter(mongoDBAuth, mongoDBName, mongoTimeout)
+	storageAdapter := storage.NewStorageAdapter(mongoDBAuth, mongoDBName, mongoTimeout, logger)
 	err := storageAdapter.Start()
 	if err != nil {
 		log.Fatal("Cannot start the mongoDB adapter - " + err.Error())
@@ -81,7 +86,7 @@ func main() {
 
 	// application
 	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, tempStorageAdapter,
-		webpAdapter, twitterAdapter, cacheAdapter, mtAppID, mtOrgID)
+		webpAdapter, twitterAdapter, cacheAdapter, mtAppID, mtOrgID, logger)
 	application.Start()
 
 	// web adapter
@@ -94,7 +99,7 @@ func main() {
 		ContentServiceURL: contentServiceURL,
 	}
 
-	webAdapter := driver.NewWebAdapter(host, port, application, config)
+	webAdapter := driver.NewWebAdapter(host, port, application, config, logger)
 
 	webAdapter.Start()
 }

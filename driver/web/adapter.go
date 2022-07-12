@@ -26,6 +26,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/rokwire/logging-library-go/logs"
+
 	"github.com/gorilla/mux"
 	"github.com/rokwire/core-auth-library-go/tokenauth"
 	httpSwagger "github.com/swaggo/http-swagger"
@@ -41,6 +43,8 @@ type Adapter struct {
 	adminApisHandler rest.AdminApisHandler
 
 	app *core.Application
+
+	logger *logs.Logger
 }
 
 // @title Rokwire Content Building Block API
@@ -196,12 +200,12 @@ func (we Adapter) coreAuthWrapFunc(handler coreAuthFunc, authorization Authoriza
 }
 
 // NewWebAdapter creates new WebAdapter instance
-func NewWebAdapter(host string, port string, app *core.Application, config model.Config) Adapter {
+func NewWebAdapter(host string, port string, app *core.Application, config model.Config, logger *logs.Logger) Adapter {
 	auth := NewAuth(app, config)
 
 	apisHandler := rest.NewApisHandler(app)
 	adminApisHandler := rest.NewAdminApisHandler(app)
-	return Adapter{host: host, port: port, auth: auth, apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app}
+	return Adapter{host: host, port: port, auth: auth, apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app, logger: logger}
 }
 
 // AppListener implements core.ApplicationListener interface
