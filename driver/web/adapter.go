@@ -201,7 +201,7 @@ func (we Adapter) coreAuthWrapFunc(handler coreAuthFunc, authorization Authoriza
 
 // NewWebAdapter creates new WebAdapter instance
 func NewWebAdapter(host string, port string, app *core.Application, config model.Config, logger *logs.Logger) Adapter {
-	auth := NewAuth(app, config)
+	auth := NewAuth(app, config, logger)
 
 	apisHandler := rest.NewApisHandler(app)
 	adminApisHandler := rest.NewAdminApisHandler(app)
