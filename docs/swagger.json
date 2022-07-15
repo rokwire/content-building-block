@@ -168,7 +168,9 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -193,7 +195,9 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -363,167 +367,13 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
-                }
-            }
-        },
-        "/admin/gies_nudge_templates": {
-            "get": {
-                "security": [
-                    {
-                        "AdminUserAuth": []
-                    }
-                ],
-                "description": "Retrieves gies nudge template items",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Admin"
-                ],
-                "operationId": "AdminGiesNudgeTemplates",
-                "parameters": [
-                    {
-                        "type": "boolean",
-                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
-                        "name": "all-apps",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Comma separated IDs of the desired records",
-                        "name": "ids",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "offset",
-                        "name": "offset",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "limit - limit the result",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "order - Possible values: asc, desc. Default: desc",
-                        "name": "order",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/ContentItem"
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "AdminUserAuth": []
-                    }
-                ],
-                "description": "Creates a new gies nudge template. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Admin"
-                ],
-                "operationId": "AdminGiesNudgeTemplate",
-                "parameters": [
-                    {
-                        "description": "Params",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/createContentItemByCategoryRequestBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ContentItem"
-                        }
+                        "description": ""
                     }
                 }
             }
         },
-        "/admin/gies_nudge_templates/{id}": {
-            "put": {
-                "security": [
-                    {
-                        "AdminUserAuth": []
-                    }
-                ],
-                "description": "Updates a gies nudge template with the specified id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Admin"
-                ],
-                "operationId": "AdminUpdateGiesNudgeTemplate",
-                "parameters": [
-                    {
-                        "description": "Params",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/updateContentItemByCategoryRequestBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ContentItem"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "AdminUserAuth": []
-                    }
-                ],
-                "description": "Deletes a gies nudge template with the specified id",
-                "tags": [
-                    "Admin"
-                ],
-                "operationId": "AdminGiesNudgeTemplate",
-                "parameters": [
-                    {
-                        "type": "boolean",
-                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
-                        "name": "all-apps",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {}
-                }
-            }
-        },
-        "/admin/gies_onboarding_checklist": {
+        "/admin/gies_onboarding_checklists": {
             "get": {
                 "security": [
                     {
@@ -617,7 +467,7 @@
                 }
             }
         },
-        "/admin/gies_onboarding_checklist/{id}": {
+        "/admin/gies_onboarding_checklists/{id}": {
             "put": {
                 "security": [
                     {
@@ -675,7 +525,167 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/admin/gies_post_templates": {
+            "get": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Retrieves gies post template items",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGiesPostTemplates",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comma separated IDs of the desired records",
+                        "name": "ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit - limit the result",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order - Possible values: asc, desc. Default: desc",
+                        "name": "order",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ContentItem"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Creates a new gies post template. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGiesPostTemplate",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/createContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/gies_post_templates/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Updates a gies post template with the specified id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminUpdateGiesPostTemplate",
+                "parameters": [
+                    {
+                        "description": "Params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/updateContentItemByCategoryRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ContentItem"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "AdminUserAuth": []
+                    }
+                ],
+                "description": "Deletes a gies post template with the specified id",
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "AdminGiesPostTemplate",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default.",
+                        "name": "all-apps",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -693,7 +703,9 @@
                 "operationId": "AdminDeleteHealthLocation",
                 "deprecated": true,
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -722,7 +734,9 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             },
             "post": {
@@ -741,7 +755,9 @@
                 "operationId": "AdminCreateHealthLocation",
                 "deprecated": true,
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -765,7 +781,9 @@
                 "operationId": "AdminGetHealthLocation",
                 "deprecated": true,
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             },
             "put": {
@@ -787,7 +805,9 @@
                 "operationId": "AdminUpdateHealthLocation",
                 "deprecated": true,
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -887,7 +907,9 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             },
             "post": {
@@ -906,7 +928,9 @@
                 "operationId": "AdminCreateStudentGuide",
                 "deprecated": true,
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -930,7 +954,9 @@
                 "operationId": "AdminGetStudentGuide",
                 "deprecated": true,
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             },
             "put": {
@@ -952,7 +978,9 @@
                 "operationId": "AdminUpdateStudentGuide",
                 "deprecated": true,
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             },
             "delete": {
@@ -968,7 +996,9 @@
                 "operationId": "AdminDeleteStudentGuide",
                 "deprecated": true,
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1124,7 +1154,9 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1280,7 +1312,9 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1436,25 +1470,27 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
-        "/admin/wellness": {
+        "/admin/wellness_tips": {
             "get": {
                 "security": [
                     {
                         "AdminUserAuth": []
                     }
                 ],
-                "description": "Retrieves wellness items",
+                "description": "Retrieves wellness tip items",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
                     "Admin"
                 ],
-                "operationId": "AdminGetWellness",
+                "operationId": "AdminGetWellnessTip",
                 "parameters": [
                     {
                         "type": "boolean",
@@ -1505,14 +1541,14 @@
                         "AdminUserAuth": []
                     }
                 ],
-                "description": "Creates a new wellness. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "description": "Creates a new wellness tip. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
                     "Admin"
                 ],
-                "operationId": "AdminCreateWellness",
+                "operationId": "AdminCreateWellnessTip",
                 "parameters": [
                     {
                         "description": "Params",
@@ -1534,14 +1570,14 @@
                 }
             }
         },
-        "/admin/wellness/{id}": {
+        "/admin/wellness_tips/{id}": {
             "put": {
                 "security": [
                     {
                         "AdminUserAuth": []
                     }
                 ],
-                "description": "Updates a wellness with the specified id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
+                "description": "Updates a wellness tip with the specified id. \u003cb\u003e The data element could be either a primitive or nested json or array.\u003c/b\u003e",
                 "consumes": [
                     "application/json"
                 ],
@@ -1551,7 +1587,7 @@
                 "tags": [
                     "Admin"
                 ],
-                "operationId": "AdminUpdateWellness",
+                "operationId": "AdminUpdateWellnessTip",
                 "parameters": [
                     {
                         "description": "Params",
@@ -1578,11 +1614,11 @@
                         "AdminUserAuth": []
                     }
                 ],
-                "description": "Deletes a wellness with the specified id",
+                "description": "Deletes a wellness tip with the specified id",
                 "tags": [
                     "Admin"
                 ],
-                "operationId": "AdminDeleteWellness",
+                "operationId": "AdminDeleteWellnessTip",
                 "parameters": [
                     {
                         "type": "boolean",
@@ -1592,7 +1628,9 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1617,7 +1655,9 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1744,7 +1784,9 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1768,7 +1810,9 @@
                 "operationId": "GetHealthLocation",
                 "deprecated": true,
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1834,7 +1878,9 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1851,7 +1897,9 @@
                 ],
                 "operationId": "DeleteProfilePhoto",
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             },
             "post": {
@@ -1869,7 +1917,9 @@
                 ],
                 "operationId": "StoreProfilePhoto",
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1894,7 +1944,9 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1923,7 +1975,9 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1947,7 +2001,9 @@
                 "operationId": "GetStudentGuide",
                 "deprecated": true,
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1976,7 +2032,9 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1991,7 +2049,9 @@
                 ],
                 "operationId": "Version",
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         }
@@ -2007,8 +2067,7 @@
                     "type": "string"
                 },
                 "data": {
-                    "description": "could be eigther a primitive or nested json or array",
-                    "type": "object"
+                    "description": "could be eigther a primitive or nested json or array"
                 },
                 "date_created": {
                     "type": "string"
@@ -2030,9 +2089,7 @@
                 "all_apps": {
                     "type": "boolean"
                 },
-                "data": {
-                    "type": "object"
-                }
+                "data": {}
             }
         },
         "createContentItemRequestBody": {
@@ -2044,9 +2101,7 @@
                 "category": {
                     "type": "string"
                 },
-                "data": {
-                    "type": "object"
-                }
+                "data": {}
             }
         },
         "getContentItemsRequestBody": {
@@ -2074,9 +2129,7 @@
                 "all_apps": {
                     "type": "boolean"
                 },
-                "data": {
-                    "type": "object"
-                }
+                "data": {}
             }
         },
         "uploadImageResponse": {
