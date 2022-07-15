@@ -64,7 +64,7 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   title: Rokwire Content Building Block API
-  version: 1.2.0
+  version: 1.2.1
 paths:
   /admin/campus_reminders:
     get:
