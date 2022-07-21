@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Set logger [#69](https://github.com/rokwire/content-building-block/issues/69)
 
+### Changed
+- Prepare the project to become open source [#62](https://github.com/rokwire/content-building-block/issues/62)
+
 ## [1.2.1] - 2022-07-07
 ### Fixed
 - Fix content item categories [#67](https://github.com/rokwire/content-building-block/issues/67)
