@@ -59,7 +59,7 @@ func main() {
 	s3Region := getEnvKey("CONTENT_S3_REGION", true)
 	awsAccessKeyID := getEnvKey("CONTENT_AWS_ACCESS_KEY_ID", true)
 	awsSecretAccessKey := getEnvKey("CONTENT_AWS_SECRET_ACCESS_KEY", true)
-	awsConfig := &model.AWSConfig{S3Bucket: s3Bucket, S3ProfileImagesBucket: s3ProfileImagesBucket, S3Region: s3Region, AWSAccessKeyID: awsAccessKeyID, AWSSecretAccessKey: awsSecretAccessKey}
+	awsConfig := &model.AWSConfig{S3Bucket: s3Bucket, S3ProfileImagesBucket: s3ProfileImagesBucket, S3Region: s3Region, AWSAccessKeyID: &awsAccessKeyID, AWSSecretAccessKey: &awsSecretAccessKey}
 	awsAdapter := awsstorage.NewAWSStorageAdapter(awsConfig)
 
 	tempStorageAdapter := tempstorage.NewTempStorageAdapter()

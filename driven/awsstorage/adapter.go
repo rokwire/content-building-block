@@ -166,8 +166,8 @@ func (a *Adapter) createS3Session() (*session.Session, error) {
 	s, err := session.NewSession(&aws.Config{
 		Region: aws.String(region),
 		Credentials: credentials.NewStaticCredentials(
-			accessKeyID,
-			secretAccessKey,
+			*accessKeyID,
+			*secretAccessKey,
 			""),
 	})
 	if err != nil {
