@@ -115,7 +115,7 @@ func (a *Adapter) CreateProfileImage(file *os.File, path string, preferredFileNa
 		return nil, err
 	}
 	key := a.prepareKey(path, preferredFileName)
-	objectLocation, err := a.uploadFileToS3(s, file, a.config.S3ProfileImagesBucket, key, "authenticated-read")
+	objectLocation, err := a.uploadFileToS3(s, file, a.config.S3ProfileImagesBucket, key, "private")
 	if err != nil {
 		log.Printf("Could not upload file")
 		return nil, err
