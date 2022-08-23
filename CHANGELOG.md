@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Set logger [#69](https://github.com/rokwire/content-building-block/issues/69)
 
+## [1.2.3] - 2022-08-01
+### Fixed
+- Missing admin image permission [#74](https://github.com/rokwire/content-building-block/issues/74)
+
+## [1.2.2] - 2022-07-25
+### Fixed
+- Unable to upload profile images to S3. The S3 profile picture acl has been changed from "authenticated-read" to "private" [#72](https://github.com/rokwire/content-building-block/issues/72)
 ### Changed
 - Prepare the project to become open source [#62](https://github.com/rokwire/content-building-block/issues/62)
 
