@@ -22,4 +22,18 @@ tags:
 paths:
   #Admin
   #Apis
+  /content/profile_photo/{user-id}:
+    $ref: "./resources/apis/profile-photo-userID.yaml"
+  /content/profile_photo:
+    $ref: "./resources/apis/profile-photo.yaml"  
   #Client
+
+  
+  components:
+  securitySchemes:
+      bearerAuth:            # arbitrary name for the security scheme
+        type: http
+        scheme: bearer
+        bearerFormat: JWT
+  schemas:
+    $ref: "./schemas/index.yaml"
