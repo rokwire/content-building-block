@@ -30,9 +30,10 @@ import (
 
 //Adapter entity
 type Adapter struct {
-	host string
-	port string
-	auth *Auth
+	host              string
+	port              string
+	contentServiceURL string
+	auth              *Auth
 
 	apisHandler      rest.ApisHandler
 	adminApisHandler rest.AdminApisHandler
@@ -160,11 +161,11 @@ func (we Adapter) Start() {
 
 func (we Adapter) serveDoc(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("access-control-allow-origin", "*")
-	http.ServeFile(w, r, "./docs/swagger.yaml")
+	http.ServeFile(w, r, "./driver/web/docs/gen/def.yaml")
 }
 
 func (we Adapter) serveDocUI() http.Handler {
-	url := fmt.Sprintf("%s/content/doc", we.host)
+	url := fmt.Sprintf("%s/content/doc", we.contentServiceURL)
 	return httpSwagger.Handler(httpSwagger.URL(url))
 }
 
@@ -198,7 +199,7 @@ func NewWebAdapter(host string, port string, app *core.Application, config model
 
 	apisHandler := rest.NewApisHandler(app)
 	adminApisHandler := rest.NewAdminApisHandler(app)
-	return Adapter{host: host, port: port, auth: auth, apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app}
+	return Adapter{host: host, port: port, contentServiceURL: config.ContentServiceURL, auth: auth, apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app}
 }
 
 // AppListener implements core.ApplicationListener interface
