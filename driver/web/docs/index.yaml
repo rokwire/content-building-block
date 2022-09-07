@@ -25,9 +25,26 @@ paths:
   /content/profile_photo/{user-id}:
     $ref: "./resources/apis/profile-photo-userID.yaml"
   /content/profile_photo:
-    $ref: "./resources/apis/profile-photo.yaml"  
+    $ref: "./resources/apis/profile-photo.yaml"   
   #Client
-
+  /content/student_guides:
+    $ref: "./resources/client/student-guides.yaml"
+  /content/student_guides/{id}:
+    $ref: "./resources/client/student-guidesid.yaml" 
+  /content/healt_locations:
+    $ref: "./resources/client/health-locations.yaml" 
+  /content/health_locations/{id}:
+    $ref: "./resources/client/health-locationsid.yaml"
+  /content/content_items:
+    $ref: "./resources/client/content-items.yaml"    
+  /content/content_items/{id}:
+    $ref: "./resources/client/content-itemsid.yaml" 
+  /content/content_item/categories:
+    $ref: "./resources/client/content-items-categories.yaml"  
+  /content/image:
+    $ref: "./resources/client/image.yaml"
+  /content/twitter/users/{user_id}/tweets:
+    $ref: "./resources/client/twitter-user-tweets.yaml"      
   
   components:
   securitySchemes:
