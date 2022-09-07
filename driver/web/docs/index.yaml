@@ -21,6 +21,15 @@ tags:
     description: Client applications APIs.
 paths:
   #Admin
+  /admin/student_guides:
+    $ref: "./resources/admin/student-guides.yaml" 
+  /admin/student_guides/{id}:
+    $ref: "./resources/admin/student-guidesid.yaml"  
+  /admin/health_locations:
+    $ref: "./resources/admin/health-locations.yaml" 
+  /admin/health_locations/{id}:
+    $ref: "./resources/admin/health-locationsid.yaml"     
+
   #Apis
   /content/profile_photo/{user-id}:
     $ref: "./resources/apis/profile-photo-userID.yaml"
@@ -31,7 +40,7 @@ paths:
     $ref: "./resources/client/student-guides.yaml"
   /content/student_guides/{id}:
     $ref: "./resources/client/student-guidesid.yaml" 
-  /content/healt_locations:
+  /content/health_locations:
     $ref: "./resources/client/health-locations.yaml" 
   /content/health_locations/{id}:
     $ref: "./resources/client/health-locationsid.yaml"
