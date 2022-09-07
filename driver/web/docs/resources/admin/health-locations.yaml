@@ -35,7 +35,7 @@ post:
   security:
     - bearerAuth: [] 
   requestBody:
-     description: Creates a student guide item
+     description: Creates a health location
      content:
        application/json:
          schema:
@@ -43,8 +43,6 @@ post:
   responses:
     200:
       description: Success
-      content:
-         application/json:
     400:
       description: Bad request
     401:

@@ -28,7 +28,11 @@ paths:
   /admin/health_locations:
     $ref: "./resources/admin/health-locations.yaml" 
   /admin/health_locations/{id}:
-    $ref: "./resources/admin/health-locationsid.yaml"     
+    $ref: "./resources/admin/health-locationsid.yaml" 
+  /admin/v2/health_locations:
+    $ref: "./resources/admin/v2/health-locations.yaml"
+  /admin/v2/health_locations/{id}:
+    $ref: "./resources/admin/v2/health-locationsid.yaml"         
 
   #Apis
   /content/profile_photo/{user-id}:

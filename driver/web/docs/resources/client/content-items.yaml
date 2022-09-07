@@ -5,13 +5,7 @@ get:
   description: |
     Retrieves  all content items
   security:
-    - bearerAuth: [] 
-  requestBody:
-     description: Retrieves  all content items
-     content:
-       application/json:
-         schema:
-           $ref: "../../schemas/apis/client/content-items/request/Request.yaml"     
+    - bearerAuth: []  
   parameters:
     - name: all-apps
       in: query
@@ -37,9 +31,9 @@ get:
       explode: false
       schema:
         type: string 
-    - name: limit
+    - name: order
       in: query
-      description: limit the result
+      description: Possible values - asc, desc. Default - desc
       required: true
       style: form
       explode: false

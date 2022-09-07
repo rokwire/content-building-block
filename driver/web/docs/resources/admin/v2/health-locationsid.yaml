@@ -1,7 +1,6 @@
 get:
   tags:
   - Admin
-  deprecated: true
   summary: Retrieves a health locations by id
   description: |
     Retrieves a health locations by id
@@ -27,8 +26,7 @@ get:
       description: Internal error
 put:
   tags:
-    - Admin
-  deprecated: true  
+    - Admin 
   summary: Updates a health locations with the specified id
   description: |
     Updates a health locations with the specified id
@@ -39,7 +37,7 @@ put:
      content:
        application/json:
          schema:
-           $ref: "../../schemas/apis/admin/health-locations/request/Request.yaml"  
+           $ref: "../../../schemas/apis/admin/health-locations/request/Request.yaml"  
   parameters:
     - name: id
       in: path
@@ -61,7 +59,6 @@ put:
 delete:
   tags:
   - Admin
-  deprecated: true
   summary: Delete a health locations by id
   description: |
     Delete a health locations by id

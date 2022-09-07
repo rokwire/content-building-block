@@ -132,8 +132,6 @@ paths:
       responses:
         '200':
           description: Success
-          content:
-            application/json: null
         '400':
           description: Bad request
         '401':
@@ -205,7 +203,7 @@ paths:
       security:
         - bearerAuth: []
       requestBody:
-        description: Creates a student guide item
+        description: Creates a health location
         content:
           application/json:
             schema:
@@ -216,8 +214,6 @@ paths:
       responses:
         '200':
           description: Success
-          content:
-            application/json: null
         '400':
           description: Bad request
         '401':
@@ -237,7 +233,7 @@ paths:
       parameters:
         - name: id
           in: path
-          description: the id of the user
+          description: the locations id
           required: true
           style: simple
           explode: false
@@ -279,8 +275,6 @@ paths:
       responses:
         '200':
           description: Success
-          content:
-            application/json: null
         '400':
           description: Bad request
         '401':
@@ -291,6 +285,190 @@ paths:
       tags:
         - Admin
       deprecated: true
+      summary: Delete a health locations by id
+      description: |
+        Delete a health locations by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: the locations id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /admin/v2/health_locations:
+    get:
+      tags:
+        - Admin
+      summary: Retrieves health locations
+      description: |
+        Retrieves health locations
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Retrieves  all content items
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: string
+                categories:
+                  type: string
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: ids
+          in: query
+          description: Coma separated IDs of the desired records
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          description: offset
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: limit the result
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: 'Possible values- asc, desc. Default- desc'
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    post:
+      tags:
+        - Admin
+      summary: Creates a new health location
+      description: |
+        Creates a new health location
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Creates a health location
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1admin~1health_locations/post/requestBody/content/application~1json/schema'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  '/admin/v2/health_locations/{id}':
+    get:
+      tags:
+        - Admin
+      summary: Retrieves a health locations by id
+      description: |
+        Retrieves a health locations by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: the locations id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    put:
+      tags:
+        - Admin
+      summary: Updates a health locations with the specified id
+      description: |
+        Updates a health locations with the specified id
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Updates a health locations items
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1admin~1health_locations/post/requestBody/content/application~1json/schema'
+      parameters:
+        - name: id
+          in: path
+          description: the locations id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    delete:
+      tags:
+        - Admin
       summary: Delete a health locations by id
       description: |
         Delete a health locations by id
@@ -532,17 +710,6 @@ paths:
         Retrieves  all content items
       security:
         - bearerAuth: []
-      requestBody:
-        description: Retrieves  all content items
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                ids:
-                  type: string
-                categories:
-                  type: string
       parameters:
         - name: all-apps
           in: query
@@ -568,9 +735,9 @@ paths:
           explode: false
           schema:
             type: string
-        - name: limit
+        - name: order
           in: query
-          description: limit the result
+          description: 'Possible values - asc, desc. Default - desc'
           required: true
           style: form
           explode: false
