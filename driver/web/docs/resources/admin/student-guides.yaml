@@ -43,8 +43,6 @@ post:
   responses:
     200:
       description: Success
-      content:
-         application/json:
     400:
       description: Bad request
     401:

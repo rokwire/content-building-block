@@ -69,8 +69,6 @@ paths:
       responses:
         '200':
           description: Success
-          content:
-            application/json: null
         '400':
           description: Bad request
         '401':
@@ -478,6 +476,338 @@ paths:
         - name: id
           in: path
           description: the locations id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /admin/v2/student_guides:
+    get:
+      tags:
+        - Admin
+      summary: Retrieves student guides
+      description: |
+        Retrieves student guides
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: ids
+          in: query
+          description: Coma separated IDs of the desired records
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          description: offset
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: limit the result
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: 'Possible values- asc, desc. Default- desc'
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    post:
+      tags:
+        - Admin
+      summary: Creates a student guide item
+      description: |
+        Creates a student guide item
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Creates a student guide item
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                all_apps:
+                  type: boolean
+                data:
+                  type: array
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  '/admin/v2/student_guides/{id}':
+    put:
+      tags:
+        - Admin
+      summary: Updates a student guide with the specified id
+      description: |
+        Updates a student guide with the specified id
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Updates a student guide items
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1admin~1v2~1student_guides/post/requestBody/content/application~1json/schema'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    delete:
+      tags:
+        - Admin
+      summary: Delete a student guide by id
+      description: |
+        Delete a student guide by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /admin/wellness_tips:
+    get:
+      tags:
+        - Admin
+      summary: Retrieves wellness tip items
+      description: |
+        Retrieves wellness tip items
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: ids
+          in: query
+          description: Coma separated IDs of the desired records
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          description: offset
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: limit the result
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: 'Possible values- asc, desc. Default- desc'
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    post:
+      tags:
+        - Admin
+      summary: Creates a new wellness tip
+      description: |
+        Creates a new wellness tip
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Creates a wellness tip
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                all_apps:
+                  type: boolean
+                data:
+                  type: array
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  '/admin/wellness-tips/{id}':
+    put:
+      tags:
+        - Admin
+      summary: Updates wellness tip  with the specified id
+      description: |
+        Updates wellness tip with the specified id
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Updates wellness tip items
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1admin~1wellness_tips/post/requestBody/content/application~1json/schema'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    delete:
+      tags:
+        - Admin
+      summary: Delete wellness tip
+      description: |
+        Delete wellness tip
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: id
+          in: path
+          description: id
           required: true
           style: simple
           explode: false

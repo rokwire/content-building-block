@@ -32,7 +32,15 @@ paths:
   /admin/v2/health_locations:
     $ref: "./resources/admin/v2/health-locations.yaml"
   /admin/v2/health_locations/{id}:
-    $ref: "./resources/admin/v2/health-locationsid.yaml"         
+    $ref: "./resources/admin/v2/health-locationsid.yaml"
+  /admin/v2/student_guides:
+    $ref: "./resources/admin/v2/student-guides.yaml"  
+  /admin/v2/student_guides/{id}:
+    $ref: "./resources/admin/v2/student-guidesid.yaml"
+  /admin/wellness_tips:
+    $ref: "./resources/admin/wellness-tips.yaml" 
+  /admin/wellness-tips/{id}:
+    $ref: "./resources/admin/wellness-tipsid.yaml"              
 
   #Apis
   /content/profile_photo/{user-id}:
