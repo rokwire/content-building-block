@@ -44,7 +44,27 @@ paths:
   /admin/campus_reminders:
     $ref: "./resources/admin/campus-reminders.yaml"  
   /admin/campus_reminders/{id}:
-    $ref: "./resources/admin/campus-remindersid.yaml"                    
+    $ref: "./resources/admin/campus-remindersid.yaml"  
+  /admin/gies_onboarding_checklists:
+    $ref: "./resources/admin/gies-onboarding-checklists.yaml"
+  /admin/gies_onboarding_checklists/{id}:
+    $ref: "./resources/admin/gies-onboarding-checklistsid.yaml" 
+  /admin/uiuc_onboarding_checklists:
+    $ref: "./resources/admin/uiuc-onboarding-checklists.yaml"
+  /admin/uiuc_onboarding_checklists/{id}:
+    $ref: "./resources/admin/uiuc-onboarding-checklistsid.yaml" 
+  /admin/gies_post_templates:
+    $ref: "./resources/admin/gies-post-templates.yaml" 
+  /admin/gies_post_templates/{id}:
+    $ref: "./resources/admin/gies-post-templatesids.yaml" 
+  /admin/content_items:
+    $ref: "./resources/admin/content-items.yaml"
+  /admin/content_items/{id}:
+    $ref: "./resources/admin/content-itemsid.yaml" 
+  /admin/content_items_categories:
+    $ref: "./resources/admin/content-item-categories.yaml"
+  /admin/image:
+    $ref: "./resources/admin/image.yaml"                                          
 
   #Apis
   /content/profile_photo/{user-id}:

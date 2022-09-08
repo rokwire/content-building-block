@@ -3,4 +3,6 @@ properties:
   all_apps:
     type: boolean
   data:
-    type: array  
+    type: array
+    items:
+      type: string    

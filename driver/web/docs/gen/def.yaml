@@ -568,12 +568,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                all_apps:
-                  type: boolean
-                data:
-                  type: array
+              $ref: '#/paths/~1admin~1wellness_tips/post/requestBody/content/application~1json/schema'
       responses:
         '200':
           description: Success
@@ -597,7 +592,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/paths/~1admin~1v2~1student_guides/post/requestBody/content/application~1json/schema'
+              type: object
+              properties:
+                all_apps:
+                  type: boolean
+                data:
+                  type: array
       parameters:
         - name: id
           in: path
@@ -734,6 +734,8 @@ paths:
                   type: boolean
                 data:
                   type: array
+                  items:
+                    type: string
       responses:
         '200':
           description: Success
@@ -900,12 +902,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                all_apps:
-                  type: boolean
-                data:
-                  type: array
+              $ref: '#/paths/~1admin~1wellness_tips/post/requestBody/content/application~1json/schema'
       responses:
         '200':
           description: Success
@@ -935,7 +932,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/paths/~1admin~1campus_reminders/post/requestBody/content/application~1json/schema'
+              $ref: '#/paths/~1admin~1wellness_tips/post/requestBody/content/application~1json/schema'
       parameters:
         - name: id
           in: path
@@ -988,6 +985,828 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /admin/gies_onboarding_checklists:
+    get:
+      tags:
+        - Admin
+      summary: Retrieves gies onboarding checklists
+      description: |
+        Retrieves gies onboarding checklists
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: ids
+          in: query
+          description: Coma separated IDs of the desired records
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          description: offset
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: limit the result
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: 'Possible values- asc, desc. Default- desc'
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    post:
+      tags:
+        - Admin
+      summary: Creates gies onboarding checklists
+      description: |
+        Creates gies onboarding checklists
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Creates a wellness tip
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1admin~1wellness_tips/post/requestBody/content/application~1json/schema'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  '/admin/gies_onboarding_checklists/{id}':
+    put:
+      tags:
+        - Admin
+      summary: Updates gies onboarding checklists  with the specified id
+      description: |
+        Updates gies onboarding checklists with the specified id
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Updates gies onboarding checklists items
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1admin~1wellness_tips/post/requestBody/content/application~1json/schema'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    delete:
+      tags:
+        - Admin
+      summary: Delete gies onboarding checklists
+      description: |
+        Delete gies onboarding checklists
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /admin/uiuc_onboarding_checklists:
+    get:
+      tags:
+        - Admin
+      summary: Retrieves uiuc onboarding checklist items
+      description: |
+        Retrieves uiuc onboarding checklist items
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: ids
+          in: query
+          description: Coma separated IDs of the desired records
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          description: offset
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: limit the result
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: 'Possible values- asc, desc. Default- desc'
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    post:
+      tags:
+        - Admin
+      summary: Creates a new uiuc onboarding checklist
+      description: |
+        Creates a new uiuc onboarding checklist
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Creates a wellness tip
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1admin~1wellness_tips/post/requestBody/content/application~1json/schema'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  '/admin/uiuc_onboarding_checklists/{id}':
+    put:
+      tags:
+        - Admin
+      summary: Updates uiuc onboarding checklist  with the specified id
+      description: |
+        Updates uiuc onboarding checklist with the specified id
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Updates uiuc onboarding checklist items
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1admin~1wellness_tips/post/requestBody/content/application~1json/schema'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    delete:
+      tags:
+        - Admin
+      summary: Delete uiuc onboarding checklist
+      description: |
+        Delete uiuc onboarding checklist
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /admin/gies_post_templates:
+    get:
+      tags:
+        - Admin
+      summary: Retrieves gies post template items
+      description: |
+        Retrieves gies post template items
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: ids
+          in: query
+          description: Coma separated IDs of the desired records
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          description: offset
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: limit the result
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: 'Possible values- asc, desc. Default- desc'
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    post:
+      tags:
+        - Admin
+      summary: Creates a new gies post template items
+      description: |
+        Creates a new gies post template items
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Creates a wellness tip
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1admin~1wellness_tips/post/requestBody/content/application~1json/schema'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  '/admin/gies_post_templates/{id}':
+    put:
+      tags:
+        - Admin
+      summary: Updates gies post template  with the specified id
+      description: |
+        Updates uiuc onboarding checklist with the specified id
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Updates gies post template items
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1admin~1wellness_tips/post/requestBody/content/application~1json/schema'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    delete:
+      tags:
+        - Admin
+      summary: Delete gies post template
+      description: |
+        Delete gies post template
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /admin/content_items:
+    get:
+      tags:
+        - Admin
+      summary: Retrieves gies post template items
+      description: |
+        Retrieves gies post template items
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Creates a wellness tip
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                categories:
+                  type: array
+                  items:
+                    type: string
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: ids
+          in: query
+          description: Coma separated IDs of the desired records
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          description: offset
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: limit the result
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: 'Possible values- asc, desc. Default- desc'
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    post:
+      tags:
+        - Admin
+      summary: Creates a new gies post template items
+      description: |
+        Creates a new gies post template items
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Creates a wellness tip
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                categories:
+                  type: array
+                  items:
+                    type: string
+                data:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  '/admin/content_items/{id}':
+    get:
+      tags:
+        - Admin
+      summary: Retrieves content items
+      description: |
+        Retrieves content items
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1admin~1content_items/get/requestBody/content/application~1json/schema'
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    put:
+      tags:
+        - Admin
+      summary: Updates content item with the specified id
+      description: |
+        Updates content item with the specified id
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Updates wellness tip items
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1admin~1content_items/post/requestBody/content/application~1json/schema'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    delete:
+      tags:
+        - Admin
+      summary: Delete content item
+      description: |
+        Delete content item
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /admin/content_items_categories:
+    get:
+      tags:
+        - Admin
+      summary: Retrieves content item categories
+      description: |
+        Retrieves content items
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /admin/image:
+    post:
+      tags:
+        - Admin
+      summary: Uploads an image to AWS S3
+      description: |
+        Uploads an image to AWS S3
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: S3 bucket path
+          in: query
+          description: path within the S3 bucket
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: height
+          in: query
+          description: height of the image to resize.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: width
+          in: query
+          description: width of the image to resize
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: quality
+          in: query
+          description: quality of the image. Default - 100
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
         '400':
           description: Bad request
         '401':

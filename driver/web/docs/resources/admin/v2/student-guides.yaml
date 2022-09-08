@@ -75,7 +75,7 @@ post:
      content:
        application/json:
          schema:
-           $ref: "../../../schemas/apis/admin/v2student-guide/request/Request.yaml"            
+           $ref: "../../../schemas/apis/admin/contentItem/request/Request.yaml"            
   responses:
     200:
       description: Success
