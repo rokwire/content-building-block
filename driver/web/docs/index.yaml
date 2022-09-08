@@ -40,7 +40,11 @@ paths:
   /admin/wellness_tips:
     $ref: "./resources/admin/wellness-tips.yaml" 
   /admin/wellness-tips/{id}:
-    $ref: "./resources/admin/wellness-tipsid.yaml"              
+    $ref: "./resources/admin/wellness-tipsid.yaml"
+  /admin/campus_reminders:
+    $ref: "./resources/admin/campus-reminders.yaml"  
+  /admin/campus_reminders/{id}:
+    $ref: "./resources/admin/campus-remindersid.yaml"                    
 
   #Apis
   /content/profile_photo/{user-id}:
