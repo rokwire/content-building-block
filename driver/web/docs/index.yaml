@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Rokwire Content Building Block API
-  description: Polls Content Block API Documentation
+  description: Rokwire Content Block API Documentation
   version: 1.2.3
 servers:  
   - url: 'https://api.rokwire.illinois.edu/content'
