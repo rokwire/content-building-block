@@ -25,7 +25,7 @@ import (
 	"sync"
 )
 
-//Application represents the core application code based on hexagonal architecture
+// Application represents the core application code based on hexagonal architecture
 type Application struct {
 	version string
 	build   string
@@ -56,7 +56,7 @@ func (app *Application) Start() {
 	}
 }
 
-//as the service starts supporting multi-tenancy we need to add the needed multi-tenancy fields for the existing data,
+// as the service starts supporting multi-tenancy we need to add the needed multi-tenancy fields for the existing data,
 func (app *Application) storeMultiTenancyData() error {
 	log.Println("storeMultiTenancyData...")
 	//in transaction

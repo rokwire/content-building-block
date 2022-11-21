@@ -42,7 +42,7 @@ func (sa *Adapter) Start() error {
 	return err
 }
 
-//PerformTransaction performs a transaction
+// PerformTransaction performs a transaction
 func (sa *Adapter) PerformTransaction(transaction func(context TransactionContext) error) error {
 	// transaction
 	err := sa.db.dbClient.UseSession(context.Background(), func(sessionContext mongo.SessionContext) error {
@@ -441,7 +441,7 @@ func (sa *Adapter) SaveContentItem(item model.ContentItem) error {
 	return nil
 }
 
-//FindAllContentItems finds all content items
+// FindAllContentItems finds all content items
 func (sa *Adapter) FindAllContentItems(context TransactionContext) ([]model.ContentItemResponse, error) {
 	filter := bson.D{}
 	var result []model.ContentItemResponse
@@ -452,7 +452,7 @@ func (sa *Adapter) FindAllContentItems(context TransactionContext) ([]model.Cont
 	return result, nil
 }
 
-//StoreMultiTenancyData stores multi-tenancy to already exisiting data in the collections
+// StoreMultiTenancyData stores multi-tenancy to already exisiting data in the collections
 func (sa *Adapter) StoreMultiTenancyData(context TransactionContext, appID string, orgID string) error {
 
 	filter := bson.D{}
@@ -501,7 +501,7 @@ func NewStorageAdapter(mongoDBAuth string, mongoDBName string, mongoTimeout stri
 	return &Adapter{db: db}
 }
 
-//TransactionContext wraps mongo.SessionContext for use by external packages
+// TransactionContext wraps mongo.SessionContext for use by external packages
 type TransactionContext interface {
 	mongo.SessionContext
 }
