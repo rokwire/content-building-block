@@ -29,12 +29,12 @@ import (
 	"github.com/google/uuid"
 )
 
-//Adapter implements the Storage interface
+// Adapter implements the Storage interface
 type Adapter struct {
 	config *model.AWSConfig
 }
 
-//NewAWSStorageAdapter creates a new storage adapter instance
+// NewAWSStorageAdapter creates a new storage adapter instance
 func NewAWSStorageAdapter(config *model.AWSConfig) *Adapter {
 	//return &Adapter{S3Bucket: S3Bucket, S3Region: S3Region, AWSAccessKeyID: AWSAccessKeyID, AWSSecretAccessKey: AWSSecretAccessKey}
 	return &Adapter{config: config}
