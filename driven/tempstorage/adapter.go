@@ -46,7 +46,7 @@ func (a *Adapter) Save(fileName string, fileType string, fileContent []byte) err
 	// write file
 	newFile, err := os.Create(newPath)
 	if err != nil {
-		return errors.New("CANT_WRITE_FILE")
+		return fmt.Errorf("CANT_WRITE_FILE: %v", err)
 	}
 	defer newFile.Close() // idempotent, okay to call twice
 	if _, err := newFile.Write(fileContent); err != nil || newFile.Close() != nil {
