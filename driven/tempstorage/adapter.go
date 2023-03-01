@@ -15,7 +15,6 @@
 package tempstorage
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"os"
