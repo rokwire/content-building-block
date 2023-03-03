@@ -20,15 +20,17 @@ import (
 	"errors"
 	"fmt"
 	"image"
-	"image/gif"
-	jpeg "image/jpeg"
-	"image/png"
-	"strings"
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/nfnt/resize"
 	"go.mongodb.org/mongo-driver/bson"
+
+	"github.com/kolesa-team/go-webp/encoder"
+	"github.com/kolesa-team/go-webp/webp"
 )
 
 func (app *Application) getVersion() string {
@@ -236,35 +238,32 @@ func (app *Application) deleteContentItemByCategory(allApps bool, appID string, 
 
 // Misc
 
-func (app *Application) uploadImage(fileName string, filetype string, bytes []byte, path string, preferredFileName *string, spec model.ImageSpec) (*string, error) {
-
-	err := app.tempStorageAdapter.Save(fileName, filetype, bytes)
+func (app *Application) uploadImage(imageBytes []byte, path string, preferredFileName *string, spec model.ImageSpec) (*string, error) {
+	image, _, err := image.Decode(bytes.NewReader(imageBytes))
 	if err != nil {
-		return nil, fmt.Errorf("Unable to save file: %s", err)
+		return nil, fmt.Errorf("Error decoding image: %s", err)
 	}
 
-	inputFileName := fileName
-	var outputFileName string
-	if strings.Contains(fileName, ".webp") {
-		outputFileName = fileName
-	} else {
-		outputFileName = fmt.Sprintf("%s.%s", strings.Split(fileName, ".")[0], "webp") //get the file name without the extension
+	if spec.Height > 0 || spec.Width > 0 {
+		image = resize.Resize(uint(spec.Width), uint(spec.Height), image, resize.Lanczos3)
 	}
 
-	defer app.tempStorageAdapter.Delete(inputFileName)
-	defer app.tempStorageAdapter.Delete(outputFileName)
+	quality := 75
+	if spec.Quality > 0 {
+		quality = spec.Quality
+	}
 
-	err = app.webpAdapter.Convert(inputFileName, outputFileName, spec)
+	options, err := encoder.NewLossyEncoderOptions(encoder.PresetDefault, float32(quality))
 	if err != nil {
-		return nil, fmt.Errorf("Unable to convert to webp file: %s", err)
+		return nil, fmt.Errorf("Error creating webp encoder options: %s", err)
 	}
 
-	convertedFile, err := app.tempStorageAdapter.Read(outputFileName)
-	if err != nil {
-		return nil, fmt.Errorf("Unable to read webp file: %s", err)
+	var output bytes.Buffer
+	if err := webp.Encode(&output, image, options); err != nil {
+		return nil, fmt.Errorf("Error encoding webp: %s", err)
 	}
 
-	url, err := app.awsAdapter.CreateImage(convertedFile, path, preferredFileName)
+	url, err := app.awsAdapter.CreateImage(&output, path, preferredFileName)
 	if err != nil {
 		return nil, fmt.Errorf("Unable to upload to S3: %s", err)
 	}
@@ -280,96 +279,43 @@ func (app *Application) getProfileImage(userID string, imageType string) ([]byte
 	return app.awsAdapter.LoadProfileImage(fmt.Sprintf("profile-images/%s-%s.webp", userID, imageType))
 }
 
-func (app *Application) uploadProfileImage(userID string, filetype string, fileBytes []byte) error {
-	var err error
-	var defaultImage image.Image
-	var mediumImage *image.Image
-	var smallImage *image.Image
-	defaultFileNameJpeg := fmt.Sprintf("%s-default.jpeg", userID)
-	mediumFileNameJpeg := fmt.Sprintf("%s-medium.jpeg", userID)
-	smallFileNameJpeg := fmt.Sprintf("%s-small.jpeg", userID)
+func (app *Application) uploadProfileImage(userID string, imageBytes []byte) error {
+	var mediumImage image.Image
+	var smallImage image.Image
+
 	defaultFileNameWebp := fmt.Sprintf("%s-default", userID)
 	mediumFileNameWebp := fmt.Sprintf("%s-medium", userID)
 	smallFileNameWebp := fmt.Sprintf("%s-small", userID)
 
-	defer app.tempStorageAdapter.Delete(defaultFileNameJpeg)
-	defer app.tempStorageAdapter.Delete(mediumFileNameJpeg)
-	defer app.tempStorageAdapter.Delete(smallFileNameJpeg)
-
-	if filetype == "image/jpeg" {
-		defaultImage, err = jpeg.Decode(bytes.NewReader(fileBytes))
-	} else if filetype == "image/png" {
-		defaultImage, err = png.Decode(bytes.NewReader(fileBytes))
-	} else if filetype == "image/gif" {
-		defaultImage, err = gif.Decode(bytes.NewReader(fileBytes))
-	}
+	defaultImage, _, err := image.Decode(bytes.NewReader(imageBytes))
 	if err != nil {
-		return fmt.Errorf("unable to read profile image file: %s", err)
-	}
-
-	err = app.tempStorageAdapter.Save(defaultFileNameJpeg, filetype, fileBytes)
-	if err != nil {
-		return fmt.Errorf("Unable to save file: %s", defaultFileNameJpeg)
+		return fmt.Errorf("Error decoding image: %s", err)
 	}
 
 	bounds := defaultImage.Bounds()
 	if bounds.Dx() > 512 || bounds.Dy() > 512 {
 		image := resize.Resize(512, 0, defaultImage, resize.Lanczos3)
-		mediumImage = &image
+		mediumImage = image
 	} else {
-		mediumImage = &defaultImage
-	}
-	mediumImageBuff := bytes.NewBuffer([]byte{})
-
-	// Generate medium profile photo
-	if filetype == "image/jpeg" {
-		err = jpeg.Encode(mediumImageBuff, *mediumImage, nil)
-	} else if filetype == "image/png" {
-		err = png.Encode(mediumImageBuff, *mediumImage)
-	} else if filetype == "image/gif" {
-		err = gif.Encode(mediumImageBuff, *mediumImage, nil)
-	}
-	if err != nil {
-		return fmt.Errorf("Unable to save file: %s", mediumFileNameJpeg)
-	}
-	err = app.tempStorageAdapter.Save(mediumFileNameJpeg, filetype, mediumImageBuff.Bytes())
-	if err != nil {
-		return fmt.Errorf("Unable to save file: %s", defaultFileNameJpeg)
+		mediumImage = defaultImage
 	}
 
 	if bounds.Dx() > 256 || bounds.Dy() > 256 {
 		image := resize.Resize(256, 0, defaultImage, resize.Lanczos3)
-		smallImage = &image
+		smallImage = image
 	} else {
-		smallImage = &defaultImage
+		smallImage = defaultImage
 	}
 
-	// Generate small profile photo
-	smallImageBuff := bytes.NewBuffer([]byte{})
-	if filetype == "image/jpeg" {
-		err = jpeg.Encode(smallImageBuff, *smallImage, nil)
-	} else if filetype == "image/png" {
-		err = png.Encode(smallImageBuff, *smallImage)
-	} else if filetype == "image/gif" {
-		err = gif.Encode(smallImageBuff, *smallImage, nil)
-	}
+	_, err = app.uploadProfileImageToAws(defaultImage, defaultFileNameWebp, "profile-images/", model.ImageSpec{})
 	if err != nil {
-		return fmt.Errorf("Unable to save file: %s", smallFileNameJpeg)
+		return fmt.Errorf("Unable to upload de file: %s. Error: %s", defaultFileNameWebp, err)
 	}
-	err = app.tempStorageAdapter.Save(smallFileNameJpeg, filetype, smallImageBuff.Bytes())
-	if err != nil {
-		return fmt.Errorf("Unable to save file: %s. Error: %s", smallFileNameJpeg, err)
-	}
-
-	_, err = app.uploadProfileImageToAws(defaultFileNameWebp, filetype, fileBytes, "profile-images/", &defaultFileNameWebp, model.ImageSpec{})
-	if err != nil {
-		return fmt.Errorf("Unable to upload file: %s. Error: %s", defaultFileNameWebp, err)
-	}
-	_, err = app.uploadProfileImageToAws(mediumFileNameWebp, filetype, mediumImageBuff.Bytes(), "profile-images/", &mediumFileNameWebp, model.ImageSpec{})
+	_, err = app.uploadProfileImageToAws(mediumImage, mediumFileNameWebp, "profile-images/", model.ImageSpec{})
 	if err != nil {
 		return fmt.Errorf("Unable to upload file: %s. Error: %s", mediumFileNameWebp, err)
 	}
-	_, err = app.uploadProfileImageToAws(smallFileNameWebp, filetype, smallImageBuff.Bytes(), "profile-images/", &smallFileNameWebp, model.ImageSpec{})
+	_, err = app.uploadProfileImageToAws(smallImage, smallFileNameWebp, "profile-images/", model.ImageSpec{})
 	if err != nil {
 		return fmt.Errorf("Unable to upload file: %s. Error: %s", smallFileNameWebp, err)
 	}
@@ -393,35 +339,18 @@ func (app *Application) deleteProfileImage(userID string) error {
 	return nil
 }
 
-func (app *Application) uploadProfileImageToAws(fileName string, filetype string, bytes []byte, path string, preferredFileName *string, spec model.ImageSpec) (*string, error) {
-
-	err := app.tempStorageAdapter.Save(fileName, filetype, bytes)
+func (app *Application) uploadProfileImageToAws(image image.Image, filename string, path string, spec model.ImageSpec) (*string, error) {
+	options, err := encoder.NewLossyEncoderOptions(encoder.PresetDefault, 75)
 	if err != nil {
-		return nil, fmt.Errorf("Unable to save file: %s", err)
+		return nil, fmt.Errorf("Error creating webp encoder options: %s", err)
 	}
 
-	inputFileName := fileName
-	var outputFileName string
-	if strings.Contains(fileName, ".webp") {
-		outputFileName = fileName
-	} else {
-		outputFileName = fmt.Sprintf("%s.%s", strings.Split(fileName, ".")[0], "webp") //get the file name without the extension
+	var output bytes.Buffer
+	if err := webp.Encode(&output, image, options); err != nil {
+		return nil, fmt.Errorf("Error encoding webp: %s", err)
 	}
 
-	defer app.tempStorageAdapter.Delete(inputFileName)
-	defer app.tempStorageAdapter.Delete(outputFileName)
-
-	err = app.webpAdapter.Convert(inputFileName, outputFileName, spec)
-	if err != nil {
-		return nil, fmt.Errorf("Unable to convert to webp file: %s", err)
-	}
-
-	convertedFile, err := app.tempStorageAdapter.Read(outputFileName)
-	if err != nil {
-		return nil, fmt.Errorf("Unable to read webp file: %s", err)
-	}
-
-	url, err := app.awsAdapter.CreateProfileImage(convertedFile, path, preferredFileName)
+	url, err := app.awsAdapter.CreateProfileImage(&output, path, &filename)
 	if err != nil {
 		return nil, fmt.Errorf("Unable to upload to S3: %s", err)
 	}
