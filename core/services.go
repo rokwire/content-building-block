@@ -20,9 +20,9 @@ import (
 	"errors"
 	"fmt"
 	"image"
-	_ "image/gif"
-	_ "image/jpeg"
-	_ "image/png"
+	_ "image/gif"  // Allow image.Decode to detect GIFs
+	_ "image/jpeg" // Allow image.Decode to detect JPEGs
+	_ "image/png"  // Allow image.Decode to detect PNGs
 	"time"
 
 	"github.com/google/uuid"
