@@ -296,9 +296,9 @@ func (sa *Adapter) FindContentItems(appID *string, orgID string, ids []string, c
 
 	findOptions := options.Find()
 	if order != nil && "desc" == *order {
-		findOptions.SetSort(bson.D{{"date_created", -1}})
+		findOptions.SetSort(bson.M{"date_created": -1})
 	} else {
-		findOptions.SetSort(bson.D{{"date_created", 1}})
+		findOptions.SetSort(bson.M{"date_created": 1})
 	}
 	if limit != nil {
 		findOptions.SetLimit(*limit)
@@ -329,9 +329,9 @@ func (sa *Adapter) GetContentItems(appID *string, orgID string, ids []string, ca
 
 	findOptions := options.Find()
 	if order != nil && "desc" == *order {
-		findOptions.SetSort(bson.D{{"date_created", -1}})
+		findOptions.SetSort(bson.M{"date_created": -1})
 	} else {
-		findOptions.SetSort(bson.D{{"date_created", 1}})
+		findOptions.SetSort(bson.M{"date_created": 1})
 	}
 	if limit != nil {
 		findOptions.SetLimit(*limit)

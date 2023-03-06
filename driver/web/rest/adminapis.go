@@ -1027,7 +1027,7 @@ func (h AdminApisHandler) UploadImage(claims *tokenauth.Claims, w http.ResponseW
 	}
 
 	// parse and validate file and post parameters
-	file, fileHeader, err := r.FormFile("fileName")
+	file, _, err := r.FormFile("fileName")
 	if err != nil {
 		log.Print("Invalid file\n")
 		http.Error(w, "Invalid file", http.StatusBadRequest)
@@ -1055,8 +1055,7 @@ func (h AdminApisHandler) UploadImage(claims *tokenauth.Claims, w http.ResponseW
 	}
 
 	// pass the file to be processed by the use case handler
-	fileName := fileHeader.Filename
-	url, err := h.app.Services.UploadImage(fileName, filetype, fileBytes, path, imgSpec)
+	url, err := h.app.Services.UploadImage(fileBytes, path, imgSpec)
 	if err != nil {
 		log.Printf("Error converting image: %s\n", err)
 		http.Error(w, "Error converting image", http.StatusInternalServerError)

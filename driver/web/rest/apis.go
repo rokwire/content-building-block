@@ -18,6 +18,7 @@ import (
 	"content/core"
 	"content/core/model"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -132,23 +133,26 @@ func (h ApisHandler) StoreProfilePhoto(claims *tokenauth.Claims, w http.Response
 	// validate file size
 	r.Body = http.MaxBytesReader(w, r.Body, maxUploadSize)
 	if err := r.ParseMultipartForm(maxUploadSize); err != nil {
-		log.Print("File is too big\n")
-		http.Error(w, "File is too big", http.StatusBadRequest)
+		msg := fmt.Sprintf("Error parsing request form: max size is %d, err %v", maxUploadSize, err)
+		log.Println(msg)
+		http.Error(w, msg, http.StatusBadRequest)
 		return
 	}
 
 	// parse and validate file and post parameters
 	file, _, err := r.FormFile("fileName")
 	if err != nil {
-		log.Print("Invalid file\n")
-		http.Error(w, "Invalid file", http.StatusBadRequest)
+		msg := fmt.Sprintf("Error reading file: %v", err)
+		log.Println(msg)
+		http.Error(w, msg, http.StatusBadRequest)
 		return
 	}
 	defer file.Close()
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
-		log.Print("Invalid file\n")
-		http.Error(w, "Invalid file", http.StatusBadRequest)
+		msg := fmt.Sprintf("Error reading file: %v", err)
+		log.Println(msg)
+		http.Error(w, msg, http.StatusBadRequest)
 		return
 	}
 
@@ -163,7 +167,7 @@ func (h ApisHandler) StoreProfilePhoto(claims *tokenauth.Claims, w http.Response
 		return
 	}
 
-	err = h.app.Services.UploadProfileImage(claims.Subject, filetype, fileBytes)
+	err = h.app.Services.UploadProfileImage(claims.Subject, fileBytes)
 	if err != nil {
 		log.Printf("Error converting image: %s\n", err)
 		http.Error(w, "Error converting image", http.StatusInternalServerError)
@@ -535,7 +539,7 @@ func (h ApisHandler) UploadImage(claims *tokenauth.Claims, w http.ResponseWriter
 	}
 
 	// parse and validate file and post parameters
-	file, fileHeader, err := r.FormFile("fileName")
+	file, _, err := r.FormFile("fileName")
 	if err != nil {
 		log.Print("Invalid file\n")
 		http.Error(w, "Invalid file", http.StatusBadRequest)
@@ -563,8 +567,7 @@ func (h ApisHandler) UploadImage(claims *tokenauth.Claims, w http.ResponseWriter
 	}
 
 	// pass the file to be processed by the use case handler
-	fileName := fileHeader.Filename
-	objectLocation, err := h.app.Services.UploadImage(fileName, filetype, fileBytes, path, imgSpec)
+	objectLocation, err := h.app.Services.UploadImage(fileBytes, path, imgSpec)
 	if err != nil {
 		log.Printf("Error converting image: %s\n", err)
 		http.Error(w, "Error converting image", http.StatusInternalServerError)
