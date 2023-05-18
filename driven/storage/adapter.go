@@ -125,11 +125,8 @@ func (sa *Adapter) GetStudentGuide(appID string, orgID string, id string) (bson.
 
 // UpdateStudentGuide updates a student guide record
 func (sa *Adapter) UpdateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error) {
-
-	jsonID := item["_id"]
-	if jsonID == nil && jsonID != id {
-		return nil, fmt.Errorf("attempt to override another object")
-	}
+	item["app_id"] = appID
+	item["org_id"] = orgID
 
 	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
 		primitive.E{Key: "org_id", Value: orgID},
