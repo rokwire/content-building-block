@@ -5,6 +5,101 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Оrg_id could be lost on update operation [#81](https://github.com/rokwire/content-building-block/issues/81)
+### Fixed
+- Photo upload uses local storage [#79](https://github.com/rokwire/content-building-block/issues/79)
+
+## [1.2.3] - 2022-08-01
+### Fixed
+- Missing admin image permission [#74](https://github.com/rokwire/content-building-block/issues/74)
+
+## [1.2.2] - 2022-07-25
+### Fixed
+- Unable to upload profile images to S3. The S3 profile picture acl has been changed from "authenticated-read" to "private" [#72](https://github.com/rokwire/content-building-block/issues/72)
+### Changed
+- Prepare the project to become open source [#62](https://github.com/rokwire/content-building-block/issues/62)
+
+## [1.2.1] - 2022-07-07
+### Fixed
+- Fix content item categories [#67](https://github.com/rokwire/content-building-block/issues/67)
+
+## [1.2.0] - 2022-06-10
+### Changed
+- Update README file [#64](https://github.com/rokwire/content-building-block/issues/64)
+- Multi-tenancy [#55](https://github.com/rokwire/content-building-block/issues/55)
+
+## [1.1.12] - 2021-05-13
+### Fixed
+- Fix broken decode of content item [#60](https://github.com/rokwire/content-building-block/issues/60)
+
+## [1.1.11] - 2021-05-12
+### Fixed
+- Fix bad documentation for content item APIs [#56](https://github.com/rokwire/content-building-block/issues/56)
+
+## [1.1.10] - 2021-04-29
+### Fixed
+- Fix content item API inconsistencies [#52](https://github.com/rokwire/content-building-block/issues/52)
+
+## [1.1.9] - 2021-04-28
+### Changed
+- Update Core auth library to the latest version and repo [#49](https://github.com/rokwire/content-building-block/issues/49)
+
+## [1.1.8] - 2021-04-28
+### Fixed
+- Fix broken content items API [#47](https://github.com/rokwire/content-building-block/issues/47)
+
+## [1.1.7] - 2021-04-26
+### Changed
+- Update Swagger library due to security issue [#45](https://github.com/rokwire/content-building-block/issues/45)
+
+## [1.1.6] - 2021-04-04
+### Fixed
+- Bad response after requesting POST /image [#41](https://github.com/rokwire/content-building-block/issues/41)
+
+## [1.1.5] - 2021-04-04
+### Added
+- Additional fix for setting appropriate ACL permission [#38](https://github.com/rokwire/content-building-block/issues/38)
+
+## [1.1.4] - 2022-03-30
+### Added
+- Introduce CRUD of profile photos [#38](https://github.com/rokwire/content-building-block/issues/38)
+
+## [1.1.3] - 2021-12-21
+### Changed
+- Introduce content item APIs (admin & client). More changes [#34](https://github.com/rokwire/content-building-block/issues/34)
+
+## [1.1.2] - 2021-12-20
+### Changed
+- Introduce content item APIs (admin & client). More changes [#34](https://github.com/rokwire/content-building-block/issues/34)
+
+## [1.1.1] - 2021-12-17
+### Added
+- Introduce content item APIs (admin & client) [#34](https://github.com/rokwire/content-building-block/issues/34)
+
+## [1.0.14] - 2021-12-03
+### Added
+- Introduce & support health information data [#33](https://github.com/rokwire/content-building-block/issues/33)
+
+## [1.0.13] - 2021-11-08
+### Added
+- Add support of all_admin_content permission [#30](https://github.com/rokwire/content-building-block/issues/30)
+
+## [1.0.12] - 2021-11-05
+### Fixed
+- Update permissions and link core permissions [#28](https://github.com/rokwire/content-building-block/issues/28)
+
+## [1.0.11] - 2021-10-25
+### Fixed
+- Support Core access tokens for UIUC client APIs [#27](https://github.com/rokwire/content-building-block/issues/27)
+
+## [1.0.10] - 2021-10-08
+### Fixed
+- Twitter feed/widget just spins and spins [#25](https://github.com/rokwire/content-building-block/issues/25)
+
+## [1.0.9] - 2021-10-05
+### Added
+- Integrate Core-BB [#22](https://github.com/rokwire/content-building-block/issues/22)
 
 ## [1.0.8] - 2021-09-17
 ### Fixed

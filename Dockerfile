@@ -1,9 +1,8 @@
-FROM golang:1.16-buster as builder
+FROM golang:1.20-alpine as builder
 
-ENV CGO_ENABLED=0
+ENV CGO_ENABLED=1
 
-RUN apt-get update -y
-RUN apt-get install -y webp libwebp-dev
+RUN apk add --no-cache --update libwebp-dev make gcc g++
 
 RUN mkdir /content-app
 WORKDIR /content-app
@@ -11,10 +10,10 @@ WORKDIR /content-app
 COPY . .
 RUN make
 
-FROM alpine:3.13
+FROM alpine:3.17.2
 
 #we need timezone database
-RUN apk --no-cache add tzdata
+RUN apk add --no-cache tzdata
 
 RUN apk update && \
     apk upgrade -U && \
@@ -27,8 +26,5 @@ COPY --from=builder /content-app/driver/web/authorization_model.conf /driver/web
 COPY --from=builder /content-app/driver/web/authorization_policy.csv /driver/web/authorization_policy.csv
 
 COPY --from=builder /etc/passwd /etc/passwd
-
-#we need timezone database
-COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo 
 
 ENTRYPOINT ["/content"]

@@ -1,30 +1,26 @@
-/*
- *   Copyright (c) 2020 Board of Trustees of the University of Illinois.
- *   All rights reserved.
-
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
-
- *   http://www.apache.org/licenses/LICENSE-2.0
-
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// Copyright 2022 Board of Trustees of the University of Illinois.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 package storage
 
 import (
 	"context"
-	"fmt"
-	"github.com/google/uuid"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -38,7 +34,9 @@ type database struct {
 	db       *mongo.Database
 	dbClient *mongo.Client
 
-	studentGuides *collectionWrapper
+	studentGuides   *collectionWrapper
+	healthLocations *collectionWrapper
+	contentItems    *collectionWrapper
 }
 
 func (m *database) start() error {
@@ -66,6 +64,19 @@ func (m *database) start() error {
 	db := client.Database(m.mongoDBName)
 
 	studentGuides := &collectionWrapper{database: m, coll: db.Collection("student_guides")}
+	err = m.applyStudentGuidesChecks(studentGuides)
+	if err != nil {
+		return err
+	}
+
+	healthLocations := &collectionWrapper{database: m, coll: db.Collection("health_locations")}
+	err = m.applyHealthLocationsChecks(healthLocations)
+	if err != nil {
+		return err
+	}
+
+	contentItems := &collectionWrapper{database: m, coll: db.Collection("content_items")}
+	err = m.applyContentItemsChecks(contentItems)
 	if err != nil {
 		return err
 	}
@@ -75,92 +86,67 @@ func (m *database) start() error {
 	m.dbClient = client
 
 	m.studentGuides = studentGuides
+	m.healthLocations = healthLocations
+	m.contentItems = contentItems
 
 	return nil
 }
 
-// GetStudentGuides retrieves all content items
-func (sa *Adapter) GetStudentGuides(ids []string) ([]bson.M, error) {
-	filter := bson.D{}
-	if len(ids) > 0 {
-		filter = bson.D{
-			primitive.E{Key: "_id", Value: bson.M{"$in": ids}},
-		}
-	}
+func (m *database) applyStudentGuidesChecks(studentGuides *collectionWrapper) error {
+	log.Println("apply student guides checks.....")
 
-	var result []bson.M
-	err := sa.db.studentGuides.Find(filter, &result, nil)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// CreateStudentGuide creates a new student guide record
-func (sa *Adapter) CreateStudentGuide(item bson.M) (bson.M, error) {
-
-	id := item["_id"]
-	if id == nil {
-		item["_id"] = uuid.NewString()
-	}
-
-	_, err := sa.db.studentGuides.InsertOne(&item)
-	if err != nil {
-		return nil, err
-	}
-	return item, nil
-}
-
-// GetStudentGuide retrieves a student guide record by id
-func (sa *Adapter) GetStudentGuide(id string) (bson.M, error) {
-
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
-	var result []bson.M
-	err := sa.db.studentGuides.Find(filter, &result, nil)
-	if err != nil {
-		return nil, err
-	}
-	if result == nil || len(result) == 0 {
-		//not found
-		return nil, fmt.Errorf("student guide with id: %s is not found", id)
-	}
-	return result[0], nil
-
-}
-
-// UpdateStudentGuide updates a student guide record
-func (sa *Adapter) UpdateStudentGuide(id string, item bson.M) (bson.M, error) {
-
-	jsonID := item["_id"]
-	if jsonID == nil && jsonID != id {
-		return nil, fmt.Errorf("attempt to override another object")
-	}
-
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
-	err := sa.db.studentGuides.ReplaceOne(filter, item, nil)
-	if err != nil {
-		return nil, err
-	}
-	return item, nil
-}
-
-// DeleteStudentGuide deletes a student guide record with the desired id
-func (sa *Adapter) DeleteStudentGuide(id string) error {
-	filter := bson.D{primitive.E{Key: "_id", Value: id}}
-	result, err := sa.db.studentGuides.DeleteOne(filter, nil)
+	//Add org_id + app_id index
+	err := studentGuides.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1},
+		primitive.E{Key: "app_id", Value: 1}}, false)
 	if err != nil {
 		return err
 	}
-	if result == nil {
-		return fmt.Errorf("result is nil for resource item with id " + id)
-	}
-	deletedCount := result.DeletedCount
-	if deletedCount != 1 {
-		return fmt.Errorf("error occured while deleting a resource item with id " + id)
-	}
-	return nil
 
+	log.Println("student guides checks passed")
+	return nil
 }
+
+func (m *database) applyHealthLocationsChecks(healthLocations *collectionWrapper) error {
+	log.Println("health locations guides checks.....")
+
+	//Add org_id + app_id index
+	err := healthLocations.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1},
+		primitive.E{Key: "app_id", Value: 1}}, false)
+	if err != nil {
+		return err
+	}
+
+	log.Println("health locations checks passed")
+	return nil
+}
+
+func (m *database) applyContentItemsChecks(contentItems *collectionWrapper) error {
+	log.Println("apply content_items checks.....")
+
+	//Add org_id + app_id index
+	err := contentItems.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1},
+		primitive.E{Key: "app_id", Value: 1}}, false)
+	if err != nil {
+		return err
+	}
+
+	// Add category index
+	err = contentItems.AddIndex(bson.D{primitive.E{Key: "category", Value: 1}}, false)
+	if err != nil {
+		return err
+	}
+
+	// Add date_created index
+	err = contentItems.AddIndex(bson.D{primitive.E{Key: "date_created", Value: 1}}, false)
+	if err != nil {
+		return err
+	}
+
+	log.Println("content_items checks passed")
+	return nil
+}
+
+// Event
 
 func (m *database) onDataChanged(changeDoc map[string]interface{}) {
 	if changeDoc == nil {
