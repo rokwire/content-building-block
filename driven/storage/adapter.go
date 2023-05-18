@@ -125,6 +125,11 @@ func (sa *Adapter) GetStudentGuide(appID string, orgID string, id string) (bson.
 
 // UpdateStudentGuide updates a student guide record
 func (sa *Adapter) UpdateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error) {
+	jsonID := item["_id"]
+	if jsonID == nil && jsonID != id {
+		return nil, fmt.Errorf("attempt to override another object")
+	}
+
 	item["app_id"] = appID
 	item["org_id"] = orgID
 
@@ -216,11 +221,12 @@ func (sa *Adapter) GetHealthLocation(appID string, orgID string, id string) (bso
 
 // UpdateHealthLocation updates a health location record
 func (sa *Adapter) UpdateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error) {
-
 	jsonID := item["_id"]
 	if jsonID == nil && jsonID != id {
 		return nil, fmt.Errorf("attempt to override another object")
 	}
+	item["app_id"] = appID
+	item["org_id"] = orgID
 
 	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
 		primitive.E{Key: "org_id", Value: orgID},
@@ -429,7 +435,12 @@ func (sa *Adapter) DeleteContentItem(appID *string, orgID string, id string) err
 
 // SaveContentItem saves content item
 func (sa *Adapter) SaveContentItem(item model.ContentItem) error {
-	filter := bson.M{"_id": item.ID}
+	filter := bson.D{primitive.E{Key: "org_id", Value: item.OrgID},
+		primitive.E{Key: "_id", Value: item.ID}}
+	if item.AppID != nil {
+		filter = append(filter, primitive.E{Key: "app_id", Value: item.AppID})
+	}
+
 	opts := options.Replace().SetUpsert(true)
 	err := sa.db.contentItems.ReplaceOne(filter, item, opts)
 	if err != nil {
