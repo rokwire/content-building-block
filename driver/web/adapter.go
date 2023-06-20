@@ -16,15 +16,16 @@ package web
 
 import (
 	"content/core"
-	"content/core/model"
 	"content/driver/web/rest"
 	"content/utils"
 	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/rokwire/core-auth-library-go/v2/authservice"
+	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
+
 	"github.com/gorilla/mux"
-	"github.com/rokwire/core-auth-library-go/tokenauth"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
@@ -193,8 +194,8 @@ func (we Adapter) coreAuthWrapFunc(handler coreAuthFunc, authorization Authoriza
 }
 
 // NewWebAdapter creates new WebAdapter instance
-func NewWebAdapter(host string, port string, app *core.Application, config model.Config) Adapter {
-	auth := NewAuth(app, config)
+func NewWebAdapter(host string, port string, app *core.Application, serviceRegManager *authservice.ServiceRegManager) Adapter {
+	auth := NewAuth(app, serviceRegManager)
 
 	apisHandler := rest.NewApisHandler(app)
 	adminApisHandler := rest.NewAdminApisHandler(app)

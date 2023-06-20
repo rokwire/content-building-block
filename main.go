@@ -22,6 +22,7 @@ import (
 	storage "content/driven/storage"
 	"content/driven/twitter"
 	driver "content/driver/web"
+	"content/vendor/github.com/rokwire/core-auth-library-go/v2/authservice"
 	"log"
 	"os"
 	"strings"
@@ -38,6 +39,8 @@ func main() {
 	if len(Version) == 0 {
 		Version = "dev"
 	}
+
+	serviceID := "content"
 
 	port := getEnvKey("CONTENT_PORT", true)
 
@@ -79,12 +82,24 @@ func main() {
 	coreBBHost := getEnvKey("CONTENT_CORE_BB_HOST", true)
 	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
 
-	config := model.Config{
-		CoreBBHost:        coreBBHost,
-		ContentServiceURL: contentServiceURL,
+	authService := authservice.AuthService{
+		ServiceID:   serviceID,
+		ServiceHost: contentServiceURL,
+		FirstParty:  true,
+		AuthBaseURL: coreBBHost,
 	}
 
-	webAdapter := driver.NewWebAdapter(host, port, application, config)
+	serviceRegLoader, err := authservice.NewRemoteServiceRegLoader(&authService, []string{"auth"})
+	if err != nil {
+		log.Fatalf("Error initializing remote service registration loader: %v", err)
+	}
+
+	serviceRegManager, err := authservice.NewServiceRegManager(&authService, serviceRegLoader)
+	if err != nil {
+		log.Fatalf("Error initializing service registration manager: %v", err)
+	}
+
+	webAdapter := driver.NewWebAdapter(host, port, application, serviceRegManager)
 
 	webAdapter.Start()
 }

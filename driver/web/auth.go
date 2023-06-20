@@ -16,16 +16,14 @@ package web
 
 import (
 	"content/core"
-	"content/core/model"
 	"log"
 	"net/http"
 
-	"github.com/rokwire/core-auth-library-go/authorization"
-	"github.com/rokwire/core-auth-library-go/authservice"
-	"github.com/rokwire/core-auth-library-go/tokenauth"
-	"github.com/rokwire/logging-library-go/errors"
-	"github.com/rokwire/logging-library-go/logs"
-	"github.com/rokwire/logging-library-go/logutils"
+	"github.com/rokwire/core-auth-library-go/v2/authorization"
+	"github.com/rokwire/core-auth-library-go/v2/authservice"
+	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
+	"github.com/rokwire/logging-library-go/v2/errors"
+	"github.com/rokwire/logging-library-go/v2/logutils"
 )
 
 // Authorization is an interface for auth types
@@ -40,8 +38,8 @@ type Auth struct {
 }
 
 // NewAuth creates new auth handler
-func NewAuth(app *core.Application, config model.Config) *Auth {
-	coreAuth := NewCoreAuth(app, config)
+func NewAuth(app *core.Application, serviceRegManager *authservice.ServiceRegManager) *Auth {
+	coreAuth := NewCoreAuth(app, serviceRegManager)
 
 	auth := Auth{coreAuth: coreAuth}
 	return &auth
@@ -58,21 +56,10 @@ type CoreAuth struct {
 }
 
 // NewCoreAuth creates new CoreAuth
-func NewCoreAuth(app *core.Application, config model.Config) *CoreAuth {
-
-	remoteConfig := authservice.RemoteAuthDataLoaderConfig{
-		AuthServicesHost: config.CoreBBHost,
-	}
-
-	serviceLoader, err := authservice.NewRemoteAuthDataLoader(remoteConfig, []string{"core"}, logs.NewLogger("content", &logs.LoggerOpts{}))
-	authService, err := authservice.NewAuthService("content", config.ContentServiceURL, serviceLoader)
-	if err != nil {
-		log.Fatalf("Error initializing auth service: %v", err)
-	}
-
+func NewCoreAuth(app *core.Application, serviceRegManager *authservice.ServiceRegManager) *CoreAuth {
 	adminPermissionAuth := authorization.NewCasbinAuthorization("driver/web/authorization_model.conf",
 		"driver/web/authorization_policy.csv")
-	tokenAuth, err := tokenauth.NewTokenAuth(true, authService, adminPermissionAuth, nil)
+	tokenAuth, err := tokenauth.NewTokenAuth(true, serviceRegManager, adminPermissionAuth, nil)
 	if err != nil {
 		log.Fatalf("Error intitializing token auth: %v", err)
 	}
