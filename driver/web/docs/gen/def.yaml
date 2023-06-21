@@ -375,7 +375,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -548,7 +548,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -708,7 +708,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -744,7 +744,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -783,7 +783,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -882,7 +882,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -911,7 +911,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -950,7 +950,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -1049,7 +1049,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -1078,7 +1078,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -1117,7 +1117,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -1216,7 +1216,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -1245,7 +1245,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -1284,7 +1284,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -1383,7 +1383,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -1412,7 +1412,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -1451,7 +1451,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -1565,7 +1565,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -1607,7 +1607,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -1685,7 +1685,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
@@ -1813,7 +1813,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  '/content/profile_photo/{user-id}':
+  '/profile_photo/{user-id}':
     get:
       tags:
         - Apis
@@ -1848,7 +1848,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  /content/profile_photo:
+  /profile_photo:
     get:
       tags:
         - Apis
@@ -1914,7 +1914,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  /content/student_guides:
+  /student_guides:
     get:
       tags:
         - Client
@@ -1941,7 +1941,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  '/content/student_guides/{id}':
+  '/student_guides/{id}':
     get:
       tags:
         - Client
@@ -1968,7 +1968,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  /content/health_locations:
+  /health_locations:
     get:
       tags:
         - Client
@@ -1995,7 +1995,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  '/content/health_locations/{id}':
+  '/health_locations/{id}':
     get:
       tags:
         - Client
@@ -2022,7 +2022,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  /content/content_items:
+  /content_items:
     get:
       tags:
         - Client
@@ -2072,14 +2072,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
           description: Unauthorized
         '500':
           description: Internal error
-  '/content/content_items/{id}':
+  '/content_items/{id}':
     get:
       tags:
         - Client
@@ -2113,14 +2113,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/schemas/Reward'
+                  $ref: '#/components/schemas/Reward'
         '400':
           description: Bad request
         '401':
           description: Unauthorized
         '500':
           description: Internal error
-  /content/content_item/categories:
+  /content_item/categories:
     get:
       tags:
         - Client
@@ -2147,7 +2147,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  /content/image:
+  /image:
     post:
       tags:
         - Client
@@ -2206,7 +2206,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  '/content/twitter/users/{user_id}/tweets':
+  '/twitter/users/{user_id}/tweets':
     get:
       tags:
         - Client
@@ -2233,7 +2233,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  components: null
+components:
   securitySchemes:
     bearerAuth:
       type: http

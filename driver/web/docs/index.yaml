@@ -67,35 +67,35 @@ paths:
     $ref: "./resources/admin/image.yaml"                                          
 
   #Apis
-  /content/profile_photo/{user-id}:
+  /profile_photo/{user-id}:
     $ref: "./resources/apis/profile-photo-userID.yaml"
-  /content/profile_photo:
+  /profile_photo:
     $ref: "./resources/apis/profile-photo.yaml"   
   #Client
-  /content/student_guides:
+  /student_guides:
     $ref: "./resources/client/student-guides.yaml"
-  /content/student_guides/{id}:
+  /student_guides/{id}:
     $ref: "./resources/client/student-guidesid.yaml" 
-  /content/health_locations:
+  /health_locations:
     $ref: "./resources/client/health-locations.yaml" 
-  /content/health_locations/{id}:
+  /health_locations/{id}:
     $ref: "./resources/client/health-locationsid.yaml"
-  /content/content_items:
+  /content_items:
     $ref: "./resources/client/content-items.yaml"    
-  /content/content_items/{id}:
+  /content_items/{id}:
     $ref: "./resources/client/content-itemsid.yaml" 
-  /content/content_item/categories:
+  /content_item/categories:
     $ref: "./resources/client/content-items-categories.yaml"  
-  /content/image:
+  /image:
     $ref: "./resources/client/image.yaml"
-  /content/twitter/users/{user_id}/tweets:
+  /twitter/users/{user_id}/tweets:
     $ref: "./resources/client/twitter-user-tweets.yaml"      
   
-  components:
+components:
   securitySchemes:
-      bearerAuth:            # arbitrary name for the security scheme
-        type: http
-        scheme: bearer
-        bearerFormat: JWT
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     $ref: "./schemas/index.yaml"
