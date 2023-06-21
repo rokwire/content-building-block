@@ -42,7 +42,7 @@ func main() {
 	}
 
 	loggerOpts := logs.LoggerOpts{SuppressRequests: []logs.HttpRequestProperties{logs.NewAwsHealthCheckHttpRequestProperties("/content/version")}}
-	logger := logs.NewLogger("core", &loggerOpts)
+	logger := logs.NewLogger("content", &loggerOpts)
 
 	port := getEnvKey("CONTENT_PORT", true)
 
