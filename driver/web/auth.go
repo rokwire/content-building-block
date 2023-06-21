@@ -37,13 +37,14 @@ type Authorization interface {
 // Auth handler
 type Auth struct {
 	coreAuth *CoreAuth
+	logger   *logs.Logger
 }
 
 // NewAuth creates new auth handler
-func NewAuth(app *core.Application, config model.Config) *Auth {
+func NewAuth(app *core.Application, config model.Config, logger *logs.Logger) *Auth {
 	coreAuth := NewCoreAuth(app, config)
 
-	auth := Auth{coreAuth: coreAuth}
+	auth := Auth{coreAuth: coreAuth, logger: logger}
 	return &auth
 }
 
