@@ -13,8 +13,8 @@ require (
 	github.com/rokwire/core-auth-library-go/v2 v2.2.0
 	github.com/rokwire/logging-library-go/v2 v2.2.0
 	github.com/swaggo/http-swagger v1.3.4
-	github.com/swaggo/swag v1.16.1
 	go.mongodb.org/mongo-driver v1.11.7
+	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
@@ -39,6 +39,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/swaggo/files v1.0.1 // indirect
+	github.com/swaggo/swag v1.16.1 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.2 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
@@ -50,6 +51,5 @@ require (
 	golang.org/x/text v0.10.0 // indirect
 	golang.org/x/tools v0.10.0 // indirect
 	gopkg.in/go-playground/validator.v9 v9.31.0 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

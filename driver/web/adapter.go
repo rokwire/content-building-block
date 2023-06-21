@@ -27,7 +27,7 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/rokwire/logging-library-go/logs"
+	"github.com/rokwire/logging-library-go/v2/logs"
 
 	"github.com/rokwire/core-auth-library-go/v2/authservice"
 	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
@@ -38,10 +38,9 @@ import (
 
 // Adapter entity
 type Adapter struct {
-	host              string
-	port              string
-	contentServiceURL string
-	auth              *Auth
+	host string
+	port string
+	auth *Auth
 
 	apisHandler      rest.ApisHandler
 	adminApisHandler rest.AdminApisHandler
@@ -247,11 +246,11 @@ func NewWebAdapter(host string, port string, app *core.Application, serviceRegMa
 		logger.Fatalf("error parsing docs yaml - %s", err.Error())
 	}
 
-	auth := NewAuth(app, serviceRegManager)
+	auth := NewAuth(app, serviceRegManager, logger)
 
 	apisHandler := rest.NewApisHandler(app)
 	adminApisHandler := rest.NewAdminApisHandler(app)
-	return Adapter{host: host, port: port, cachedYamlDoc: yamlDoc, contentServiceURL: config.ContentServiceURL, auth: auth,
+	return Adapter{host: host, port: port, cachedYamlDoc: yamlDoc, auth: auth,
 		apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app, logger: logger}
 }
 

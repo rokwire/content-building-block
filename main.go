@@ -22,10 +22,11 @@ import (
 	storage "content/driven/storage"
 	"content/driven/twitter"
 	driver "content/driver/web"
-	"content/vendor/github.com/rokwire/core-auth-library-go/v2/authservice"
 	"log"
 	"os"
 	"strings"
+
+	"github.com/rokwire/core-auth-library-go/v2/authservice"
 
 	"github.com/rokwire/logging-library-go/v2/logs"
 )
