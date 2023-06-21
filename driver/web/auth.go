@@ -28,7 +28,7 @@ import (
 	"github.com/rokwire/logging-library-go/logutils"
 )
 
-//Authorization is an interface for auth types
+// Authorization is an interface for auth types
 type Authorization interface {
 	check(req *http.Request) (int, *tokenauth.Claims, error)
 	start()
@@ -37,13 +37,14 @@ type Authorization interface {
 // Auth handler
 type Auth struct {
 	coreAuth *CoreAuth
+	logger   *logs.Logger
 }
 
 // NewAuth creates new auth handler
-func NewAuth(app *core.Application, config model.Config) *Auth {
+func NewAuth(app *core.Application, config model.Config, logger *logs.Logger) *Auth {
 	coreAuth := NewCoreAuth(app, config)
 
-	auth := Auth{coreAuth: coreAuth}
+	auth := Auth{coreAuth: coreAuth, logger: logger}
 	return &auth
 }
 
@@ -85,8 +86,8 @@ func NewCoreAuth(app *core.Application, config model.Config) *CoreAuth {
 	return &auth
 }
 
-//PermissionsAuth entity
-//This enforces that the user has permissions matching the policy
+// PermissionsAuth entity
+// This enforces that the user has permissions matching the policy
 type PermissionsAuth struct {
 	tokenAuth *tokenauth.TokenAuth
 }
@@ -114,7 +115,7 @@ func newPermissionsAuth(tokenAuth *tokenauth.TokenAuth) *PermissionsAuth {
 	return &permissionsAuth
 }
 
-//UserAuth entity
+// UserAuth entity
 // This enforces that the user is not anonymous
 type UserAuth struct {
 	tokenAuth *tokenauth.TokenAuth
@@ -142,7 +143,7 @@ func newUserAuth(tokenAuth *tokenauth.TokenAuth) *UserAuth {
 	return &userAuth
 }
 
-//StandardAuth entity
+// StandardAuth entity
 // This enforces standard auth check
 type StandardAuth struct {
 	tokenAuth *tokenauth.TokenAuth

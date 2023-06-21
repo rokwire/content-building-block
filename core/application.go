@@ -18,14 +18,14 @@ import (
 	"content/driven/awsstorage"
 	cacheadapter "content/driven/cache"
 	"content/driven/storage"
-	"content/driven/tempstorage"
 	"content/driven/twitter"
-	"content/driven/webp"
 	"log"
 	"sync"
+
+	"github.com/rokwire/logging-library-go/logs"
 )
 
-//Application represents the core application code based on hexagonal architecture
+// Application represents the core application code based on hexagonal architecture
 type Application struct {
 	version string
 	build   string
@@ -34,16 +34,16 @@ type Application struct {
 
 	Services Services //expose to the drivers adapters
 
-	storage            Storage
-	awsAdapter         *awsstorage.Adapter
-	tempStorageAdapter *tempstorage.Adapter
-	webpAdapter        *webp.Adapter
-	twitterAdapter     *twitter.Adapter
-	cacheAdapter       *cacheadapter.CacheAdapter
+	storage        Storage
+	awsAdapter     *awsstorage.Adapter
+	twitterAdapter *twitter.Adapter
+	cacheAdapter   *cacheadapter.CacheAdapter
 
 	//TODO - remove this when applied to all environemnts
 	multiTenancyAppID string
 	multiTenancyOrgID string
+
+	logger *logs.Logger
 }
 
 // Start starts the core part of the application
@@ -56,7 +56,7 @@ func (app *Application) Start() {
 	}
 }
 
-//as the service starts supporting multi-tenancy we need to add the needed multi-tenancy fields for the existing data,
+// as the service starts supporting multi-tenancy we need to add the needed multi-tenancy fields for the existing data,
 func (app *Application) storeMultiTenancyData() error {
 	log.Println("storeMultiTenancyData...")
 	//in transaction
@@ -105,12 +105,10 @@ func (app *Application) storeMultiTenancyData() error {
 
 // NewApplication creates new Application
 func NewApplication(version string, build string, storage Storage, awsAdapter *awsstorage.Adapter,
-	tempStorageAdapter *tempstorage.Adapter, webpAdapter *webp.Adapter, twitterAdapter *twitter.Adapter,
-	cacheadapter *cacheadapter.CacheAdapter, mtAppID string, mtOrgID string) *Application {
+	twitterAdapter *twitter.Adapter, cacheadapter *cacheadapter.CacheAdapter, mtAppID string, mtOrgID string, logger *logs.Logger) *Application {
 	cacheLock := &sync.Mutex{}
 	application := Application{version: version, build: build, cacheLock: cacheLock, storage: storage,
-		awsAdapter: awsAdapter, tempStorageAdapter: tempStorageAdapter, webpAdapter: webpAdapter,
-		twitterAdapter: twitterAdapter, cacheAdapter: cacheadapter, multiTenancyAppID: mtAppID, multiTenancyOrgID: mtOrgID}
+		awsAdapter: awsAdapter, twitterAdapter: twitterAdapter, cacheAdapter: cacheadapter, multiTenancyAppID: mtAppID, multiTenancyOrgID: mtOrgID, logger: logger}
 
 	// add the drivers ports/interfaces
 	application.Services = &servicesImpl{app: &application}

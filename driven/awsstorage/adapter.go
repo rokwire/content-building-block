@@ -17,8 +17,8 @@ package awsstorage
 import (
 	"content/core/model"
 	"fmt"
+	"io"
 	"log"
-	"os"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -29,12 +29,12 @@ import (
 	"github.com/google/uuid"
 )
 
-//Adapter implements the Storage interface
+// Adapter implements the Storage interface
 type Adapter struct {
 	config *model.AWSConfig
 }
 
-//NewAWSStorageAdapter creates a new storage adapter instance
+// NewAWSStorageAdapter creates a new storage adapter instance
 func NewAWSStorageAdapter(config *model.AWSConfig) *Adapter {
 	//return &Adapter{S3Bucket: S3Bucket, S3Region: S3Region, AWSAccessKeyID: AWSAccessKeyID, AWSSecretAccessKey: AWSSecretAccessKey}
 	return &Adapter{config: config}
@@ -87,7 +87,7 @@ func (a *Adapter) LoadProfileImage(path string) ([]byte, error) {
 }
 
 // CreateImage uploads an image instance from a file and image type
-func (a *Adapter) CreateImage(file *os.File, path string, preferredFileName *string) (*string, error) {
+func (a *Adapter) CreateImage(body io.Reader, path string, preferredFileName *string) (*string, error) {
 	log.Println("Create image")
 
 	s, err := a.createS3Session()
@@ -96,7 +96,7 @@ func (a *Adapter) CreateImage(file *os.File, path string, preferredFileName *str
 		return nil, err
 	}
 	key := a.prepareKey(path, preferredFileName)
-	objectLocation, err := a.uploadFileToS3(s, file, a.config.S3Bucket, key, "public-read")
+	objectLocation, err := a.uploadFileToS3(s, body, a.config.S3Bucket, key, "public-read")
 	if err != nil {
 		log.Printf("Could not upload file")
 		return nil, err
@@ -106,7 +106,7 @@ func (a *Adapter) CreateImage(file *os.File, path string, preferredFileName *str
 }
 
 // CreateProfileImage uploads a profile image
-func (a *Adapter) CreateProfileImage(file *os.File, path string, preferredFileName *string) (*string, error) {
+func (a *Adapter) CreateProfileImage(body io.Reader, path string, preferredFileName *string) (*string, error) {
 	log.Println("Create profile image")
 
 	s, err := a.createS3Session()
@@ -115,7 +115,7 @@ func (a *Adapter) CreateProfileImage(file *os.File, path string, preferredFileNa
 		return nil, err
 	}
 	key := a.prepareKey(path, preferredFileName)
-	objectLocation, err := a.uploadFileToS3(s, file, a.config.S3ProfileImagesBucket, key, "private")
+	objectLocation, err := a.uploadFileToS3(s, body, a.config.S3ProfileImagesBucket, key, "private")
 	if err != nil {
 		log.Printf("Could not upload file")
 		return nil, err
@@ -178,13 +178,13 @@ func (a *Adapter) createS3Session() (*session.Session, error) {
 }
 
 // UploadFileToS3 saves a file to aws bucket and returns the url to the file and an error if there's any
-func (a *Adapter) uploadFileToS3(s *session.Session, file *os.File, bucket string, key string, cannedACL string) (string, error) {
+func (a *Adapter) uploadFileToS3(s *session.Session, body io.Reader, bucket string, key string, cannedACL string) (string, error) {
 	uploader := s3manager.NewUploader(s)
 	result, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(bucket),
 		ACL:    aws.String(cannedACL),
 		Key:    aws.String(key),
-		Body:   file,
+		Body:   body,
 	})
 	if err != nil {
 		log.Print(err)

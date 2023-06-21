@@ -23,12 +23,14 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/rokwire/logging-library-go/logs"
+
 	"github.com/gorilla/mux"
 	"github.com/rokwire/core-auth-library-go/tokenauth"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-//Adapter entity
+// Adapter entity
 type Adapter struct {
 	host              string
 	port              string
@@ -39,6 +41,8 @@ type Adapter struct {
 	adminApisHandler rest.AdminApisHandler
 
 	app *core.Application
+
+	logger *logs.Logger
 }
 
 // @title Rokwire Content Building Block API
@@ -66,7 +70,7 @@ type Adapter struct {
 // @in header
 // @name GROUP
 
-//Start starts the module
+// Start starts the module
 func (we Adapter) Start() {
 
 	router := mux.NewRouter().StrictSlash(true)
@@ -194,12 +198,12 @@ func (we Adapter) coreAuthWrapFunc(handler coreAuthFunc, authorization Authoriza
 }
 
 // NewWebAdapter creates new WebAdapter instance
-func NewWebAdapter(host string, port string, app *core.Application, config model.Config) Adapter {
-	auth := NewAuth(app, config)
+func NewWebAdapter(host string, port string, app *core.Application, config model.Config, logger *logs.Logger) Adapter {
+	auth := NewAuth(app, config, logger)
 
 	apisHandler := rest.NewApisHandler(app)
 	adminApisHandler := rest.NewAdminApisHandler(app)
-	return Adapter{host: host, port: port, contentServiceURL: config.ContentServiceURL, auth: auth, apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app}
+	return Adapter{host: host, port: port, contentServiceURL: config.ContentServiceURL, auth: auth, apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app, logger: logger}
 }
 
 // AppListener implements core.ApplicationListener interface
