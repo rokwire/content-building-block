@@ -43,7 +43,7 @@ func (sa *Adapter) Start() error {
 	return err
 }
 
-//PerformTransaction performs a transaction
+// PerformTransaction performs a transaction
 func (sa *Adapter) PerformTransaction(transaction func(context TransactionContext) error) error {
 	// transaction
 	err := sa.db.dbClient.UseSession(context.Background(), func(sessionContext mongo.SessionContext) error {
@@ -126,11 +126,13 @@ func (sa *Adapter) GetStudentGuide(appID string, orgID string, id string) (bson.
 
 // UpdateStudentGuide updates a student guide record
 func (sa *Adapter) UpdateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error) {
-
 	jsonID := item["_id"]
 	if jsonID == nil && jsonID != id {
 		return nil, fmt.Errorf("attempt to override another object")
 	}
+
+	item["app_id"] = appID
+	item["org_id"] = orgID
 
 	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
 		primitive.E{Key: "org_id", Value: orgID},
@@ -220,11 +222,12 @@ func (sa *Adapter) GetHealthLocation(appID string, orgID string, id string) (bso
 
 // UpdateHealthLocation updates a health location record
 func (sa *Adapter) UpdateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error) {
-
 	jsonID := item["_id"]
 	if jsonID == nil && jsonID != id {
 		return nil, fmt.Errorf("attempt to override another object")
 	}
+	item["app_id"] = appID
+	item["org_id"] = orgID
 
 	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
 		primitive.E{Key: "org_id", Value: orgID},
@@ -297,9 +300,9 @@ func (sa *Adapter) FindContentItems(appID *string, orgID string, ids []string, c
 
 	findOptions := options.Find()
 	if order != nil && "desc" == *order {
-		findOptions.SetSort(bson.D{{"date_created", -1}})
+		findOptions.SetSort(bson.M{"date_created": -1})
 	} else {
-		findOptions.SetSort(bson.D{{"date_created", 1}})
+		findOptions.SetSort(bson.M{"date_created": 1})
 	}
 	if limit != nil {
 		findOptions.SetLimit(*limit)
@@ -330,9 +333,9 @@ func (sa *Adapter) GetContentItems(appID *string, orgID string, ids []string, ca
 
 	findOptions := options.Find()
 	if order != nil && "desc" == *order {
-		findOptions.SetSort(bson.D{{"date_created", -1}})
+		findOptions.SetSort(bson.M{"date_created": -1})
 	} else {
-		findOptions.SetSort(bson.D{{"date_created", 1}})
+		findOptions.SetSort(bson.M{"date_created": 1})
 	}
 	if limit != nil {
 		findOptions.SetLimit(*limit)
@@ -433,7 +436,12 @@ func (sa *Adapter) DeleteContentItem(appID *string, orgID string, id string) err
 
 // SaveContentItem saves content item
 func (sa *Adapter) SaveContentItem(item model.ContentItem) error {
-	filter := bson.M{"_id": item.ID}
+	filter := bson.D{primitive.E{Key: "org_id", Value: item.OrgID},
+		primitive.E{Key: "_id", Value: item.ID}}
+	if item.AppID != nil {
+		filter = append(filter, primitive.E{Key: "app_id", Value: item.AppID})
+	}
+
 	opts := options.Replace().SetUpsert(true)
 	err := sa.db.contentItems.ReplaceOne(filter, item, opts)
 	if err != nil {
@@ -442,7 +450,7 @@ func (sa *Adapter) SaveContentItem(item model.ContentItem) error {
 	return nil
 }
 
-//FindAllContentItems finds all content items
+// FindAllContentItems finds all content items
 func (sa *Adapter) FindAllContentItems(context TransactionContext) ([]model.ContentItemResponse, error) {
 	filter := bson.D{}
 	var result []model.ContentItemResponse
@@ -453,7 +461,7 @@ func (sa *Adapter) FindAllContentItems(context TransactionContext) ([]model.Cont
 	return result, nil
 }
 
-//StoreMultiTenancyData stores multi-tenancy to already exisiting data in the collections
+// StoreMultiTenancyData stores multi-tenancy to already exisiting data in the collections
 func (sa *Adapter) StoreMultiTenancyData(context TransactionContext, appID string, orgID string) error {
 
 	filter := bson.D{}
@@ -502,7 +510,7 @@ func NewStorageAdapter(mongoDBAuth string, mongoDBName string, mongoTimeout stri
 	return &Adapter{db: db}
 }
 
-//TransactionContext wraps mongo.SessionContext for use by external packages
+// TransactionContext wraps mongo.SessionContext for use by external packages
 type TransactionContext interface {
 	mongo.SessionContext
 }

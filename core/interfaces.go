@@ -46,9 +46,9 @@ type Services interface {
 	DeleteContentItem(allApps bool, appID string, orgID string, id string) error
 	DeleteContentItemByCategory(allApps bool, appID string, orgID string, id string, category string) error
 
-	UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (*string, error)
+	UploadImage(imageBytes []byte, path string, spec model.ImageSpec) (*string, error)
 	GetProfileImage(userID string, imageType string) ([]byte, error)
-	UploadProfileImage(userID string, filetype string, bytes []byte) error
+	UploadProfileImage(userID string, bytes []byte) error
 	DeleteProfileImage(userID string) error
 
 	GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error)
@@ -146,12 +146,12 @@ func (s *servicesImpl) GetProfileImage(userID string, imageType string) ([]byte,
 	return s.app.getProfileImage(userID, imageType)
 }
 
-func (s *servicesImpl) UploadImage(fileName string, filetype string, bytes []byte, path string, spec model.ImageSpec) (*string, error) {
-	return s.app.uploadImage(fileName, filetype, bytes, path, nil, spec)
+func (s *servicesImpl) UploadImage(imageBytes []byte, path string, spec model.ImageSpec) (*string, error) {
+	return s.app.uploadImage(imageBytes, path, nil, spec)
 }
 
-func (s *servicesImpl) UploadProfileImage(userID string, filetype string, fileBytes []byte) error {
-	return s.app.uploadProfileImage(userID, filetype, fileBytes)
+func (s *servicesImpl) UploadProfileImage(userID string, fileBytes []byte) error {
+	return s.app.uploadProfileImage(userID, fileBytes)
 }
 
 func (s *servicesImpl) DeleteProfileImage(userID string) error {

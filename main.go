@@ -20,9 +20,7 @@ import (
 	"content/driven/awsstorage"
 	cacheadapter "content/driven/cache"
 	storage "content/driven/storage"
-	"content/driven/tempstorage"
 	"content/driven/twitter"
-	"content/driven/webp"
 	driver "content/driver/web"
 	"log"
 	"os"
@@ -67,10 +65,6 @@ func main() {
 	awsConfig := &model.AWSConfig{S3Bucket: s3Bucket, S3ProfileImagesBucket: s3ProfileImagesBucket, S3Region: s3Region, AWSAccessKeyID: awsAccessKeyID, AWSSecretAccessKey: awsSecretAccessKey}
 	awsAdapter := awsstorage.NewAWSStorageAdapter(awsConfig)
 
-	tempStorageAdapter := tempstorage.NewTempStorageAdapter()
-
-	webpAdapter := webp.NewWebpAdapter()
-
 	defaultCacheExpirationSeconds := getEnvKey("CONTENT_DEFAULT_CACHE_EXPIRATION_SECONDS", false)
 	cacheAdapter := cacheadapter.NewCacheAdapter(defaultCacheExpirationSeconds)
 
@@ -82,8 +76,7 @@ func main() {
 	mtOrgID := getEnvKey("CONTENT_MULTI_TENANCY_ORG_ID", true)
 
 	// application
-	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, tempStorageAdapter,
-		webpAdapter, twitterAdapter, cacheAdapter, mtAppID, mtOrgID, logger)
+	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, twitterAdapter, cacheAdapter, mtAppID, mtOrgID, logger)
 	application.Start()
 
 	// web adapter
