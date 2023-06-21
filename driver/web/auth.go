@@ -35,13 +35,14 @@ type Authorization interface {
 // Auth handler
 type Auth struct {
 	coreAuth *CoreAuth
+	logger   *logs.Logger
 }
 
 // NewAuth creates new auth handler
-func NewAuth(app *core.Application, serviceRegManager *authservice.ServiceRegManager) *Auth {
+func NewAuth(app *core.Application, serviceRegManager *authservice.ServiceRegManager, logger *logs.Logger) *Auth {
 	coreAuth := NewCoreAuth(app, serviceRegManager)
 
-	auth := Auth{coreAuth: coreAuth}
+	auth := Auth{coreAuth: coreAuth, logger: logger}
 	return &auth
 }
 
