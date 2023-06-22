@@ -17,7 +17,6 @@ package web
 import (
 	"bytes"
 	"content/core"
-	"content/core/model"
 	"content/driver/web/rest"
 	"content/utils"
 	"fmt"
@@ -28,19 +27,20 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/rokwire/logging-library-go/logs"
+	"github.com/rokwire/logging-library-go/v2/logs"
+
+	"github.com/rokwire/core-auth-library-go/v2/authservice"
+	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
 
 	"github.com/gorilla/mux"
-	"github.com/rokwire/core-auth-library-go/tokenauth"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 // Adapter entity
 type Adapter struct {
-	host              string
-	port              string
-	contentServiceURL string
-	auth              *Auth
+	host string
+	port string
+	auth *Auth
 
 	apisHandler      rest.ApisHandler
 	adminApisHandler rest.AdminApisHandler
@@ -240,17 +240,17 @@ func (we Adapter) coreAuthWrapFunc(handler coreAuthFunc, authorization Authoriza
 }
 
 // NewWebAdapter creates new WebAdapter instance
-func NewWebAdapter(host string, port string, app *core.Application, config model.Config, logger *logs.Logger) Adapter {
+func NewWebAdapter(host string, port string, app *core.Application, serviceRegManager *authservice.ServiceRegManager, logger *logs.Logger) Adapter {
 	yamlDoc, err := loadDocsYAML(host)
 	if err != nil {
 		logger.Fatalf("error parsing docs yaml - %s", err.Error())
 	}
 
-	auth := NewAuth(app, config, logger)
+	auth := NewAuth(app, serviceRegManager, logger)
 
 	apisHandler := rest.NewApisHandler(app)
 	adminApisHandler := rest.NewAdminApisHandler(app)
-	return Adapter{host: host, port: port, cachedYamlDoc: yamlDoc, contentServiceURL: config.ContentServiceURL, auth: auth,
+	return Adapter{host: host, port: port, cachedYamlDoc: yamlDoc, auth: auth,
 		apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app, logger: logger}
 }
 

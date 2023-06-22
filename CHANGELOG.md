@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Set logger [#69](https://github.com/rokwire/content-building-block/issues/69)
 - Оrg_id could be lost on update operation [#81](https://github.com/rokwire/content-building-block/issues/81)
+- Prepare for deployment in OpenShift [#84](https://github.com/rokwire/content-building-block/issues/84)
 ### Fixed
 - Photo upload uses local storage [#79](https://github.com/rokwire/content-building-block/issues/79)
 - Fix docs [#76](https://github.com/rokwire/content-building-block/issues/76)

@@ -26,7 +26,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rokwire/logging-library-go/logs"
+	"github.com/rokwire/core-auth-library-go/v2/authservice"
+
+	"github.com/rokwire/logging-library-go/v2/logs"
 )
 
 var (
@@ -41,8 +43,10 @@ func main() {
 		Version = "dev"
 	}
 
-	loggerOpts := logs.LoggerOpts{SuppressRequests: []logs.HttpRequestProperties{logs.NewAwsHealthCheckHttpRequestProperties("/content/version")}}
-	logger := logs.NewLogger("content", &loggerOpts)
+	serviceID := "content"
+
+	loggerOpts := logs.LoggerOpts{SuppressRequests: logs.NewStandardHealthCheckHTTPRequestProperties(serviceID + "/version")}
+	logger := logs.NewLogger(serviceID, &loggerOpts)
 
 	port := getEnvKey("CONTENT_PORT", true)
 
@@ -84,12 +88,24 @@ func main() {
 	coreBBHost := getEnvKey("CONTENT_CORE_BB_HOST", true)
 	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
 
-	config := model.Config{
-		CoreBBHost:        coreBBHost,
-		ContentServiceURL: contentServiceURL,
+	authService := authservice.AuthService{
+		ServiceID:   serviceID,
+		ServiceHost: contentServiceURL,
+		FirstParty:  true,
+		AuthBaseURL: coreBBHost,
 	}
 
-	webAdapter := driver.NewWebAdapter(host, port, application, config, logger)
+	serviceRegLoader, err := authservice.NewRemoteServiceRegLoader(&authService, []string{"auth"})
+	if err != nil {
+		log.Fatalf("Error initializing remote service registration loader: %v", err)
+	}
+
+	serviceRegManager, err := authservice.NewServiceRegManager(&authService, serviceRegLoader)
+	if err != nil {
+		log.Fatalf("Error initializing service registration manager: %v", err)
+	}
+
+	webAdapter := driver.NewWebAdapter(host, port, application, serviceRegManager, logger)
 
 	webAdapter.Start()
 }
