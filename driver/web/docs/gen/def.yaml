@@ -1803,10 +1803,389 @@ paths:
               schema:
                 type: array
                 items:
+                  $ref: '#/paths/~1admin~1file/post/responses/200/content/application~1json/schema/items'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /admin/data:
+    post:
+      tags:
+        - Admin
+      summary: Creates a data content item
+      description: |
+        Creates a new data content item
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Creates a data content item
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1admin~1data/put/requestBody/content/application~1json/schema'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    put:
+      tags:
+        - Admin
+      summary: Updates data content item
+      description: |
+        Updates data content item 
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Updates data content item
+        content:
+          application/json:
+            schema:
+              required:
+                - key
+                - category
+              type: object
+              properties:
+                key:
+                  type: string
+                category:
+                  type: string
+                data:
+                  type: object
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    get:
+      tags:
+        - Admin
+      summary: Retrieves data content items
+      description: |
+        Retrieves data content items
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1admin~1data/put/requestBody/content/application~1json/schema'
+      parameters:
+        - name: category
+          in: query
+          description: category of data content item
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reward'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  '/admin/data/{key}':
+    get:
+      tags:
+        - Admin
+      summary: Retrieves data content item
+      description: |
+        Retrieves data content item
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: key
+          in: path
+          description: key
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    delete:
+      tags:
+        - Admin
+      summary: Delete data content item
+      description: |
+        Delete data content item
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: key
+          in: path
+          description: key
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /admin/category:
+    post:
+      tags:
+        - Admin
+      summary: Creates a category
+      description: |
+        Creates a category
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Creates category
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1admin~1category/put/requestBody/content/application~1json/schema'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    put:
+      tags:
+        - Admin
+      summary: Updates a category
+      description: |
+        Updates a category
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Updates a category
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+              type: object
+              properties:
+                name:
+                  type: string
+                permissions:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  '/admin/category/{id}':
+    get:
+      tags:
+        - Admin
+      summary: Retrieves data content item
+      description: |
+        Retrieves data content item
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    delete:
+      tags:
+        - Admin
+      summary: Delete data content item
+      description: |
+        Delete data content item
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /admin/file:
+    post:
+      tags:
+        - Admin
+      summary: Uploads a file to AWS S3
+      description: |
+        Uploads a file to AWS S3
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      parameters:
+        - name: fileName
+          in: query
+          description: name of the file
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: category of file
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
                   type: object
                   properties:
                     url:
                       type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    get:
+      tags:
+        - Admin
+      summary: Gets a file to AWS S3
+      description: |
+        Gets a file to AWS S3
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: fileName
+          in: query
+          description: name of the file
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: category of file
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    delete:
+      tags:
+        - Admin
+      summary: Deletes a file to AWS S3
+      description: |
+        Deletes a file to AWS S3
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: fileName
+          in: query
+          description: name of the file
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: category of file
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
         '400':
           description: Bad request
         '401':

@@ -636,6 +636,116 @@ func (h ApisHandler) GetTweeterPosts(claims *tokenauth.Claims, w http.ResponseWr
 	w.Write(data)
 }
 
+// GetDataContentItem Gets a data content type item
+// @Description Gets a data content type item
+// @Tags Client
+// @ID GetDataContentItem
+// @Accept json
+// @Produce json
+// @Success 200
+// @Security UserAuth
+// @Router /data/{id} [get]
+func (h ApisHandler) GetDataContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key := vars["id"]
+
+	resData, err := h.app.Services.GetDataContentItem(claims, key)
+	if err != nil {
+		log.Printf("Error on getting data content type with id - %s\n %s", key, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal of data content type")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// GetFileContentItem Get a file to AWS S3
+// @Description Get a file to AWS S3
+// @Tags Client
+// @ID GetFileContentItem
+// @Param fileName body string false "fileName - the uploaded file name"
+// @Param category body string false "category - category of file content item"
+// @Success 200
+// @Security UserAuth
+// @Router /file [get]
+func (h ApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	fileName := r.FormValue("fileName")
+	if len(fileName) <= 0 {
+		log.Print("Missing file name\n")
+		http.Error(w, "missing 'fileName' form param", http.StatusBadRequest)
+		return
+	}
+
+	category := r.FormValue("category")
+	if len(category) <= 0 {
+		log.Print("Missing category\n")
+		http.Error(w, "missing 'catgory' form param", http.StatusBadRequest)
+		return
+	}
+
+	// pass the file to be processed by the use case handler
+	result, err := h.app.Services.GetFileContentItem(claims, fileName, category)
+	if err != nil {
+		log.Printf("Error converting file: %s\n", err)
+		http.Error(w, "Error converting file", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "multipart/form-data")
+	w.WriteHeader(http.StatusOK)
+	w.Write(result)
+}
+
+// GetDataContentItems Gets data content items
+// @Descriptions Gets data content items
+// @Tags Client
+// @ID GetDataContentItems
+// @Param category body string false "category - get all data content items based on category"
+// @Accept json
+// @Produce json
+// @Success 200
+// @Security UserAuth
+// @Router /data [get]
+func (h ApisHandler) GetDataContentItems(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key := vars["id"]
+
+	category := r.FormValue("category")
+	if len(category) <= 0 {
+		log.Print("Missing category\n")
+		http.Error(w, "missing 'catgory' form param", http.StatusBadRequest)
+		return
+	}
+
+	resData, err := h.app.Services.GetDataContentItems(claims, category)
+	if err != nil {
+		log.Printf("Error on getting data content type with id - %s\n %s", key, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal of data content type")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 func intPostValueFromString(stringValue string) int {
 	var value int
 	if len(stringValue) > 0 {

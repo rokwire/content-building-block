@@ -1387,3 +1387,469 @@ func (h AdminApisHandler) GetContentItemsCategories(claims *tokenauth.Claims, w 
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
+
+// CreateDataContentItem Creates a new data content type item
+// @Description Creates a new data content type item
+// @Tags Admin
+// @ID AdminCreateDataContentItem
+// @Accept json
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/data [post]
+func (h AdminApisHandler) CreateDataContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("Error on marshal create a data content item - %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	var item model.DataContentItem
+	err = json.Unmarshal(data, &item)
+	if err != nil {
+		log.Printf("Error on unmarshal the create data content item request data - %s\n", err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	createdItem, err := h.app.Services.CreateDataContentItem(claims, &item)
+	if err != nil {
+		log.Printf("Error on creating data content item: %s\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, err := json.Marshal(createdItem)
+	if err != nil {
+		log.Println("Error on marshal the new item")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonData)
+}
+
+// GetDataContentItem Gets a data content type item
+// @Description Gets a data content type item
+// @Tags Admin
+// @ID AdminGetDataContentItem
+// @Accept json
+// @Produce json
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/data/{key} [get]
+func (h AdminApisHandler) GetDataContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key := vars["key"]
+
+	resData, err := h.app.Services.GetDataContentItem(claims, key)
+	if err != nil {
+		log.Printf("Error on getting data content type with id - %s\n %s", key, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal of data content type")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// GetDataContentItems Gets data content items
+// @Descriptions Gets data content items
+// @Tags Admin
+// @ID AdminGetDataContentItems
+// @Param category body string false "category - get all data content items based on category"
+// @Accept json
+// @Produce json
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/data [get]
+func (h AdminApisHandler) GetDataContentItems(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key := vars["id"]
+
+	category := r.FormValue("category")
+	if len(category) <= 0 {
+		log.Print("Missing category\n")
+		http.Error(w, "missing 'catgory' form param", http.StatusBadRequest)
+		return
+	}
+
+	resData, err := h.app.Services.GetDataContentItems(claims, category)
+	if err != nil {
+		log.Printf("Error on getting data content type with id - %s\n %s", key, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal of data content type")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// UpdateDataContentItem Updates a content item with the specified id.
+// @Description Updates a content item with the specified id.
+// @Tags Admin
+// @ID AdminUpdateDataContentItem
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.DataContentItem
+// @Security AdminUserAuth
+// @Router /admin/data/{id} [put]
+func (h AdminApisHandler) UpdateDataContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("Error on marshal create a data content item - %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	var body model.DataContentItem
+	err = json.Unmarshal(data, &body)
+	if err != nil {
+		log.Printf("Error on unmarshal the update data content item request data - %s\n", err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if len(body.Category) == 0 {
+		log.Printf("Unable to update content item: Missing category")
+		http.Error(w, "Unable to update content item: Missing category", http.StatusBadRequest)
+		return
+	}
+
+	if body.Data == nil {
+		log.Printf("Unable to update content item: Missing data")
+		http.Error(w, "Unable to update content item: Missing data", http.StatusBadRequest)
+		return
+	}
+
+	resData, err := h.app.Services.UpdateDataContentItem(claims, &body)
+	if err != nil {
+		log.Printf("Error on updating content item with id - %s\n %s", id, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal the updated content item")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonData)
+}
+
+// DeleteDataContentItem Deletes a data content item with a specified key
+// @Description Deletes a data content item with the specified key
+// @Tags Admin
+// @ID AdminDeleteDataContentItem
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/data/{id} [delete]
+func (h AdminApisHandler) DeleteDataContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key := vars["id"]
+
+	err := h.app.Services.DeleteDataContentItem(claims, key)
+	if err != nil {
+		log.Printf("Error on deleting data content item with id - %s\n %s", key, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+}
+
+// CreateCategory Creates a category
+// @Description Creates a category
+// @Tags Admin
+// @ID AdminCreateCategory
+// @Accept json
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/category [post]
+func (h AdminApisHandler) CreateCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("Error on marshal create a category - %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	var item model.Category
+	err = json.Unmarshal(data, &item)
+	if err != nil {
+		log.Printf("Error on unmarshal the create a category - %s\n", err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	createdItem, err := h.app.Services.CreateCategory(claims, &item)
+	if err != nil {
+		log.Printf("Error on creating category %s\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, err := json.Marshal(createdItem)
+	if err != nil {
+		log.Println("Error on marshal the new category")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonData)
+}
+
+// GetCategory Gets a category
+// @Description Gets a category
+// @Tags Admin
+// @ID AdminGetCategory
+// @Accept json
+// @Produce json
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/category/{id} [get]
+func (h AdminApisHandler) GetCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	resData, err := h.app.Services.GetCategory(claims.AppID, claims.OrgID, id)
+	if err != nil {
+		log.Printf("Error on getting category with name - %s\n %s", id, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal of category")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// UpdateCategory Updates a category with a specificed id.
+// @Description  Updates a category with a specificed id.
+// @Tags Admin
+// @ID AdminUpdateCategory
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.Category
+// @Security AdminUserAuth
+// @Router /admin/category [put]
+func (h AdminApisHandler) UpdateCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("Error on marshal create a data content item - %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	var body model.Category
+	err = json.Unmarshal(data, &body)
+	if err != nil {
+		log.Printf("Error on unmarshal the update category request data - %s\n", err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	resData, err := h.app.Services.UpdateCategory(claims.AppID, claims.OrgID, &body)
+	if err != nil {
+		log.Printf("Error on updating category  - %s", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal the updated category")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonData)
+}
+
+// DeleteCategory Deletes a category with specified id
+// @Description Deletes a category with specified id
+// @Tags Admin
+// @ID AdminDeleteCategory
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/category/{id} [delete]
+func (h AdminApisHandler) DeleteCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	err := h.app.Services.DeleteCategory(claims.AppID, claims.OrgID, id)
+	if err != nil {
+		log.Printf("Error on deleting category with id - %s\n %s", id, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+}
+
+// UploadFileContentItem Uploads a file to AWS S3
+// @Description Uploads a file to AWS S3
+// @Tags Admin
+// @ID AdminUploadFileContentItem
+// @Param fileName body string false "fileName - the uploaded file name"
+// @Param category body string false "category - category of file content item"
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/file [post]
+func (h AdminApisHandler) UploadFileContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	fileName := r.FormValue("fileName")
+	if len(fileName) <= 0 {
+		log.Print("Missing file name\n")
+		http.Error(w, "missing 'fileName' form param", http.StatusBadRequest)
+		return
+	}
+
+	category := r.FormValue("category")
+	if len(category) <= 0 {
+		log.Print("Missing category\n")
+		http.Error(w, "missing 'catgory' form param", http.StatusBadRequest)
+		return
+	}
+
+	// parse and validate file and post parameters
+	file, _, err := r.FormFile("file")
+	if err != nil {
+		log.Print("Invalid file\n")
+		http.Error(w, "Invalid file", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+
+	// pass the file to be processed by the use case handler
+	url, err := h.app.Services.UploadFileContentItem(file, claims, fileName, category)
+	if err != nil {
+		log.Printf("Error converting file: %s\n", err)
+		http.Error(w, "Error converting file", http.StatusInternalServerError)
+		return
+	}
+
+	jsonData := map[string]string{"url": *url}
+	jsonBynaryData, err := json.Marshal(jsonData)
+	if err != nil {
+		log.Println("Error on marshal s3 location data")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonBynaryData)
+}
+
+// GetFileContentItem Get a file to AWS S3
+// @Description Get a file to AWS S3
+// @Tags Admin
+// @ID AdminGetFileContentItem
+// @Param fileName body string false "fileName - the uploaded file name"
+// @Param category body string false "category - category of file content item"
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/file [get]
+func (h AdminApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	fileName := r.FormValue("fileName")
+	if len(fileName) <= 0 {
+		log.Print("Missing file name\n")
+		http.Error(w, "missing 'fileName' form param", http.StatusBadRequest)
+		return
+	}
+
+	category := r.FormValue("category")
+	if len(category) <= 0 {
+		log.Print("Missing category\n")
+		http.Error(w, "missing 'catgory' form param", http.StatusBadRequest)
+		return
+	}
+
+	// pass the file to be processed by the use case handler
+	result, err := h.app.Services.GetFileContentItem(claims, fileName, category)
+	if err != nil {
+		log.Printf("Error converting file: %s\n", err)
+		http.Error(w, "Error converting file", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "multipart/form-data")
+	w.WriteHeader(http.StatusOK)
+	w.Write(result)
+}
+
+// DeleteFileContentItem Deletes a file content item
+// @Description Deletes a file content item
+// @Tags Admin
+// @ID AdminDeleteFileContentItem
+// @Success 200
+// @Security AdminUserAuth
+// @Router /admin/fille [delete]
+func (h AdminApisHandler) DeleteFileContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	fileName := r.FormValue("fileName")
+	if len(fileName) <= 0 {
+		log.Print("Missing file name\n")
+		http.Error(w, "missing 'fileName' form param", http.StatusBadRequest)
+		return
+	}
+
+	category := r.FormValue("category")
+	if len(category) <= 0 {
+		log.Print("Missing category\n")
+		http.Error(w, "missing 'catgory' form param", http.StatusBadRequest)
+		return
+	}
+
+	err := h.app.Services.DeleteFileContentItem(claims, fileName, category)
+	if err != nil {
+		if err != nil {
+			log.Printf("error on delete AWS profile image: %s", err)
+		}
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}

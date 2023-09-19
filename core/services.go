@@ -17,16 +17,20 @@ package core
 import (
 	"bytes"
 	"content/core/model"
+	"content/driven/storage"
 	"errors"
 	"fmt"
 	"image"
 	_ "image/gif"  // Allow image.Decode to detect GIFs
 	_ "image/jpeg" // Allow image.Decode to detect JPEGs
 	_ "image/png"  // Allow image.Decode to detect PNGs
+	"io"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/nfnt/resize"
+	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
 	"go.mongodb.org/mongo-driver/bson"
 
 	"github.com/kolesa-team/go-webp/encoder"
@@ -382,4 +386,179 @@ func (app *Application) getTwitterPosts(userID string, twitterQueryParams string
 		app.cacheLock.Unlock()
 	}
 	return posts, err
+}
+
+func (app *Application) getDataContentItem(claims *tokenauth.Claims, key string) (*model.DataContentItem, error) {
+	item, err := app.storage.FindDataContentItem(&claims.AppID, claims.OrgID, key, nil)
+	if err != nil {
+		return nil, err
+	}
+	return item, nil
+}
+
+func (app *Application) getDataContentItems(claims *tokenauth.Claims, category string) ([]*model.DataContentItem, error) {
+	item, err := app.storage.FindDataContentItems(&claims.AppID, claims.OrgID, category)
+	if err != nil {
+		return nil, err
+	}
+	return item, nil
+}
+
+func (app *Application) createDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error) {
+	item.ID = uuid.NewString()
+	item.AppID = &claims.AppID
+	item.OrgID = claims.OrgID
+	item.DateCreated = time.Now().UTC()
+	item, err := app.storage.CreateDataContentItem(item)
+	if err != nil {
+		return nil, err
+	}
+	return item, nil
+}
+
+func (app *Application) updateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error) {
+	var dataItem *model.DataContentItem
+	err := app.storage.PerformTransaction(func(context storage.TransactionContext) error {
+
+		category, err := app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category, nil)
+		if err != nil {
+			return err
+		}
+
+		isValid := false
+		for _, element := range category.Permissions {
+			if strings.Contains(claims.Permissions, element) {
+				isValid = true
+				break
+			}
+		}
+
+		if !isValid {
+			return fmt.Errorf("Unauthorized to update data content item")
+		}
+
+		dataItem, err = app.storage.UpdateDataContentItem(&claims.AppID, claims.OrgID, item)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return dataItem, err
+}
+
+func (app *Application) deleteDataContentItem(claims *tokenauth.Claims, key string) error {
+	err := app.storage.PerformTransaction(func(context storage.TransactionContext) error {
+
+		item, err := app.storage.FindDataContentItem(&claims.AppID, claims.OrgID, key, context)
+		if err != nil {
+			return err
+		}
+
+		category, err := app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category, context)
+		if err != nil {
+			return err
+		}
+
+		isValid := false
+		for _, element := range category.Permissions {
+			if strings.Contains(claims.Permissions, element) {
+				isValid = true
+				break
+			}
+		}
+
+		if !isValid {
+			return fmt.Errorf("Unauthorized to delete data content item")
+		}
+
+		err = app.storage.DeleteDataContentItem(&claims.AppID, claims.OrgID, key, context)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+	return err
+}
+
+func (app *Application) createCategory(claims *tokenauth.Claims, item *model.Category) (*model.Category, error) {
+	item.ID = uuid.NewString()
+	item.AppID = &claims.AppID
+	item.OrgID = claims.OrgID
+	item.DateCreated = time.Now().UTC()
+	item, err := app.storage.CreateCategory(item)
+	if err != nil {
+		return nil, err
+	}
+	return item, nil
+}
+
+func (app *Application) getCategory(appID *string, orgID string, id string) (*model.Category, error) {
+	item, err := app.storage.FindCategory(appID, orgID, id, nil)
+	if err != nil {
+		return nil, err
+	}
+	return item, nil
+}
+
+func (app *Application) updateCategory(appID *string, orgID string, item *model.Category) (*model.Category, error) {
+	item, err := app.storage.UpdateCategory(appID, orgID, item)
+	if err != nil {
+		return nil, err
+	}
+	return item, nil
+}
+
+func (app *Application) deleteCategory(appID *string, orgID string, id string) error {
+	err := app.storage.DeleteCategory(appID, orgID, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (app *Application) uploadFileContentItem(file io.Reader, claims *tokenauth.Claims, fileName string, category string) (*string, error) {
+
+	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Id
+
+	url, err := app.awsAdapter.CreateImage(file, path, &fileName)
+	if err != nil {
+		return nil, fmt.Errorf("Unable to upload to S3: %s", err)
+	}
+
+	if url != nil {
+		return url, nil
+	}
+
+	return nil, nil
+}
+
+func (app *Application) getFileContentItem(claims *tokenauth.Claims, fileName string, category string) ([]byte, error) {
+
+	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Id + "/" + fileName
+
+	url, err := app.awsAdapter.LoadImage(path)
+	if err != nil {
+		return nil, fmt.Errorf("Unable to upload to S3: %s", err)
+	}
+
+	if url != nil {
+		return url, nil
+	}
+
+	return nil, nil
+}
+
+func (app *Application) deleteFileContentItem(claims *tokenauth.Claims, fileName string, category string) error {
+
+	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Id + "/" + fileName
+
+	err := app.awsAdapter.DeleteProfileImage(path)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

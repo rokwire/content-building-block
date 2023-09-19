@@ -1,0 +1,123 @@
+post:
+  tags:
+    - Admin
+  summary: Uploads a file to AWS S3
+  description: |
+     Uploads a file to AWS S3
+  security:
+    - bearerAuth: [] 
+  requestBody:
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            # 'file' will be the field name in this multipart request
+            file:
+              type: string
+              format: binary
+  parameters:
+    - name: fileName
+      in: query
+      description: name of the file
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string
+    - name: category
+      in: query
+      description: category of file
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string   
+  responses:
+    200:
+      description: Success
+      content:
+         application/json:
+           schema:
+             type: array
+             items:
+               $ref: "../../schemas/apis/admin/image/response/Response.yaml"
+    400:
+      description: Bad request
+    401:
+      description: Unauthorized
+    500:
+      description: Internal error
+get:
+  tags:
+    - Admin
+  summary: Gets a file to AWS S3
+  description: |
+      Gets a file to AWS S3
+  security:
+    - bearerAuth: [] 
+  parameters:
+    - name: fileName
+      in: query
+      description: name of the file
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string
+    - name: category
+      in: query
+      description: category of file
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string   
+  responses:
+    200:
+      description: Success
+      content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+    400:
+      description: Bad request
+    401:
+      description: Unauthorized
+    500:
+      description: Internal error
+delete:
+  tags:
+    - Admin
+  summary: Deletes a file to AWS S3
+  description: |
+      Deletes a file to AWS S3
+  security:
+    - bearerAuth: [] 
+  parameters:
+    - name: fileName
+      in: query
+      description: name of the file
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string
+    - name: category
+      in: query
+      description: category of file
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string   
+  responses:
+    200:
+      description: Success
+    400:
+      description: Bad request
+    401:
+      description: Unauthorized
+    500:
+      description: Internal error

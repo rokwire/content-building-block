@@ -461,6 +461,161 @@ func (sa *Adapter) FindAllContentItems(context TransactionContext) ([]model.Cont
 	return result, nil
 }
 
+// CreateDataContentItem creates a data content item
+func (sa *Adapter) CreateDataContentItem(item *model.DataContentItem) (*model.DataContentItem, error) {
+
+	_, err := sa.db.dataContentItems.InsertOne(&item)
+	if err != nil {
+		return nil, err
+	}
+	return item, nil
+}
+
+// FindDataContentItem gets a data content item
+func (sa *Adapter) FindDataContentItem(appID *string, orgID string, key string, context TransactionContext) (*model.DataContentItem, error) {
+
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "key", Value: key}}
+
+	var result *model.DataContentItem
+	err := sa.db.dataContentItems.FindOneWithContext(context, filter, &result, nil)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// FindDataContentItems gets multiple data content items
+func (sa *Adapter) FindDataContentItems(appID *string, orgID string, category string) ([]*model.DataContentItem, error) {
+	var filter bson.D
+	if len(category) > 0 {
+		filter = bson.D{primitive.E{Key: "app_id", Value: appID},
+			primitive.E{Key: "org_id", Value: orgID},
+			primitive.E{Key: "category", Value: category}}
+	} else {
+		filter = bson.D{primitive.E{Key: "app_id", Value: appID},
+			primitive.E{Key: "org_id", Value: orgID}}
+	}
+
+	var result []*model.DataContentItem
+	err := sa.db.dataContentItems.Find(filter, &result, nil)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// UpdateDataContentItem updates a data content item
+func (sa *Adapter) UpdateDataContentItem(appID *string, orgID string, item *model.DataContentItem) (*model.DataContentItem, error) {
+
+	filter := bson.D{
+		primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "key", Value: item.Key}}
+	update := bson.D{
+		primitive.E{Key: "$set", Value: bson.D{
+			primitive.E{Key: "category", Value: item.Category},
+			primitive.E{Key: "data", Value: item.Data},
+			primitive.E{Key: "date_updated", Value: time.Now().UTC()},
+		}},
+	}
+	_, err := sa.db.dataContentItems.UpdateOne(filter, update, nil)
+	if err != nil {
+		log.Printf("error updating data content item: %s", err)
+		return nil, err
+	}
+
+	return item, nil
+}
+
+// DeleteDataContentItem deletes a data content item
+func (sa *Adapter) DeleteDataContentItem(appID *string, orgID string, key string, context TransactionContext) error {
+
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "key", Value: key}}
+
+	result, err := sa.db.dataContentItems.DeleteOneWithContext(context, filter, nil)
+	if err != nil {
+		return err
+	}
+	if result == nil {
+		return fmt.Errorf("result is nil for data content item with key " + key)
+	}
+	deletedCount := result.DeletedCount
+	if deletedCount != 1 {
+		return fmt.Errorf("error occured while deleting a data content item with key " + key)
+	}
+	return nil
+}
+
+// CreateCategory created a new category
+func (sa *Adapter) CreateCategory(item *model.Category) (*model.Category, error) {
+
+	_, err := sa.db.categories.InsertOne(&item)
+	if err != nil {
+		return nil, err
+	}
+	return item, nil
+}
+
+// FindCategory fins a category
+func (sa *Adapter) FindCategory(appID *string, orgID string, id string, context TransactionContext) (*model.Category, error) {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "name", Value: id}}
+
+	var result *model.Category
+	err := sa.db.categories.FindOneWithContext(context, filter, &result, nil)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// UpdateCategory updates a  category
+func (sa *Adapter) UpdateCategory(appID *string, orgID string, item *model.Category) (*model.Category, error) {
+	filter := bson.D{
+		primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "_id", Value: item.ID}}
+	update := bson.D{
+		primitive.E{Key: "$set", Value: bson.D{
+			primitive.E{Key: "name", Value: item.Name},
+			primitive.E{Key: "permissions", Value: item.Permissions},
+			primitive.E{Key: "date_updated", Value: time.Now().UTC()},
+		}},
+	}
+	_, err := sa.db.categories.UpdateOne(filter, update, nil)
+	if err != nil {
+		log.Printf("error updating category: %s", err)
+		return nil, err
+	}
+
+	return item, nil
+}
+
+// DeleteCategory deletes a category
+func (sa *Adapter) DeleteCategory(appID *string, orgID string, name string) error {
+	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+		primitive.E{Key: "org_id", Value: orgID},
+		primitive.E{Key: "name", Value: name}}
+
+	result, err := sa.db.categories.DeleteOne(filter, nil)
+	if err != nil {
+		return err
+	}
+	if result == nil {
+		return fmt.Errorf("result is nil for cateogry with id " + name)
+	}
+	deletedCount := result.DeletedCount
+	if deletedCount != 1 {
+		return fmt.Errorf("error occured while deleting a category with id " + name)
+	}
+	return nil
+}
+
 // StoreMultiTenancyData stores multi-tenancy to already exisiting data in the collections
 func (sa *Adapter) StoreMultiTenancyData(context TransactionContext, appID string, orgID string) error {
 

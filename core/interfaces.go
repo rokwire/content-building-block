@@ -17,7 +17,9 @@ package core
 import (
 	"content/core/model"
 	"content/driven/storage"
+	"io"
 
+	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -52,6 +54,21 @@ type Services interface {
 	DeleteProfileImage(userID string) error
 
 	GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error)
+
+	CreateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error)
+	GetDataContentItem(claims *tokenauth.Claims, key string) (*model.DataContentItem, error)
+	UpdateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error)
+	DeleteDataContentItem(claims *tokenauth.Claims, key string) error
+	GetDataContentItems(claims *tokenauth.Claims, category string) ([]*model.DataContentItem, error)
+
+	CreateCategory(claims *tokenauth.Claims, item *model.Category) (*model.Category, error)
+	GetCategory(appID string, orgID string, id string) (*model.Category, error)
+	UpdateCategory(appID string, orgID string, item *model.Category) (*model.Category, error)
+	DeleteCategory(appID string, orgID string, id string) error
+
+	UploadFileContentItem(file io.Reader, claims *tokenauth.Claims, fileName string, category string) (*string, error)
+	GetFileContentItem(claims *tokenauth.Claims, fileName string, category string) ([]byte, error)
+	DeleteFileContentItem(claims *tokenauth.Claims, fileName string, category string) error
 }
 
 type servicesImpl struct {
@@ -162,6 +179,54 @@ func (s *servicesImpl) GetTwitterPosts(userID string, twitterQueryParams string,
 	return s.app.getTwitterPosts(userID, twitterQueryParams, force)
 }
 
+func (s *servicesImpl) CreateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error) {
+	return s.app.createDataContentItem(claims, item)
+}
+
+func (s *servicesImpl) GetDataContentItem(claims *tokenauth.Claims, key string) (*model.DataContentItem, error) {
+	return s.app.getDataContentItem(claims, key)
+}
+
+func (s *servicesImpl) GetDataContentItems(claims *tokenauth.Claims, category string) ([]*model.DataContentItem, error) {
+	return s.app.getDataContentItems(claims, category)
+}
+
+func (s *servicesImpl) UpdateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error) {
+	return s.app.updateDataContentItem(claims, item)
+}
+
+func (s *servicesImpl) DeleteDataContentItem(claims *tokenauth.Claims, key string) error {
+	return s.app.deleteDataContentItem(claims, key)
+}
+
+func (s *servicesImpl) CreateCategory(claims *tokenauth.Claims, item *model.Category) (*model.Category, error) {
+	return s.app.createCategory(claims, item)
+}
+
+func (s *servicesImpl) GetCategory(appID string, orgID string, id string) (*model.Category, error) {
+	return s.app.getCategory(&appID, orgID, id)
+}
+
+func (s *servicesImpl) UpdateCategory(appID string, orgID string, item *model.Category) (*model.Category, error) {
+	return s.app.updateCategory(&appID, orgID, item)
+}
+
+func (s *servicesImpl) DeleteCategory(appID string, orgID string, id string) error {
+	return s.app.deleteCategory(&appID, orgID, id)
+}
+
+func (s *servicesImpl) UploadFileContentItem(file io.Reader, claims *tokenauth.Claims, fileName string, category string) (*string, error) {
+	return s.app.uploadFileContentItem(file, claims, fileName, category)
+}
+
+func (s *servicesImpl) GetFileContentItem(claims *tokenauth.Claims, fileName string, category string) ([]byte, error) {
+	return s.app.getFileContentItem(claims, fileName, category)
+}
+
+func (s *servicesImpl) DeleteFileContentItem(claims *tokenauth.Claims, fileName string, category string) error {
+	return s.app.deleteFileContentItem(claims, fileName, category)
+}
+
 // Storage is used by core to storage data - DB storage adapter, file storage adapter etc
 type Storage interface {
 	PerformTransaction(func(context storage.TransactionContext) error) error
@@ -192,4 +257,15 @@ type Storage interface {
 	FindAllContentItems(context storage.TransactionContext) ([]model.ContentItemResponse, error)
 	StoreMultiTenancyData(context storage.TransactionContext, appID string, orgID string) error
 	///
+
+	CreateDataContentItem(item *model.DataContentItem) (*model.DataContentItem, error)
+	FindDataContentItem(appID *string, orgID string, key string, context storage.TransactionContext) (*model.DataContentItem, error)
+	UpdateDataContentItem(appID *string, orgID string, item *model.DataContentItem) (*model.DataContentItem, error)
+	DeleteDataContentItem(appID *string, orgID string, key string, context storage.TransactionContext) error
+	FindDataContentItems(appID *string, orgID string, key string) ([]*model.DataContentItem, error)
+
+	CreateCategory(item *model.Category) (*model.Category, error)
+	FindCategory(appID *string, orgID string, id string, context storage.TransactionContext) (*model.Category, error)
+	UpdateCategory(appID *string, orgID string, item *model.Category) (*model.Category, error)
+	DeleteCategory(appID *string, orgID string, key string) error
 }
