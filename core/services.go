@@ -521,9 +521,9 @@ func (app *Application) deleteCategory(appID *string, orgID string, id string) e
 
 func (app *Application) uploadFileContentItem(file io.Reader, claims *tokenauth.Claims, fileName string, category string) (*string, error) {
 
-	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Id
+	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Subject + "/" + fileName
 
-	url, err := app.awsAdapter.CreateImage(file, path, &fileName)
+	url, err := app.awsAdapter.UploadFile(file, path)
 	if err != nil {
 		return nil, fmt.Errorf("Unable to upload to S3: %s", err)
 	}
@@ -537,15 +537,15 @@ func (app *Application) uploadFileContentItem(file io.Reader, claims *tokenauth.
 
 func (app *Application) getFileContentItem(claims *tokenauth.Claims, fileName string, category string) ([]byte, error) {
 
-	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Id + "/" + fileName
+	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Subject + "/" + fileName
 
-	url, err := app.awsAdapter.LoadImage(path)
+	file, err := app.awsAdapter.DownloadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("Unable to upload to S3: %s", err)
+		return nil, fmt.Errorf("Unable to read file to S3: %s", err)
 	}
 
-	if url != nil {
-		return url, nil
+	if file != nil {
+		return file, nil
 	}
 
 	return nil, nil
@@ -553,12 +553,35 @@ func (app *Application) getFileContentItem(claims *tokenauth.Claims, fileName st
 
 func (app *Application) deleteFileContentItem(claims *tokenauth.Claims, fileName string, category string) error {
 
-	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Id + "/" + fileName
+	err := app.storage.PerformTransaction(func(context storage.TransactionContext) error {
 
-	err := app.awsAdapter.DeleteProfileImage(path)
-	if err != nil {
-		return err
-	}
+		categoryItem, err := app.storage.FindCategory(&claims.AppID, claims.OrgID, category, nil)
+		if err != nil {
+			return err
+		}
 
-	return nil
+		isValid := false
+		for _, element := range categoryItem.Permissions {
+			if strings.Contains(claims.Permissions, element) {
+				isValid = true
+				break
+			}
+		}
+
+		if !isValid {
+			return fmt.Errorf("Unauthorized to delete file content item")
+		}
+
+		path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Id + "/" + fileName
+
+		err = app.awsAdapter.DeleteProfileImage(path)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+
+	return err
 }

@@ -1816,7 +1816,7 @@ func (h AdminApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Re
 		return
 	}
 
-	w.Header().Set("Content-Type", "multipart/form-data")
+	w.Header().Set("Content-Type", "application/octet-stream")
 	w.WriteHeader(http.StatusOK)
 	w.Write(result)
 }
@@ -1846,7 +1846,7 @@ func (h AdminApisHandler) DeleteFileContentItem(claims *tokenauth.Claims, w http
 	err := h.app.Services.DeleteFileContentItem(claims, fileName, category)
 	if err != nil {
 		if err != nil {
-			log.Printf("error on delete AWS profile image: %s", err)
+			log.Printf("error on delete AWS file: %s", err)
 		}
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return

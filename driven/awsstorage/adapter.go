@@ -159,6 +159,53 @@ func (a *Adapter) prepareKey(path string, preferredFileName *string) string {
 	return path + "/" + fmt.Sprintf("%s", fileName) + ".webp"
 }
 
+// UploadFile uploads an file content item to the s3 bucket
+func (a *Adapter) UploadFile(body io.Reader, path string) (*string, error) {
+	log.Println("Upload File")
+
+	s, err := a.createS3Session()
+	if err != nil {
+		log.Printf("Could not create S3 session")
+		return nil, err
+	}
+	objectLocation, err := a.uploadFileToS3(s, body, a.config.S3Bucket, path, "private")
+	if err != nil {
+		log.Printf("Could not upload file")
+		return nil, err
+	}
+
+	return &objectLocation, nil
+}
+
+// Downloadfile loads image at specific path
+func (a *Adapter) DownloadFile(path string) ([]byte, error) {
+	s, err := a.createS3Session()
+	if err != nil {
+		log.Printf("Could not create S3 session")
+		return nil, err
+	}
+
+	// file, err := os.Create(path)
+	// if err != nil {
+	// 	log.Printf("Could not create S3 session")
+	// 	return nil, err
+	// }
+
+	buffer := aws.NewWriteAtBuffer([]byte{})
+
+	downloader := s3manager.NewDownloader(s)
+	_, err = downloader.Download(buffer,
+		&s3.GetObjectInput{
+			Bucket: aws.String(a.config.S3Bucket),
+			Key:    aws.String(path),
+		})
+	if err != nil {
+		return nil, err
+	}
+
+	return buffer.Bytes(), nil
+}
+
 func (a *Adapter) createS3Session() (*session.Session, error) {
 	region := a.config.S3Region
 	accessKeyID := a.config.AWSAccessKeyID
