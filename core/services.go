@@ -36,118 +36,118 @@ import (
 	"github.com/kolesa-team/go-webp/webp"
 )
 
-func (app *Application) getVersion() string {
-	return app.version
+func (s *servicesImpl) GetVersion() string {
+	return s.app.version
 }
 
 // Student guides
 
-func (app *Application) getStudentGuides(appID string, orgID string, ids []string) ([]bson.M, error) {
-	items, err := app.storage.GetStudentGuides(appID, orgID, ids)
+func (s *servicesImpl) GetStudentGuides(appID string, orgID string, ids []string) ([]bson.M, error) {
+	items, err := s.app.storage.GetStudentGuides(appID, orgID, ids)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) getStudentGuide(appID string, orgID string, id string) (bson.M, error) {
-	item, err := app.storage.GetStudentGuide(appID, orgID, id)
+func (s *servicesImpl) GetStudentGuide(appID string, orgID string, id string) (bson.M, error) {
+	item, err := s.app.storage.GetStudentGuide(appID, orgID, id)
 	if err != nil {
 		return nil, err
 	}
 	return item, nil
 }
 
-func (app *Application) createStudentGuide(appID string, orgID string, item bson.M) (bson.M, error) {
-	items, err := app.storage.CreateStudentGuide(appID, orgID, item)
+func (s *servicesImpl) CreateStudentGuide(appID string, orgID string, item bson.M) (bson.M, error) {
+	items, err := s.app.storage.CreateStudentGuide(appID, orgID, item)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) updateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error) {
-	items, err := app.storage.UpdateStudentGuide(appID, orgID, id, item)
+func (s *servicesImpl) UpdateStudentGuide(appID string, orgID string, id string, item bson.M) (bson.M, error) {
+	items, err := s.app.storage.UpdateStudentGuide(appID, orgID, id, item)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) deleteStudentGuide(appID string, orgID string, id string) error {
-	err := app.storage.DeleteStudentGuide(appID, orgID, id)
+func (s *servicesImpl) DeleteStudentGuide(appID string, orgID string, id string) error {
+	err := s.app.storage.DeleteStudentGuide(appID, orgID, id)
 	return err
 }
 
 // Health Locations
 
-func (app *Application) getHealthLocations(appID string, orgID string, ids []string) ([]bson.M, error) {
-	items, err := app.storage.GetHealthLocations(appID, orgID, ids)
+func (s *servicesImpl) GetHealthLocations(appID string, orgID string, ids []string) ([]bson.M, error) {
+	items, err := s.app.storage.GetHealthLocations(appID, orgID, ids)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) getHealthLocation(appID string, orgID string, id string) (bson.M, error) {
-	item, err := app.storage.GetHealthLocation(appID, orgID, id)
+func (s *servicesImpl) GetHealthLocation(appID string, orgID string, id string) (bson.M, error) {
+	item, err := s.app.storage.GetHealthLocation(appID, orgID, id)
 	if err != nil {
 		return nil, err
 	}
 	return item, nil
 }
 
-func (app *Application) createHealthLocation(appID string, orgID string, item bson.M) (bson.M, error) {
-	items, err := app.storage.CreateHealthLocation(appID, orgID, item)
+func (s *servicesImpl) CreateHealthLocation(appID string, orgID string, item bson.M) (bson.M, error) {
+	items, err := s.app.storage.CreateHealthLocation(appID, orgID, item)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) updateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error) {
-	items, err := app.storage.UpdateHealthLocation(appID, orgID, id, item)
+func (s *servicesImpl) UpdateHealthLocation(appID string, orgID string, id string, item bson.M) (bson.M, error) {
+	items, err := s.app.storage.UpdateHealthLocation(appID, orgID, id, item)
 	if err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (app *Application) deleteHealthLocation(appID string, orgID string, id string) error {
-	err := app.storage.DeleteHealthLocation(appID, orgID, id)
+func (s *servicesImpl) DeleteHealthLocation(appID string, orgID string, id string) error {
+	err := s.app.storage.DeleteHealthLocation(appID, orgID, id)
 	return err
 }
 
 // Content Items
 
-func (app *Application) getContentItemsCategories(allApps bool, appID string, orgID string) ([]string, error) {
+func (s *servicesImpl) GetContentItemsCategories(allApps bool, appID string, orgID string) ([]string, error) {
 	//logic
 	var appIDParam *string
 	if !allApps {
 		appIDParam = &appID //associated with current app
 	}
-	return app.storage.GetContentItemsCategories(appIDParam, orgID)
+	return s.app.storage.GetContentItemsCategories(appIDParam, orgID)
 }
 
-func (app *Application) getContentItems(allApps bool, appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
+func (s *servicesImpl) GetContentItems(allApps bool, appID string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
 	//logic
 	var appIDParam *string
 	if !allApps {
 		appIDParam = &appID //associated with current app
 	}
-	return app.storage.GetContentItems(appIDParam, orgID, ids, categoryList, offset, limit, order)
+	return s.app.storage.GetContentItems(appIDParam, orgID, ids, categoryList, offset, limit, order)
 }
 
-func (app *Application) getContentItem(allApps bool, appID string, orgID string, id string) (*model.ContentItemResponse, error) {
+func (s *servicesImpl) GetContentItem(allApps bool, appID string, orgID string, id string) (*model.ContentItemResponse, error) {
 	//logic
 	var appIDParam *string
 	if !allApps {
 		appIDParam = &appID //associated with current app
 	}
-	return app.storage.GetContentItem(appIDParam, orgID, id)
+	return s.app.storage.GetContentItem(appIDParam, orgID, id)
 }
 
-func (app *Application) createContentItem(allApps bool, appID string, orgID string, category string, data interface{}) (*model.ContentItem, error) {
+func (s *servicesImpl) CreateContentItem(allApps bool, appID string, orgID string, category string, data interface{}) (*model.ContentItem, error) {
 	//logic
 	var appIDParam *string
 	if !allApps {
@@ -155,10 +155,10 @@ func (app *Application) createContentItem(allApps bool, appID string, orgID stri
 	}
 	cItem := model.ContentItem{ID: uuid.NewString(), Category: category, DateCreated: time.Now().UTC(),
 		Data: data, OrgID: orgID, AppID: appIDParam}
-	return app.storage.CreateContentItem(cItem)
+	return s.app.storage.CreateContentItem(cItem)
 }
 
-func (app *Application) updateContentItem(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error) {
+func (s *servicesImpl) UpdateContentItem(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error) {
 	//logic
 	var appIDParam *string
 	if !allApps {
@@ -166,7 +166,7 @@ func (app *Application) updateContentItem(allApps bool, appID string, orgID stri
 	}
 
 	//update
-	item, err := app.storage.UpdateContentItem(appIDParam, orgID, id, category, data)
+	item, err := s.app.storage.UpdateContentItem(appIDParam, orgID, id, category, data)
 	if err != nil {
 		return nil, err
 	}
@@ -174,7 +174,7 @@ func (app *Application) updateContentItem(allApps bool, appID string, orgID stri
 	return item, nil
 }
 
-func (app *Application) updateContentItemData(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error) {
+func (s *servicesImpl) UpdateContentItemData(allApps bool, appID string, orgID string, id string, category string, data interface{}) (*model.ContentItem, error) {
 	//logic
 	var appIDParam *string
 	if !allApps {
@@ -182,7 +182,7 @@ func (app *Application) updateContentItemData(allApps bool, appID string, orgID 
 	}
 
 	//find the item
-	items, err := app.storage.FindContentItems(appIDParam, orgID, []string{id}, []string{category}, nil, nil, nil)
+	items, err := s.app.storage.FindContentItems(appIDParam, orgID, []string{id}, []string{category}, nil, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -197,7 +197,7 @@ func (app *Application) updateContentItemData(allApps bool, appID string, orgID 
 	item.DateUpdated = &now
 
 	//save it
-	err = app.storage.SaveContentItem(item)
+	err = s.app.storage.SaveContentItem(item)
 	if err != nil {
 		return nil, err
 	}
@@ -205,16 +205,16 @@ func (app *Application) updateContentItemData(allApps bool, appID string, orgID 
 	return &item, nil
 }
 
-func (app *Application) deleteContentItem(allApps bool, appID string, orgID string, id string) error {
+func (s *servicesImpl) DeleteContentItem(allApps bool, appID string, orgID string, id string) error {
 	//logic
 	var appIDParam *string
 	if !allApps {
 		appIDParam = &appID //associated with current app
 	}
-	return app.storage.DeleteContentItem(appIDParam, orgID, id)
+	return s.app.storage.DeleteContentItem(appIDParam, orgID, id)
 }
 
-func (app *Application) deleteContentItemByCategory(allApps bool, appID string, orgID string, id string, category string) error {
+func (s *servicesImpl) DeleteContentItemByCategory(allApps bool, appID string, orgID string, id string, category string) error {
 	//logic
 	var appIDParam *string
 	if !allApps {
@@ -222,7 +222,7 @@ func (app *Application) deleteContentItemByCategory(allApps bool, appID string, 
 	}
 
 	//find the item
-	items, err := app.storage.FindContentItems(appIDParam, orgID, []string{id}, []string{category}, nil, nil, nil)
+	items, err := s.app.storage.FindContentItems(appIDParam, orgID, []string{id}, []string{category}, nil, nil, nil)
 	if err != nil {
 		return err
 	}
@@ -231,7 +231,7 @@ func (app *Application) deleteContentItemByCategory(allApps bool, appID string, 
 	}
 
 	//delete it
-	err = app.storage.DeleteContentItem(appIDParam, orgID, id)
+	err = s.app.storage.DeleteContentItem(appIDParam, orgID, id)
 	if err != nil {
 		return err
 	}
@@ -241,7 +241,7 @@ func (app *Application) deleteContentItemByCategory(allApps bool, appID string, 
 
 // Misc
 
-func (app *Application) uploadImage(imageBytes []byte, path string, preferredFileName *string, spec model.ImageSpec) (*string, error) {
+func (s *servicesImpl) UploadImage(imageBytes []byte, path string, spec model.ImageSpec) (*string, error) {
 	image, _, err := image.Decode(bytes.NewReader(imageBytes))
 	if err != nil {
 		return nil, fmt.Errorf("Error decoding image: %s", err)
@@ -266,7 +266,7 @@ func (app *Application) uploadImage(imageBytes []byte, path string, preferredFil
 		return nil, fmt.Errorf("Error encoding webp: %s", err)
 	}
 
-	url, err := app.awsAdapter.CreateImage(&output, path, preferredFileName)
+	url, err := s.app.awsAdapter.CreateImage(&output, path, nil)
 	if err != nil {
 		return nil, fmt.Errorf("Unable to upload to S3: %s", err)
 	}
@@ -278,11 +278,11 @@ func (app *Application) uploadImage(imageBytes []byte, path string, preferredFil
 	return nil, nil
 }
 
-func (app *Application) getProfileImage(userID string, imageType string) ([]byte, error) {
-	return app.awsAdapter.LoadProfileImage(fmt.Sprintf("profile-images/%s-%s.webp", userID, imageType))
+func (s *servicesImpl) GetProfileImage(userID string, imageType string) ([]byte, error) {
+	return s.app.awsAdapter.LoadProfileImage(fmt.Sprintf("profile-images/%s-%s.webp", userID, imageType))
 }
 
-func (app *Application) uploadProfileImage(userID string, imageBytes []byte) error {
+func (s *servicesImpl) UploadProfileImage(userID string, imageBytes []byte) error {
 	var mediumImage image.Image
 	var smallImage image.Image
 
@@ -310,15 +310,15 @@ func (app *Application) uploadProfileImage(userID string, imageBytes []byte) err
 		smallImage = defaultImage
 	}
 
-	_, err = app.uploadProfileImageToAws(defaultImage, defaultFileNameWebp, "profile-images/", model.ImageSpec{})
+	_, err = s.UploadProfileImageToAws(defaultImage, defaultFileNameWebp, "profile-images/", model.ImageSpec{})
 	if err != nil {
 		return fmt.Errorf("Unable to upload de file: %s. Error: %s", defaultFileNameWebp, err)
 	}
-	_, err = app.uploadProfileImageToAws(mediumImage, mediumFileNameWebp, "profile-images/", model.ImageSpec{})
+	_, err = s.UploadProfileImageToAws(mediumImage, mediumFileNameWebp, "profile-images/", model.ImageSpec{})
 	if err != nil {
 		return fmt.Errorf("Unable to upload file: %s. Error: %s", mediumFileNameWebp, err)
 	}
-	_, err = app.uploadProfileImageToAws(smallImage, smallFileNameWebp, "profile-images/", model.ImageSpec{})
+	_, err = s.UploadProfileImageToAws(smallImage, smallFileNameWebp, "profile-images/", model.ImageSpec{})
 	if err != nil {
 		return fmt.Errorf("Unable to upload file: %s. Error: %s", smallFileNameWebp, err)
 	}
@@ -326,23 +326,23 @@ func (app *Application) uploadProfileImage(userID string, imageBytes []byte) err
 	return nil
 }
 
-func (app *Application) deleteProfileImage(userID string) error {
-	err := app.awsAdapter.DeleteProfileImage(fmt.Sprintf("profile-images/%s-default.webp", userID))
+func (s *servicesImpl) DeleteProfileImage(userID string) error {
+	err := s.app.awsAdapter.DeleteProfileImage(fmt.Sprintf("profile-images/%s-default.webp", userID))
 	if err != nil {
 		return err
 	}
-	err = app.awsAdapter.DeleteProfileImage(fmt.Sprintf("profile-images/%s-medium.webp", userID))
+	err = s.app.awsAdapter.DeleteProfileImage(fmt.Sprintf("profile-images/%s-medium.webp", userID))
 	if err != nil {
 		return err
 	}
-	err = app.awsAdapter.DeleteProfileImage(fmt.Sprintf("profile-images/%s-small.webp", userID))
+	err = s.app.awsAdapter.DeleteProfileImage(fmt.Sprintf("profile-images/%s-small.webp", userID))
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (app *Application) uploadProfileImageToAws(image image.Image, filename string, path string, spec model.ImageSpec) (*string, error) {
+func (s *servicesImpl) UploadProfileImageToAws(image image.Image, filename string, path string, spec model.ImageSpec) (*string, error) {
 	options, err := encoder.NewLossyEncoderOptions(encoder.PresetDefault, 75)
 	if err != nil {
 		return nil, fmt.Errorf("Error creating webp encoder options: %s", err)
@@ -353,7 +353,7 @@ func (app *Application) uploadProfileImageToAws(image image.Image, filename stri
 		return nil, fmt.Errorf("Error encoding webp: %s", err)
 	}
 
-	url, err := app.awsAdapter.CreateProfileImage(&output, path, &filename)
+	url, err := s.app.awsAdapter.CreateProfileImage(&output, path, &filename)
 	if err != nil {
 		return nil, fmt.Errorf("Unable to upload to S3: %s", err)
 	}
@@ -365,60 +365,60 @@ func (app *Application) uploadProfileImageToAws(image image.Image, filename stri
 	return nil, nil
 }
 
-func (app *Application) getTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error) {
+func (s *servicesImpl) GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error) {
 	var err error
-	posts := app.cacheAdapter.GetTwitterPosts(userID, twitterQueryParams)
+	posts := s.app.cacheAdapter.GetTwitterPosts(userID, twitterQueryParams)
 	if posts == nil || force {
-		app.cacheLock.Lock()
-		posts = app.cacheAdapter.GetTwitterPosts(userID, twitterQueryParams)
+		s.app.cacheLock.Lock()
+		posts = s.app.cacheAdapter.GetTwitterPosts(userID, twitterQueryParams)
 		if posts == nil || force {
 			if force {
-				app.cacheAdapter.ClearTwitterCacheForUser(userID)
+				s.app.cacheAdapter.ClearTwitterCacheForUser(userID)
 			}
-			posts, err = app.twitterAdapter.GetTwitterPosts(userID, twitterQueryParams)
+			posts, err = s.app.twitterAdapter.GetTwitterPosts(userID, twitterQueryParams)
 			if err == nil {
-				app.cacheAdapter.SetTwitterPosts(userID, twitterQueryParams, posts)
+				s.app.cacheAdapter.SetTwitterPosts(userID, twitterQueryParams, posts)
 			} else {
 				fmt.Printf("error feeding twitter: %s", err)
 			}
 		}
-		app.cacheLock.Unlock()
+		s.app.cacheLock.Unlock()
 	}
 	return posts, err
 }
 
-func (app *Application) getDataContentItem(claims *tokenauth.Claims, key string) (*model.DataContentItem, error) {
-	item, err := app.storage.FindDataContentItem(&claims.AppID, claims.OrgID, key)
+func (s *servicesImpl) GetDataContentItem(claims *tokenauth.Claims, key string) (*model.DataContentItem, error) {
+	item, err := s.app.storage.FindDataContentItem(&claims.AppID, claims.OrgID, key)
 	if err != nil {
 		return nil, err
 	}
 	return item, nil
 }
 
-func (app *Application) getDataContentItems(claims *tokenauth.Claims, category string) ([]*model.DataContentItem, error) {
-	item, err := app.storage.FindDataContentItems(&claims.AppID, claims.OrgID, category)
+func (s *servicesImpl) GetDataContentItems(claims *tokenauth.Claims, category string) ([]*model.DataContentItem, error) {
+	item, err := s.app.storage.FindDataContentItems(&claims.AppID, claims.OrgID, category)
 	if err != nil {
 		return nil, err
 	}
 	return item, nil
 }
 
-func (app *Application) createDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error) {
+func (s *servicesImpl) CreateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error) {
 	item.ID = uuid.NewString()
 	item.AppID = &claims.AppID
 	item.OrgID = claims.OrgID
 	item.DateCreated = time.Now().UTC()
-	item, err := app.storage.CreateDataContentItem(item)
+	item, err := s.app.storage.CreateDataContentItem(item)
 	if err != nil {
 		return nil, err
 	}
 	return item, nil
 }
 
-func (app *Application) updateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error) {
+func (s *servicesImpl) UpdateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error) {
 	var dataItem *model.DataContentItem
 
-	category, err := app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category)
+	category, err := s.app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category)
 	if err != nil {
 		return nil, err
 	}
@@ -437,7 +437,7 @@ func (app *Application) updateDataContentItem(claims *tokenauth.Claims, item *mo
 		return nil, fmt.Errorf("Unauthorized to update data content item")
 	}
 
-	dataItem, err = app.storage.UpdateDataContentItem(&claims.AppID, claims.OrgID, item)
+	dataItem, err = s.app.storage.UpdateDataContentItem(&claims.AppID, claims.OrgID, item)
 	if err != nil {
 		return nil, err
 	}
@@ -445,14 +445,14 @@ func (app *Application) updateDataContentItem(claims *tokenauth.Claims, item *mo
 	return dataItem, err
 }
 
-func (app *Application) deleteDataContentItem(claims *tokenauth.Claims, key string) error {
+func (s *servicesImpl) DeleteDataContentItem(claims *tokenauth.Claims, key string) error {
 
-	item, err := app.storage.FindDataContentItem(&claims.AppID, claims.OrgID, key)
+	item, err := s.app.storage.FindDataContentItem(&claims.AppID, claims.OrgID, key)
 	if err != nil {
 		return err
 	}
 
-	category, err := app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category)
+	category, err := s.app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category)
 	if err != nil {
 		return err
 	}
@@ -469,7 +469,7 @@ func (app *Application) deleteDataContentItem(claims *tokenauth.Claims, key stri
 		return fmt.Errorf("Unauthorized to delete data content item")
 	}
 
-	err = app.storage.DeleteDataContentItem(&claims.AppID, claims.OrgID, key)
+	err = s.app.storage.DeleteDataContentItem(&claims.AppID, claims.OrgID, key)
 	if err != nil {
 		return err
 	}
@@ -477,47 +477,47 @@ func (app *Application) deleteDataContentItem(claims *tokenauth.Claims, key stri
 	return nil
 }
 
-func (app *Application) createCategory(claims *tokenauth.Claims, item *model.Category) (*model.Category, error) {
+func (s *servicesImpl) CreateCategory(claims *tokenauth.Claims, item *model.Category) (*model.Category, error) {
 	item.ID = uuid.NewString()
 	item.AppID = &claims.AppID
 	item.OrgID = claims.OrgID
 	item.DateCreated = time.Now().UTC()
-	item, err := app.storage.CreateCategory(item)
+	item, err := s.app.storage.CreateCategory(item)
 	if err != nil {
 		return nil, err
 	}
 	return item, nil
 }
 
-func (app *Application) getCategory(appID *string, orgID string, id string) (*model.Category, error) {
-	item, err := app.storage.FindCategory(appID, orgID, id)
+func (s *servicesImpl) GetCategory(appID string, orgID string, id string) (*model.Category, error) {
+	item, err := s.app.storage.FindCategory(&appID, orgID, id)
 	if err != nil {
 		return nil, err
 	}
 	return item, nil
 }
 
-func (app *Application) updateCategory(appID *string, orgID string, item *model.Category) (*model.Category, error) {
-	item, err := app.storage.UpdateCategory(appID, orgID, item)
+func (s *servicesImpl) UpdateCategory(appID string, orgID string, item *model.Category) (*model.Category, error) {
+	item, err := s.app.storage.UpdateCategory(&appID, orgID, item)
 	if err != nil {
 		return nil, err
 	}
 	return item, nil
 }
 
-func (app *Application) deleteCategory(appID *string, orgID string, id string) error {
-	err := app.storage.DeleteCategory(appID, orgID, id)
+func (s *servicesImpl) DeleteCategory(appID string, orgID string, id string) error {
+	err := s.app.storage.DeleteCategory(&appID, orgID, id)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (app *Application) uploadFileContentItem(file io.Reader, claims *tokenauth.Claims, fileName string, category string) error {
+func (s *servicesImpl) UploadFileContentItem(file io.Reader, claims *tokenauth.Claims, fileName string, category string) error {
 
 	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Subject + "/" + fileName
 
-	_, err := app.awsAdapter.UploadFile(file, path)
+	_, err := s.app.awsAdapter.UploadFile(file, path)
 	if err != nil {
 		return fmt.Errorf("Unable to upload to S3: %s", err)
 	}
@@ -525,11 +525,11 @@ func (app *Application) uploadFileContentItem(file io.Reader, claims *tokenauth.
 	return nil
 }
 
-func (app *Application) getFileContentItem(claims *tokenauth.Claims, fileName string, category string) ([]byte, error) {
+func (s *servicesImpl) GetFileContentItem(claims *tokenauth.Claims, fileName string, category string) ([]byte, error) {
 
 	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Subject + "/" + fileName
 
-	file, err := app.awsAdapter.DownloadFile(path)
+	file, err := s.app.awsAdapter.DownloadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("Unable to read file to S3: %s", err)
 	}
@@ -541,8 +541,8 @@ func (app *Application) getFileContentItem(claims *tokenauth.Claims, fileName st
 	return nil, nil
 }
 
-func (app *Application) deleteFileContentItem(claims *tokenauth.Claims, fileName string, category string) error {
-	categoryItem, err := app.storage.FindCategory(&claims.AppID, claims.OrgID, category)
+func (s *servicesImpl) DeleteFileContentItem(claims *tokenauth.Claims, fileName string, category string) error {
+	categoryItem, err := s.app.storage.FindCategory(&claims.AppID, claims.OrgID, category)
 	if err != nil {
 		return err
 	}
@@ -561,11 +561,15 @@ func (app *Application) deleteFileContentItem(claims *tokenauth.Claims, fileName
 
 	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Id + "/" + fileName
 
-	err = app.awsAdapter.DeleteProfileImage(path)
+	err = s.app.awsAdapter.DeleteProfileImage(path)
 	if err != nil {
 		return err
 	}
 
 	return nil
 
+}
+
+type servicesImpl struct {
+	app *Application
 }
