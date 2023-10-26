@@ -2151,7 +2151,7 @@ paths:
             application/pdf:
               schema:
                 type: string
-                format: binary
+                format: base64
         '400':
           description: Bad request
         '401':

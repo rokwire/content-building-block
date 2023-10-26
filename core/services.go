@@ -17,7 +17,6 @@ package core
 import (
 	"bytes"
 	"content/core/model"
-	"content/driven/storage"
 	"errors"
 	"fmt"
 	"image"
@@ -389,7 +388,7 @@ func (app *Application) getTwitterPosts(userID string, twitterQueryParams string
 }
 
 func (app *Application) getDataContentItem(claims *tokenauth.Claims, key string) (*model.DataContentItem, error) {
-	item, err := app.storage.FindDataContentItem(&claims.AppID, claims.OrgID, key, nil)
+	item, err := app.storage.FindDataContentItem(&claims.AppID, claims.OrgID, key)
 	if err != nil {
 		return nil, err
 	}
@@ -418,69 +417,64 @@ func (app *Application) createDataContentItem(claims *tokenauth.Claims, item *mo
 
 func (app *Application) updateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error) {
 	var dataItem *model.DataContentItem
-	err := app.storage.PerformTransaction(func(context storage.TransactionContext) error {
 
-		category, err := app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category, nil)
-		if err != nil {
-			return err
+	category, err := app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category)
+	if err != nil {
+		return nil, err
+	}
+
+	isValid := false
+	for _, element := range category.Permissions {
+		if strings.Contains(claims.Permissions, element) {
+			isValid = true
+			break
 		}
+	}
 
-		isValid := false
-		for _, element := range category.Permissions {
-			if strings.Contains(claims.Permissions, element) {
-				isValid = true
-				break
-			}
-		}
+	//TODO check new permission
 
-		if !isValid {
-			return fmt.Errorf("Unauthorized to update data content item")
-		}
+	if !isValid {
+		return nil, fmt.Errorf("Unauthorized to update data content item")
+	}
 
-		dataItem, err = app.storage.UpdateDataContentItem(&claims.AppID, claims.OrgID, item)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
+	dataItem, err = app.storage.UpdateDataContentItem(&claims.AppID, claims.OrgID, item)
+	if err != nil {
+		return nil, err
+	}
 
 	return dataItem, err
 }
 
 func (app *Application) deleteDataContentItem(claims *tokenauth.Claims, key string) error {
-	err := app.storage.PerformTransaction(func(context storage.TransactionContext) error {
 
-		item, err := app.storage.FindDataContentItem(&claims.AppID, claims.OrgID, key, context)
-		if err != nil {
-			return err
+	item, err := app.storage.FindDataContentItem(&claims.AppID, claims.OrgID, key)
+	if err != nil {
+		return err
+	}
+
+	category, err := app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category)
+	if err != nil {
+		return err
+	}
+
+	isValid := false
+	for _, element := range category.Permissions {
+		if strings.Contains(claims.Permissions, element) {
+			isValid = true
+			break
 		}
+	}
 
-		category, err := app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category, context)
-		if err != nil {
-			return err
-		}
+	if !isValid {
+		return fmt.Errorf("Unauthorized to delete data content item")
+	}
 
-		isValid := false
-		for _, element := range category.Permissions {
-			if strings.Contains(claims.Permissions, element) {
-				isValid = true
-				break
-			}
-		}
+	err = app.storage.DeleteDataContentItem(&claims.AppID, claims.OrgID, key)
+	if err != nil {
+		return err
+	}
 
-		if !isValid {
-			return fmt.Errorf("Unauthorized to delete data content item")
-		}
-
-		err = app.storage.DeleteDataContentItem(&claims.AppID, claims.OrgID, key, context)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
-	return err
+	return nil
 }
 
 func (app *Application) createCategory(claims *tokenauth.Claims, item *model.Category) (*model.Category, error) {
@@ -496,7 +490,7 @@ func (app *Application) createCategory(claims *tokenauth.Claims, item *model.Cat
 }
 
 func (app *Application) getCategory(appID *string, orgID string, id string) (*model.Category, error) {
-	item, err := app.storage.FindCategory(appID, orgID, id, nil)
+	item, err := app.storage.FindCategory(appID, orgID, id)
 	if err != nil {
 		return nil, err
 	}
@@ -519,20 +513,16 @@ func (app *Application) deleteCategory(appID *string, orgID string, id string) e
 	return nil
 }
 
-func (app *Application) uploadFileContentItem(file io.Reader, claims *tokenauth.Claims, fileName string, category string) (*string, error) {
+func (app *Application) uploadFileContentItem(file io.Reader, claims *tokenauth.Claims, fileName string, category string) error {
 
 	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Subject + "/" + fileName
 
-	url, err := app.awsAdapter.UploadFile(file, path)
+	_, err := app.awsAdapter.UploadFile(file, path)
 	if err != nil {
-		return nil, fmt.Errorf("Unable to upload to S3: %s", err)
+		return fmt.Errorf("Unable to upload to S3: %s", err)
 	}
 
-	if url != nil {
-		return url, nil
-	}
-
-	return nil, nil
+	return nil
 }
 
 func (app *Application) getFileContentItem(claims *tokenauth.Claims, fileName string, category string) ([]byte, error) {
@@ -552,36 +542,30 @@ func (app *Application) getFileContentItem(claims *tokenauth.Claims, fileName st
 }
 
 func (app *Application) deleteFileContentItem(claims *tokenauth.Claims, fileName string, category string) error {
+	categoryItem, err := app.storage.FindCategory(&claims.AppID, claims.OrgID, category)
+	if err != nil {
+		return err
+	}
 
-	err := app.storage.PerformTransaction(func(context storage.TransactionContext) error {
-
-		categoryItem, err := app.storage.FindCategory(&claims.AppID, claims.OrgID, category, nil)
-		if err != nil {
-			return err
+	isValid := false
+	for _, element := range categoryItem.Permissions {
+		if strings.Contains(claims.Permissions, element) {
+			isValid = true
+			break
 		}
+	}
 
-		isValid := false
-		for _, element := range categoryItem.Permissions {
-			if strings.Contains(claims.Permissions, element) {
-				isValid = true
-				break
-			}
-		}
+	if !isValid {
+		return fmt.Errorf("Unauthorized to delete file content item")
+	}
 
-		if !isValid {
-			return fmt.Errorf("Unauthorized to delete file content item")
-		}
+	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Id + "/" + fileName
 
-		path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Id + "/" + fileName
+	err = app.awsAdapter.DeleteProfileImage(path)
+	if err != nil {
+		return err
+	}
 
-		err = app.awsAdapter.DeleteProfileImage(path)
-		if err != nil {
-			return err
-		}
+	return nil
 
-		return nil
-	})
-
-
-	return err
 }

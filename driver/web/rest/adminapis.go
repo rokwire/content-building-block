@@ -1763,24 +1763,15 @@ func (h AdminApisHandler) UploadFileContentItem(claims *tokenauth.Claims, w http
 	defer file.Close()
 
 	// pass the file to be processed by the use case handler
-	url, err := h.app.Services.UploadFileContentItem(file, claims, fileName, category)
+	err = h.app.Services.UploadFileContentItem(file, claims, fileName, category)
 	if err != nil {
 		log.Printf("Error converting file: %s\n", err)
 		http.Error(w, "Error converting file", http.StatusInternalServerError)
 		return
 	}
 
-	jsonData := map[string]string{"url": *url}
-	jsonBynaryData, err := json.Marshal(jsonData)
-	if err != nil {
-		log.Println("Error on marshal s3 location data")
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
-	}
-
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
-	w.Write(jsonBynaryData)
 }
 
 // GetFileContentItem Get a file to AWS S3

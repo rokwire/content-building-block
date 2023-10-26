@@ -181,6 +181,12 @@ func (m *database) applyDataContentItemsChecks(dataContentItems *collectionWrapp
 		return err
 	}
 
+	// Add key index
+	err = dataContentItems.AddIndex(bson.D{primitive.E{Key: "key", Value: 1}}, false)
+	if err != nil {
+		return err
+	}
+
 	log.Println("data_content_items checks passed")
 	return nil
 }
