@@ -177,7 +177,7 @@ func (a *Adapter) UploadFile(body io.Reader, path string) (*string, error) {
 	return &objectLocation, nil
 }
 
-// Downloadfile loads image at specific path
+// DownloadFile loads image at specific path
 func (a *Adapter) DownloadFile(path string) ([]byte, error) {
 	s, err := a.createS3Session()
 	if err != nil {
