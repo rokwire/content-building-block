@@ -1877,7 +1877,7 @@ paths:
     get:
       tags:
         - Admin
-      summary: Admin API thatRetrieves data content items
+      summary: Admin API that retrieves data content items
       description: |
         Retrieves data content items
 
@@ -1936,7 +1936,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  _id:
+                  id:
                     type: string
                   category:
                     type: string
@@ -2009,7 +2009,7 @@ paths:
           content:
             application/json:
               schema:
-                ref: ../../schemas/admin/categories/Categories.yaml
+                ref: ../../schemas/apis/admin/categories/Categories.yaml
         '400':
           description: Bad request
         '401':
@@ -2076,7 +2076,7 @@ paths:
           content:
             application/json:
               schema:
-                ref: ../../schemas/admin/categories/Categories.yaml
+                ref: ../../schemas/apis/admin/categories/Categories.yaml
         '400':
           description: Bad request
         '401':
@@ -2160,9 +2160,9 @@ paths:
     get:
       tags:
         - Admin
-      summary: Admin API that Gets a file to AWS S3
+      summary: Admin API that Gets a file from AWS S3
       description: |
-        Gets a file to AWS S3
+        Gets a file from AWS S3
 
         **Auth:** Requires admin token with `all_admin_content` permission
       security:
@@ -2201,9 +2201,9 @@ paths:
     delete:
       tags:
         - Admin
-      summary: Admin API that Deletes a file to AWS S3
+      summary: Admin API that Deletes a file from AWS S3
       description: |
-        Deletes a file to AWS S3
+        Deletes a file from AWS S3
 
         **Auth:** Requires admin token with `all_admin_content` permission
       security:
@@ -2658,7 +2658,7 @@ paths:
     get:
       tags:
         - Client
-      summary: Client API thatRetrieves data content items
+      summary: Client API that retrieves data content items
       description: |
         Retrieves data content items
       security:
@@ -2722,9 +2722,9 @@ paths:
     get:
       tags:
         - Client
-      summary: Client API that Gets a file to AWS S3
+      summary: Client API that Gets a file from AWS S3
       description: |
-        Gets a file to AWS S3
+        Gets a file from AWS S3
       security:
         - bearerAuth: []
       parameters:

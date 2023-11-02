@@ -588,15 +588,13 @@ func (s *servicesImpl) DeleteFileContentItem(claims *tokenauth.Claims, fileName 
 }
 
 func checkPermissions(itemPermissions []string, claimsPermissions string) bool {
-	isValid := false
 	for _, element := range itemPermissions {
 		if strings.Contains(claimsPermissions, element) {
-			isValid = true
-			break
+			return true
 		}
 	}
 
-	return isValid
+	return false
 }
 
 type servicesImpl struct {

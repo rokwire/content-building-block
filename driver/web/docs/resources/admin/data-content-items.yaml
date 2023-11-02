@@ -51,7 +51,7 @@ put:
 get:
   tags:
     - Admin
-  summary: Admin API thatRetrieves data content items
+  summary: Admin API that retrieves data content items
   description: |
     Retrieves data content items
 
