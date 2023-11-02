@@ -404,11 +404,21 @@ func (s *servicesImpl) GetDataContentItems(claims *tokenauth.Claims, category st
 }
 
 func (s *servicesImpl) CreateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error) {
+
+	category, err := s.app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category)
+	if err != nil {
+		return nil, err
+	}
+
+	if !checkPermissions(category.Permissions, claims.Permissions) {
+		return nil, fmt.Errorf("unauthorized to update data content item")
+	}
+
 	item.ID = uuid.NewString()
 	item.AppID = &claims.AppID
 	item.OrgID = claims.OrgID
 	item.DateCreated = time.Now().UTC()
-	item, err := s.app.storage.CreateDataContentItem(item)
+	item, err = s.app.storage.CreateDataContentItem(item)
 	if err != nil {
 		return nil, err
 	}
@@ -423,18 +433,8 @@ func (s *servicesImpl) UpdateDataContentItem(claims *tokenauth.Claims, item *mod
 		return nil, err
 	}
 
-	isValid := false
-	for _, element := range category.Permissions {
-		if strings.Contains(claims.Permissions, element) {
-			isValid = true
-			break
-		}
-	}
-
-	//TODO check new permission
-
-	if !isValid {
-		return nil, fmt.Errorf("Unauthorized to update data content item")
+	if !checkPermissions(category.Permissions, claims.Permissions) {
+		return nil, fmt.Errorf("unauthorized to update data content item")
 	}
 
 	dataItem, err = s.app.storage.UpdateDataContentItem(&claims.AppID, claims.OrgID, item)
@@ -457,16 +457,8 @@ func (s *servicesImpl) DeleteDataContentItem(claims *tokenauth.Claims, key strin
 		return err
 	}
 
-	isValid := false
-	for _, element := range category.Permissions {
-		if strings.Contains(claims.Permissions, element) {
-			isValid = true
-			break
-		}
-	}
-
-	if !isValid {
-		return fmt.Errorf("Unauthorized to delete data content item")
+	if !checkPermissions(category.Permissions, claims.Permissions) {
+		return fmt.Errorf("unauthorized to delete data content item")
 	}
 
 	err = s.app.storage.DeleteDataContentItem(&claims.AppID, claims.OrgID, key)
@@ -478,6 +470,11 @@ func (s *servicesImpl) DeleteDataContentItem(claims *tokenauth.Claims, key strin
 }
 
 func (s *servicesImpl) CreateCategory(claims *tokenauth.Claims, item *model.Category) (*model.Category, error) {
+
+	if !checkPermissions(item.Permissions, claims.Permissions) {
+		return nil, fmt.Errorf("unauthorized to Create category")
+	}
+
 	item.ID = uuid.NewString()
 	item.AppID = &claims.AppID
 	item.OrgID = claims.OrgID
@@ -489,24 +486,43 @@ func (s *servicesImpl) CreateCategory(claims *tokenauth.Claims, item *model.Cate
 	return item, nil
 }
 
-func (s *servicesImpl) GetCategory(appID string, orgID string, id string) (*model.Category, error) {
-	item, err := s.app.storage.FindCategory(&appID, orgID, id)
+func (s *servicesImpl) GetCategory(claims *tokenauth.Claims, name string) (*model.Category, error) {
+
+	item, err := s.app.storage.FindCategory(&claims.AppID, claims.OrgID, name)
 	if err != nil {
 		return nil, err
 	}
 	return item, nil
 }
 
-func (s *servicesImpl) UpdateCategory(appID string, orgID string, item *model.Category) (*model.Category, error) {
-	item, err := s.app.storage.UpdateCategory(&appID, orgID, item)
+func (s *servicesImpl) UpdateCategory(claims *tokenauth.Claims, item *model.Category) (*model.Category, error) {
+	categoryItem, err := s.app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	if !checkPermissions(categoryItem.Permissions, claims.Permissions) {
+		return nil, fmt.Errorf("unauthorized to update category")
+	}
+
+	item, err = s.app.storage.UpdateCategory(&claims.AppID, claims.OrgID, item)
 	if err != nil {
 		return nil, err
 	}
 	return item, nil
 }
 
-func (s *servicesImpl) DeleteCategory(appID string, orgID string, id string) error {
-	err := s.app.storage.DeleteCategory(&appID, orgID, id)
+func (s *servicesImpl) DeleteCategory(claims *tokenauth.Claims, name string) error {
+	categoryItem, err := s.app.storage.FindCategory(&claims.AppID, claims.OrgID, name)
+	if err != nil {
+		return err
+	}
+
+	if !checkPermissions(categoryItem.Permissions, claims.Permissions) {
+		return fmt.Errorf("unauthorized to delete category")
+	}
+
+	err = s.app.storage.DeleteCategory(&claims.AppID, claims.OrgID, name)
 	if err != nil {
 		return err
 	}
@@ -517,9 +533,18 @@ func (s *servicesImpl) UploadFileContentItem(file io.Reader, claims *tokenauth.C
 
 	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Subject + "/" + fileName
 
-	_, err := s.app.awsAdapter.UploadFile(file, path)
+	categoryItem, err := s.app.storage.FindCategory(&claims.AppID, claims.OrgID, category)
 	if err != nil {
-		return fmt.Errorf("Unable to upload to S3: %s", err)
+		return err
+	}
+
+	if !checkPermissions(categoryItem.Permissions, claims.Permissions) {
+		return fmt.Errorf("unauthorized to delete file content item")
+	}
+
+	_, err = s.app.awsAdapter.UploadFile(file, path)
+	if err != nil {
+		return fmt.Errorf("unable to upload to S3: %s", err)
 	}
 
 	return nil
@@ -531,7 +556,7 @@ func (s *servicesImpl) GetFileContentItem(claims *tokenauth.Claims, fileName str
 
 	file, err := s.app.awsAdapter.DownloadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("Unable to read file to S3: %s", err)
+		return nil, fmt.Errorf("unable to read file to S3: %s", err)
 	}
 
 	if file != nil {
@@ -547,16 +572,8 @@ func (s *servicesImpl) DeleteFileContentItem(claims *tokenauth.Claims, fileName 
 		return err
 	}
 
-	isValid := false
-	for _, element := range categoryItem.Permissions {
-		if strings.Contains(claims.Permissions, element) {
-			isValid = true
-			break
-		}
-	}
-
-	if !isValid {
-		return fmt.Errorf("Unauthorized to delete file content item")
+	if !checkPermissions(categoryItem.Permissions, claims.Permissions) {
+		return fmt.Errorf("unauthorized to delete file content item")
 	}
 
 	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Id + "/" + fileName
@@ -568,6 +585,18 @@ func (s *servicesImpl) DeleteFileContentItem(claims *tokenauth.Claims, fileName 
 
 	return nil
 
+}
+
+func checkPermissions(itemPermissions []string, claimsPermissions string) bool {
+	isValid := false
+	for _, element := range itemPermissions {
+		if strings.Contains(claimsPermissions, element) {
+			isValid = true
+			break
+		}
+	}
+
+	return isValid
 }
 
 type servicesImpl struct {

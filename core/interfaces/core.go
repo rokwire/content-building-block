@@ -57,9 +57,9 @@ type Services interface {
 	GetDataContentItems(claims *tokenauth.Claims, category string) ([]*model.DataContentItem, error)
 
 	CreateCategory(claims *tokenauth.Claims, item *model.Category) (*model.Category, error)
-	GetCategory(appID string, orgID string, id string) (*model.Category, error)
-	UpdateCategory(appID string, orgID string, item *model.Category) (*model.Category, error)
-	DeleteCategory(appID string, orgID string, id string) error
+	GetCategory(claims *tokenauth.Claims, name string) (*model.Category, error)
+	UpdateCategory(claims *tokenauth.Claims, item *model.Category) (*model.Category, error)
+	DeleteCategory(claims *tokenauth.Claims, name string) error
 
 	UploadFileContentItem(file io.Reader, claims *tokenauth.Claims, fileName string, category string) error
 	GetFileContentItem(claims *tokenauth.Claims, fileName string, category string) ([]byte, error)

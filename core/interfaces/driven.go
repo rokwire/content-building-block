@@ -54,7 +54,7 @@ type Storage interface {
 	FindDataContentItems(appID *string, orgID string, key string) ([]*model.DataContentItem, error)
 
 	CreateCategory(item *model.Category) (*model.Category, error)
-	FindCategory(appID *string, orgID string, id string) (*model.Category, error)
+	FindCategory(appID *string, orgID string, name string) (*model.Category, error)
 	UpdateCategory(appID *string, orgID string, item *model.Category) (*model.Category, error)
 	DeleteCategory(appID *string, orgID string, key string) error
 }

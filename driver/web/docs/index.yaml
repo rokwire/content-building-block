@@ -71,7 +71,7 @@ paths:
     $ref: "./resources/admin/data-content-itemsids.yaml"
   /admin/category:
     $ref: "./resources/admin/categories.yaml" 
-  /admin/category/{id}:
+  /admin/category/{name}:
     $ref: "./resources/admin/categoriesids.yaml"    
   /admin/file:
     $ref: "./resources/admin/file-content-items.yaml"                            
@@ -99,7 +99,13 @@ paths:
   /image:
     $ref: "./resources/client/image.yaml"
   /twitter/users/{user_id}/tweets:
-    $ref: "./resources/client/twitter-user-tweets.yaml"      
+    $ref: "./resources/client/twitter-user-tweets.yaml"   
+  /data:
+    $ref: "./resources/client/data-content-items.yaml"
+  /data/{key}:
+    $ref: "./resources/client/data-content-itemsids.yaml" 
+  /file:
+    $ref: "./resources/client/file-content-items.yaml"     
   
 components:
   securitySchemes:

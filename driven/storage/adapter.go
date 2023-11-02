@@ -569,10 +569,10 @@ func (sa *Adapter) CreateCategory(item *model.Category) (*model.Category, error)
 }
 
 // FindCategory fins a category
-func (sa *Adapter) FindCategory(appID *string, orgID string, id string) (*model.Category, error) {
+func (sa *Adapter) FindCategory(appID *string, orgID string, name string) (*model.Category, error) {
 	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
 		primitive.E{Key: "org_id", Value: orgID},
-		primitive.E{Key: "name", Value: id}}
+		primitive.E{Key: "name", Value: name}}
 
 	var result *model.Category
 	err := sa.db.categories.FindOne(sa.context, filter, &result, nil)

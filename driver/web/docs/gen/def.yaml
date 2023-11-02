@@ -1803,7 +1803,10 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/~1admin~1file/post/responses/200/content/application~1json/schema/items'
+                  type: object
+                  properties:
+                    url:
+                      type: string
         '400':
           description: Bad request
         '401':
@@ -1814,9 +1817,11 @@ paths:
     post:
       tags:
         - Admin
-      summary: Creates a data content item
+      summary: Admin API that Creates a data content item
       description: |
         Creates a new data content item
+
+        **Auth:** Requires admin token with `all_admin_content` permission
       security:
         - bearerAuth: []
       requestBody:
@@ -1837,9 +1842,11 @@ paths:
     put:
       tags:
         - Admin
-      summary: Updates data content item
+      summary: Admin API that Updates data content item
       description: |
         Updates data content item 
+
+        **Auth:** Requires admin token with `all_admin_content` permission
       security:
         - bearerAuth: []
       requestBody:
@@ -1870,16 +1877,13 @@ paths:
     get:
       tags:
         - Admin
-      summary: Retrieves data content items
+      summary: Admin API thatRetrieves data content items
       description: |
         Retrieves data content items
+
+        **Auth:** Requires admin token with `all_admin_content` permission
       security:
         - bearerAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/paths/~1admin~1data/put/requestBody/content/application~1json/schema'
       parameters:
         - name: category
           in: query
@@ -1897,7 +1901,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/paths/~1admin~1data~1%7Bkey%7D/get/responses/200/content/application~1json/schema'
         '400':
           description: Bad request
         '401':
@@ -1908,9 +1912,11 @@ paths:
     get:
       tags:
         - Admin
-      summary: Retrieves data content item
+      summary: Admin API that Retrieves data content item
       description: |
         Retrieves data content item
+
+        **Auth:** Requires admin token with `all_admin_content` permission
       security:
         - bearerAuth: []
       parameters:
@@ -1925,6 +1931,27 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  category:
+                    type: string
+                  key:
+                    type: string
+                  date_created:
+                    type: string
+                  date_updated:
+                    type: string
+                  data:
+                    type: array
+                  org_id:
+                    type: string
+                  app_id:
+                    type: string
         '400':
           description: Bad request
         '401':
@@ -1934,9 +1961,11 @@ paths:
     delete:
       tags:
         - Admin
-      summary: Delete data content item
+      summary: Admin API that Delete data content item
       description: |
         Delete data content item
+
+        **Auth:** Requires admin token with `all_admin_content` permission
       security:
         - bearerAuth: []
       parameters:
@@ -1961,9 +1990,11 @@ paths:
     post:
       tags:
         - Admin
-      summary: Creates a category
+      summary: Admin API that Creates a category
       description: |
         Creates a category
+
+        **Auth:** Requires admin token with `all_admin_content` permission
       security:
         - bearerAuth: []
       requestBody:
@@ -1975,6 +2006,10 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                ref: ../../schemas/admin/categories/Categories.yaml
         '400':
           description: Bad request
         '401':
@@ -1984,9 +2019,11 @@ paths:
     put:
       tags:
         - Admin
-      summary: Updates a category
+      summary: Admin API that Updates a category
       description: |
         Updates a category
+
+        **Auth:** Requires admin token with `all_admin_content` permission
       security:
         - bearerAuth: []
       requestBody:
@@ -2013,19 +2050,21 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  '/admin/category/{id}':
+  '/admin/category/{name}':
     get:
       tags:
         - Admin
-      summary: Retrieves data content item
+      summary: Admin API that Retrieves data content item
       description: |
         Retrieves data content item
+
+        **Auth:** Requires admin token with `all_admin_content` permission
       security:
         - bearerAuth: []
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: id
+          description: name of category
           required: true
           style: simple
           explode: false
@@ -2034,6 +2073,10 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                ref: ../../schemas/admin/categories/Categories.yaml
         '400':
           description: Bad request
         '401':
@@ -2043,15 +2086,17 @@ paths:
     delete:
       tags:
         - Admin
-      summary: Delete data content item
+      summary: Admin API that Delete data content item
       description: |
         Delete data content item
+
+        **Auth:** Requires admin token with `all_admin_content` permission
       security:
         - bearerAuth: []
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: id
+          description: name of category
           required: true
           style: simple
           explode: false
@@ -2070,9 +2115,11 @@ paths:
     post:
       tags:
         - Admin
-      summary: Uploads a file to AWS S3
+      summary: Admin API that Uploads a file to AWS S3
       description: |
         Uploads a file to AWS S3
+
+        **Auth:** Requires admin token with `all_admin_content` permission
       security:
         - bearerAuth: []
       requestBody:
@@ -2104,15 +2151,6 @@ paths:
       responses:
         '200':
           description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    url:
-                      type: string
         '400':
           description: Bad request
         '401':
@@ -2122,9 +2160,11 @@ paths:
     get:
       tags:
         - Admin
-      summary: Gets a file to AWS S3
+      summary: Admin API that Gets a file to AWS S3
       description: |
         Gets a file to AWS S3
+
+        **Auth:** Requires admin token with `all_admin_content` permission
       security:
         - bearerAuth: []
       parameters:
@@ -2148,7 +2188,7 @@ paths:
         '200':
           description: Success
           content:
-            application/pdf:
+            application/octet-stream:
               schema:
                 type: string
                 format: base64
@@ -2161,9 +2201,11 @@ paths:
     delete:
       tags:
         - Admin
-      summary: Deletes a file to AWS S3
+      summary: Admin API that Deletes a file to AWS S3
       description: |
         Deletes a file to AWS S3
+
+        **Auth:** Requires admin token with `all_admin_content` permission
       security:
         - bearerAuth: []
       parameters:
@@ -2612,6 +2654,111 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
+  /data:
+    get:
+      tags:
+        - Client
+      summary: Client API thatRetrieves data content items
+      description: |
+        Retrieves data content items
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: category
+          in: query
+          description: category of data content item
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/paths/~1admin~1data~1%7Bkey%7D/get/responses/200/content/application~1json/schema'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  '/data/{key}':
+    get:
+      tags:
+        - Client
+      summary: Client API that Retrieves data content item
+      description: |
+        Retrieves data content item
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: key
+          in: path
+          description: key
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1admin~1data/put/requestBody/content/application~1json/schema'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /file:
+    get:
+      tags:
+        - Client
+      summary: Client API that Gets a file to AWS S3
+      description: |
+        Gets a file to AWS S3
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: fileName
+          in: query
+          description: name of the file
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: category of file
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: base64
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    delete: null
 components:
   securitySchemes:
     bearerAuth:

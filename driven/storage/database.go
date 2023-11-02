@@ -175,12 +175,6 @@ func (m *database) applyDataContentItemsChecks(dataContentItems *collectionWrapp
 		return err
 	}
 
-	// Add date_created index
-	err = dataContentItems.AddIndex(bson.D{primitive.E{Key: "date_created", Value: 1}}, false)
-	if err != nil {
-		return err
-	}
-
 	// Add key index
 	err = dataContentItems.AddIndex(bson.D{primitive.E{Key: "key", Value: 1}}, false)
 	if err != nil {

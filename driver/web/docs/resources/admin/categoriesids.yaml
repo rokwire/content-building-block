@@ -1,15 +1,17 @@
 get:
   tags:
     - Admin
-  summary: Retrieves data content item
+  summary: Admin API that Retrieves data content item
   description: |
     Retrieves data content item
+
+    **Auth:** Requires admin token with `all_admin_content` permission
   security:
     - bearerAuth: []          
   parameters:
-    - name: id
+    - name: name
       in: path
-      description: id
+      description: name of category
       required: true
       style: simple
       explode: false
@@ -18,6 +20,10 @@ get:
   responses:
     200:
       description: Success
+      content:
+        application/json:
+          schema:
+            ref: "../../schemas/admin/categories/Categories.yaml"
     400:
       description: Bad request
     401:
@@ -27,15 +33,17 @@ get:
 delete:
   tags:
   - Admin
-  summary: Delete data content item
+  summary: Admin API that Delete data content item
   description: |
     Delete data content item
+
+    **Auth:** Requires admin token with `all_admin_content` permission
   security:
     - bearerAuth: []
   parameters:
-    - name: id
+    - name: name
       in: path
-      description: id
+      description: name of category
       required: true
       style: simple
       explode: false

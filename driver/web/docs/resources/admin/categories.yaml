@@ -1,9 +1,11 @@
 post:
   tags:
     - Admin 
-  summary: Creates a category
+  summary: Admin API that Creates a category
   description: |
     Creates a category
+
+    **Auth:** Requires admin token with `all_admin_content` permission
   security:
     - bearerAuth: [] 
   requestBody:
@@ -15,6 +17,10 @@ post:
   responses:
     200:
       description: Success
+      content:
+        application/json:
+          schema:
+            ref: "../../schemas/admin/categories/Categories.yaml"
     400:
       description: Bad request
     401:
@@ -24,9 +30,11 @@ post:
 put:
   tags:
     - Admin
-  summary: Updates a category
+  summary: Admin API that Updates a category
   description: |
     Updates a category
+
+    **Auth:** Requires admin token with `all_admin_content` permission
   security:
     - bearerAuth: [] 
   requestBody:

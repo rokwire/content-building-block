@@ -644,14 +644,14 @@ func (h ApisHandler) GetTweeterPosts(claims *tokenauth.Claims, w http.ResponseWr
 // @Produce json
 // @Success 200
 // @Security UserAuth
-// @Router /data/{id} [get]
+// @Router /data/{key} [get]
 func (h ApisHandler) GetDataContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	key := vars["id"]
+	key := vars["key"]
 
 	resData, err := h.app.Services.GetDataContentItem(claims, key)
 	if err != nil {
-		log.Printf("Error on getting data content type with id - %s\n %s", key, err)
+		log.Printf("Error on getting data content type with key - %s\n %s", key, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -718,7 +718,7 @@ func (h ApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Respons
 // @Router /data [get]
 func (h ApisHandler) GetDataContentItems(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	key := vars["id"]
+	key := vars["key"]
 
 	category := r.FormValue("category")
 	if len(category) <= 0 {

@@ -1,9 +1,11 @@
 post:
   tags:
     - Admin 
-  summary: Creates a data content item
+  summary: Admin API that Creates a data content item
   description: |
     Creates a new data content item
+
+    **Auth:** Requires admin token with `all_admin_content` permission
   security:
     - bearerAuth: [] 
   requestBody:
@@ -24,9 +26,11 @@ post:
 put:
   tags:
     - Admin
-  summary: Updates data content item 
+  summary: Admin API that Updates data content item 
   description: |
     Updates data content item 
+
+    **Auth:** Requires admin token with `all_admin_content` permission
   security:
     - bearerAuth: [] 
   requestBody:
@@ -47,16 +51,13 @@ put:
 get:
   tags:
     - Admin
-  summary: Retrieves data content items
+  summary: Admin API thatRetrieves data content items
   description: |
     Retrieves data content items
+
+    **Auth:** Requires admin token with `all_admin_content` permission
   security:
-    - bearerAuth: [] 
-  requestBody:
-     content:
-       application/json:
-         schema:
-           $ref: "../../schemas/apis/admin/data-content-item/DataContentItem.yaml"          
+    - bearerAuth: []         
   parameters:
     - name: category
       in: query
@@ -74,7 +75,7 @@ get:
           schema:
             type: array
             items:
-              $ref: "../../schemas/application/ContentItem.yaml"
+              $ref: "../../schemas/application/DataContentItem.yaml"
     400:
       description: Bad request
     401:

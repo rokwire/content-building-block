@@ -1,9 +1,11 @@
 post:
   tags:
     - Admin
-  summary: Uploads a file to AWS S3
+  summary: Admin API that Uploads a file to AWS S3
   description: |
-     Uploads a file to AWS S3
+    Uploads a file to AWS S3
+
+    **Auth:** Requires admin token with `all_admin_content` permission
   security:
     - bearerAuth: [] 
   requestBody:
@@ -45,9 +47,11 @@ post:
 get:
   tags:
     - Admin
-  summary: Gets a file to AWS S3
+  summary: Admin API that Gets a file to AWS S3
   description: |
-      Gets a file to AWS S3
+    Gets a file to AWS S3
+
+    **Auth:** Requires admin token with `all_admin_content` permission
   security:
     - bearerAuth: [] 
   parameters:
@@ -71,7 +75,7 @@ get:
     200:
       description: Success
       content:
-            application/pdf:
+            application/octet-stream:
               schema:
                 type: string
                 format: base64
@@ -84,9 +88,11 @@ get:
 delete:
   tags:
     - Admin
-  summary: Deletes a file to AWS S3
+  summary: Admin API that Deletes a file to AWS S3
   description: |
-      Deletes a file to AWS S3
+    Deletes a file to AWS S3
+
+    **Auth:** Requires admin token with `all_admin_content` permission
   security:
     - bearerAuth: [] 
   parameters:

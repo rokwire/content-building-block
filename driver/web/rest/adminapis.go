@@ -123,15 +123,8 @@ func (h AdminApisHandler) UpdateStudentGuide(claims *tokenauth.Claims, w http.Re
 	vars := mux.Vars(r)
 	guideID := vars["id"]
 
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Error on marshal create a student guide - %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
 	var item bson.M
-	err = json.Unmarshal(data, &item)
+	err := json.NewDecoder(r.Body).Decode(&item)
 	if err != nil {
 		log.Printf("Error on unmarshal the create student guide request data - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -167,16 +160,8 @@ func (h AdminApisHandler) UpdateStudentGuide(claims *tokenauth.Claims, w http.Re
 // @Deprecated true
 // @Router /admin/student_guides [post]
 func (h AdminApisHandler) CreateStudentGuide(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Error on marshal create a student guide - %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
 	var item bson.M
-	err = json.Unmarshal(data, &item)
+	err := json.NewDecoder(r.Body).Decode(&item)
 	if err != nil {
 		log.Printf("Error on unmarshal the create student guide request data - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -314,15 +299,8 @@ func (h AdminApisHandler) UpdateHealthLocation(claims *tokenauth.Claims, w http.
 	vars := mux.Vars(r)
 	locationID := vars["id"]
 
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Error on marshal create a health location - %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
 	var item bson.M
-	err = json.Unmarshal(data, &item)
+	err := json.NewDecoder(r.Body).Decode(&item)
 	if err != nil {
 		log.Printf("Error on unmarshal the create health location request data - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -358,16 +336,8 @@ func (h AdminApisHandler) UpdateHealthLocation(claims *tokenauth.Claims, w http.
 // @Deprecated true
 // @Router /admin/health_locations [post]
 func (h AdminApisHandler) CreateHealthLocation(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Error on marshal create a health location - %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
 	var item bson.M
-	err = json.Unmarshal(data, &item)
+	err := json.NewDecoder(r.Body).Decode(&item)
 	if err != nil {
 		log.Printf("Error on unmarshal the create health location request data - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -879,15 +849,8 @@ type createContentItemByCategoryRequestBody struct {
 } // @name createContentItemByCategoryRequestBody
 
 func (h AdminApisHandler) createContentItemByCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request, category string) {
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Error on marshal create a content item - %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
 	var item createContentItemByCategoryRequestBody
-	err = json.Unmarshal(data, &item)
+	err := json.NewDecoder(r.Body).Decode(&item)
 	if err != nil {
 		log.Printf("Error on unmarshal the create content item request data - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -923,28 +886,21 @@ func (h AdminApisHandler) updateContentItemByCategory(claims *tokenauth.Claims, 
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Error on marshal create a content item - %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	var request updateContentItemByCategoryRequestBody
-	err = json.Unmarshal(data, &request)
+	var item updateContentItemByCategoryRequestBody
+	err := json.NewDecoder(r.Body).Decode(&item)
 	if err != nil {
 		log.Printf("Error on unmarshal the update content item request data - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if request.Data == nil {
+	if item.Data == nil {
 		log.Printf("Unable to update content item: Missing data")
 		http.Error(w, "Unable to update content item: Missing data", http.StatusBadRequest)
 		return
 	}
 
-	resData, err := h.app.Services.UpdateContentItemData(request.AllApps, claims.AppID, claims.OrgID, id, category, request.Data)
+	resData, err := h.app.Services.UpdateContentItemData(item.AllApps, claims.AppID, claims.OrgID, id, category, item.Data)
 	if err != nil {
 		log.Printf("Error on updating content item with id - %s\n %s", id, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1125,16 +1081,13 @@ func (h AdminApisHandler) GetContentItems(claims *tokenauth.Claims, w http.Respo
 		order = &orders[0]
 	}
 
-	var body getContentItemsRequestBody
-	bodyData, _ := ioutil.ReadAll(r.Body)
-	if len(bodyData) > 0 {
-		bodyErr := json.Unmarshal(bodyData, &body)
-		if bodyErr != nil {
-			log.Printf("Warning: bad getContentItemsRequestBody request: %s", bodyErr)
-		}
+	var item getContentItemsRequestBody
+	bodyErr := json.NewDecoder(r.Body).Decode(&item)
+	if bodyErr != nil {
+		log.Printf("Warning: bad getContentItemsRequestBody request: %s", bodyErr)
 	}
 
-	resData, err := h.app.Services.GetContentItems(allApps, claims.AppID, claims.OrgID, body.IDs, body.Categories, offset, limit, order)
+	resData, err := h.app.Services.GetContentItems(allApps, claims.AppID, claims.OrgID, item.IDs, item.Categories, offset, limit, order)
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1217,34 +1170,27 @@ func (h AdminApisHandler) UpdateContentItem(claims *tokenauth.Claims, w http.Res
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Error on marshal create a content item - %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	var request updateContentItemRequestBody
-	err = json.Unmarshal(data, &request)
+	var item updateContentItemRequestBody
+	err := json.NewDecoder(r.Body).Decode(&item)
 	if err != nil {
 		log.Printf("Error on unmarshal the update content item request data - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if len(request.Category) == 0 {
+	if len(item.Category) == 0 {
 		log.Printf("Unable to update content item: Missing category")
 		http.Error(w, "Unable to update content item: Missing category", http.StatusBadRequest)
 		return
 	}
 
-	if request.Data == nil {
+	if item.Data == nil {
 		log.Printf("Unable to update content item: Missing data")
 		http.Error(w, "Unable to update content item: Missing data", http.StatusBadRequest)
 		return
 	}
 
-	resData, err := h.app.Services.UpdateContentItem(request.AllApps, claims.AppID, claims.OrgID, id, request.Category, request.Data)
+	resData, err := h.app.Services.UpdateContentItem(item.AllApps, claims.AppID, claims.OrgID, id, item.Category, item.Data)
 	if err != nil {
 		log.Printf("Error on updating content item with id - %s\n %s", id, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1279,15 +1225,8 @@ type createContentItemRequestBody struct {
 // @Security AdminUserAuth
 // @Router /admin/content_items [post]
 func (h AdminApisHandler) CreateContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Error on marshal create a content item - %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
 	var item createContentItemRequestBody
-	err = json.Unmarshal(data, &item)
+	err := json.NewDecoder(r.Body).Decode(&item)
 	if err != nil {
 		log.Printf("Error on unmarshal the create content item request data - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -1397,16 +1336,8 @@ func (h AdminApisHandler) GetContentItemsCategories(claims *tokenauth.Claims, w 
 // @Security AdminUserAuth
 // @Router /admin/data [post]
 func (h AdminApisHandler) CreateDataContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Error on marshal create a data content item - %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
 	var item model.DataContentItem
-	err = json.Unmarshal(data, &item)
+	err := json.NewDecoder(r.Body).Decode(&item)
 	if err != nil {
 		log.Printf("Error on unmarshal the create data content item request data - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -1475,9 +1406,6 @@ func (h AdminApisHandler) GetDataContentItem(claims *tokenauth.Claims, w http.Re
 // @Security AdminUserAuth
 // @Router /admin/data [get]
 func (h AdminApisHandler) GetDataContentItems(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	key := vars["id"]
-
 	category := r.FormValue("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
@@ -1487,7 +1415,7 @@ func (h AdminApisHandler) GetDataContentItems(claims *tokenauth.Claims, w http.R
 
 	resData, err := h.app.Services.GetDataContentItems(claims, category)
 	if err != nil {
-		log.Printf("Error on getting data content type with id - %s\n %s", key, err)
+		log.Printf("Error on getting data content type with id - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -1504,49 +1432,40 @@ func (h AdminApisHandler) GetDataContentItems(claims *tokenauth.Claims, w http.R
 	w.Write(data)
 }
 
-// UpdateDataContentItem Updates a content item with the specified id.
-// @Description Updates a content item with the specified id.
+// UpdateDataContentItem Updates a content item.
+// @Description Updates a content item
 // @Tags Admin
 // @ID AdminUpdateDataContentItem
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.DataContentItem
 // @Security AdminUserAuth
-// @Router /admin/data/{id} [put]
+// @Router /admin/data/ [put]
 func (h AdminApisHandler) UpdateDataContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id := vars["id"]
 
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Error on marshal create a data content item - %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	var body model.DataContentItem
-	err = json.Unmarshal(data, &body)
+	var item model.DataContentItem
+	err := json.NewDecoder(r.Body).Decode(&item)
 	if err != nil {
 		log.Printf("Error on unmarshal the update data content item request data - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if len(body.Category) == 0 {
+	if len(item.Category) == 0 {
 		log.Printf("Unable to update content item: Missing category")
 		http.Error(w, "Unable to update content item: Missing category", http.StatusBadRequest)
 		return
 	}
 
-	if body.Data == nil {
+	if item.Data == nil {
 		log.Printf("Unable to update content item: Missing data")
 		http.Error(w, "Unable to update content item: Missing data", http.StatusBadRequest)
 		return
 	}
 
-	resData, err := h.app.Services.UpdateDataContentItem(claims, &body)
+	resData, err := h.app.Services.UpdateDataContentItem(claims, &item)
 	if err != nil {
-		log.Printf("Error on updating content item with id - %s\n %s", id, err)
+		log.Printf("Error on updating content item- %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -1569,14 +1488,14 @@ func (h AdminApisHandler) UpdateDataContentItem(claims *tokenauth.Claims, w http
 // @ID AdminDeleteDataContentItem
 // @Success 200
 // @Security AdminUserAuth
-// @Router /admin/data/{id} [delete]
+// @Router /admin/data/{key} [delete]
 func (h AdminApisHandler) DeleteDataContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	key := vars["id"]
+	key := vars["key"]
 
 	err := h.app.Services.DeleteDataContentItem(claims, key)
 	if err != nil {
-		log.Printf("Error on deleting data content item with id - %s\n %s", key, err)
+		log.Printf("Error on deleting data content item with key - %s\n %s", key, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -1594,16 +1513,8 @@ func (h AdminApisHandler) DeleteDataContentItem(claims *tokenauth.Claims, w http
 // @Security AdminUserAuth
 // @Router /admin/category [post]
 func (h AdminApisHandler) CreateCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Error on marshal create a category - %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
 	var item model.Category
-	err = json.Unmarshal(data, &item)
+	err := json.NewDecoder(r.Body).Decode(&item)
 	if err != nil {
 		log.Printf("Error on unmarshal the create a category - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -1637,14 +1548,14 @@ func (h AdminApisHandler) CreateCategory(claims *tokenauth.Claims, w http.Respon
 // @Produce json
 // @Success 200
 // @Security AdminUserAuth
-// @Router /admin/category/{id} [get]
+// @Router /admin/category/{name} [get]
 func (h AdminApisHandler) GetCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
+	name := vars["name"]
 
-	resData, err := h.app.Services.GetCategory(claims.AppID, claims.OrgID, id)
+	resData, err := h.app.Services.GetCategory(claims, name)
 	if err != nil {
-		log.Printf("Error on getting category with name - %s\n %s", id, err)
+		log.Printf("Error on getting category with name - %s\n %s", name, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -1671,23 +1582,15 @@ func (h AdminApisHandler) GetCategory(claims *tokenauth.Claims, w http.ResponseW
 // @Security AdminUserAuth
 // @Router /admin/category [put]
 func (h AdminApisHandler) UpdateCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Error on marshal create a data content item - %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	var body model.Category
-	err = json.Unmarshal(data, &body)
+	var item model.Category
+	err := json.NewDecoder(r.Body).Decode(&item)
 	if err != nil {
 		log.Printf("Error on unmarshal the update category request data - %s\n", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	resData, err := h.app.Services.UpdateCategory(claims.AppID, claims.OrgID, &body)
+	resData, err := h.app.Services.UpdateCategory(claims, &item)
 	if err != nil {
 		log.Printf("Error on updating category  - %s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1706,20 +1609,20 @@ func (h AdminApisHandler) UpdateCategory(claims *tokenauth.Claims, w http.Respon
 	w.Write(jsonData)
 }
 
-// DeleteCategory Deletes a category with specified id
-// @Description Deletes a category with specified id
+// DeleteCategory Deletes a category with specified key
+// @Description Deletes a category with specified key
 // @Tags Admin
 // @ID AdminDeleteCategory
 // @Success 200
 // @Security AdminUserAuth
-// @Router /admin/category/{id} [delete]
+// @Router /admin/category/{name} [delete]
 func (h AdminApisHandler) DeleteCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
+	name := vars["name"]
 
-	err := h.app.Services.DeleteCategory(claims.AppID, claims.OrgID, id)
+	err := h.app.Services.DeleteCategory(claims, name)
 	if err != nil {
-		log.Printf("Error on deleting category with id - %s\n %s", id, err)
+		log.Printf("Error on deleting category with name - %s\n %s", name, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
