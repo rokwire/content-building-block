@@ -635,17 +635,17 @@ func (sa *Adapter) StoreMultiTenancyData(appID string, orgID string) error {
 		}},
 	}
 	//content items
-	_, err := sa.db.contentItems.UpdateManyWithContext(sa.context, filter, update, nil)
+	_, err := sa.db.contentItems.UpdateMany(sa.context, filter, update, nil)
 	if err != nil {
 		return err
 	}
 	//health locations
-	_, err = sa.db.healthLocations.UpdateManyWithContext(sa.context, filter, update, nil)
+	_, err = sa.db.healthLocations.UpdateMany(sa.context, filter, update, nil)
 	if err != nil {
 		return err
 	}
 	//student guides
-	_, err = sa.db.studentGuides.UpdateManyWithContext(sa.context, filter, update, nil)
+	_, err = sa.db.studentGuides.UpdateMany(sa.context, filter, update, nil)
 	if err != nil {
 		return err
 	}

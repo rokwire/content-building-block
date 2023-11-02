@@ -96,9 +96,11 @@ func (collWrapper *collectionWrapper) ReplaceOne(ctx context.Context, filter int
 	if res == nil {
 		return errors.New("replace one - res is nil")
 	}
-	matchedCount := res.MatchedCount
-	if matchedCount == 0 {
-		return errors.New("replace one - no record replaced")
+	if replaceOptions.Upsert == nil || !*replaceOptions.Upsert {
+		matchedCount := res.MatchedCount
+		if matchedCount == 0 {
+			return errors.New("replace one - no record replaced")
+		}
 	}
 	return nil
 }
@@ -113,9 +115,7 @@ func (collWrapper *collectionWrapper) InsertOne(ctx context.Context, data interf
 	cancel()
 
 	if err == nil {
-		if id, ok := ins.InsertedID.(interface{}); ok {
-			return id, nil
-		}
+		return ins.InsertedID, nil
 	}
 
 	return nil, err
@@ -179,6 +179,36 @@ func (collWrapper *collectionWrapper) UpdateOne(ctx context.Context, filter inte
 	}
 
 	return updateResult, nil
+}
+
+func (collWrapper *collectionWrapper) UpdateMany(ctx context.Context, filter interface{}, update interface{}, opts *options.UpdateOptions) (*mongo.UpdateResult, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	ctx, cancel := context.WithTimeout(ctx, collWrapper.database.mongoTimeout)
+	defer cancel()
+
+	updateResult, err := collWrapper.coll.UpdateMany(ctx, filter, update, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	return updateResult, nil
+}
+
+func (collWrapper *collectionWrapper) FindOneAndUpdate(ctx context.Context, filter interface{}, update interface{}, result interface{}, opts *options.FindOneAndUpdateOptions) error {
+	ctx, cancel := context.WithTimeout(ctx, collWrapper.database.mongoTimeout)
+	defer cancel()
+
+	singleResult := collWrapper.coll.FindOneAndUpdate(ctx, filter, update, opts)
+	if singleResult.Err() != nil {
+		return singleResult.Err()
+	}
+	err := singleResult.Decode(result)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (collWrapper *collectionWrapper) CountDocuments(ctx context.Context, filter interface{}) (int64, error) {
@@ -328,19 +358,4 @@ func (collWrapper *collectionWrapper) Drop() error {
 		return err
 	}
 	return nil
-}
-
-func (collWrapper *collectionWrapper) UpdateManyWithContext(ctx context.Context, filter interface{}, update interface{}, opts *options.UpdateOptions) (*mongo.UpdateResult, error) {
-	if ctx == nil {
-		ctx = context.Background()
-	}
-	ctx, cancel := context.WithTimeout(ctx, collWrapper.database.mongoTimeout)
-	defer cancel()
-
-	updateResult, err := collWrapper.coll.UpdateMany(ctx, filter, update, opts)
-	if err != nil {
-		return nil, err
-	}
-
-	return updateResult, nil
 }

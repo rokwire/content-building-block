@@ -60,34 +60,45 @@ func (app *Application) Start() {
 func (app *Application) storeMultiTenancyData() error {
 	log.Println("storeMultiTenancyData...")
 
-	//check if we need to apply multi-tenancy data
-	var applyData bool
-	items, err := app.storage.FindAllContentItems()
-	if err != nil {
-		return err
-	}
-	for _, current := range items {
-		if val, ok := current["app_id"]; ok {
-			log.Printf("\thas already app_id:%s", val)
-			applyData = false
-			break
-		} else {
-			log.Print("\tno app_id")
-			applyData = true
-			break
-		}
-	}
-
-	//apply data if necessary
-	if applyData {
-		log.Print("\tapplying multi-tenancy data..")
-
-		err := app.storage.StoreMultiTenancyData(app.multiTenancyAppID, app.multiTenancyOrgID)
+	//in transaction
+	transaction := func(storage interfaces.Storage) error {
+		//check if we need to apply multi-tenancy data
+		var applyData bool
+		items, err := storage.FindAllContentItems()
 		if err != nil {
 			return err
 		}
-	} else {
-		log.Print("\tno need to apply multi-tenancy data, so do nothing")
+		for _, current := range items {
+			if val, ok := current["app_id"]; ok {
+				log.Printf("\thas already app_id:%s", val)
+				applyData = false
+				break
+			} else {
+				log.Print("\tno app_id")
+				applyData = true
+				break
+			}
+		}
+
+		//apply data if necessary
+		if applyData {
+			log.Print("\tapplying multi-tenancy data..")
+
+			err := storage.StoreMultiTenancyData(app.multiTenancyAppID, app.multiTenancyOrgID)
+			if err != nil {
+				return err
+			}
+		} else {
+			log.Print("\tno need to apply multi-tenancy data, so do nothing")
+		}
+
+		return nil
+	}
+
+	err := app.storage.PerformTransaction(transaction)
+	if err != nil {
+		log.Printf("error performing transaction for multi tenancy")
+		return err
 	}
 
 	return nil
@@ -101,7 +112,6 @@ func NewApplication(version string, build string, storage interfaces.Storage, aw
 		awsAdapter: awsAdapter, twitterAdapter: twitterAdapter, cacheAdapter: cacheadapter, multiTenancyAppID: mtAppID, multiTenancyOrgID: mtOrgID, logger: logger}
 
 	// add the drivers ports/interfaces
-	//TODO fix this servicesImpl
 	application.Services = &servicesImpl{app: &application}
 
 	return &application

@@ -72,10 +72,8 @@ func main() {
 	defaultCacheExpirationSeconds := getEnvKey("CONTENT_DEFAULT_CACHE_EXPIRATION_SECONDS", false)
 	cacheAdapter := cacheadapter.NewCacheAdapter(defaultCacheExpirationSeconds)
 
-	twitterFeedURL := "test"
-	// getEnvKey("CONTENT_TWITTER_FEED_URL", true)
-	twitterAccessToken := "123"
-	// getEnvKey("CONTENT_TWITTER_ACCESS_TOKEN", true)
+	twitterFeedURL := getEnvKey("CONTENT_TWITTER_FEED_URL", true)
+	twitterAccessToken := getEnvKey("CONTENT_TWITTER_ACCESS_TOKEN", true)
 	twitterAdapter := twitter.NewTwitterAdapter(twitterFeedURL, twitterAccessToken)
 
 	mtAppID := getEnvKey("CONTENT_MULTI_TENANCY_APP_ID", true)
