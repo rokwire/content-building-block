@@ -701,7 +701,7 @@ func (h ApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Respons
 		return
 	}
 
-	w.Header().Set("Content-Type", "multipart/form-data")
+	w.Header().Set("Content-Type", "application/octet-stream")
 	w.WriteHeader(http.StatusOK)
 	w.Write(result)
 }

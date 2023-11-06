@@ -1,7 +1,7 @@
 get:
   tags:
     - Client
-  summary: Client API thatRetrieves data content items
+  summary: Client API that Retrieves data content items
   description: |
     Retrieves data content items
   security:

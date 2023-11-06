@@ -11,7 +11,7 @@ properties:
   date_updated:
     type: string
   data:
-    type: array
+    type: object
   org_id:
     type: string      
   app_id:

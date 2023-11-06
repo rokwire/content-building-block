@@ -17,6 +17,10 @@ post:
   responses:
     200:
       description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/application/DataContentItem.yaml"
     400:
       description: Bad request
     401:
@@ -42,6 +46,10 @@ put:
   responses:
     200:
       description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/application/DataContentItem.yaml"
     400:
       description: Bad request
     401:

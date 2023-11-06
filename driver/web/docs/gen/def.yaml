@@ -1833,6 +1833,10 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1admin~1data/put/responses/200/content/application~1json/schema'
         '400':
           description: Bad request
         '401':
@@ -1868,6 +1872,27 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  category:
+                    type: string
+                  key:
+                    type: string
+                  date_created:
+                    type: string
+                  date_updated:
+                    type: string
+                  data:
+                    type: object
+                  org_id:
+                    type: string
+                  app_id:
+                    type: string
         '400':
           description: Bad request
         '401':
@@ -1901,7 +1926,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/~1admin~1data~1%7Bkey%7D/get/responses/200/content/application~1json/schema'
+                  $ref: '#/paths/~1admin~1data/put/responses/200/content/application~1json/schema'
         '400':
           description: Bad request
         '401':
@@ -1934,24 +1959,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  _id:
-                    type: string
-                  category:
-                    type: string
-                  key:
-                    type: string
-                  date_created:
-                    type: string
-                  date_updated:
-                    type: string
-                  data:
-                    type: array
-                  org_id:
-                    type: string
-                  app_id:
-                    type: string
+                $ref: '#/paths/~1admin~1data/put/responses/200/content/application~1json/schema'
         '400':
           description: Bad request
         '401':
@@ -2658,7 +2666,7 @@ paths:
     get:
       tags:
         - Client
-      summary: Client API thatRetrieves data content items
+      summary: Client API that Retrieves data content items
       description: |
         Retrieves data content items
       security:
@@ -2680,7 +2688,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/~1admin~1data~1%7Bkey%7D/get/responses/200/content/application~1json/schema'
+                  $ref: '#/paths/~1admin~1data/put/responses/200/content/application~1json/schema'
         '400':
           description: Bad request
         '401':
@@ -2711,7 +2719,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1admin~1data/put/requestBody/content/application~1json/schema'
+                $ref: '#/paths/~1admin~1data/put/responses/200/content/application~1json/schema'
         '400':
           description: Bad request
         '401':
@@ -2722,9 +2730,9 @@ paths:
     get:
       tags:
         - Client
-      summary: Client API that Gets a file to AWS S3
+      summary: Client API that Gets a file from AWS S3
       description: |
-        Gets a file to AWS S3
+        Gets a file from AWS S3
       security:
         - bearerAuth: []
       parameters:

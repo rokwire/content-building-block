@@ -169,14 +169,7 @@ func (m *database) applyDataContentItemsChecks(dataContentItems *collectionWrapp
 	log.Println("apply data_content_items checks.....")
 
 	//Add org_id + app_id index
-	err := dataContentItems.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1},
-		primitive.E{Key: "app_id", Value: 1}}, false)
-	if err != nil {
-		return err
-	}
-
-	// Add key index
-	err = dataContentItems.AddIndex(bson.D{primitive.E{Key: "key", Value: 1}}, false)
+	err := dataContentItems.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1}, primitive.E{Key: "app_id", Value: 1}, primitive.E{Key: "key", Value: 1}}, true)
 	if err != nil {
 		return err
 	}
@@ -189,14 +182,7 @@ func (m *database) applyCategoriesChecks(categories *collectionWrapper) error {
 	log.Println("apply categories checks.....")
 
 	//Add org_id + app_id index
-	err := categories.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1},
-		primitive.E{Key: "app_id", Value: 1}}, false)
-	if err != nil {
-		return err
-	}
-
-	// Add name index
-	err = categories.AddIndex(bson.D{primitive.E{Key: "name", Value: 1}}, false)
+	err := categories.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1}, primitive.E{Key: "app_id", Value: 1}, primitive.E{Key: "name", Value: 1}}, true)
 	if err != nil {
 		return err
 	}

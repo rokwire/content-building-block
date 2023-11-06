@@ -576,7 +576,7 @@ func (s *servicesImpl) DeleteFileContentItem(claims *tokenauth.Claims, fileName 
 		return fmt.Errorf("unauthorized to delete file content item")
 	}
 
-	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Id + "/" + fileName
+	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/user/" + claims.Subject + "/" + fileName
 
 	err = s.app.awsAdapter.DeleteProfileImage(path)
 	if err != nil {

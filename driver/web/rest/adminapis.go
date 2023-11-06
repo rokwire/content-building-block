@@ -1673,7 +1673,6 @@ func (h AdminApisHandler) UploadFileContentItem(claims *tokenauth.Claims, w http
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 }
 
