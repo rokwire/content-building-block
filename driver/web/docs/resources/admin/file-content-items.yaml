@@ -47,9 +47,9 @@ post:
 get:
   tags:
     - Admin
-  summary: Admin API that Gets a file to AWS S3
+  summary: Admin API that Gets a file from AWS S3
   description: |
-    Gets a file to AWS S3
+    Gets a file from AWS S3
 
     **Auth:** Requires admin token with `all_admin_content` permission
   security:
@@ -88,9 +88,9 @@ get:
 delete:
   tags:
     - Admin
-  summary: Admin API that Deletes a file to AWS S3
+  summary: Admin API that Deletes a file from AWS S3
   description: |
-    Deletes a file to AWS S3
+    Deletes a file from AWS S3
 
     **Auth:** Requires admin token with `all_admin_content` permission
   security:

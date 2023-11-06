@@ -717,9 +717,6 @@ func (h ApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Respons
 // @Security UserAuth
 // @Router /data [get]
 func (h ApisHandler) GetDataContentItems(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	key := vars["key"]
-
 	category := r.FormValue("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
@@ -729,7 +726,7 @@ func (h ApisHandler) GetDataContentItems(claims *tokenauth.Claims, w http.Respon
 
 	resData, err := h.app.Services.GetDataContentItems(claims, category)
 	if err != nil {
-		log.Printf("Error on getting data content type with id - %s\n %s", key, err)
+		log.Printf("Error on getting data content items with category - %s\n %s", category, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

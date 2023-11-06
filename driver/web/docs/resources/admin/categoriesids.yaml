@@ -23,7 +23,7 @@ get:
       content:
         application/json:
           schema:
-            ref: "../../schemas/admin/categories/Categories.yaml"
+            ref: "../../schemas/apis/admin/categories/Categories.yaml"
     400:
       description: Bad request
     401:

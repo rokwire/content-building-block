@@ -20,7 +20,7 @@ post:
       content:
         application/json:
           schema:
-            ref: "../../schemas/admin/categories/Categories.yaml"
+            ref: "../../schemas/apis/admin/categories/Categories.yaml"
     400:
       description: Bad request
     401:
@@ -38,11 +38,11 @@ put:
   security:
     - bearerAuth: [] 
   requestBody:
-     description: Updates a category
-     content:
-       application/json:
-          schema:
-            $ref: "../../schemas/apis/admin/categories/Categories.yaml"                         
+    description: Updates a category
+    content:
+      application/json:
+        schema:
+          $ref: "../../schemas/apis/admin/categories/Categories.yaml"                         
   responses:
     200:
       description: Success
