@@ -689,7 +689,7 @@ func (h ApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Respons
 	category := r.FormValue("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
-		http.Error(w, "missing 'catgory' form param", http.StatusBadRequest)
+		http.Error(w, "missing 'category' form param", http.StatusBadRequest)
 		return
 	}
 
@@ -720,7 +720,7 @@ func (h ApisHandler) GetDataContentItems(claims *tokenauth.Claims, w http.Respon
 	category := r.FormValue("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
-		http.Error(w, "missing 'catgory' form param", http.StatusBadRequest)
+		http.Error(w, "missing 'category' form param", http.StatusBadRequest)
 		return
 	}
 

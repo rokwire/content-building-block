@@ -1378,7 +1378,7 @@ func (h AdminApisHandler) GetDataContentItem(claims *tokenauth.Claims, w http.Re
 
 	resData, err := h.app.Services.GetDataContentItem(claims, key)
 	if err != nil {
-		log.Printf("Error on getting data content type with id - %s\n %s", key, err)
+		log.Printf("Error on getting data content type with key - %s\n %s", key, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -1409,7 +1409,7 @@ func (h AdminApisHandler) GetDataContentItems(claims *tokenauth.Claims, w http.R
 	category := r.FormValue("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
-		http.Error(w, "missing 'catgory' form param", http.StatusBadRequest)
+		http.Error(w, "missing 'category' form param", http.StatusBadRequest)
 		return
 	}
 
@@ -1652,7 +1652,7 @@ func (h AdminApisHandler) UploadFileContentItem(claims *tokenauth.Claims, w http
 	category := r.FormValue("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
-		http.Error(w, "missing 'catgory' form param", http.StatusBadRequest)
+		http.Error(w, "missing 'category' form param", http.StatusBadRequest)
 		return
 	}
 
@@ -1697,7 +1697,7 @@ func (h AdminApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Re
 	category := r.FormValue("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
-		http.Error(w, "missing 'catgory' form param", http.StatusBadRequest)
+		http.Error(w, "missing 'category' form param", http.StatusBadRequest)
 		return
 	}
 
@@ -1732,15 +1732,13 @@ func (h AdminApisHandler) DeleteFileContentItem(claims *tokenauth.Claims, w http
 	category := r.FormValue("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
-		http.Error(w, "missing 'catgory' form param", http.StatusBadRequest)
+		http.Error(w, "missing 'category' form param", http.StatusBadRequest)
 		return
 	}
 
 	err := h.app.Services.DeleteFileContentItem(claims, fileName, category)
 	if err != nil {
-		if err != nil {
-			log.Printf("error on delete AWS file: %s", err)
-		}
+		log.Printf("error on delete AWS file: %s", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
