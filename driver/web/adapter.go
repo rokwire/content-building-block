@@ -15,16 +15,24 @@
 package web
 
 import (
+	"bytes"
 	"content/core"
-	"content/core/model"
 	"content/driver/web/rest"
 	"content/utils"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"time"
+
+	"gopkg.in/yaml.v2"
+
+	"github.com/rokwire/logging-library-go/v2/logs"
+
+	"github.com/rokwire/core-auth-library-go/v2/authservice"
+	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
 
 	"github.com/gorilla/mux"
-	"github.com/rokwire/core-auth-library-go/tokenauth"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
@@ -38,6 +46,10 @@ type Adapter struct {
 	adminApisHandler rest.AdminApisHandler
 
 	app *core.Application
+
+	cachedYamlDoc []byte
+
+	logger *logs.Logger
 }
 
 // @title Rokwire Content Building Block API
@@ -160,12 +172,47 @@ func (we Adapter) Start() {
 
 func (we Adapter) serveDoc(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("access-control-allow-origin", "*")
-	http.ServeFile(w, r, "./docs/swagger.yaml")
+
+	if we.cachedYamlDoc != nil {
+		http.ServeContent(w, r, "", time.Now(), bytes.NewReader([]byte(we.cachedYamlDoc)))
+	} else {
+		http.ServeFile(w, r, "./driver/web/docs/gen/def.yaml")
+	}
 }
 
 func (we Adapter) serveDocUI() http.Handler {
-	url := fmt.Sprintf("%s/content/doc", we.host)
+	url := fmt.Sprintf("%s/doc", we.host)
 	return httpSwagger.Handler(httpSwagger.URL(url))
+}
+
+func loadDocsYAML(baseServerURL string) ([]byte, error) {
+	data, _ := os.ReadFile("./driver/web/docs/gen/def.yaml")
+	// yamlMap := make(map[string]interface{})
+	yamlMap := yaml.MapSlice{}
+	err := yaml.Unmarshal(data, &yamlMap)
+	if err != nil {
+		return nil, err
+	}
+
+	for index, item := range yamlMap {
+		if item.Key == "servers" {
+			var serverList []interface{}
+			if baseServerURL != "" {
+				serverList = []interface{}{yaml.MapSlice{yaml.MapItem{Key: "url", Value: baseServerURL}}}
+			}
+
+			item.Value = serverList
+			yamlMap[index] = item
+			break
+		}
+	}
+
+	yamlDoc, err := yaml.Marshal(&yamlMap)
+	if err != nil {
+		return nil, err
+	}
+
+	return yamlDoc, nil
 }
 
 func (we Adapter) wrapFunc(handler http.HandlerFunc) http.HandlerFunc {
@@ -193,12 +240,18 @@ func (we Adapter) coreAuthWrapFunc(handler coreAuthFunc, authorization Authoriza
 }
 
 // NewWebAdapter creates new WebAdapter instance
-func NewWebAdapter(host string, port string, app *core.Application, config model.Config) Adapter {
-	auth := NewAuth(app, config)
+func NewWebAdapter(host string, port string, app *core.Application, serviceRegManager *authservice.ServiceRegManager, logger *logs.Logger) Adapter {
+	yamlDoc, err := loadDocsYAML(host)
+	if err != nil {
+		logger.Fatalf("error parsing docs yaml - %s", err.Error())
+	}
+
+	auth := NewAuth(app, serviceRegManager, logger)
 
 	apisHandler := rest.NewApisHandler(app)
 	adminApisHandler := rest.NewAdminApisHandler(app)
-	return Adapter{host: host, port: port, auth: auth, apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app}
+	return Adapter{host: host, port: port, cachedYamlDoc: yamlDoc, auth: auth,
+		apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app, logger: logger}
 }
 
 // AppListener implements core.ApplicationListener interface

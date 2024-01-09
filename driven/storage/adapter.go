@@ -23,8 +23,9 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/rokwire/logging-library-go/errors"
-	"github.com/rokwire/logging-library-go/logutils"
+	"github.com/rokwire/logging-library-go/v2/errors"
+	"github.com/rokwire/logging-library-go/v2/logs"
+	"github.com/rokwire/logging-library-go/v2/logutils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -497,7 +498,7 @@ func (sa *Adapter) abortTransaction(sessionContext mongo.SessionContext) {
 }
 
 // NewStorageAdapter creates a new storage adapter instance
-func NewStorageAdapter(mongoDBAuth string, mongoDBName string, mongoTimeout string) *Adapter {
+func NewStorageAdapter(mongoDBAuth string, mongoDBName string, mongoTimeout string, logger *logs.Logger) *Adapter {
 	timeout, err := strconv.Atoi(mongoTimeout)
 	if err != nil {
 		log.Println("Set default timeout - 500")
@@ -505,7 +506,7 @@ func NewStorageAdapter(mongoDBAuth string, mongoDBName string, mongoTimeout stri
 	}
 	timeoutMS := time.Millisecond * time.Duration(timeout)
 
-	db := &database{mongoDBAuth: mongoDBAuth, mongoDBName: mongoDBName, mongoTimeout: timeoutMS}
+	db := &database{mongoDBAuth: mongoDBAuth, mongoDBName: mongoDBName, mongoTimeout: timeoutMS, logger: logger}
 	return &Adapter{db: db}
 }
 

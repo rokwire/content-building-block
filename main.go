@@ -25,6 +25,10 @@ import (
 	"log"
 	"os"
 	"strings"
+
+	"github.com/rokwire/core-auth-library-go/v2/authservice"
+
+	"github.com/rokwire/logging-library-go/v2/logs"
 )
 
 var (
@@ -39,13 +43,18 @@ func main() {
 		Version = "dev"
 	}
 
+	serviceID := "content"
+
+	loggerOpts := logs.LoggerOpts{SuppressRequests: logs.NewStandardHealthCheckHTTPRequestProperties(serviceID + "/version")}
+	logger := logs.NewLogger(serviceID, &loggerOpts)
+
 	port := getEnvKey("CONTENT_PORT", true)
 
 	//mongoDB adapter
 	mongoDBAuth := getEnvKey("CONTENT_MONGO_AUTH", true)
 	mongoDBName := getEnvKey("CONTENT_MONGO_DATABASE", true)
 	mongoTimeout := getEnvKey("CONTENT_MONGO_TIMEOUT", false)
-	storageAdapter := storage.NewStorageAdapter(mongoDBAuth, mongoDBName, mongoTimeout)
+	storageAdapter := storage.NewStorageAdapter(mongoDBAuth, mongoDBName, mongoTimeout, logger)
 	err := storageAdapter.Start()
 	if err != nil {
 		log.Fatal("Cannot start the mongoDB adapter - " + err.Error())
@@ -71,7 +80,7 @@ func main() {
 	mtOrgID := getEnvKey("CONTENT_MULTI_TENANCY_ORG_ID", true)
 
 	// application
-	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, twitterAdapter, cacheAdapter, mtAppID, mtOrgID)
+	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, twitterAdapter, cacheAdapter, mtAppID, mtOrgID, logger)
 	application.Start()
 
 	// web adapter
@@ -79,12 +88,24 @@ func main() {
 	coreBBHost := getEnvKey("CONTENT_CORE_BB_HOST", true)
 	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
 
-	config := model.Config{
-		CoreBBHost:        coreBBHost,
-		ContentServiceURL: contentServiceURL,
+	authService := authservice.AuthService{
+		ServiceID:   serviceID,
+		ServiceHost: contentServiceURL,
+		FirstParty:  true,
+		AuthBaseURL: coreBBHost,
 	}
 
-	webAdapter := driver.NewWebAdapter(host, port, application, config)
+	serviceRegLoader, err := authservice.NewRemoteServiceRegLoader(&authService, []string{"auth"})
+	if err != nil {
+		log.Fatalf("Error initializing remote service registration loader: %v", err)
+	}
+
+	serviceRegManager, err := authservice.NewServiceRegManager(&authService, serviceRegLoader)
+	if err != nil {
+		log.Fatalf("Error initializing service registration manager: %v", err)
+	}
+
+	webAdapter := driver.NewWebAdapter(host, port, application, serviceRegManager, logger)
 
 	webAdapter.Start()
 }
