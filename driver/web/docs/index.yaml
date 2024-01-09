@@ -70,7 +70,10 @@ paths:
   /profile_photo/{user-id}:
     $ref: "./resources/apis/profile-photo-userID.yaml"
   /profile_photo:
-    $ref: "./resources/apis/profile-photo.yaml"   
+    $ref: "./resources/apis/profile-photo.yaml"
+  /voice_record:
+    $ref: "./resources/apis/voice-record.yaml"
+
   #Client
   /student_guides:
     $ref: "./resources/client/student-guides.yaml"

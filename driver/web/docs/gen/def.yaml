@@ -1914,6 +1914,25 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
+  /voice_record:
+    post:
+      tags:
+        - Apis
+      summary: Upload a voice record file
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: File uploaded successfully
+        '400':
+          description: Bad request
   /student_guides:
     get:
       tags:
