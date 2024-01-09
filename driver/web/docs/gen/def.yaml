@@ -1937,6 +1937,20 @@ paths:
           description: File uploaded successfully
         '400':
           description: Bad request
+    get:
+      tags:
+        - Apis
+      summary: Get voice record file
+      responses:
+        '200':
+          description: File downloaded successfully
+          content:
+            audio/x-m4a:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: File not found
   /student_guides:
     get:
       tags:
