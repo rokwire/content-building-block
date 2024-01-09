@@ -1919,6 +1919,7 @@ paths:
       tags:
         - Apis
       summary: Upload a voice record file
+      description: Accept m4a file
       requestBody:
         content:
           multipart/form-data:
@@ -1928,6 +1929,9 @@ paths:
                 file:
                   type: string
                   format: binary
+            encoding:
+              file:
+                contentType: audio/x-m4a
       responses:
         '200':
           description: File uploaded successfully
