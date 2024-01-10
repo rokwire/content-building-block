@@ -363,7 +363,7 @@ func (app *Application) uploadProfileImageToAws(image image.Image, filename stri
 }
 
 func (app *Application) uploadVoiceRecord(userID string, bytes []byte) error {
-	_, err := app.awsAdapter.CreateUserVoiceRecord(bytes)
+	_, err := app.awsAdapter.CreateUserVoiceRecord(bytes, userID)
 	if err != nil {
 		return err
 	}
