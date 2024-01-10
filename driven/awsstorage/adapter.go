@@ -156,8 +156,7 @@ func (a *Adapter) CreateUserVoiceRecord(fileContent []byte /*, path string, pref
 	}
 	//key := a.prepareKey(path, preferredFileName)
 	key := "names-records/ffgg.m4a"
-	//objectLocation, err := a.uploadFileToS3(s, body, a.config.S3ProfileImagesBucket, key, "private")
-	objectLocation, err := a.uploadFileToS3(s, bytes.NewReader(fileContent), "todo", key, "private")
+	objectLocation, err := a.uploadFileToS3(s, bytes.NewReader(fileContent), a.config.S3UsersAudiosBucket, key, "private")
 	if err != nil {
 		log.Printf("Could not upload file")
 		return nil, err
