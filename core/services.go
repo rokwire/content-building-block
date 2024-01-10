@@ -362,6 +362,16 @@ func (app *Application) uploadProfileImageToAws(image image.Image, filename stri
 	return nil, nil
 }
 
+func (app *Application) uploadVoiceRecord(userID string, bytes []byte) error {
+	//TODO
+	return errors.New("not implemented")
+}
+
+func (app *Application) getVoiceRecord(userID string) ([]byte, error) {
+	//TODO
+	return nil, errors.New("not implemented")
+}
+
 func (app *Application) getTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error) {
 	var err error
 	posts := app.cacheAdapter.GetTwitterPosts(userID, twitterQueryParams)
