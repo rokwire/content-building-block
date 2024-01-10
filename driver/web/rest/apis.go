@@ -228,7 +228,7 @@ func (h ApisHandler) StoreVoiceRecord(claims *tokenauth.Claims, w http.ResponseW
 		return
 	}
 
-	// Check file type
+	// check file type
 	mime := mimetype.Detect(fileBytes)
 	if mime == nil {
 		msg := fmt.Sprintf("Error checking file type: %v", err)
@@ -243,73 +243,16 @@ func (h ApisHandler) StoreVoiceRecord(claims *tokenauth.Claims, w http.ResponseW
 		return
 	}
 
-	/*
-		err = h.app.Services.UploadProfileImage(claims.Subject, fileBytes)
-		if err != nil {
-			log.Printf("Error converting image: %s\n", err)
-			http.Error(w, "Error converting image", http.StatusInternalServerError)
-			return
-		}
+	// upload voice record
+	err = h.app.Services.UploadVoiceRecord(claims.Subject, fileBytes)
+	if err != nil {
+		log.Printf("Error uploading voice record: %s\n", err)
+		http.Error(w, "Error uploading voice record", http.StatusInternalServerError)
+		return
+	}
 
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(http.StatusOK)
-
-	*/
-	//TODO
-	/*// Проверка на метода
-	  if r.Method != "POST" {
-	      http.Error(w, "Unsupported method", http.StatusMethodNotAllowed)
-	      return
-	  }
-
-	  // Проверка на размера на файла
-	  r.Body = http.MaxBytesReader(w, r.Body, MaxUploadSize)
-	  if err := r.ParseMultipartForm(MaxUploadSize); err != nil {
-	      http.Error(w, "File too big", http.StatusBadRequest)
-	      return
-	  }
-
-	  // Извличане на файла
-	  file, _, err := r.FormFile("file")
-	  if err != nil {
-	      http.Error(w, "Invalid file", http.StatusBadRequest)
-	      return
-	  }
-	  defer file.Close()
-
-	  // Проверка на MIME типа
-	  buffer := make([]byte, 512)
-	  if _, err := file.Read(buffer); err != nil {
-	      http.Error(w, "File read error", http.StatusInternalServerError)
-	      return
-	  }
-
-	  filetype := http.DetectContentType(buffer)
-	  if filetype != "audio/x-m4a" {
-	      http.Error(w, "Invalid file type", http.StatusBadRequest)
-	      return
-	  }
-
-	  // Позициониране назад на началото на файла
-	  if _, err := file.Seek(0, io.SeekStart); err != nil {
-	      http.Error(w, "File seek error", http.StatusInternalServerError)
-	      return
-	  }
-
-	  // Съхраняване на файла
-	  out, err := os.Create("/path/to/save/file.m4a")
-	  if err != nil {
-	      http.Error(w, "Unable to create the file for writing", http.StatusInternalServerError)
-	      return
-	  }
-	  defer out.Close()
-
-	  if _, err = io.Copy(out, file); err != nil {
-	      http.Error(w, "Error occurred while writing file to disk", http.StatusInternalServerError)
-	      return
-	  }
-
-	  fmt.Fprintf(w, "File uploaded successfully") */
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h ApisHandler) GetVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {

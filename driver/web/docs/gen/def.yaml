@@ -1934,7 +1934,7 @@ paths:
                 contentType: audio/x-m4a
       responses:
         '200':
-          description: File uploaded successfully
+          description: Success
         '400':
           description: Bad request
     get:
@@ -1943,7 +1943,7 @@ paths:
       summary: Get voice record file
       responses:
         '200':
-          description: File downloaded successfully
+          description: Success
           content:
             audio/x-m4a:
               schema:
