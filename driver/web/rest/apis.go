@@ -28,6 +28,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
 	"go.mongodb.org/mongo-driver/bson"
+
+	"github.com/gabriel-vasile/mimetype"
 )
 
 const maxUploadSize = 15 * 1024 * 1024 // 15 mb
@@ -226,20 +228,22 @@ func (h ApisHandler) StoreVoiceRecord(claims *tokenauth.Claims, w http.ResponseW
 		return
 	}
 
-	//TODO
-	log.Println(fileBytes)
-	/*
-		// check file type, detectcontenttype only needs the first 512 bytes
-		filetype := http.DetectContentType(fileBytes)
-		switch filetype {
-		case "image/jpeg", "image/jpg":
-		case "image/gif", "image/png":
-		default:
-			log.Print("Invalid file type\n")
-			http.Error(w, "Invalid file type. Expected jpeg, png or gif!", http.StatusBadRequest)
-			return
-		}
+	// Check file type
+	mime := mimetype.Detect(fileBytes)
+	if mime == nil {
+		msg := fmt.Sprintf("Error checking file type: %v", err)
+		log.Println(msg)
+		http.Error(w, msg, http.StatusBadRequest)
+		return
+	}
 
+	if mime.String() != "audio/mp4" && mime.String() != "audio/x-m4a" {
+		log.Print("Invalid file type\n")
+		http.Error(w, "Invalid file type. Expected m4a!", http.StatusBadRequest)
+		return
+	}
+
+	/*
 		err = h.app.Services.UploadProfileImage(claims.Subject, fileBytes)
 		if err != nil {
 			log.Printf("Error converting image: %s\n", err)
