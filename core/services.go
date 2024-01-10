@@ -364,7 +364,12 @@ func (app *Application) uploadProfileImageToAws(image image.Image, filename stri
 
 func (app *Application) uploadVoiceRecord(userID string, bytes []byte) error {
 	//TODO
-	return errors.New("not implemented")
+	_, err := app.awsAdapter.CreateUserVoiceRecord(bytes)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (app *Application) getVoiceRecord(userID string) ([]byte, error) {

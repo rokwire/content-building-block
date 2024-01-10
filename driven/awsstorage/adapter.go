@@ -144,6 +144,30 @@ func (a *Adapter) DeleteProfileImage(path string) error {
 	return nil
 }
 
+// CreateVoiceRecord uploads a voice record for the user
+func (a *Adapter) CreateUserVoiceRecord(fileContent []byte /*, path string, preferredFileName *string*/) (*string, error) {
+	log.Println("Create user voice record")
+	/*
+	   s, err := a.createS3Session()
+
+	   	if err != nil {
+	   		log.Printf("Could not create S3 session")
+	   		return nil, err
+	   	}
+
+	   key := a.prepareKey(path, preferredFileName)
+	   objectLocation, err := a.uploadFileToS3(s, body, a.config.S3ProfileImagesBucket, key, "private")
+
+	   	if err != nil {
+	   		log.Printf("Could not upload file")
+	   		return nil, err
+	   	}
+
+	   return &objectLocation, nil
+	*/
+	return nil, nil
+}
+
 func (a *Adapter) prepareKey(path string, preferredFileName *string) string {
 	var fileName string
 	if preferredFileName == nil {
