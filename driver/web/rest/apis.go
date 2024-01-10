@@ -198,6 +198,118 @@ func (h ApisHandler) DeleteProfilePhoto(claims *tokenauth.Claims, w http.Respons
 	w.WriteHeader(http.StatusOK)
 }
 
+func (h ApisHandler) StoreVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	// validate file size
+	maxUploadAudioFileSize := int64(5 * 1024 * 1024) // 5 mb
+	r.Body = http.MaxBytesReader(w, r.Body, maxUploadAudioFileSize)
+	if err := r.ParseMultipartForm(maxUploadAudioFileSize); err != nil {
+		msg := fmt.Sprintf("Error parsing request form: max audio file size is %d, err %v", maxUploadAudioFileSize, err)
+		log.Println(msg)
+		http.Error(w, msg, http.StatusBadRequest)
+		return
+	}
+	/*
+
+		// parse and validate file and post parameters
+		file, _, err := r.FormFile("fileName")
+		if err != nil {
+			msg := fmt.Sprintf("Error reading file: %v", err)
+			log.Println(msg)
+			http.Error(w, msg, http.StatusBadRequest)
+			return
+		}
+		defer file.Close()
+		fileBytes, err := ioutil.ReadAll(file)
+		if err != nil {
+			msg := fmt.Sprintf("Error reading file: %v", err)
+			log.Println(msg)
+			http.Error(w, msg, http.StatusBadRequest)
+			return
+		}
+
+		// check file type, detectcontenttype only needs the first 512 bytes
+		filetype := http.DetectContentType(fileBytes)
+		switch filetype {
+		case "image/jpeg", "image/jpg":
+		case "image/gif", "image/png":
+		default:
+			log.Print("Invalid file type\n")
+			http.Error(w, "Invalid file type. Expected jpeg, png or gif!", http.StatusBadRequest)
+			return
+		}
+
+		err = h.app.Services.UploadProfileImage(claims.Subject, fileBytes)
+		if err != nil {
+			log.Printf("Error converting image: %s\n", err)
+			http.Error(w, "Error converting image", http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(http.StatusOK)
+
+	*/
+	//TODO
+	/*// Проверка на метода
+	  if r.Method != "POST" {
+	      http.Error(w, "Unsupported method", http.StatusMethodNotAllowed)
+	      return
+	  }
+
+	  // Проверка на размера на файла
+	  r.Body = http.MaxBytesReader(w, r.Body, MaxUploadSize)
+	  if err := r.ParseMultipartForm(MaxUploadSize); err != nil {
+	      http.Error(w, "File too big", http.StatusBadRequest)
+	      return
+	  }
+
+	  // Извличане на файла
+	  file, _, err := r.FormFile("file")
+	  if err != nil {
+	      http.Error(w, "Invalid file", http.StatusBadRequest)
+	      return
+	  }
+	  defer file.Close()
+
+	  // Проверка на MIME типа
+	  buffer := make([]byte, 512)
+	  if _, err := file.Read(buffer); err != nil {
+	      http.Error(w, "File read error", http.StatusInternalServerError)
+	      return
+	  }
+
+	  filetype := http.DetectContentType(buffer)
+	  if filetype != "audio/x-m4a" {
+	      http.Error(w, "Invalid file type", http.StatusBadRequest)
+	      return
+	  }
+
+	  // Позициониране назад на началото на файла
+	  if _, err := file.Seek(0, io.SeekStart); err != nil {
+	      http.Error(w, "File seek error", http.StatusInternalServerError)
+	      return
+	  }
+
+	  // Съхраняване на файла
+	  out, err := os.Create("/path/to/save/file.m4a")
+	  if err != nil {
+	      http.Error(w, "Unable to create the file for writing", http.StatusInternalServerError)
+	      return
+	  }
+	  defer out.Close()
+
+	  if _, err = io.Copy(out, file); err != nil {
+	      http.Error(w, "Error occurred while writing file to disk", http.StatusInternalServerError)
+	      return
+	  }
+
+	  fmt.Fprintf(w, "File uploaded successfully") */
+}
+
+func (h ApisHandler) GetVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	//TODO
+}
+
 // GetStudentGuides retrieves  all student guides
 // @Description Retrieves  all student guides
 // @Tags Client
