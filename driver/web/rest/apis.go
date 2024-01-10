@@ -208,25 +208,27 @@ func (h ApisHandler) StoreVoiceRecord(claims *tokenauth.Claims, w http.ResponseW
 		http.Error(w, msg, http.StatusBadRequest)
 		return
 	}
+
+	// parse and validate file and post parameters
+	file, _, err := r.FormFile("voiceRecord")
+	if err != nil {
+		msg := fmt.Sprintf("Error reading file: %v", err)
+		log.Println(msg)
+		http.Error(w, msg, http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+	fileBytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		msg := fmt.Sprintf("Error reading file: %v", err)
+		log.Println(msg)
+		http.Error(w, msg, http.StatusBadRequest)
+		return
+	}
+
+	//TODO
+	log.Println(fileBytes)
 	/*
-
-		// parse and validate file and post parameters
-		file, _, err := r.FormFile("fileName")
-		if err != nil {
-			msg := fmt.Sprintf("Error reading file: %v", err)
-			log.Println(msg)
-			http.Error(w, msg, http.StatusBadRequest)
-			return
-		}
-		defer file.Close()
-		fileBytes, err := ioutil.ReadAll(file)
-		if err != nil {
-			msg := fmt.Sprintf("Error reading file: %v", err)
-			log.Println(msg)
-			http.Error(w, msg, http.StatusBadRequest)
-			return
-		}
-
 		// check file type, detectcontenttype only needs the first 512 bytes
 		filetype := http.DetectContentType(fileBytes)
 		switch filetype {
