@@ -200,6 +200,7 @@ func (h ApisHandler) DeleteProfilePhoto(claims *tokenauth.Claims, w http.Respons
 	w.WriteHeader(http.StatusOK)
 }
 
+// StoreVoiceRecord store the user voice record
 func (h ApisHandler) StoreVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	// validate file size
 	maxUploadAudioFileSize := int64(5 * 1024 * 1024) // 5 mb
@@ -256,6 +257,7 @@ func (h ApisHandler) StoreVoiceRecord(claims *tokenauth.Claims, w http.ResponseW
 	w.Write([]byte("Success"))
 }
 
+// GetVoiceRecord gets the user voice record
 func (h ApisHandler) GetVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
 	fileBytes, err := h.app.Services.GetVoiceRecord(claims.Subject)

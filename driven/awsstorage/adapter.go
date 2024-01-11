@@ -145,7 +145,7 @@ func (a *Adapter) DeleteProfileImage(path string) error {
 	return nil
 }
 
-// CreateVoiceRecord uploads a voice record for the user
+// CreateUserVoiceRecord uploads a voice record for the user
 func (a *Adapter) CreateUserVoiceRecord(fileContent []byte, accountID string) (*string, error) {
 	log.Println("Create user voice record")
 
