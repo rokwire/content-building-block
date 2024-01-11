@@ -1,0 +1,36 @@
+post:
+  tags:
+  - Apis
+  summary: Upload a voice record file
+  description: Accept m4a file
+  requestBody:
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            file:
+              type: string
+              format: binary
+        encoding:
+            file:
+              contentType: 'audio/x-m4a'
+  responses:
+    '200':
+      description: Success
+    '400':
+      description: Bad request
+get:
+  tags:
+  - Apis
+  summary: Get voice record file
+  responses:
+    '200':
+      description: Success
+      content:
+        audio/x-m4a:
+          schema:
+            type: string
+            format: binary
+    '404':
+      description: File not found

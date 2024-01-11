@@ -28,6 +28,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
 	"go.mongodb.org/mongo-driver/bson"
+
+	"github.com/gabriel-vasile/mimetype"
 )
 
 const maxUploadSize = 15 * 1024 * 1024 // 15 mb
@@ -196,6 +198,82 @@ func (h ApisHandler) DeleteProfilePhoto(claims *tokenauth.Claims, w http.Respons
 		return
 	}
 	w.WriteHeader(http.StatusOK)
+}
+
+// StoreVoiceRecord store the user voice record
+func (h ApisHandler) StoreVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	// validate file size
+	maxUploadAudioFileSize := int64(5 * 1024 * 1024) // 5 mb
+	r.Body = http.MaxBytesReader(w, r.Body, maxUploadAudioFileSize)
+	if err := r.ParseMultipartForm(maxUploadAudioFileSize); err != nil {
+		msg := fmt.Sprintf("Error parsing request form: max audio file size is %d, err %v", maxUploadAudioFileSize, err)
+		log.Println(msg)
+		http.Error(w, msg, http.StatusBadRequest)
+		return
+	}
+
+	// parse and validate file and post parameters
+	file, _, err := r.FormFile("voiceRecord")
+	if err != nil {
+		msg := fmt.Sprintf("Error reading file: %v", err)
+		log.Println(msg)
+		http.Error(w, msg, http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+	fileBytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		msg := fmt.Sprintf("Error reading file: %v", err)
+		log.Println(msg)
+		http.Error(w, msg, http.StatusBadRequest)
+		return
+	}
+
+	// check file type
+	mime := mimetype.Detect(fileBytes)
+	if mime == nil {
+		msg := fmt.Sprintf("Error checking file type: %v", err)
+		log.Println(msg)
+		http.Error(w, msg, http.StatusBadRequest)
+		return
+	}
+
+	if mime.String() != "audio/mp4" && mime.String() != "audio/x-m4a" {
+		log.Print("Invalid file type\n")
+		http.Error(w, "Invalid file type. Expected m4a!", http.StatusBadRequest)
+		return
+	}
+
+	// upload voice record
+	err = h.app.Services.UploadVoiceRecord(claims.Subject, fileBytes)
+	if err != nil {
+		log.Printf("Error uploading voice record: %s\n", err)
+		http.Error(w, "Error uploading voice record", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Success"))
+}
+
+// GetVoiceRecord gets the user voice record
+func (h ApisHandler) GetVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	fileBytes, err := h.app.Services.GetVoiceRecord(claims.Subject)
+	if err != nil || len(fileBytes) == 0 {
+		if err != nil {
+			log.Printf("error on retrieve AWS audio file: %s", err)
+		} else {
+			log.Printf("voice record audio not found for user %s", claims.Subject)
+		}
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "audio/m4a")
+	w.WriteHeader(http.StatusOK)
+	w.Write(fileBytes)
 }
 
 // GetStudentGuides retrieves  all student guides

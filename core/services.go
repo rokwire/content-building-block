@@ -362,6 +362,23 @@ func (app *Application) uploadProfileImageToAws(image image.Image, filename stri
 	return nil, nil
 }
 
+func (app *Application) uploadVoiceRecord(userID string, bytes []byte) error {
+	_, err := app.awsAdapter.CreateUserVoiceRecord(bytes, userID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (app *Application) getVoiceRecord(userID string) ([]byte, error) {
+	fileContent, err := app.awsAdapter.LoadUserVoiceRecord(userID)
+	if err != nil {
+		return nil, err
+	}
+	return fileContent, nil
+}
+
 func (app *Application) getTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error) {
 	var err error
 	posts := app.cacheAdapter.GetTwitterPosts(userID, twitterQueryParams)
