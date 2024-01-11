@@ -257,7 +257,21 @@ func (h ApisHandler) StoreVoiceRecord(claims *tokenauth.Claims, w http.ResponseW
 }
 
 func (h ApisHandler) GetVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	//TODO
+
+	fileBytes, err := h.app.Services.GetVoiceRecord(claims.Subject)
+	if err != nil || len(fileBytes) == 0 {
+		if err != nil {
+			log.Printf("error on retrieve AWS audio file: %s", err)
+		} else {
+			log.Printf("voice record audio not found for user %s", claims.Subject)
+		}
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "audio/m4a")
+	w.WriteHeader(http.StatusOK)
+	w.Write(fileBytes)
 }
 
 // GetStudentGuides retrieves  all student guides

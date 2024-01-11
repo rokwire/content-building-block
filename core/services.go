@@ -372,8 +372,11 @@ func (app *Application) uploadVoiceRecord(userID string, bytes []byte) error {
 }
 
 func (app *Application) getVoiceRecord(userID string) ([]byte, error) {
-	//TODO
-	return nil, errors.New("not implemented")
+	fileContent, err := app.awsAdapter.LoadUserVoiceRecord(userID)
+	if err != nil {
+		return nil, err
+	}
+	return fileContent, nil
 }
 
 func (app *Application) getTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error) {
