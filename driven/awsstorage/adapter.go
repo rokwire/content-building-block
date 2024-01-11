@@ -164,6 +164,31 @@ func (a *Adapter) CreateUserVoiceRecord(fileContent []byte, accountID string) (*
 	return &objectLocation, nil
 }
 
+// LoadUserVoiceRecord loads the voice record for the user
+func (a *Adapter) LoadUserVoiceRecord(accountID string) ([]byte, error) {
+	s, err := a.createS3Session()
+	if err != nil {
+		log.Printf("Could not create S3 session")
+		return nil, err
+	}
+
+	buffer := aws.NewWriteAtBuffer([]byte{})
+
+	key := fmt.Sprintf("names-records/%s.m4a", accountID)
+
+	downloader := s3manager.NewDownloader(s)
+	_, err = downloader.Download(buffer,
+		&s3.GetObjectInput{
+			Bucket: aws.String(a.config.S3UsersAudiosBucket),
+			Key:    aws.String(key),
+		})
+	if err != nil {
+		return nil, err
+	}
+
+	return buffer.Bytes(), nil
+}
+
 func (a *Adapter) prepareKey(path string, preferredFileName *string) string {
 	var fileName string
 	if preferredFileName == nil {
