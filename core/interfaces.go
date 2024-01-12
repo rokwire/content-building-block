@@ -53,6 +53,7 @@ type Services interface {
 
 	UploadVoiceRecord(userID string, bytes []byte) error
 	GetVoiceRecord(userID string) ([]byte, error)
+	DeleteVoiceRecord(userID string) error
 
 	GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error)
 }
@@ -167,6 +168,10 @@ func (s *servicesImpl) UploadVoiceRecord(userID string, bytes []byte) error {
 
 func (s *servicesImpl) GetVoiceRecord(userID string) ([]byte, error) {
 	return s.app.getVoiceRecord(userID)
+}
+
+func (s *servicesImpl) DeleteVoiceRecord(userID string) error {
+	return s.app.deleteVoiceRecord(userID)
 }
 
 func (s *servicesImpl) GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error) {

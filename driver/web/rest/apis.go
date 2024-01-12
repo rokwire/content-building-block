@@ -279,7 +279,15 @@ func (h ApisHandler) GetVoiceRecord(claims *tokenauth.Claims, w http.ResponseWri
 // DeleteVoiceRecord deletes the user voice record
 func (h ApisHandler) DeleteVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
-	//TODO
+	err := h.app.Services.DeleteVoiceRecord(claims.Subject)
+	if err != nil {
+		if err != nil {
+			log.Printf("error on delete AWS voice audio file: %s", err)
+		}
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Success"))
 }
