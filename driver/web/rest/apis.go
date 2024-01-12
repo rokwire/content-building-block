@@ -238,8 +238,8 @@ func (h ApisHandler) StoreVoiceRecord(claims *tokenauth.Claims, w http.ResponseW
 		return
 	}
 
-	if mime.String() != "audio/mp4" && mime.String() != "audio/x-m4a" {
-		log.Print("Invalid file type\n")
+	if mime.String() != "audio/mp4" && mime.String() != "audio/x-m4a" && mime.String() != "audio/m4a" {
+		log.Printf("Invalid file type - %s\n", mime.String())
 		http.Error(w, "Invalid file type. Expected m4a!", http.StatusBadRequest)
 		return
 	}
