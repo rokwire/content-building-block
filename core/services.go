@@ -379,6 +379,15 @@ func (app *Application) getVoiceRecord(userID string) ([]byte, error) {
 	return fileContent, nil
 }
 
+func (app *Application) deleteVoiceRecord(userID string) error {
+	err := app.awsAdapter.DeleteUserVoiceRecord(userID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (app *Application) getTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error) {
 	var err error
 	posts := app.cacheAdapter.GetTwitterPosts(userID, twitterQueryParams)

@@ -95,6 +95,7 @@ func (we Adapter) Start() {
 
 	contentRouter.HandleFunc("/voice_record", we.coreAuthWrapFunc(we.apisHandler.StoreVoiceRecord, we.auth.coreAuth.userAuth)).Methods("POST")
 	contentRouter.HandleFunc("/voice_record", we.coreAuthWrapFunc(we.apisHandler.GetVoiceRecord, we.auth.coreAuth.userAuth)).Methods("GET")
+	contentRouter.HandleFunc("/voice_record", we.coreAuthWrapFunc(we.apisHandler.DeleteVoiceRecord, we.auth.coreAuth.userAuth)).Methods("DELETE")
 
 	// handle student guide client apis
 	contentRouter.HandleFunc("/student_guides", we.coreAuthWrapFunc(we.apisHandler.GetStudentGuides, we.auth.coreAuth.standardAuth)).Methods("GET")

@@ -238,8 +238,8 @@ func (h ApisHandler) StoreVoiceRecord(claims *tokenauth.Claims, w http.ResponseW
 		return
 	}
 
-	if mime.String() != "audio/mp4" && mime.String() != "audio/x-m4a" {
-		log.Print("Invalid file type\n")
+	if mime.String() != "audio/mp4" && mime.String() != "audio/x-m4a" && mime.String() != "audio/m4a" {
+		log.Printf("Invalid file type - %s\n", mime.String())
 		http.Error(w, "Invalid file type. Expected m4a!", http.StatusBadRequest)
 		return
 	}
@@ -274,6 +274,22 @@ func (h ApisHandler) GetVoiceRecord(claims *tokenauth.Claims, w http.ResponseWri
 	w.Header().Set("Content-Type", "audio/m4a")
 	w.WriteHeader(http.StatusOK)
 	w.Write(fileBytes)
+}
+
+// DeleteVoiceRecord deletes the user voice record
+func (h ApisHandler) DeleteVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	err := h.app.Services.DeleteVoiceRecord(claims.Subject)
+	if err != nil {
+		if err != nil {
+			log.Printf("error on delete AWS voice audio file: %s", err)
+		}
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Success"))
 }
 
 // GetStudentGuides retrieves  all student guides
