@@ -276,6 +276,14 @@ func (h ApisHandler) GetVoiceRecord(claims *tokenauth.Claims, w http.ResponseWri
 	w.Write(fileBytes)
 }
 
+// DeleteVoiceRecord deletes the user voice record
+func (h ApisHandler) DeleteVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	//TODO
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Success"))
+}
+
 // GetStudentGuides retrieves  all student guides
 // @Description Retrieves  all student guides
 // @Tags Client
