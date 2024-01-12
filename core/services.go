@@ -380,6 +380,11 @@ func (app *Application) getVoiceRecord(userID string) ([]byte, error) {
 }
 
 func (app *Application) deleteVoiceRecord(userID string) error {
+	err := app.awsAdapter.DeleteUserVoiceRecord(userID)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

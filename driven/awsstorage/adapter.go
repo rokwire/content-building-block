@@ -189,6 +189,12 @@ func (a *Adapter) LoadUserVoiceRecord(accountID string) ([]byte, error) {
 	return buffer.Bytes(), nil
 }
 
+// DeleteUserVoiceRecord deletes the voice record for the user
+func (a *Adapter) DeleteUserVoiceRecord(accountID string) error {
+	//TODO
+	return nil
+}
+
 func (a *Adapter) prepareKey(path string, preferredFileName *string) string {
 	var fileName string
 	if preferredFileName == nil {
