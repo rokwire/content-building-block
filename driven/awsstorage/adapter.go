@@ -191,7 +191,23 @@ func (a *Adapter) LoadUserVoiceRecord(accountID string) ([]byte, error) {
 
 // DeleteUserVoiceRecord deletes the voice record for the user
 func (a *Adapter) DeleteUserVoiceRecord(accountID string) error {
-	//TODO
+	s, err := a.createS3Session()
+	if err != nil {
+		log.Printf("Could not create S3 session")
+		return err
+	}
+
+	key := fmt.Sprintf("names-records/%s.m4a", accountID)
+
+	session := s3.New(s)
+	_, err = session.DeleteObject(&s3.DeleteObjectInput{
+		Bucket: aws.String(a.config.S3UsersAudiosBucket),
+		Key:    aws.String(key),
+	})
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
