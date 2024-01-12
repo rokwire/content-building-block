@@ -1918,8 +1918,8 @@ paths:
     post:
       tags:
         - Apis
-      summary: Upload a voice record file
-      description: Accept m4a file
+      summary: Upload a voice record file.
+      description: Accept m4a file with key 'voiceRecord'. It overrides the current audio.
       requestBody:
         content:
           multipart/form-data:
