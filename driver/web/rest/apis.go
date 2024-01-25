@@ -773,14 +773,14 @@ func (h ApisHandler) GetDataContentItem(claims *tokenauth.Claims, w http.Respons
 // @Router /files [get]
 func (h ApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
-	fileName := r.FormValue("fileName")
+	fileName := r.URL.Query().Get("fileName")
 	if len(fileName) <= 0 {
 		log.Print("Missing file name\n")
 		http.Error(w, "missing 'fileName' form param", http.StatusBadRequest)
 		return
 	}
 
-	category := r.FormValue("category")
+	category := r.URL.Query().Get("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
 		http.Error(w, "missing 'category' form param", http.StatusBadRequest)
@@ -811,7 +811,7 @@ func (h ApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Respons
 // @Security UserAuth
 // @Router /data [get]
 func (h ApisHandler) GetDataContentItems(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	category := r.FormValue("category")
+	category := r.URL.Query().Get("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
 		http.Error(w, "missing 'category' form param", http.StatusBadRequest)
