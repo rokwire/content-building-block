@@ -273,6 +273,26 @@ func (a *Adapter) DownloadFile(path string) ([]byte, error) {
 	return buffer.Bytes(), nil
 }
 
+// DeleteFile deletes file at specific path
+func (a *Adapter) DeleteFile(path string) error {
+	s, err := a.createS3Session()
+	if err != nil {
+		log.Printf("Could not create S3 session")
+		return err
+	}
+
+	session := s3.New(s)
+	_, err = session.DeleteObject(&s3.DeleteObjectInput{
+		Bucket: &a.config.S3Bucket,
+		Key:    &path,
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (a *Adapter) createS3Session() (*session.Session, error) {
 	region := a.config.S3Region
 	accessKeyID := a.config.AWSAccessKeyID
