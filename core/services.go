@@ -455,27 +455,29 @@ func (s *servicesImpl) CreateDataContentItem(claims *tokenauth.Claims, item *mod
 func (s *servicesImpl) UpdateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error) {
 	var dataItem *model.DataContentItem
 
+	category, err := s.app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category)
+	if err != nil {
+		return nil, err
+	}
+
+	if !checkPermissions(category.Permissions, claims.Permissions) {
+		return nil, fmt.Errorf("unauthorized to update data content item: [%s]", strings.Join(category.Permissions, ", "))
+	}
+
 	oldItem, err := s.app.storage.FindDataContentItem(&claims.AppID, claims.OrgID, item.Key)
 	if err != nil {
 		return nil, err
 	}
 
-	category, err := s.app.storage.FindCategory(&claims.AppID, claims.OrgID, oldItem.Category)
-	if err != nil {
-		return nil, err
-	}
+	if item.Category != oldItem.Category {
+		category, err = s.app.storage.FindCategory(&claims.AppID, claims.OrgID, oldItem.Category)
+		if err != nil {
+			return nil, err
+		}
 
-	if !checkPermissions(category.Permissions, claims.Permissions) {
-		return nil, fmt.Errorf("unauthorized to update data content item: [%s]", strings.Join(category.Permissions, ", "))
-	}
-
-	category, err = s.app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category)
-	if err != nil {
-		return nil, err
-	}
-
-	if !checkPermissions(category.Permissions, claims.Permissions) {
-		return nil, fmt.Errorf("unauthorized to update data content item: [%s]", strings.Join(category.Permissions, ", "))
+		if !checkPermissions(category.Permissions, claims.Permissions) {
+			return nil, fmt.Errorf("unauthorized to update data content item: [%s]", strings.Join(category.Permissions, ", "))
+		}
 	}
 
 	dataItem, err = s.app.storage.UpdateDataContentItem(&claims.AppID, claims.OrgID, item)
