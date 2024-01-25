@@ -64,7 +64,17 @@ paths:
   /admin/content_items_categories:
     $ref: "./resources/admin/content-item-categories.yaml"
   /admin/image:
-    $ref: "./resources/admin/image.yaml"                                          
+    $ref: "./resources/admin/image.yaml"  
+  /admin/data:
+    $ref: "./resources/admin/data-content-items.yaml"
+  /admin/data/{key}:
+    $ref: "./resources/admin/data-content-itemsids.yaml"
+  /admin/categories:
+    $ref: "./resources/admin/categories.yaml" 
+  /admin/categories/{name}:
+    $ref: "./resources/admin/categoriesids.yaml"    
+  /admin/files:
+    $ref: "./resources/admin/file-content-items.yaml"                            
 
   #Apis
   /profile_photo/{user-id}:
@@ -92,7 +102,13 @@ paths:
   /image:
     $ref: "./resources/client/image.yaml"
   /twitter/users/{user_id}/tweets:
-    $ref: "./resources/client/twitter-user-tweets.yaml"      
+    $ref: "./resources/client/twitter-user-tweets.yaml"   
+  /data:
+    $ref: "./resources/client/data-content-items.yaml"
+  /data/{key}:
+    $ref: "./resources/client/data-content-itemsids.yaml" 
+  /files:
+    $ref: "./resources/client/file-content-items.yaml"     
   
 components:
   securitySchemes:

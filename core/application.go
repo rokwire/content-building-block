@@ -15,9 +15,9 @@
 package core
 
 import (
+	"content/core/interfaces"
 	"content/driven/awsstorage"
 	cacheadapter "content/driven/cache"
-	"content/driven/storage"
 	"content/driven/twitter"
 	"log"
 	"sync"
@@ -32,9 +32,9 @@ type Application struct {
 
 	cacheLock *sync.Mutex
 
-	Services Services //expose to the drivers adapters
+	Services interfaces.Services //expose to the drivers adapters
 
-	storage        Storage
+	storage        interfaces.Storage
 	awsAdapter     *awsstorage.Adapter
 	twitterAdapter *twitter.Adapter
 	cacheAdapter   *cacheadapter.CacheAdapter
@@ -59,12 +59,12 @@ func (app *Application) Start() {
 // as the service starts supporting multi-tenancy we need to add the needed multi-tenancy fields for the existing data,
 func (app *Application) storeMultiTenancyData() error {
 	log.Println("storeMultiTenancyData...")
-	//in transaction
-	transaction := func(context storage.TransactionContext) error {
 
+	//in transaction
+	transaction := func(storage interfaces.Storage) error {
 		//check if we need to apply multi-tenancy data
 		var applyData bool
-		items, err := app.storage.FindAllContentItems(context)
+		items, err := storage.FindAllContentItems()
 		if err != nil {
 			return err
 		}
@@ -84,7 +84,7 @@ func (app *Application) storeMultiTenancyData() error {
 		if applyData {
 			log.Print("\tapplying multi-tenancy data..")
 
-			err := app.storage.StoreMultiTenancyData(context, app.multiTenancyAppID, app.multiTenancyOrgID)
+			err := storage.StoreMultiTenancyData(app.multiTenancyAppID, app.multiTenancyOrgID)
 			if err != nil {
 				return err
 			}
@@ -100,11 +100,12 @@ func (app *Application) storeMultiTenancyData() error {
 		log.Printf("error performing transaction for multi tenancy")
 		return err
 	}
+
 	return nil
 }
 
 // NewApplication creates new Application
-func NewApplication(version string, build string, storage Storage, awsAdapter *awsstorage.Adapter,
+func NewApplication(version string, build string, storage interfaces.Storage, awsAdapter *awsstorage.Adapter,
 	twitterAdapter *twitter.Adapter, cacheadapter *cacheadapter.CacheAdapter, mtAppID string, mtOrgID string, logger *logs.Logger) *Application {
 	cacheLock := &sync.Mutex{}
 	application := Application{version: version, build: build, cacheLock: cacheLock, storage: storage,
