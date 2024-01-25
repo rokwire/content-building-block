@@ -109,7 +109,7 @@ func main() {
 		log.Fatalf("Error initializing service registration manager: %v", err)
 	}
 
-	webAdapter := driver.NewWebAdapter(host, port, application, serviceRegManager, logger)
+	webAdapter := driver.NewWebAdapter(contentServiceURL, port, application, serviceRegManager, logger)
 
 	webAdapter.Start()
 }
