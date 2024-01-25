@@ -48,6 +48,10 @@ type Services interface {
 	UploadProfileImage(userID string, bytes []byte) error
 	DeleteProfileImage(userID string) error
 
+	UploadVoiceRecord(userID string, bytes []byte) error
+	GetVoiceRecord(userID string) ([]byte, error)
+	DeleteVoiceRecord(userID string) error
+
 	GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error)
 
 	CreateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error)

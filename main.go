@@ -63,10 +63,14 @@ func main() {
 	// S3 Adapter
 	s3Bucket := getEnvKey("CONTENT_S3_BUCKET", true)
 	s3ProfileImagesBucket := getEnvKey("CONTENT_S3_PROFILE_IMAGES_BUCKET", true)
+	s3UsersAudiosBucket := getEnvKey("CONTENT_S3_USERS_AUDIOS_BUCKET", true)
 	s3Region := getEnvKey("CONTENT_S3_REGION", true)
 	awsAccessKeyID := getEnvKey("CONTENT_AWS_ACCESS_KEY_ID", true)
 	awsSecretAccessKey := getEnvKey("CONTENT_AWS_SECRET_ACCESS_KEY", true)
-	awsConfig := &model.AWSConfig{S3Bucket: s3Bucket, S3ProfileImagesBucket: s3ProfileImagesBucket, S3Region: s3Region, AWSAccessKeyID: awsAccessKeyID, AWSSecretAccessKey: awsSecretAccessKey}
+	awsConfig := &model.AWSConfig{S3Bucket: s3Bucket,
+		S3ProfileImagesBucket: s3ProfileImagesBucket,
+		S3UsersAudiosBucket:   s3UsersAudiosBucket,
+		S3Region:              s3Region, AWSAccessKeyID: awsAccessKeyID, AWSSecretAccessKey: awsSecretAccessKey}
 	awsAdapter := awsstorage.NewAWSStorageAdapter(awsConfig)
 
 	defaultCacheExpirationSeconds := getEnvKey("CONTENT_DEFAULT_CACHE_EXPIRATION_SECONDS", false)

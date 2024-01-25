@@ -365,6 +365,32 @@ func (s *servicesImpl) UploadProfileImageToAws(image image.Image, filename strin
 	return nil, nil
 }
 
+func (s *servicesImpl) UploadVoiceRecord(userID string, bytes []byte) error {
+	_, err := s.app.awsAdapter.CreateUserVoiceRecord(bytes, userID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *servicesImpl) GetVoiceRecord(userID string) ([]byte, error) {
+	fileContent, err := s.app.awsAdapter.LoadUserVoiceRecord(userID)
+	if err != nil {
+		return nil, err
+	}
+	return fileContent, nil
+}
+
+func (s *servicesImpl) DeleteVoiceRecord(userID string) error {
+	err := s.app.awsAdapter.DeleteUserVoiceRecord(userID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (s *servicesImpl) GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error) {
 	var err error
 	posts := s.app.cacheAdapter.GetTwitterPosts(userID, twitterQueryParams)

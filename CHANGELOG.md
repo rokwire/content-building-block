@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Refactor and support arbitrary file types [#87](https://github.com/rokwire/content-building-block/issues/87)
+
+## [1.4.0] - 2024-01-12
+### Added
+- Expose delete user audio record API [#91](https://github.com/rokwire/content-building-block/issues/91)
+
+## [1.3.0] - 2024-01-11
+### Added
+- Add user audio record availabillity [#89](https://github.com/rokwire/content-building-block/issues/89)
+
 ## [1.2.4] - 2023-07-11
 ### Added
 - Set logger [#69](https://github.com/rokwire/content-building-block/issues/69)
