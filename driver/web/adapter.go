@@ -109,7 +109,7 @@ func (we Adapter) Start() {
 	contentRouter.HandleFunc("/twitter/users/{user_id}/tweets", we.coreAuthWrapFunc(we.apisHandler.GetTweeterPosts, we.auth.coreAuth.standardAuth)).Methods("GET")
 
 	contentRouter.HandleFunc("/data/{key}", we.coreAuthWrapFunc(we.apisHandler.GetDataContentItem, we.auth.coreAuth.standardAuth)).Methods("GET")
-	contentRouter.HandleFunc("/file", we.coreAuthWrapFunc(we.apisHandler.GetFileContentItem, we.auth.coreAuth.standardAuth)).Methods("GET")
+	contentRouter.HandleFunc("/files", we.coreAuthWrapFunc(we.apisHandler.GetFileContentItem, we.auth.coreAuth.standardAuth)).Methods("GET")
 	contentRouter.HandleFunc("/data", we.coreAuthWrapFunc(we.apisHandler.GetDataContentItems, we.auth.coreAuth.standardAuth)).Methods("GET")
 
 	// handle student guide admin apis
@@ -121,14 +121,14 @@ func (we Adapter) Start() {
 	adminSubRouter.HandleFunc("/data", we.coreAuthWrapFunc(we.adminApisHandler.UpdateDataContentItem, we.auth.coreAuth.permissionsAuth)).Methods("PUT")
 	adminSubRouter.HandleFunc("/data/{key}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteDataContentItem, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
 
-	adminSubRouter.HandleFunc("/file", we.coreAuthWrapFunc(we.adminApisHandler.UploadFileContentItem, we.auth.coreAuth.permissionsAuth)).Methods("POST")
-	adminSubRouter.HandleFunc("/file", we.coreAuthWrapFunc(we.adminApisHandler.GetFileContentItem, we.auth.coreAuth.permissionsAuth)).Methods("GET")
-	adminSubRouter.HandleFunc("/file", we.coreAuthWrapFunc(we.adminApisHandler.DeleteFileContentItem, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
+	adminSubRouter.HandleFunc("/files", we.coreAuthWrapFunc(we.adminApisHandler.UploadFileContentItem, we.auth.coreAuth.permissionsAuth)).Methods("POST")
+	adminSubRouter.HandleFunc("/files", we.coreAuthWrapFunc(we.adminApisHandler.GetFileContentItem, we.auth.coreAuth.permissionsAuth)).Methods("GET")
+	adminSubRouter.HandleFunc("/files", we.coreAuthWrapFunc(we.adminApisHandler.DeleteFileContentItem, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
 
-	adminSubRouter.HandleFunc("/category", we.coreAuthWrapFunc(we.adminApisHandler.CreateCategory, we.auth.coreAuth.permissionsAuth)).Methods("POST")
-	adminSubRouter.HandleFunc("/category/{name}", we.coreAuthWrapFunc(we.adminApisHandler.GetCategory, we.auth.coreAuth.permissionsAuth)).Methods("GET")
-	adminSubRouter.HandleFunc("/category", we.coreAuthWrapFunc(we.adminApisHandler.UpdateCategory, we.auth.coreAuth.permissionsAuth)).Methods("PUT")
-	adminSubRouter.HandleFunc("/category/{name}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteCategory, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
+	adminSubRouter.HandleFunc("/categories", we.coreAuthWrapFunc(we.adminApisHandler.CreateCategory, we.auth.coreAuth.permissionsAuth)).Methods("POST")
+	adminSubRouter.HandleFunc("/categories/{name}", we.coreAuthWrapFunc(we.adminApisHandler.GetCategory, we.auth.coreAuth.permissionsAuth)).Methods("GET")
+	adminSubRouter.HandleFunc("/categories", we.coreAuthWrapFunc(we.adminApisHandler.UpdateCategory, we.auth.coreAuth.permissionsAuth)).Methods("PUT")
+	adminSubRouter.HandleFunc("/categories/{name}", we.coreAuthWrapFunc(we.adminApisHandler.DeleteCategory, we.auth.coreAuth.permissionsAuth)).Methods("DELETE")
 
 	//deprecated
 	adminSubRouter.HandleFunc("/student_guides", we.coreAuthWrapFunc(we.adminApisHandler.GetStudentGuides, we.auth.coreAuth.permissionsAuth)).Methods("GET")

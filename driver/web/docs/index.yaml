@@ -69,11 +69,11 @@ paths:
     $ref: "./resources/admin/data-content-items.yaml"
   /admin/data/{key}:
     $ref: "./resources/admin/data-content-itemsids.yaml"
-  /admin/category:
+  /admin/categories:
     $ref: "./resources/admin/categories.yaml" 
-  /admin/category/{name}:
+  /admin/categories/{name}:
     $ref: "./resources/admin/categoriesids.yaml"    
-  /admin/file:
+  /admin/files:
     $ref: "./resources/admin/file-content-items.yaml"                            
 
   #Apis
@@ -107,7 +107,7 @@ paths:
     $ref: "./resources/client/data-content-items.yaml"
   /data/{key}:
     $ref: "./resources/client/data-content-itemsids.yaml" 
-  /file:
+  /files:
     $ref: "./resources/client/file-content-items.yaml"     
   
 components:

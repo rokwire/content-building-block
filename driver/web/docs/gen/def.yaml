@@ -1994,7 +1994,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  /admin/category:
+  /admin/categories:
     post:
       tags:
         - Admin
@@ -2058,7 +2058,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  '/admin/category/{name}':
+  '/admin/categories/{name}':
     get:
       tags:
         - Admin
@@ -2119,7 +2119,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  /admin/file:
+  /admin/files:
     post:
       tags:
         - Admin
@@ -2780,7 +2780,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  /file:
+  /files:
     get:
       tags:
         - Client

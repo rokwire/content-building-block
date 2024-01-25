@@ -770,7 +770,7 @@ func (h ApisHandler) GetDataContentItem(claims *tokenauth.Claims, w http.Respons
 // @Param category body string false "category - category of file content item"
 // @Success 200
 // @Security UserAuth
-// @Router /file [get]
+// @Router /files [get]
 func (h ApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
 	fileName := r.FormValue("fileName")

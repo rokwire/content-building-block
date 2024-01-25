@@ -1511,7 +1511,7 @@ func (h AdminApisHandler) DeleteDataContentItem(claims *tokenauth.Claims, w http
 // @Accept json
 // @Success 200
 // @Security AdminUserAuth
-// @Router /admin/category [post]
+// @Router /admin/categories [post]
 func (h AdminApisHandler) CreateCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	var item model.Category
 	err := json.NewDecoder(r.Body).Decode(&item)
@@ -1548,7 +1548,7 @@ func (h AdminApisHandler) CreateCategory(claims *tokenauth.Claims, w http.Respon
 // @Produce json
 // @Success 200
 // @Security AdminUserAuth
-// @Router /admin/category/{name} [get]
+// @Router /admin/categories/{name} [get]
 func (h AdminApisHandler) GetCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	name := vars["name"]
@@ -1580,7 +1580,7 @@ func (h AdminApisHandler) GetCategory(claims *tokenauth.Claims, w http.ResponseW
 // @Produce json
 // @Success 200 {object} model.Category
 // @Security AdminUserAuth
-// @Router /admin/category [put]
+// @Router /admin/categories [put]
 func (h AdminApisHandler) UpdateCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	var item model.Category
 	err := json.NewDecoder(r.Body).Decode(&item)
@@ -1615,7 +1615,7 @@ func (h AdminApisHandler) UpdateCategory(claims *tokenauth.Claims, w http.Respon
 // @ID AdminDeleteCategory
 // @Success 200
 // @Security AdminUserAuth
-// @Router /admin/category/{name} [delete]
+// @Router /admin/categories/{name} [delete]
 func (h AdminApisHandler) DeleteCategory(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	name := vars["name"]
@@ -1639,7 +1639,7 @@ func (h AdminApisHandler) DeleteCategory(claims *tokenauth.Claims, w http.Respon
 // @Param category body string false "category - category of file content item"
 // @Success 200
 // @Security AdminUserAuth
-// @Router /admin/file [post]
+// @Router /admin/files [post]
 func (h AdminApisHandler) UploadFileContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
 	fileName := r.FormValue("fileName")
@@ -1684,17 +1684,17 @@ func (h AdminApisHandler) UploadFileContentItem(claims *tokenauth.Claims, w http
 // @Param category body string false "category - category of file content item"
 // @Success 200
 // @Security AdminUserAuth
-// @Router /admin/file [get]
+// @Router /admin/files [get]
 func (h AdminApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
-	fileName := r.FormValue("fileName")
+	fileName := r.URL.Query().Get("fileName")
 	if len(fileName) <= 0 {
 		log.Print("Missing file name\n")
 		http.Error(w, "missing 'fileName' form param", http.StatusBadRequest)
 		return
 	}
 
-	category := r.FormValue("category")
+	category := r.URL.Query().Get("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
 		http.Error(w, "missing 'category' form param", http.StatusBadRequest)
@@ -1722,14 +1722,14 @@ func (h AdminApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Re
 // @Security AdminUserAuth
 // @Router /admin/fille [delete]
 func (h AdminApisHandler) DeleteFileContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	fileName := r.FormValue("fileName")
+	fileName := r.URL.Query().Get("fileName")
 	if len(fileName) <= 0 {
 		log.Print("Missing file name\n")
 		http.Error(w, "missing 'fileName' form param", http.StatusBadRequest)
 		return
 	}
 
-	category := r.FormValue("category")
+	category := r.URL.Query().Get("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
 		http.Error(w, "missing 'category' form param", http.StatusBadRequest)
