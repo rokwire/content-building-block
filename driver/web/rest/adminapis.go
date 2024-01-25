@@ -1406,10 +1406,10 @@ func (h AdminApisHandler) GetDataContentItem(claims *tokenauth.Claims, w http.Re
 // @Security AdminUserAuth
 // @Router /admin/data [get]
 func (h AdminApisHandler) GetDataContentItems(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	category := r.FormValue("category")
+	category := r.URL.Query().Get("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
-		http.Error(w, "missing 'category' form param", http.StatusBadRequest)
+		http.Error(w, "missing 'category' query param", http.StatusBadRequest)
 		return
 	}
 
@@ -1690,14 +1690,14 @@ func (h AdminApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Re
 	fileName := r.URL.Query().Get("fileName")
 	if len(fileName) <= 0 {
 		log.Print("Missing file name\n")
-		http.Error(w, "missing 'fileName' form param", http.StatusBadRequest)
+		http.Error(w, "missing 'fileName' query param", http.StatusBadRequest)
 		return
 	}
 
 	category := r.URL.Query().Get("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
-		http.Error(w, "missing 'category' form param", http.StatusBadRequest)
+		http.Error(w, "missing 'category' query param", http.StatusBadRequest)
 		return
 	}
 
@@ -1725,14 +1725,14 @@ func (h AdminApisHandler) DeleteFileContentItem(claims *tokenauth.Claims, w http
 	fileName := r.URL.Query().Get("fileName")
 	if len(fileName) <= 0 {
 		log.Print("Missing file name\n")
-		http.Error(w, "missing 'fileName' form param", http.StatusBadRequest)
+		http.Error(w, "missing 'fileName' query param", http.StatusBadRequest)
 		return
 	}
 
 	category := r.URL.Query().Get("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
-		http.Error(w, "missing 'category' form param", http.StatusBadRequest)
+		http.Error(w, "missing 'category' query param", http.StatusBadRequest)
 		return
 	}
 
