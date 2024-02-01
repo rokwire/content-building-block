@@ -88,7 +88,7 @@ func main() {
 	application.Start()
 
 	// web adapter
-	host := getEnvKey("CONTENT_HOST", true)
+	// host := getEnvKey("CONTENT_HOST", true)
 	coreBBHost := getEnvKey("CONTENT_CORE_BB_HOST", true)
 	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
 
@@ -109,7 +109,7 @@ func main() {
 		log.Fatalf("Error initializing service registration manager: %v", err)
 	}
 
-	webAdapter := driver.NewWebAdapter(host, port, application, serviceRegManager, logger)
+	webAdapter := driver.NewWebAdapter(contentServiceURL, port, application, serviceRegManager, logger)
 
 	webAdapter.Start()
 }
