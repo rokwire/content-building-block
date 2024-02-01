@@ -2,7 +2,7 @@ FROM golang:1.21-alpine as builder
 
 ENV CGO_ENABLED=1
 
-RUN apk add --no-cache --update libwebp-dev make gcc g++
+RUN apk add --no-cache --update libwebp-dev make gcc g++ git
 
 RUN mkdir /content-app
 WORKDIR /content-app
