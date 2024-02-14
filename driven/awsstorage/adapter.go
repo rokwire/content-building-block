@@ -21,6 +21,7 @@ import (
 	"io"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -30,15 +31,23 @@ import (
 	"github.com/google/uuid"
 )
 
+const (
+	defaultPresignExpirationMinutes int = 5
+)
+
 // Adapter implements the Storage interface
 type Adapter struct {
-	config *model.AWSConfig
+	config                   *model.AWSConfig
+	presignExpirationMinutes int
 }
 
 // NewAWSStorageAdapter creates a new storage adapter instance
-func NewAWSStorageAdapter(config *model.AWSConfig) *Adapter {
+func NewAWSStorageAdapter(config *model.AWSConfig, presignExpirationMinutes int) *Adapter {
 	//return &Adapter{S3Bucket: S3Bucket, S3Region: S3Region, AWSAccessKeyID: AWSAccessKeyID, AWSSecretAccessKey: AWSSecretAccessKey}
-	return &Adapter{config: config}
+	if presignExpirationMinutes == 0 {
+		presignExpirationMinutes = defaultPresignExpirationMinutes
+	}
+	return &Adapter{config: config, presignExpirationMinutes: presignExpirationMinutes}
 }
 
 // LoadImage loads image at specific path
@@ -244,7 +253,7 @@ func (a *Adapter) UploadFile(body io.Reader, path string) (*string, error) {
 	return &objectLocation, nil
 }
 
-// DownloadFile loads image at specific path
+// DownloadFile loads a file at a specific path
 func (a *Adapter) DownloadFile(path string) ([]byte, error) {
 	s, err := a.createS3Session()
 	if err != nil {
@@ -271,6 +280,27 @@ func (a *Adapter) DownloadFile(path string) ([]byte, error) {
 	}
 
 	return buffer.Bytes(), nil
+}
+
+// GetDownloadRedirectURL gets a URL to redirect a download request directly to S3
+func (a *Adapter) GetDownloadRedirectURL(path string) (string, error) {
+	s, err := a.createS3Session()
+	if err != nil {
+		log.Printf("Could not create S3 session")
+		return "", err
+	}
+
+	req, _ := s3.New(s).GetObjectRequest(&s3.GetObjectInput{
+		Bucket: aws.String(a.config.S3Bucket),
+		Key:    aws.String(path),
+	})
+
+	url, err := req.Presign(time.Duration(a.presignExpirationMinutes) * time.Minute)
+	if err != nil {
+		return "", err
+	}
+
+	return url, nil
 }
 
 // DeleteFile deletes file at specific path

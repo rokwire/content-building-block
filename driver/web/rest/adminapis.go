@@ -1701,17 +1701,14 @@ func (h AdminApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Re
 		return
 	}
 
-	// pass the file to be processed by the use case handler
-	result, err := h.app.Services.GetFileContentItem(claims, fileName, category)
+	redirectURL, err := h.app.Services.GetFileRedirectURL(claims, fileName, category)
 	if err != nil {
-		log.Printf("Error converting file: %s\n", err)
-		http.Error(w, "Error converting file", http.StatusInternalServerError)
+		log.Printf("Error getting file download redirect URL: %s\n", err)
+		http.Error(w, "Error getting file download redirect URL", http.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/octet-stream")
-	w.WriteHeader(http.StatusOK)
-	w.Write(result)
+	http.Redirect(w, r, redirectURL, http.StatusTemporaryRedirect)
 }
 
 // DeleteFileContentItem Deletes a file content item
@@ -1720,7 +1717,7 @@ func (h AdminApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Re
 // @ID AdminDeleteFileContentItem
 // @Success 200
 // @Security AdminUserAuth
-// @Router /admin/fille [delete]
+// @Router /admin/files [delete]
 func (h AdminApisHandler) DeleteFileContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	fileName := r.URL.Query().Get("fileName")
 	if len(fileName) <= 0 {

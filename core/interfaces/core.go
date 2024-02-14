@@ -66,6 +66,6 @@ type Services interface {
 	DeleteCategory(claims *tokenauth.Claims, name string) error
 
 	UploadFileContentItem(file io.Reader, claims *tokenauth.Claims, fileName string, category string) error
-	GetFileContentItem(claims *tokenauth.Claims, fileName string, category string) ([]byte, error)
+	GetFileRedirectURL(claims *tokenauth.Claims, fileName string, category string) (string, error)
 	DeleteFileContentItem(claims *tokenauth.Claims, fileName string, category string) error
 }

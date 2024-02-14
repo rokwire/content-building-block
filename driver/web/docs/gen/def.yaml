@@ -2193,13 +2193,8 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: Success
-          content:
-            application/octet-stream:
-              schema:
-                type: string
-                format: base64
+        '307':
+          description: Temporary redirect
         '400':
           description: Bad request
         '401':
@@ -2807,20 +2802,14 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: Success
-          content:
-            application/octet-stream:
-              schema:
-                type: string
-                format: base64
+        '307':
+          description: Temporary redirect
         '400':
           description: Bad request
         '401':
           description: Unauthorized
         '500':
           description: Internal error
-    delete: null
 components:
   securitySchemes:
     bearerAuth:

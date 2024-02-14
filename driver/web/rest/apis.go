@@ -769,7 +769,7 @@ func (h ApisHandler) GetDataContentItem(claims *tokenauth.Claims, w http.Respons
 // @ID GetFileContentItem
 // @Param fileName body string false "fileName - the uploaded file name"
 // @Param category body string false "category - category of file content item"
-// @Success 200
+// @Redirect 307
 // @Security UserAuth
 // @Router /files [get]
 func (h ApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
@@ -788,17 +788,14 @@ func (h ApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Respons
 		return
 	}
 
-	// pass the file to be processed by the use case handler
-	result, err := h.app.Services.GetFileContentItem(claims, fileName, category)
+	redirectURL, err := h.app.Services.GetFileRedirectURL(claims, fileName, category)
 	if err != nil {
-		log.Printf("Error converting file: %s\n", err)
-		http.Error(w, "Error converting file", http.StatusInternalServerError)
+		log.Printf("Error getting file download redirect URL: %s\n", err)
+		http.Error(w, "Error getting file download redirect URL", http.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/octet-stream")
-	w.WriteHeader(http.StatusOK)
-	w.Write(result)
+	http.Redirect(w, r, redirectURL, http.StatusTemporaryRedirect)
 }
 
 // GetDataContentItems Gets data content items
