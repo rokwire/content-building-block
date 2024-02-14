@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+###
+- Use redirect to S3 for file downloads [#94](https://github.com/rokwire/content-building-block/issues/94)
+
 ## [1.5.1] - 2024-02-01
 ### Fixed
 - Fix host/base URL environment variables
