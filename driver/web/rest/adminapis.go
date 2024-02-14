@@ -18,6 +18,8 @@ import (
 	"content/core"
 	"content/core/model"
 	"encoding/json"
+	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -1701,14 +1703,24 @@ func (h AdminApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Re
 		return
 	}
 
-	redirectURL, err := h.app.Services.GetFileRedirectURL(claims, fileName, category)
+	fileData, err := h.app.Services.GetFileContentItem(claims, fileName, category)
 	if err != nil {
-		log.Printf("Error getting file download redirect URL: %s\n", err)
-		http.Error(w, "Error getting file download redirect URL", http.StatusInternalServerError)
+		log.Printf("Error getting file download stream: %s\n", err)
+		http.Error(w, "Error getting file download stream", http.StatusInternalServerError)
 		return
 	}
 
-	http.Redirect(w, r, redirectURL, http.StatusTemporaryRedirect)
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", fileName))
+	w.Header().Set("Cache-Control", "no-store")
+
+	_, err = io.Copy(w, fileData)
+	if err != nil {
+		log.Printf("Error copying file into response: %s\n", err.Error())
+		http.Error(w, "Error copying file to http response", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
 // DeleteFileContentItem Deletes a file content item

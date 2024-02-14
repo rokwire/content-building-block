@@ -2193,8 +2193,8 @@ paths:
           schema:
             type: string
       responses:
-        '307':
-          description: Temporary redirect
+        '200':
+          description: Success
         '400':
           description: Bad request
         '401':
@@ -2802,8 +2802,8 @@ paths:
           schema:
             type: string
       responses:
-        '307':
-          description: Temporary redirect
+        '200':
+          description: Success
         '400':
           description: Bad request
         '401':

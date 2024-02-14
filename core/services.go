@@ -569,16 +569,16 @@ func (s *servicesImpl) UploadFileContentItem(file io.Reader, claims *tokenauth.C
 	return nil
 }
 
-func (s *servicesImpl) GetFileRedirectURL(claims *tokenauth.Claims, fileName string, category string) (string, error) {
+func (s *servicesImpl) GetFileContentItem(claims *tokenauth.Claims, fileName string, category string) (io.ReadCloser, error) {
 
 	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/" + fileName
 
-	redirectURL, err := s.app.awsAdapter.GetDownloadRedirectURL(path)
+	fileData, err := s.app.awsAdapter.StreamDownloadFile(path)
 	if err != nil {
-		return "", fmt.Errorf("unable to get redirect URL for file download: %s", err.Error())
+		return nil, fmt.Errorf("unable to get data for file download stream: %s", err.Error())
 	}
 
-	return redirectURL, nil
+	return fileData, nil
 }
 
 func (s *servicesImpl) DeleteFileContentItem(claims *tokenauth.Claims, fileName string, category string) error {
