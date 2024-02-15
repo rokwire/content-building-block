@@ -6,8 +6,8 @@ Patches for **Content Building Block** in this repository will only be applied t
 
 | Version  | Supported          |
 |----------| ------------------ |
-| 1.5.1    | :white_check_mark: |
-| < 1.5.1 | :x: |
+| 1.5.2    | :white_check_mark: |
+| < 1.5.2  | :x: |
 
 
 ## Reporting a Bug or Vulnerability
