@@ -1710,17 +1710,14 @@ func (h AdminApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Re
 		return
 	}
 
-	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", fileName))
-	w.Header().Set("Cache-Control", "no-store")
-
 	_, err = io.Copy(w, fileData)
 	if err != nil {
 		log.Printf("Error copying file into response: %s\n", err.Error())
-		http.Error(w, "Error copying file to http response", http.StatusInternalServerError)
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", fileName))
+	w.Header().Set("Cache-Control", "no-store")
 }
 
 // DeleteFileContentItem Deletes a file content item
