@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ###
-- Use redirect to S3 for file downloads [#94](https://github.com/rokwire/content-building-block/issues/94)
+- Use redirect to S3 for file downloads (EDIT: Stream files from S3) [#94](https://github.com/rokwire/content-building-block/issues/94)
 
 ## [1.5.1] - 2024-02-01
 ### Fixed
