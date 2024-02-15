@@ -19,6 +19,7 @@ import (
 	"content/core/model"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -788,17 +789,21 @@ func (h ApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Respons
 		return
 	}
 
-	// pass the file to be processed by the use case handler
-	result, err := h.app.Services.GetFileContentItem(claims, fileName, category)
+	fileData, err := h.app.Services.GetFileContentItem(claims, fileName, category)
 	if err != nil {
-		log.Printf("Error converting file: %s\n", err)
-		http.Error(w, "Error converting file", http.StatusInternalServerError)
+		log.Printf("Error getting file download stream: %s\n", err)
+		http.Error(w, "Error getting file download stream", http.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/octet-stream")
-	w.WriteHeader(http.StatusOK)
-	w.Write(result)
+	_, err = io.Copy(w, fileData)
+	if err != nil {
+		log.Printf("Error copying file into response: %s\n", err.Error())
+		return
+	}
+
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", fileName))
+	w.Header().Set("Cache-Control", "no-store")
 }
 
 // GetDataContentItems Gets data content items

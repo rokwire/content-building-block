@@ -18,6 +18,8 @@ import (
 	"content/core"
 	"content/core/model"
 	"encoding/json"
+	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -1701,17 +1703,21 @@ func (h AdminApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Re
 		return
 	}
 
-	// pass the file to be processed by the use case handler
-	result, err := h.app.Services.GetFileContentItem(claims, fileName, category)
+	fileData, err := h.app.Services.GetFileContentItem(claims, fileName, category)
 	if err != nil {
-		log.Printf("Error converting file: %s\n", err)
-		http.Error(w, "Error converting file", http.StatusInternalServerError)
+		log.Printf("Error getting file download stream: %s\n", err)
+		http.Error(w, "Error getting file download stream", http.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/octet-stream")
-	w.WriteHeader(http.StatusOK)
-	w.Write(result)
+	_, err = io.Copy(w, fileData)
+	if err != nil {
+		log.Printf("Error copying file into response: %s\n", err.Error())
+		return
+	}
+
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", fileName))
+	w.Header().Set("Cache-Control", "no-store")
 }
 
 // DeleteFileContentItem Deletes a file content item
@@ -1720,7 +1726,7 @@ func (h AdminApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Re
 // @ID AdminDeleteFileContentItem
 // @Success 200
 // @Security AdminUserAuth
-// @Router /admin/fille [delete]
+// @Router /admin/files [delete]
 func (h AdminApisHandler) DeleteFileContentItem(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	fileName := r.URL.Query().Get("fileName")
 	if len(fileName) <= 0 {

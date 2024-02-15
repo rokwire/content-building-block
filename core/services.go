@@ -569,20 +569,16 @@ func (s *servicesImpl) UploadFileContentItem(file io.Reader, claims *tokenauth.C
 	return nil
 }
 
-func (s *servicesImpl) GetFileContentItem(claims *tokenauth.Claims, fileName string, category string) ([]byte, error) {
+func (s *servicesImpl) GetFileContentItem(claims *tokenauth.Claims, fileName string, category string) (io.ReadCloser, error) {
 
 	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/" + fileName
 
-	file, err := s.app.awsAdapter.DownloadFile(path)
+	fileData, err := s.app.awsAdapter.StreamDownloadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("unable to read file to S3: %s", err)
+		return nil, fmt.Errorf("unable to get data for file download stream: %s", err.Error())
 	}
 
-	if file != nil {
-		return file, nil
-	}
-
-	return nil, nil
+	return fileData, nil
 }
 
 func (s *servicesImpl) DeleteFileContentItem(claims *tokenauth.Claims, fileName string, category string) error {

@@ -22,19 +22,13 @@ get:
       style: form
       explode: false
       schema:
-        type: string   
+        type: string
   responses:
     200:
       description: Success
-      content:
-            application/octet-stream:
-              schema:
-                type: string
-                format: base64
     400:
       description: Bad request
     401:
       description: Unauthorized
     500:
       description: Internal error
-delete:

@@ -24,6 +24,7 @@ import (
 	driver "content/driver/web"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/rokwire/core-auth-library-go/v2/authservice"
@@ -71,7 +72,13 @@ func main() {
 		S3ProfileImagesBucket: s3ProfileImagesBucket,
 		S3UsersAudiosBucket:   s3UsersAudiosBucket,
 		S3Region:              s3Region, AWSAccessKeyID: awsAccessKeyID, AWSSecretAccessKey: awsSecretAccessKey}
-	awsAdapter := awsstorage.NewAWSStorageAdapter(awsConfig)
+
+	presignExpirationMinutesVal := getEnvKey("CONTENT_S3_REQUEST_PRESIGN_EXPIRATION_MINUTES", false)
+	presignExpirationMinutes, err := strconv.Atoi(presignExpirationMinutesVal)
+	if err != nil {
+		logger.Warnf("error parsing S3 request presign expiration minutes: %s - applying default", err.Error())
+	}
+	awsAdapter := awsstorage.NewAWSStorageAdapter(awsConfig, presignExpirationMinutes)
 
 	defaultCacheExpirationSeconds := getEnvKey("CONTENT_DEFAULT_CACHE_EXPIRATION_SECONDS", false)
 	cacheAdapter := cacheadapter.NewCacheAdapter(defaultCacheExpirationSeconds)
