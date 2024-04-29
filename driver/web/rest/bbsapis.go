@@ -25,7 +25,7 @@ import (
 	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
 )
 
-// BBsApisHandle handles the rest BBs APIs implementation
+// BBsApisHandler handles the rest BBs APIs implementation
 type BBsApisHandler struct {
 	app *core.Application
 }
