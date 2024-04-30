@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Create "upload image" bbs API [#97](https://github.com/rokwire/content-building-block/issues/97)
+
 ## [1.5.2] - 2024-02-15
 ###
 - Use redirect to S3 for file downloads (EDIT: Stream files from S3) [#94](https://github.com/rokwire/content-building-block/issues/94)

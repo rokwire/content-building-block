@@ -25,9 +25,8 @@ import (
 	"os"
 	"time"
 
-	"gopkg.in/yaml.v2"
-
 	"github.com/rokwire/logging-library-go/v2/logs"
+	"gopkg.in/yaml.v2"
 
 	"github.com/rokwire/core-auth-library-go/v2/authservice"
 	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
@@ -44,6 +43,7 @@ type Adapter struct {
 
 	apisHandler      rest.ApisHandler
 	adminApisHandler rest.AdminApisHandler
+	bbsApisHandler   rest.BBsApisHandler
 
 	app *core.Application
 
@@ -190,6 +190,10 @@ func (we Adapter) Start() {
 
 	adminSubRouter.HandleFunc("/image", we.coreAuthWrapFunc(we.adminApisHandler.UploadImage, we.auth.coreAuth.permissionsAuth)).Methods("POST")
 
+	// handle bbs apis
+	bbsSubRouter := contentRouter.PathPrefix("/bbs").Subrouter()
+	bbsSubRouter.HandleFunc("/image", we.bbsAuthWrapFunc(we.bbsApisHandler.UploadImage, we.auth.bbs.Permissions)).Methods("POST")
+
 	log.Fatal(http.ListenAndServe(":"+we.port, router))
 }
 
@@ -262,6 +266,22 @@ func (we Adapter) coreAuthWrapFunc(handler coreAuthFunc, authorization Authoriza
 	}
 }
 
+type bbsAuthFunc = func(*tokenauth.Claims, http.ResponseWriter, *http.Request)
+
+func (we Adapter) bbsAuthWrapFunc(handler bbsAuthFunc, authorization tokenauth.Handler) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		utils.LogRequest(req)
+
+		responseStatus, claims, err := authorization.Check(req)
+		if err != nil {
+			log.Printf("error authorization check - %s", err)
+			http.Error(w, http.StatusText(responseStatus), responseStatus)
+			return
+		}
+		handler(claims, w, req)
+	}
+}
+
 // NewWebAdapter creates new WebAdapter instance
 func NewWebAdapter(host string, port string, app *core.Application, serviceRegManager *authservice.ServiceRegManager, logger *logs.Logger) Adapter {
 	yamlDoc, err := loadDocsYAML(host)
@@ -273,8 +293,9 @@ func NewWebAdapter(host string, port string, app *core.Application, serviceRegMa
 
 	apisHandler := rest.NewApisHandler(app)
 	adminApisHandler := rest.NewAdminApisHandler(app)
+	bbsApisHandler := rest.NewBBSApisHandler(app)
 	return Adapter{host: host, port: port, cachedYamlDoc: yamlDoc, auth: auth,
-		apisHandler: apisHandler, adminApisHandler: adminApisHandler, app: app, logger: logger}
+		apisHandler: apisHandler, adminApisHandler: adminApisHandler, bbsApisHandler: bbsApisHandler, app: app, logger: logger}
 }
 
 // AppListener implements core.ApplicationListener interface

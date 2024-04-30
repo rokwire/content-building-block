@@ -36,6 +36,7 @@ type Authorization interface {
 // Auth handler
 type Auth struct {
 	coreAuth *CoreAuth
+	bbs      tokenauth.Handlers
 	logger   *logs.Logger
 }
 
@@ -43,7 +44,13 @@ type Auth struct {
 func NewAuth(app *core.Application, serviceRegManager *authservice.ServiceRegManager, logger *logs.Logger) *Auth {
 	coreAuth := NewCoreAuth(app, serviceRegManager)
 
-	auth := Auth{coreAuth: coreAuth, logger: logger}
+	bbsStandardHandler, err := newBBsStandardHandler(serviceRegManager)
+	if err != nil {
+		return nil
+	}
+	bbsHandlers := tokenauth.NewHandlers(bbsStandardHandler) //add permissions, user and authenticated
+
+	auth := Auth{coreAuth: coreAuth, bbs: bbsHandlers, logger: logger}
 	return &auth
 }
 
@@ -72,6 +79,30 @@ func NewCoreAuth(app *core.Application, serviceRegManager *authservice.ServiceRe
 	auth := CoreAuth{app: app, tokenAuth: tokenAuth, permissionsAuth: permissionsAuth,
 		userAuth: usersAuth, standardAuth: standardAuth}
 	return &auth
+}
+
+// BBs auth ///////////
+func newBBsStandardHandler(serviceRegManager *authservice.ServiceRegManager) (*tokenauth.StandardHandler, error) {
+	bbsPermissionAuth := authorization.NewCasbinStringAuthorization("driver/web/authorization_bbs_permission_policy.csv")
+	bbsTokenAuth, err := tokenauth.NewTokenAuth(true, serviceRegManager, bbsPermissionAuth, nil)
+	if err != nil {
+		return nil, errors.WrapErrorAction(logutils.ActionCreate, "bbs token auth", nil, err)
+	}
+
+	check := func(claims *tokenauth.Claims, req *http.Request) (int, error) {
+		if !claims.Service {
+			return http.StatusUnauthorized, errors.ErrorData(logutils.StatusInvalid, "service claim", nil)
+		}
+
+		if !claims.FirstParty {
+			return http.StatusUnauthorized, errors.ErrorData(logutils.StatusInvalid, "first party claim", nil)
+		}
+
+		return http.StatusOK, nil
+	}
+
+	auth := tokenauth.NewStandardHandler(*bbsTokenAuth, check)
+	return &auth, nil
 }
 
 // PermissionsAuth entity

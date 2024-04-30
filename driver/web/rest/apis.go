@@ -863,3 +863,8 @@ func NewApisHandler(app *core.Application) ApisHandler {
 func NewAdminApisHandler(app *core.Application) AdminApisHandler {
 	return AdminApisHandler{app: app}
 }
+
+// NewBBSApisHandler creates new rest Handler instance
+func NewBBSApisHandler(app *core.Application) BBsApisHandler {
+	return BBsApisHandler{app: app}
+}

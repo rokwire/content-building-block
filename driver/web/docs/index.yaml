@@ -109,6 +109,10 @@ paths:
     $ref: "./resources/client/data-content-itemsids.yaml" 
   /files:
     $ref: "./resources/client/file-content-items.yaml"     
+
+ #BBs
+  /bbs/image:
+    $ref: "./resources/bbs/image.yaml"   
   
 components:
   securitySchemes:
