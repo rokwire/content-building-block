@@ -190,7 +190,7 @@ func (we Adapter) Start() {
 
 	adminSubRouter.HandleFunc("/image", we.coreAuthWrapFunc(we.adminApisHandler.UploadImage, we.auth.coreAuth.permissionsAuth)).Methods("POST")
 
-	// handle student guide bbs apis
+	// handle bbs apis
 	bbsSubRouter := contentRouter.PathPrefix("/bbs").Subrouter()
 	bbsSubRouter.HandleFunc("/image", we.bbsAuthWrapFunc(we.bbsApisHandler.UploadImage, we.auth.bbs.Permissions)).Methods("POST")
 

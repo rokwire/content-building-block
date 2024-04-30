@@ -1,1 +1,1 @@
-p, image, /content/bbs/image, (POST) , allow
+p, tps_update_images, /content/bbs/image, (POST) , allow
