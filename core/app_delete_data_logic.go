@@ -26,9 +26,9 @@ import (
 )
 
 type deleteDataLogic struct {
-	logger logs.Logger
-
-	storage interfaces.Storage
+	logger    logs.Logger
+	serviceID string
+	storage   interfaces.Storage
 	//coreAdapter Core
 
 	//delete data timer
@@ -119,32 +119,32 @@ func (d deleteDataLogic) process() {
 }
 
 func (d deleteDataLogic) processDelete() {
-	/*
-	   //load deleted accounts
-	   deletedMemberships, err := d.coreAdapter.LoadDeletedMemberships()
 
-	   	if err != nil {
-	   		d.logger.Errorf("error on loading deleted accounts - %s", err)
-	   		return
-	   	}
+	//load deleted accounts
+	/*deletedMemberships, err := d.coreAdapter.LoadDeletedMemberships()
 
-	   //process by app org
+	if err != nil {
+		d.logger.Errorf("error on loading deleted accounts - %s", err)
+		return
+	}
 
-	   	for _, appOrgSection := range deletedMemberships {
-	   		d.logger.Infof("delete - [app-id:%s org-id:%s]", appOrgSection.AppID, appOrgSection.OrgID)
+	//process by app org
 
-	   		accountsIDs := d.getAccountsIDs(appOrgSection.Memberships)
-	   		if len(accountsIDs) == 0 {
-	   			d.logger.Info("no accounts for deletion")
-	   			continue
-	   		}
+	for _, appOrgSection := range deletedMemberships {
+		d.logger.Infof("delete - [app-id:%s org-id:%s]", appOrgSection.AppID, appOrgSection.OrgID)
 
-	   		d.logger.Infof("accounts for deletion - %s", accountsIDs)
+		accountsIDs := d.getAccountsIDs(appOrgSection.Memberships)
+		if len(accountsIDs) == 0 {
+			d.logger.Info("no accounts for deletion")
+			continue
+		}
 
-	   		//delete the data
-	   		d.deleteAppOrgUsersData(appOrgSection.AppID, appOrgSection.OrgID, accountsIDs)
-	   	}
-	*/
+		d.logger.Infof("accounts for deletion - %s", accountsIDs)
+
+		//delete the data
+		d.deleteAppOrgUsersData(appOrgSection.AppID, appOrgSection.OrgID, accountsIDs)
+	}*/
+
 }
 
 func (d deleteDataLogic) deleteAppOrgUsersData(appID string, orgID string, accountsIDs []string) {
@@ -184,7 +184,7 @@ func (d deleteDataLogic) getAccountsIDs(memberships []model.DeletedMembership) [
 }
 
 // deleteLogic creates new deleteLogic
-func deleteLogic( /*coreAdapter Core,*/ logger logs.Logger) deleteDataLogic {
+/*func deleteLogic(coreAdapter Core, logger logs.Logger) deleteDataLogic {
 	timerDone := make(chan bool)
-	return deleteDataLogic{ /*coreAdapter: coreAdapter, */ timerDone: timerDone, logger: logger}
-}
+	return deleteDataLogic{coreAdapter: coreAdapter, timerDone: timerDone, logger: logger}
+}*/
