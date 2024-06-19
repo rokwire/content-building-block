@@ -139,7 +139,7 @@ func main() {
 
 	// application
 	application := core.NewApplication(Version, Build, storageAdapter /*awsAdapter*/, nil, twitterAdapter, cacheAdapter,
-		mtAppID, mtOrgID, serviceID, logger)
+		mtAppID, mtOrgID, serviceID, coreAdapter, logger)
 	application.Start()
 
 	webAdapter := driver.NewWebAdapter(contentServiceURL, port, application, serviceRegManager, logger)

@@ -112,9 +112,9 @@ func (app *Application) storeMultiTenancyData() error {
 // NewApplication creates new Application
 func NewApplication(version string, build string, storage interfaces.Storage, awsAdapter *awsstorage.Adapter,
 	twitterAdapter *twitter.Adapter, cacheadapter *cacheadapter.CacheAdapter, mtAppID string, mtOrgID string,
-	serviceID string, logger *logs.Logger) *Application {
+	serviceID string, coreBB interfaces.Core, logger *logs.Logger) *Application {
 	cacheLock := &sync.Mutex{}
-	deleteDataLogic := deleteDataLogic{logger: *logger /*core: coreBB,*/, serviceID: serviceID, storage: storage}
+	deleteDataLogic := deleteDataLogic{logger: *logger, core: coreBB, serviceID: serviceID, storage: storage}
 
 	application := Application{version: version, build: build, cacheLock: cacheLock, storage: storage,
 		awsAdapter: awsAdapter, twitterAdapter: twitterAdapter, cacheAdapter: cacheadapter,

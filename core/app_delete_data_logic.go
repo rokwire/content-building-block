@@ -29,8 +29,7 @@ type deleteDataLogic struct {
 	logger    logs.Logger
 	serviceID string
 	storage   interfaces.Storage
-	//coreAdapter Core
-
+	core      interfaces.Core
 	//delete data timer
 	dailyDeleteTimer *time.Timer
 	timerDone        chan bool
@@ -121,7 +120,7 @@ func (d deleteDataLogic) process() {
 func (d deleteDataLogic) processDelete() {
 
 	//load deleted accounts
-	/*deletedMemberships, err := d.coreAdapter.LoadDeletedMemberships()
+	deletedMemberships, err := d.core.LoadDeletedMemberships()
 
 	if err != nil {
 		d.logger.Errorf("error on loading deleted accounts - %s", err)
@@ -143,36 +142,11 @@ func (d deleteDataLogic) processDelete() {
 
 		//delete the data
 		d.deleteAppOrgUsersData(appOrgSection.AppID, appOrgSection.OrgID, accountsIDs)
-	}*/
+	}
 
 }
 
 func (d deleteDataLogic) deleteAppOrgUsersData(appID string, orgID string, accountsIDs []string) {
-	/*
-	   // delete the mesages recipients
-	   err := d.storage.DeleteMessagesRecipientsForUsers(nil, appID, orgID, accountsIDs)
-
-	   	if err != nil {
-	   		d.logger.Errorf("error deleting the messages recipients for users - %s", err)
-	   		return
-	   	}
-
-	   // delete the queue data items
-	   err = d.storage.DeleteQueueDataForUsers(nil, appID, orgID, accountsIDs)
-
-	   	if err != nil {
-	   		d.logger.Errorf("error deleting the queue data items for users - %s", err)
-	   		return
-	   	}
-
-	   // delete the users
-	   err = d.storage.DeleteUsersWithIDs(nil, appID, orgID, accountsIDs)
-
-	   	if err != nil {
-	   		d.logger.Errorf("error deleting the users - %s", err)
-	   		return
-	   	}
-	*/
 }
 
 func (d deleteDataLogic) getAccountsIDs(memberships []model.DeletedMembership) []string {
@@ -184,7 +158,7 @@ func (d deleteDataLogic) getAccountsIDs(memberships []model.DeletedMembership) [
 }
 
 // deleteLogic creates new deleteLogic
-/*func deleteLogic(coreAdapter Core, logger logs.Logger) deleteDataLogic {
+func deleteLogic(core interfaces.Core, logger logs.Logger) deleteDataLogic {
 	timerDone := make(chan bool)
-	return deleteDataLogic{coreAdapter: coreAdapter, timerDone: timerDone, logger: logger}
-}*/
+	return deleteDataLogic{core: core, timerDone: timerDone, logger: logger}
+}
