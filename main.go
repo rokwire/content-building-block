@@ -19,6 +19,7 @@ import (
 	"content/core/model"
 	"content/driven/awsstorage"
 	cacheadapter "content/driven/cache"
+	corebb "content/driven/core"
 	storage "content/driven/storage"
 	"content/driven/twitter"
 	driver "content/driver/web"
@@ -27,7 +28,9 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/rokwire/core-auth-library-go/v2/authservice"
+	"github.com/rokwire/core-auth-library-go/v2/sigauth"
 
 	"github.com/rokwire/logging-library-go/v2/logs"
 )
@@ -51,12 +54,31 @@ func main() {
 
 	port := getEnvKey("CONTENT_PORT", true)
 
+	//common
+	coreBBHost := getEnvKey("CONTENT_CORE_BB_HOST", true)
+	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
+	authService := authservice.AuthService{
+		ServiceID:   serviceID,
+		ServiceHost: contentServiceURL,
+		FirstParty:  true,
+		AuthBaseURL: coreBBHost,
+	}
+	serviceRegLoader, err := authservice.NewRemoteServiceRegLoader(&authService, []string{"auth"})
+	if err != nil {
+		log.Fatalf("Error initializing remote service registration loader: %v", err)
+	}
+	serviceRegManager, err := authservice.NewServiceRegManager(&authService, serviceRegLoader)
+	if err != nil {
+		log.Fatalf("Error initializing service registration manager: %v", err)
+	}
+	//end common
+
 	//mongoDB adapter
 	mongoDBAuth := getEnvKey("CONTENT_MONGO_AUTH", true)
 	mongoDBName := getEnvKey("CONTENT_MONGO_DATABASE", true)
 	mongoTimeout := getEnvKey("CONTENT_MONGO_TIMEOUT", false)
 	storageAdapter := storage.NewStorageAdapter(mongoDBAuth, mongoDBName, mongoTimeout, logger)
-	err := storageAdapter.Start()
+	err = storageAdapter.Start()
 	if err != nil {
 		log.Fatal("Cannot start the mongoDB adapter - " + err.Error())
 	}
@@ -90,32 +112,33 @@ func main() {
 	mtAppID := getEnvKey("CONTENT_MULTI_TENANCY_APP_ID", true)
 	mtOrgID := getEnvKey("CONTENT_MULTI_TENANCY_ORG_ID", true)
 
+	//core adapter
+	serviceAccountID := getEnvKey("CONTENT_SERVICE_ACCOUNT_ID", false)
+	privKeyRaw := getEnvKey("CONTENT_PRIV_KEY", true)
+	privKeyRaw = strings.ReplaceAll(privKeyRaw, "\\n", "\n")
+	privKey, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(privKeyRaw))
+	if err != nil {
+		log.Fatalf("Error parsing priv key: %v", err)
+	}
+	signatureAuth, err := sigauth.NewSignatureAuth(privKey, serviceRegManager, false)
+	if err != nil {
+		log.Fatalf("Error initializing signature auth: %v", err)
+	}
+	serviceAccountLoader, err := authservice.NewRemoteServiceAccountLoader(&authService, serviceAccountID, signatureAuth)
+	if err != nil {
+		log.Fatalf("Error initializing remote service account loader: %v", err)
+	}
+	serviceAccountManager, err := authservice.NewServiceAccountManager(&authService, serviceAccountLoader)
+	if err != nil {
+		log.Fatalf("Error initializing service account manager: %v", err)
+	}
+	coreAdapter := corebb.NewCoreAdapter(coreBBHost, serviceAccountManager)
+
 	// application
-	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, twitterAdapter, cacheAdapter, mtAppID, mtOrgID, serviceID, nil, logger)
+	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, twitterAdapter, cacheAdapter, mtAppID, mtOrgID, serviceID, coreAdapter, logger)
 	application.Start()
 
 	// web adapter
-	// host := getEnvKey("CONTENT_HOST", true)
-	coreBBHost := getEnvKey("CONTENT_CORE_BB_HOST", true)
-	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
-
-	authService := authservice.AuthService{
-		ServiceID:   serviceID,
-		ServiceHost: contentServiceURL,
-		FirstParty:  true,
-		AuthBaseURL: coreBBHost,
-	}
-
-	serviceRegLoader, err := authservice.NewRemoteServiceRegLoader(&authService, []string{"auth"})
-	if err != nil {
-		log.Fatalf("Error initializing remote service registration loader: %v", err)
-	}
-
-	serviceRegManager, err := authservice.NewServiceRegManager(&authService, serviceRegLoader)
-	if err != nil {
-		log.Fatalf("Error initializing service registration manager: %v", err)
-	}
-
 	webAdapter := driver.NewWebAdapter(contentServiceURL, port, application, serviceRegManager, logger)
 
 	webAdapter.Start()
