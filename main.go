@@ -16,19 +16,19 @@ package main
 
 import (
 	"content/core"
+	"content/core/model"
+	"content/driven/awsstorage"
 	cacheadapter "content/driven/cache"
-	coreBB "content/driven/core"
 	storage "content/driven/storage"
 	"content/driven/twitter"
 	driver "content/driver/web"
-	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 
-	"github.com/golang-jwt/jwt"
 	"github.com/rokwire/core-auth-library-go/v2/authservice"
-	"github.com/rokwire/core-auth-library-go/v2/sigauth"
+
 	"github.com/rokwire/logging-library-go/v2/logs"
 )
 
@@ -62,23 +62,23 @@ func main() {
 	}
 
 	// S3 Adapter
-	/*	s3Bucket := getEnvKey("CONTENT_S3_BUCKET", true)
-		s3ProfileImagesBucket := getEnvKey("CONTENT_S3_PROFILE_IMAGES_BUCKET", true)
-		s3UsersAudiosBucket := getEnvKey("CONTENT_S3_USERS_AUDIOS_BUCKET", true)
-		s3Region := getEnvKey("CONTENT_S3_REGION", true)
-		awsAccessKeyID := getEnvKey("CONTENT_AWS_ACCESS_KEY_ID", true)
-		awsSecretAccessKey := getEnvKey("CONTENT_AWS_SECRET_ACCESS_KEY", true)
-		awsConfig := &model.AWSConfig{S3Bucket: s3Bucket,
-			S3ProfileImagesBucket: s3ProfileImagesBucket,
-			S3UsersAudiosBucket:   s3UsersAudiosBucket,
-			S3Region:              s3Region, AWSAccessKeyID: awsAccessKeyID, AWSSecretAccessKey: awsSecretAccessKey}*/
+	s3Bucket := getEnvKey("CONTENT_S3_BUCKET", true)
+	s3ProfileImagesBucket := getEnvKey("CONTENT_S3_PROFILE_IMAGES_BUCKET", true)
+	s3UsersAudiosBucket := getEnvKey("CONTENT_S3_USERS_AUDIOS_BUCKET", true)
+	s3Region := getEnvKey("CONTENT_S3_REGION", true)
+	awsAccessKeyID := getEnvKey("CONTENT_AWS_ACCESS_KEY_ID", true)
+	awsSecretAccessKey := getEnvKey("CONTENT_AWS_SECRET_ACCESS_KEY", true)
+	awsConfig := &model.AWSConfig{S3Bucket: s3Bucket,
+		S3ProfileImagesBucket: s3ProfileImagesBucket,
+		S3UsersAudiosBucket:   s3UsersAudiosBucket,
+		S3Region:              s3Region, AWSAccessKeyID: awsAccessKeyID, AWSSecretAccessKey: awsSecretAccessKey}
 
-	/*presignExpirationMinutesVal := getEnvKey("CONTENT_S3_REQUEST_PRESIGN_EXPIRATION_MINUTES", false)
+	presignExpirationMinutesVal := getEnvKey("CONTENT_S3_REQUEST_PRESIGN_EXPIRATION_MINUTES", false)
 	presignExpirationMinutes, err := strconv.Atoi(presignExpirationMinutesVal)
 	if err != nil {
 		logger.Warnf("error parsing S3 request presign expiration minutes: %s - applying default", err.Error())
 	}
-	awsAdapter := awsstorage.NewAWSStorageAdapter(awsConfig, presignExpirationMinutes)*/
+	awsAdapter := awsstorage.NewAWSStorageAdapter(awsConfig, presignExpirationMinutes)
 
 	defaultCacheExpirationSeconds := getEnvKey("CONTENT_DEFAULT_CACHE_EXPIRATION_SECONDS", false)
 	cacheAdapter := cacheadapter.NewCacheAdapter(defaultCacheExpirationSeconds)
@@ -89,6 +89,10 @@ func main() {
 
 	mtAppID := getEnvKey("CONTENT_MULTI_TENANCY_APP_ID", true)
 	mtOrgID := getEnvKey("CONTENT_MULTI_TENANCY_ORG_ID", true)
+
+	// application
+	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, twitterAdapter, cacheAdapter, mtAppID, mtOrgID, serviceID, nil, logger)
+	application.Start()
 
 	// web adapter
 	// host := getEnvKey("CONTENT_HOST", true)
@@ -101,7 +105,8 @@ func main() {
 		FirstParty:  true,
 		AuthBaseURL: coreBBHost,
 	}
-	serviceRegLoader, err := authservice.NewRemoteServiceRegLoader(&authService, []string{"rewards"})
+
+	serviceRegLoader, err := authservice.NewRemoteServiceRegLoader(&authService, []string{"auth"})
 	if err != nil {
 		log.Fatalf("Error initializing remote service registration loader: %v", err)
 	}
@@ -110,37 +115,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error initializing service registration manager: %v", err)
 	}
-
-	serviceAccountID := getEnvKey("CONTENT_SERVICE_ACCOUNT_ID", false)
-	privKeyRaw := getEnvKey("CONTENT_PRIV_KEY", true)
-	privKeyRaw = strings.ReplaceAll(privKeyRaw, "\\n", "\n")
-	privKey, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(privKeyRaw))
-	if err != nil {
-		log.Fatalf("Error parsing priv key: %v", err)
-	}
-	signatureAuth, err := sigauth.NewSignatureAuth(privKey, serviceRegManager, false)
-	if err != nil {
-		log.Fatalf("Error initializing signature auth: %v", err)
-	}
-
-	serviceAccountLoader, err := authservice.NewRemoteServiceAccountLoader(&authService, serviceAccountID, signatureAuth)
-	if err != nil {
-		log.Fatalf("Error initializing remote service account loader: %v", err)
-	}
-
-	serviceAccountManager, err := authservice.NewServiceAccountManager(&authService, serviceAccountLoader)
-	if err != nil {
-		log.Fatalf("Error initializing service account manager: %v", err)
-	}
-
-	// Core adapter
-	coreAdapter := coreBB.NewCoreAdapter(coreBBHost, serviceAccountManager)
-	fmt.Print(coreAdapter)
-
-	// application
-	application := core.NewApplication(Version, Build, storageAdapter /*awsAdapter*/, nil, twitterAdapter, cacheAdapter,
-		mtAppID, mtOrgID, serviceID, coreAdapter, logger)
-	application.Start()
 
 	webAdapter := driver.NewWebAdapter(contentServiceURL, port, application, serviceRegManager, logger)
 
