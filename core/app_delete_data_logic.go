@@ -26,10 +26,13 @@ import (
 )
 
 type deleteDataLogic struct {
-	logger    logs.Logger
+	logger logs.Logger
+
 	serviceID string
-	storage   interfaces.Storage
-	core      interfaces.Core
+
+	storage interfaces.Storage
+	core    interfaces.Core
+
 	//delete data timer
 	dailyDeleteTimer *time.Timer
 	timerDone        chan bool
