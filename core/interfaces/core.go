@@ -69,8 +69,3 @@ type Services interface {
 	GetFileContentItem(claims *tokenauth.Claims, fileName string, category string) (io.ReadCloser, error)
 	DeleteFileContentItem(claims *tokenauth.Claims, fileName string, category string) error
 }
-
-// Core entity
-type Core interface {
-	LoadDeletedMemberships() ([]model.DeletedUserData, error)
-}
