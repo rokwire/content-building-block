@@ -165,6 +165,13 @@ func (d deleteDataLogic) deleteAppOrgUsersData(appID string, orgID string, accou
 		if err != nil {
 			d.logger.Debugf("error on delete profile image - %s", err)
 		}
+
+		//delete voice record
+		err = d.awsAdapter.DeleteUserVoiceRecord(accountID)
+		if err != nil {
+			d.logger.Debugf("error on delete voice record - %s", err)
+		}
+
 	}
 }
 
