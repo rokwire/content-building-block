@@ -193,7 +193,6 @@ func (d deleteDataLogic) getAccountsIDs(memberships []model.DeletedMembership) [
 }
 
 // deleteLogic creates new deleteLogic
-func deleteLogic(core interfaces.Core, logger logs.Logger) deleteDataLogic {
-	timerDone := make(chan bool)
-	return deleteDataLogic{core: core, timerDone: timerDone, logger: logger}
+func deleteLogic(logger logs.Logger, coreBB interfaces.Core, serviceID string, storage interfaces.Storage, awsAdapter *awsstorage.Adapter) deleteDataLogic {
+	return deleteDataLogic{logger: logger, core: coreBB, serviceID: serviceID, storage: storage, awsAdapter: awsAdapter}
 }
