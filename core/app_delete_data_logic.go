@@ -20,6 +20,8 @@ package core
 import (
 	"content/core/interfaces"
 	"content/core/model"
+	"content/driven/awsstorage"
+	"fmt"
 	"time"
 
 	"github.com/rokwire/logging-library-go/v2/logs"
@@ -30,8 +32,9 @@ type deleteDataLogic struct {
 
 	serviceID string
 
-	storage interfaces.Storage
-	core    interfaces.Core
+	storage    interfaces.Storage
+	awsAdapter *awsstorage.Adapter
+	core       interfaces.Core
 
 	//delete data timer
 	dailyDeleteTimer *time.Timer
@@ -150,12 +153,35 @@ func (d deleteDataLogic) processDelete() {
 }
 
 func (d deleteDataLogic) deleteAppOrgUsersData(appID string, orgID string, accountsIDs []string) {
-	// delete todo categories
-	err := d.storage.DeleteCategory()(nil, appID, orgID, accountsIDs)
-	if err != nil {
-		d.logger.Errorf("error deleting the messages recipients for users - %s", err)
+	if len(accountsIDs) == 0 {
+		d.logger.Info("no deleted accounts")
 		return
 	}
+
+	for _, accountID := range accountsIDs {
+
+		//delete profile images
+		err := d.deleteProfileImage(accountID)
+		if err != nil {
+			d.logger.Debugf("error on delete profile image - %s", err)
+		}
+	}
+}
+
+func (d deleteDataLogic) deleteProfileImage(accountID string) error {
+	err := d.awsAdapter.DeleteProfileImage(fmt.Sprintf("profile-images/%s-default.webp", accountID))
+	if err != nil {
+		return err
+	}
+	err = d.awsAdapter.DeleteProfileImage(fmt.Sprintf("profile-images/%s-medium.webp", accountID))
+	if err != nil {
+		return err
+	}
+	err = d.awsAdapter.DeleteProfileImage(fmt.Sprintf("profile-images/%s-small.webp", accountID))
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d deleteDataLogic) getAccountsIDs(memberships []model.DeletedMembership) []string {
