@@ -58,3 +58,8 @@ type Storage interface {
 	UpdateCategory(appID *string, orgID string, item *model.Category) (*model.Category, error)
 	DeleteCategory(appID *string, orgID string, key string) error
 }
+
+// Core BB interface
+type Core interface {
+	LoadDeletedMemberships() ([]model.DeletedUserData, error)
+}

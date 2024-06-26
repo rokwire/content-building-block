@@ -44,6 +44,9 @@ type Application struct {
 	multiTenancyOrgID string
 
 	logger *logs.Logger
+
+	//delete data logic
+	deleteDataLogic deleteDataLogic
 }
 
 // Start starts the core part of the application
@@ -54,6 +57,8 @@ func (app *Application) Start() {
 	if err != nil {
 		log.Fatalf("error initializing multi-tenancy data: %s", err.Error())
 	}
+
+	app.deleteDataLogic.start()
 }
 
 // as the service starts supporting multi-tenancy we need to add the needed multi-tenancy fields for the existing data,
@@ -106,10 +111,14 @@ func (app *Application) storeMultiTenancyData() error {
 
 // NewApplication creates new Application
 func NewApplication(version string, build string, storage interfaces.Storage, awsAdapter *awsstorage.Adapter,
-	twitterAdapter *twitter.Adapter, cacheadapter *cacheadapter.CacheAdapter, mtAppID string, mtOrgID string, logger *logs.Logger) *Application {
+	twitterAdapter *twitter.Adapter, cacheadapter *cacheadapter.CacheAdapter, mtAppID string, mtOrgID string,
+	serviceID string, coreBB interfaces.Core, logger *logs.Logger) *Application {
 	cacheLock := &sync.Mutex{}
+	deleteDataLogic := deleteLogic(*logger, coreBB, serviceID, storage, awsAdapter)
+
 	application := Application{version: version, build: build, cacheLock: cacheLock, storage: storage,
-		awsAdapter: awsAdapter, twitterAdapter: twitterAdapter, cacheAdapter: cacheadapter, multiTenancyAppID: mtAppID, multiTenancyOrgID: mtOrgID, logger: logger}
+		awsAdapter: awsAdapter, twitterAdapter: twitterAdapter, cacheAdapter: cacheadapter,
+		multiTenancyAppID: mtAppID, multiTenancyOrgID: mtOrgID, deleteDataLogic: deleteDataLogic, logger: logger}
 
 	// add the drivers ports/interfaces
 	application.Services = &servicesImpl{app: &application}
