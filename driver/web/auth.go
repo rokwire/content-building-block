@@ -51,7 +51,7 @@ func NewAuth(app *core.Application, serviceRegManager *authservice.ServiceRegMan
 	}
 	bbsHandlers := tokenauth.NewHandlers(bbsStandardHandler) //add permissions, user and authenticated
 
-	tpsStandardHandler, err := newBBsStandardHandler(serviceRegManager)
+	tpsStandardHandler, err := newTPsStandardHandler(serviceRegManager)
 	if err != nil {
 		return nil
 	}
