@@ -30,20 +30,7 @@ type TPsApisHandler struct {
 	app *core.Application
 }
 
-// UploadImage Uploads an image to AWS S3
-// @Description Uploads an image to AWS S3
-// @Tags Admin
-// @ID TPsUploadImage
-// @Param path body string true "path - path within the S3 bucket"
-// @Param width body string false "width - width of the image to resize. If width and height are missing - then the new image will use the original size"
-// @Param height body string false "height - height of the image to resize. If width and height are missing - then the new image will use the original size"
-// @Param quality body string false "quality - quality of the image. Default: 90"
-// @Param fileName body string false "fileName - the uploaded file name"
-// @Accept multipart/form-data
-// @Produce json
-// @Success 200 {object} uploadImageResponse
-// @Security AdminUserAuth
-// @Router /admin/image [post]
+// UploadImage Uploads an image to the Rokwire system
 func (h TPsApisHandler) UploadImage(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	//validate the image type
 	path := "event/tout"
