@@ -25,6 +25,7 @@ COPY --from=builder /content-app/driver/web/docs/gen/def.yaml /driver/web/docs/g
 COPY --from=builder /content-app/driver/web/authorization_model.conf /driver/web/authorization_model.conf
 COPY --from=builder /content-app/driver/web/authorization_policy.csv /driver/web/authorization_policy.csv
 COPY --from=builder /content-app/driver/web/authorization_bbs_permission_policy.csv /driver/web/authorization_bbs_permission_policy.csv
+COPY --from=builder /content-app/driver/web/authorization_tps_permission_policy.csv /driver/web/authorization_tps_permission_policy.csv
 
 COPY --from=builder /content-app/vendor/github.com/rokwire/core-auth-library-go/v2/authorization/authorization_model_scope.conf /content-app/vendor/github.com/rokwire/core-auth-library-go/v2/authorization/authorization_model_scope.conf
 COPY --from=builder /content-app/vendor/github.com/rokwire/core-auth-library-go/v2/authorization/authorization_model_string.conf /content-app/vendor/github.com/rokwire/core-auth-library-go/v2/authorization/authorization_model_string.conf
