@@ -32,7 +32,6 @@ type TPsApisHandler struct {
 
 // UploadImage Uploads an image to the Rokwire system
 func (h TPsApisHandler) UploadImage(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	//validate the image type
 	path := "tps-images"
 
 	heightParam := intPostValueFromString(r.PostFormValue("height"))
