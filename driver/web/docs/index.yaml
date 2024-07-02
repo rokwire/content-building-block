@@ -113,6 +113,10 @@ paths:
  #BBs
   /bbs/image:
     $ref: "./resources/bbs/image.yaml"   
+
+ #TPs
+  /tps/image:
+    $ref: "./resources/tps/image.yaml"    
   
 components:
   securitySchemes:
