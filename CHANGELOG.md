@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Expose TPS API for adding images[#106](https://github.com/rokwire/content-building-block/issues/106)
+- Expose TPS API for adding images [#106](https://github.com/rokwire/content-building-block/issues/106)
 
 ## [1.7.0] - 2024-06-26
 ### Added
