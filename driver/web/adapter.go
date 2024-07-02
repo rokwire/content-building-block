@@ -44,6 +44,7 @@ type Adapter struct {
 	apisHandler      rest.ApisHandler
 	adminApisHandler rest.AdminApisHandler
 	bbsApisHandler   rest.BBsApisHandler
+	tpsApisHandler   rest.TPsApisHandler
 
 	app *core.Application
 
@@ -192,7 +193,11 @@ func (we Adapter) Start() {
 
 	// handle bbs apis
 	bbsSubRouter := contentRouter.PathPrefix("/bbs").Subrouter()
-	bbsSubRouter.HandleFunc("/image", we.bbsAuthWrapFunc(we.bbsApisHandler.UploadImage, we.auth.bbs.Permissions)).Methods("POST")
+	bbsSubRouter.HandleFunc("/image", we.authWrapFunc(we.bbsApisHandler.UploadImage, we.auth.bbs.Permissions)).Methods("POST")
+
+	// handle tps apis
+	tpsSubRouter := contentRouter.PathPrefix("/tps").Subrouter()
+	tpsSubRouter.HandleFunc("/image", we.authWrapFunc(we.tpsApisHandler.UploadImage, we.auth.tps.Permissions)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+we.port, router))
 }
@@ -268,7 +273,7 @@ func (we Adapter) coreAuthWrapFunc(handler coreAuthFunc, authorization Authoriza
 
 type bbsAuthFunc = func(*tokenauth.Claims, http.ResponseWriter, *http.Request)
 
-func (we Adapter) bbsAuthWrapFunc(handler bbsAuthFunc, authorization tokenauth.Handler) http.HandlerFunc {
+func (we Adapter) authWrapFunc(handler bbsAuthFunc, authorization tokenauth.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		utils.LogRequest(req)
 
@@ -294,8 +299,11 @@ func NewWebAdapter(host string, port string, app *core.Application, serviceRegMa
 	apisHandler := rest.NewApisHandler(app)
 	adminApisHandler := rest.NewAdminApisHandler(app)
 	bbsApisHandler := rest.NewBBSApisHandler(app)
+	tpsApisHandler := rest.NewTPSApisHandler(app)
 	return Adapter{host: host, port: port, cachedYamlDoc: yamlDoc, auth: auth,
-		apisHandler: apisHandler, adminApisHandler: adminApisHandler, bbsApisHandler: bbsApisHandler, app: app, logger: logger}
+		apisHandler: apisHandler, adminApisHandler: adminApisHandler,
+		bbsApisHandler: bbsApisHandler, tpsApisHandler: tpsApisHandler,
+		app: app, logger: logger}
 }
 
 // AppListener implements core.ApplicationListener interface
