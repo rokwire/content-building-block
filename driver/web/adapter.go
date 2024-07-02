@@ -299,8 +299,11 @@ func NewWebAdapter(host string, port string, app *core.Application, serviceRegMa
 	apisHandler := rest.NewApisHandler(app)
 	adminApisHandler := rest.NewAdminApisHandler(app)
 	bbsApisHandler := rest.NewBBSApisHandler(app)
+	tpsApisHandler := rest.NewTPSApisHandler(app)
 	return Adapter{host: host, port: port, cachedYamlDoc: yamlDoc, auth: auth,
-		apisHandler: apisHandler, adminApisHandler: adminApisHandler, bbsApisHandler: bbsApisHandler, app: app, logger: logger}
+		apisHandler: apisHandler, adminApisHandler: adminApisHandler,
+		bbsApisHandler: bbsApisHandler, tpsApisHandler: tpsApisHandler,
+		app: app, logger: logger}
 }
 
 // AppListener implements core.ApplicationListener interface
