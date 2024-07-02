@@ -1,9 +1,9 @@
 post:
   tags:
     - TPs
-  summary: Uploads an image to AWS S3
+  summary: Uploads an image to the Rokwire system
   description: |
-     Uploads an image to AWS S3
+     Uploads an image to the Rokwire system
   security:
     - bearerAuth: [] 
   parameters:
