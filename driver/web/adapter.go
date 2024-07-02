@@ -193,11 +193,11 @@ func (we Adapter) Start() {
 
 	// handle bbs apis
 	bbsSubRouter := contentRouter.PathPrefix("/bbs").Subrouter()
-	bbsSubRouter.HandleFunc("/image", we.bbsAuthWrapFunc(we.bbsApisHandler.UploadImage, we.auth.bbs.Permissions)).Methods("POST")
+	bbsSubRouter.HandleFunc("/image", we.authWrapFunc(we.bbsApisHandler.UploadImage, we.auth.bbs.Permissions)).Methods("POST")
 
 	// handle tps apis
 	tpsSubRouter := contentRouter.PathPrefix("/tps").Subrouter()
-	tpsSubRouter.HandleFunc("/image", we.bbsAuthWrapFunc(we.tpsApisHandler.UploadImage, we.auth.tps.Permissions)).Methods("POST")
+	tpsSubRouter.HandleFunc("/image", we.authWrapFunc(we.tpsApisHandler.UploadImage, we.auth.tps.Permissions)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+we.port, router))
 }
@@ -273,7 +273,7 @@ func (we Adapter) coreAuthWrapFunc(handler coreAuthFunc, authorization Authoriza
 
 type bbsAuthFunc = func(*tokenauth.Claims, http.ResponseWriter, *http.Request)
 
-func (we Adapter) bbsAuthWrapFunc(handler bbsAuthFunc, authorization tokenauth.Handler) http.HandlerFunc {
+func (we Adapter) authWrapFunc(handler bbsAuthFunc, authorization tokenauth.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		utils.LogRequest(req)
 
