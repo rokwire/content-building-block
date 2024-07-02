@@ -51,7 +51,13 @@ func NewAuth(app *core.Application, serviceRegManager *authservice.ServiceRegMan
 	}
 	bbsHandlers := tokenauth.NewHandlers(bbsStandardHandler) //add permissions, user and authenticated
 
-	auth := Auth{coreAuth: coreAuth, bbs: bbsHandlers, logger: logger}
+	tpsStandardHandler, err := newBBsStandardHandler(serviceRegManager)
+	if err != nil {
+		return nil
+	}
+	tpsHandlers := tokenauth.NewHandlers(tpsStandardHandler) //add permissions, user and authenticated
+
+	auth := Auth{coreAuth: coreAuth, bbs: bbsHandlers, tps: tpsHandlers, logger: logger}
 	return &auth
 }
 
@@ -103,6 +109,30 @@ func newBBsStandardHandler(serviceRegManager *authservice.ServiceRegManager) (*t
 	}
 
 	auth := tokenauth.NewStandardHandler(*bbsTokenAuth, check)
+	return &auth, nil
+}
+
+// TPs auth ///////////
+func newTPsStandardHandler(serviceRegManager *authservice.ServiceRegManager) (*tokenauth.StandardHandler, error) {
+	tpsPermissionAuth := authorization.NewCasbinStringAuthorization("driver/web/authorization_tps_permission_policy.csv")
+	tpsTokenAuth, err := tokenauth.NewTokenAuth(true, serviceRegManager, tpsPermissionAuth, nil)
+	if err != nil {
+		return nil, errors.WrapErrorAction(logutils.ActionCreate, "tps token auth", nil, err)
+	}
+
+	check := func(claims *tokenauth.Claims, req *http.Request) (int, error) {
+		if !claims.Service {
+			return http.StatusUnauthorized, errors.ErrorData(logutils.StatusInvalid, "service claim", nil)
+		}
+
+		if !claims.FirstParty {
+			return http.StatusUnauthorized, errors.ErrorData(logutils.StatusInvalid, "first party claim", nil)
+		}
+
+		return http.StatusOK, nil
+	}
+
+	auth := tokenauth.NewStandardHandler(*tpsTokenAuth, check)
 	return &auth, nil
 }
 
