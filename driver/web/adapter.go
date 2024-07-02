@@ -44,6 +44,7 @@ type Adapter struct {
 	apisHandler      rest.ApisHandler
 	adminApisHandler rest.AdminApisHandler
 	bbsApisHandler   rest.BBsApisHandler
+	tpsApisHandler   rest.TPsApisHandler
 
 	app *core.Application
 
@@ -193,6 +194,10 @@ func (we Adapter) Start() {
 	// handle bbs apis
 	bbsSubRouter := contentRouter.PathPrefix("/bbs").Subrouter()
 	bbsSubRouter.HandleFunc("/image", we.bbsAuthWrapFunc(we.bbsApisHandler.UploadImage, we.auth.bbs.Permissions)).Methods("POST")
+
+	// handle tps apis
+	tpsSubRouter := contentRouter.PathPrefix("/tps").Subrouter()
+	tpsSubRouter.HandleFunc("/image", we.bbsAuthWrapFunc(we.tpsApisHandler.UploadImage, we.auth.tps.Permissions)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+we.port, router))
 }

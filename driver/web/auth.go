@@ -37,6 +37,7 @@ type Authorization interface {
 type Auth struct {
 	coreAuth *CoreAuth
 	bbs      tokenauth.Handlers
+	tps      tokenauth.Handlers
 	logger   *logs.Logger
 }
 
