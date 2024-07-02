@@ -48,12 +48,9 @@ func (h TPsApisHandler) UploadImage(claims *tokenauth.Claims, w http.ResponseWri
 	//validate the image type
 	path := "event/tout"
 
-	heightParam := 2
-	widthParam := 3
-	qualityParam := 4
-	//heightParam := intPostValueFromString(r.PostFormValue("height"))
-	//widthParam := intPostValueFromString(r.PostFormValue("width"))
-	//qualityParam := intPostValueFromString(r.PostFormValue("quality"))
+	heightParam := intPostValueFromString(r.PostFormValue("height"))
+	widthParam := intPostValueFromString(r.PostFormValue("width"))
+	qualityParam := intPostValueFromString(r.PostFormValue("quality"))
 	imgSpec := model.ImageSpec{Height: heightParam, Width: widthParam, Quality: qualityParam}
 
 	// validate file size
