@@ -125,7 +125,7 @@ func newTPsStandardHandler(serviceRegManager *authservice.ServiceRegManager) (*t
 			return http.StatusUnauthorized, errors.ErrorData(logutils.StatusInvalid, "service claim", nil)
 		}
 
-		if !claims.FirstParty {
+		if claims.FirstParty {
 			return http.StatusUnauthorized, errors.ErrorData(logutils.StatusInvalid, "first party claim", nil)
 		}
 
