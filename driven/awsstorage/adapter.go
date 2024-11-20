@@ -21,6 +21,7 @@ import (
 	"io"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -295,6 +296,27 @@ func (a *Adapter) StreamDownloadFile(path string) (io.ReadCloser, error) {
 	})
 
 	return file.Body, nil
+}
+
+// GetDownloadRedirectURL gets a URL to redirect a download request directly to S3
+func (a *Adapter) GetDownloadRedirectURL(path string) (string, error) {
+	s, err := a.createS3Session()
+	if err != nil {
+		log.Printf("Could not create S3 session")
+		return "", err
+	}
+
+	req, _ := s3.New(s).GetObjectRequest(&s3.GetObjectInput{
+		Bucket: aws.String(a.config.S3Bucket),
+		Key:    aws.String(path),
+	})
+
+	url, err := req.Presign(time.Duration(a.presignExpirationMinutes) * time.Minute)
+	if err != nil {
+		return "", err
+	}
+
+	return url, nil
 }
 
 // DeleteFile deletes file at specific path

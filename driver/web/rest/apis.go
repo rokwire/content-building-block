@@ -804,6 +804,19 @@ func (h ApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Respons
 
 	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", fileName))
 	w.Header().Set("Cache-Control", "no-store")
+
+	// redirectURL, err := h.app.Services.GetFileContentItemRedirect(claims, fileName, category)
+	// if err != nil {
+	// 	log.Printf("Error getting URL for file download redirect: %s\n", err.Error())
+	// 	http.Error(w, "Error getting file download redirect", http.StatusInternalServerError)
+	// 	return
+	// }
+
+	// http.Redirect(w, r, redirectURL, http.StatusFound)
+
+	// w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	// w.WriteHeader(http.StatusOK)
+	// w.Write([]byte(redirectURL))
 }
 
 // GetDataContentItems Gets data content items

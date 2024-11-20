@@ -581,6 +581,18 @@ func (s *servicesImpl) GetFileContentItem(claims *tokenauth.Claims, fileName str
 	return fileData, nil
 }
 
+func (s *servicesImpl) GetFileContentItemRedirect(claims *tokenauth.Claims, fileName string, category string) (string, error) {
+
+	path := claims.OrgID + "/" + claims.AppID + "/" + category + "/" + fileName
+
+	redirectURL, err := s.app.awsAdapter.GetDownloadRedirectURL(path)
+	if err != nil {
+		return "", fmt.Errorf("unable to get URL for file download redirect: %s", err.Error())
+	}
+
+	return redirectURL, nil
+}
+
 func (s *servicesImpl) DeleteFileContentItem(claims *tokenauth.Claims, fileName string, category string) error {
 	categoryItem, err := s.app.storage.FindCategory(&claims.AppID, claims.OrgID, category)
 	if err != nil {
