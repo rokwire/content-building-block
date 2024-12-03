@@ -83,6 +83,8 @@ paths:
     $ref: "./resources/apis/profile-photo.yaml"
   /voice_record:
     $ref: "./resources/apis/voice-record.yaml"
+  /voice_record/{user-id}:
+    $ref: "./resources/apis/voice-record-userID.yaml"
 
   #Client
   /student_guides:

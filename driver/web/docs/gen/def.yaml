@@ -2392,6 +2392,38 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
+  '/voice_record/{user-id}':
+    get:
+      tags:
+        - Apis
+      summary: Gets a user voice record
+      description: |
+        Get a user voice record as a file by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          description: the id of the user
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            audio/x-m4a:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
   /student_guides:
     get:
       tags:

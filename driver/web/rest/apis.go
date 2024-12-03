@@ -259,8 +259,29 @@ func (h ApisHandler) StoreVoiceRecord(claims *tokenauth.Claims, w http.ResponseW
 	w.Write([]byte("Success"))
 }
 
-// GetVoiceRecord gets the user voice record
+// GetVoiceRecord gets a voice record by user ID
 func (h ApisHandler) GetVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	userID := vars["user-id"]
+
+	fileBytes, err := h.app.Services.GetVoiceRecord(userID)
+	if err != nil || len(fileBytes) == 0 {
+		if err != nil {
+			log.Printf("error on retrieve AWS audio file: %s", err)
+		} else {
+			log.Printf("voice record audio not found for user %s", userID)
+		}
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "audio/m4a")
+	w.WriteHeader(http.StatusOK)
+	w.Write(fileBytes)
+}
+
+// GetUserVoiceRecord gets the user voice record
+func (h ApisHandler) GetUserVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
 	fileBytes, err := h.app.Services.GetVoiceRecord(claims.Subject)
 	if err != nil || len(fileBytes) == 0 {
