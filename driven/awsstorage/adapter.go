@@ -21,6 +21,7 @@ import (
 	"io"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -250,6 +251,29 @@ func (a *Adapter) UploadFile(body io.Reader, path string) (*string, error) {
 	}
 
 	return &objectLocation, nil
+}
+
+// GetPresignedURLsForUpload gets a set of presigned URLs for file upload directly to S3 by a client application
+func (a *Adapter) GetPresignedURLsForUpload(paths []string) ([]string, error) {
+	//TODO: transfer acceleration
+	s, err := a.createS3Session()
+	if err != nil {
+		log.Printf("Could not create S3 session")
+		return nil, err
+	}
+
+	urls := make([]string, len(paths))
+	for i, path := range paths {
+		req, _ := s3.New(s).GetObjectRequest(&s3.GetObjectInput{
+			Bucket: aws.String(a.config.S3Bucket),
+			Key:    aws.String(path),
+		})
+		urls[i], err = req.Presign(time.Duration(a.presignExpirationMinutes) * time.Minute)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return urls, nil
 }
 
 // DownloadFile loads a file at a specific path
