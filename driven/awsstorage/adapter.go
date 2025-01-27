@@ -264,7 +264,7 @@ func (a *Adapter) GetPresignedURLsForUpload(paths []string) ([]string, error) {
 
 	urls := make([]string, len(paths))
 	for i, path := range paths {
-		req, _ := s3.New(s).GetObjectRequest(&s3.GetObjectInput{
+		req, _ := s3.New(s).PutObjectRequest(&s3.PutObjectInput{
 			Bucket: aws.String(a.config.S3Bucket),
 			Key:    aws.String(path),
 		})
@@ -303,6 +303,29 @@ func (a *Adapter) DownloadFile(path string) ([]byte, error) {
 	}
 
 	return buffer.Bytes(), nil
+}
+
+// GetPresignedURLsForDownload gets a set of presigned URLs for file download directly from S3 by a client application
+func (a *Adapter) GetPresignedURLsForDownload(paths []string) ([]string, error) {
+	//TODO: transfer acceleration
+	s, err := a.createS3Session(a.config.S3BucketAccelerate)
+	if err != nil {
+		log.Printf("Could not create S3 session")
+		return nil, err
+	}
+
+	urls := make([]string, len(paths))
+	for i, path := range paths {
+		req, _ := s3.New(s).GetObjectRequest(&s3.GetObjectInput{
+			Bucket: aws.String(a.config.S3Bucket),
+			Key:    aws.String(path),
+		})
+		urls[i], err = req.Presign(time.Duration(a.presignExpirationMinutes) * time.Minute)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return urls, nil
 }
 
 // StreamDownloadFile streams a file downlod from S3

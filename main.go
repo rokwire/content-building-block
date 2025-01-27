@@ -91,6 +91,7 @@ func main() {
 	if err != nil {
 		logger.Warnf("error parsing S3 bucket accelerate: %s - applying default", err.Error())
 	}
+	// only allow S3 transfer accleration on the bucket used for all file types for now
 
 	s3ProfileImagesBucket := getEnvKey("CONTENT_S3_PROFILE_IMAGES_BUCKET", true)
 	s3UsersAudiosBucket := getEnvKey("CONTENT_S3_USERS_AUDIOS_BUCKET", true)

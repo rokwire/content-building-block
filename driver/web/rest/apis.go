@@ -835,8 +835,59 @@ func (h ApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Respons
 // @Param category body string false "category - category of file content item"
 // @Success 200
 // @Security UserAuth
-// @Router /files [get]
+// @Router /files/upload [get]
 func (h ApisHandler) GetFileContentUploadURLs(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	fileNamesStr := r.URL.Query().Get("fileNames")
+	if len(fileNamesStr) <= 0 {
+		log.Print("Missing file names query param\n")
+		http.Error(w, "missing 'fileNames' query param", http.StatusBadRequest)
+		return
+	}
+
+	fileNames := strings.Split(fileNamesStr, ",")
+	if len(fileNames) <= 0 {
+		log.Print("Missing file names\n")
+		http.Error(w, "missing file names", http.StatusBadRequest)
+		return
+	}
+
+	category := r.URL.Query().Get("category")
+	if len(category) <= 0 {
+		log.Print("Missing category\n")
+		http.Error(w, "missing 'category' query param", http.StatusBadRequest)
+		return
+	}
+
+	urls, err := h.app.Services.GetFileContentUploadURLs(claims, fileNames, category)
+	if err != nil {
+		log.Printf("Error getting file download stream: %s\n", err)
+		http.Error(w, "Error getting file download stream", http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(urls)
+	if err != nil {
+		log.Println("Error on marshal of upload urls")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// GetFileContentDownloadURLs Get URLs to download files from S3
+// @Description Get URLs to download files from S3
+// @Tags Client
+// @ID GetFileContentDownloadURLs
+// @Param fileNames body string false "fileNames - comma-separated list of file names"
+// @Param category body string false "category - category of file content item"
+// @Success 200
+// @Security UserAuth
+// @Router /files/download [get]
+func (h ApisHandler) GetFileContentDownloadURLs(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
 	fileNamesStr := r.URL.Query().Get("fileNames")
 	if len(fileNamesStr) <= 0 {
