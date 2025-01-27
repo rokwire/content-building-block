@@ -52,7 +52,7 @@ func NewAWSStorageAdapter(config *model.AWSConfig, presignExpirationMinutes int)
 
 // LoadImage loads image at specific path
 func (a *Adapter) LoadImage(path string) ([]byte, error) {
-	s, err := a.createS3Session()
+	s, err := a.createS3Session(a.config.S3BucketAccelerate)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return nil, err
@@ -75,7 +75,7 @@ func (a *Adapter) LoadImage(path string) ([]byte, error) {
 
 // LoadProfileImage loads profile image at specific path
 func (a *Adapter) LoadProfileImage(path string) ([]byte, error) {
-	s, err := a.createS3Session()
+	s, err := a.createS3Session(false)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return nil, err
@@ -100,7 +100,7 @@ func (a *Adapter) LoadProfileImage(path string) ([]byte, error) {
 func (a *Adapter) CreateImage(body io.Reader, path string, preferredFileName *string) (*string, error) {
 	log.Println("Create image")
 
-	s, err := a.createS3Session()
+	s, err := a.createS3Session(a.config.S3BucketAccelerate)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return nil, err
@@ -119,7 +119,7 @@ func (a *Adapter) CreateImage(body io.Reader, path string, preferredFileName *st
 func (a *Adapter) CreateProfileImage(body io.Reader, path string, preferredFileName *string) (*string, error) {
 	log.Println("Create profile image")
 
-	s, err := a.createS3Session()
+	s, err := a.createS3Session(false)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return nil, err
@@ -136,7 +136,7 @@ func (a *Adapter) CreateProfileImage(body io.Reader, path string, preferredFileN
 
 // DeleteProfileImage deletes profile image at specific path
 func (a *Adapter) DeleteProfileImage(path string) error {
-	s, err := a.createS3Session()
+	s, err := a.createS3Session(false)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return err
@@ -158,7 +158,7 @@ func (a *Adapter) DeleteProfileImage(path string) error {
 func (a *Adapter) CreateUserVoiceRecord(fileContent []byte, accountID string) (*string, error) {
 	log.Println("Create user voice record")
 
-	s, err := a.createS3Session()
+	s, err := a.createS3Session(false)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return nil, err
@@ -175,7 +175,7 @@ func (a *Adapter) CreateUserVoiceRecord(fileContent []byte, accountID string) (*
 
 // LoadUserVoiceRecord loads the voice record for the user
 func (a *Adapter) LoadUserVoiceRecord(accountID string) ([]byte, error) {
-	s, err := a.createS3Session()
+	s, err := a.createS3Session(false)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return nil, err
@@ -200,7 +200,7 @@ func (a *Adapter) LoadUserVoiceRecord(accountID string) ([]byte, error) {
 
 // DeleteUserVoiceRecord deletes the voice record for the user
 func (a *Adapter) DeleteUserVoiceRecord(accountID string) error {
-	s, err := a.createS3Session()
+	s, err := a.createS3Session(false)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return err
@@ -239,7 +239,7 @@ func (a *Adapter) prepareKey(path string, preferredFileName *string) string {
 func (a *Adapter) UploadFile(body io.Reader, path string) (*string, error) {
 	log.Println("Upload File")
 
-	s, err := a.createS3Session()
+	s, err := a.createS3Session(a.config.S3BucketAccelerate)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return nil, err
@@ -256,7 +256,7 @@ func (a *Adapter) UploadFile(body io.Reader, path string) (*string, error) {
 // GetPresignedURLsForUpload gets a set of presigned URLs for file upload directly to S3 by a client application
 func (a *Adapter) GetPresignedURLsForUpload(paths []string) ([]string, error) {
 	//TODO: transfer acceleration
-	s, err := a.createS3Session()
+	s, err := a.createS3Session(a.config.S3BucketAccelerate)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return nil, err
@@ -278,7 +278,7 @@ func (a *Adapter) GetPresignedURLsForUpload(paths []string) ([]string, error) {
 
 // DownloadFile loads a file at a specific path
 func (a *Adapter) DownloadFile(path string) ([]byte, error) {
-	s, err := a.createS3Session()
+	s, err := a.createS3Session(a.config.S3BucketAccelerate)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return nil, err
@@ -307,7 +307,7 @@ func (a *Adapter) DownloadFile(path string) ([]byte, error) {
 
 // StreamDownloadFile streams a file downlod from S3
 func (a *Adapter) StreamDownloadFile(path string) (io.ReadCloser, error) {
-	s, err := a.createS3Session()
+	s, err := a.createS3Session(a.config.S3BucketAccelerate)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return nil, err
@@ -323,7 +323,7 @@ func (a *Adapter) StreamDownloadFile(path string) (io.ReadCloser, error) {
 
 // DeleteFile deletes file at specific path
 func (a *Adapter) DeleteFile(path string) error {
-	s, err := a.createS3Session()
+	s, err := a.createS3Session(a.config.S3BucketAccelerate)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return err
@@ -341,7 +341,7 @@ func (a *Adapter) DeleteFile(path string) error {
 	return nil
 }
 
-func (a *Adapter) createS3Session() (*session.Session, error) {
+func (a *Adapter) createS3Session(accelerate bool) (*session.Session, error) {
 	region := a.config.S3Region
 	accessKeyID := a.config.AWSAccessKeyID
 	secretAccessKey := a.config.AWSSecretAccessKey
@@ -351,6 +351,7 @@ func (a *Adapter) createS3Session() (*session.Session, error) {
 			accessKeyID,
 			secretAccessKey,
 			""),
+		S3UseAccelerate: &accelerate,
 	})
 	if err != nil {
 		log.Print(err)

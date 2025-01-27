@@ -85,12 +85,20 @@ func main() {
 
 	// S3 Adapter
 	s3Bucket := getEnvKey("CONTENT_S3_BUCKET", true)
+	s3BucketAccelerateStr := getEnvKey("CONTENT_S3_BUCKET_ACCELERATE", false)
+	s3BucketAccelerate := false
+	s3BucketAccelerate, err = strconv.ParseBool(s3BucketAccelerateStr)
+	if err != nil {
+		logger.Warnf("error parsing S3 bucket accelerate: %s - applying default", err.Error())
+	}
+
 	s3ProfileImagesBucket := getEnvKey("CONTENT_S3_PROFILE_IMAGES_BUCKET", true)
 	s3UsersAudiosBucket := getEnvKey("CONTENT_S3_USERS_AUDIOS_BUCKET", true)
 	s3Region := getEnvKey("CONTENT_S3_REGION", true)
 	awsAccessKeyID := getEnvKey("CONTENT_AWS_ACCESS_KEY_ID", true)
 	awsSecretAccessKey := getEnvKey("CONTENT_AWS_SECRET_ACCESS_KEY", true)
 	awsConfig := &model.AWSConfig{S3Bucket: s3Bucket,
+		S3BucketAccelerate:    s3BucketAccelerate,
 		S3ProfileImagesBucket: s3ProfileImagesBucket,
 		S3UsersAudiosBucket:   s3UsersAudiosBucket,
 		S3Region:              s3Region, AWSAccessKeyID: awsAccessKeyID, AWSSecretAccessKey: awsSecretAccessKey}

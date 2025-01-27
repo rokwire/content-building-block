@@ -17,6 +17,7 @@ package model
 // AWSConfig wrapper for all S3 configuration keys
 type AWSConfig struct {
 	S3Bucket              string
+	S3BucketAccelerate    bool
 	S3ProfileImagesBucket string
 	S3UsersAudiosBucket   string
 
