@@ -2842,6 +2842,88 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
+  /files/upload:
+    get:
+      tags:
+        - Client
+      summary: Client API that gets presigned URLs for file upload to AWS S3
+      description: |
+        Gets presigned URLs for file upload to AWS S3
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: fileNames
+          in: query
+          description: comma-separated list of names of the files
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: category of files
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /files/download:
+    get:
+      tags:
+        - Client
+      summary: Client API that gets presigned URLs for file download from AWS S3
+      description: |
+        Gets presigned URLs for file download from AWS S3
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: fileNames
+          in: query
+          description: comma-separated list of names of the files
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: category of files
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
   /bbs/image:
     post:
       tags:
