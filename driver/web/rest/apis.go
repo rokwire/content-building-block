@@ -852,6 +852,7 @@ func (h ApisHandler) GetFileContentUploadURLs(claims *tokenauth.Claims, w http.R
 		return
 	}
 
+	entityID := r.URL.Query().Get("entityID")
 	category := r.URL.Query().Get("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
@@ -859,7 +860,7 @@ func (h ApisHandler) GetFileContentUploadURLs(claims *tokenauth.Claims, w http.R
 		return
 	}
 
-	urls, err := h.app.Services.GetFileContentUploadURLs(claims, fileNames, category)
+	urls, err := h.app.Services.GetFileContentUploadURLs(claims, fileNames, entityID, category)
 	if err != nil {
 		log.Printf("Error getting file download stream: %s\n", err)
 		http.Error(w, "Error getting file download stream", http.StatusInternalServerError)
@@ -903,6 +904,7 @@ func (h ApisHandler) GetFileContentDownloadURLs(claims *tokenauth.Claims, w http
 		return
 	}
 
+	entityID := r.URL.Query().Get("entityID")
 	category := r.URL.Query().Get("category")
 	if len(category) <= 0 {
 		log.Print("Missing category\n")
@@ -910,7 +912,7 @@ func (h ApisHandler) GetFileContentDownloadURLs(claims *tokenauth.Claims, w http
 		return
 	}
 
-	urls, err := h.app.Services.GetFileContentUploadURLs(claims, fileNames, category)
+	urls, err := h.app.Services.GetFileContentUploadURLs(claims, fileNames, entityID, category)
 	if err != nil {
 		log.Printf("Error getting file download stream: %s\n", err)
 		http.Error(w, "Error getting file download stream", http.StatusInternalServerError)

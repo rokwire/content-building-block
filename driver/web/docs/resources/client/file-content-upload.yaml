@@ -15,6 +15,14 @@ get:
       explode: false
       schema:
         type: string
+    - name: entityID
+      in: query
+      description: id of entity to associate file
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: string
     - name: category
       in: query
       description: category of files

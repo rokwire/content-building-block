@@ -581,10 +581,14 @@ func (s *servicesImpl) GetFileContentItem(claims *tokenauth.Claims, fileName str
 	return fileData, nil
 }
 
-func (s *servicesImpl) GetFileContentUploadURLs(claims *tokenauth.Claims, fileNames []string, category string) ([]string, error) {
+func (s *servicesImpl) GetFileContentUploadURLs(claims *tokenauth.Claims, fileNames []string, entityID string, category string) ([]string, error) {
 	paths := make([]string, len(fileNames))
 	for i, name := range fileNames {
-		paths[i] = claims.OrgID + "/" + claims.AppID + "/" + category + "/" + name
+		paths[i] = claims.OrgID + "/" + claims.AppID + "/" + category
+		if entityID != "" {
+			paths[i] += "/" + entityID
+		}
+		paths[i] += "/" + name
 	}
 
 	urls, err := s.app.awsAdapter.GetPresignedURLsForUpload(paths)
@@ -595,10 +599,14 @@ func (s *servicesImpl) GetFileContentUploadURLs(claims *tokenauth.Claims, fileNa
 	return urls, nil
 }
 
-func (s *servicesImpl) GetFileContentDownloadURLs(claims *tokenauth.Claims, fileNames []string, category string) ([]string, error) {
+func (s *servicesImpl) GetFileContentDownloadURLs(claims *tokenauth.Claims, fileNames []string, entityID string, category string) ([]string, error) {
 	paths := make([]string, len(fileNames))
 	for i, name := range fileNames {
-		paths[i] = claims.OrgID + "/" + claims.AppID + "/" + category + "/" + name
+		paths[i] = claims.OrgID + "/" + claims.AppID + "/" + category
+		if entityID != "" {
+			paths[i] += "/" + entityID
+		}
+		paths[i] += "/" + name
 	}
 
 	urls, err := s.app.awsAdapter.GetPresignedURLsForDownload(paths)
