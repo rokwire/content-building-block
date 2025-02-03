@@ -77,6 +77,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error initializing service registration manager: %v", err)
 	}
+	//end common
 
 	//mongoDB adapter
 	mongoDBAuth := envLoader.GetAndLogEnvVar(envPrefix+"MONGO_AUTH", true, true)
