@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add CORS support
 
+## [1.9.0] - 2024-12-03
+### Added
+- Add API to get voice record by user ID [#111](https://github.com/rokwire/content-building-block/issues/111)
+
 ## [1.8.0] - 2024-06-26
 ### Added
 - Expose TPS API for adding images [#106](https://github.com/rokwire/content-building-block/issues/106)
