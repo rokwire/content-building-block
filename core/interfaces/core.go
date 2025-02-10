@@ -67,5 +67,7 @@ type Services interface {
 
 	UploadFileContentItem(file io.Reader, claims *tokenauth.Claims, fileName string, category string) error
 	GetFileContentItem(claims *tokenauth.Claims, fileName string, category string) (io.ReadCloser, error)
+	GetFileContentUploadURLs(claims *tokenauth.Claims, fileNames []string, entityID string, category string) ([]string, error)
+	GetFileContentDownloadURLs(claims *tokenauth.Claims, fileNames []string, entityID string, category string) ([]string, error)
 	DeleteFileContentItem(claims *tokenauth.Claims, fileName string, category string) error
 }
