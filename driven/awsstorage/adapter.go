@@ -254,23 +254,24 @@ func (a *Adapter) UploadFile(body io.Reader, path string) (*string, error) {
 }
 
 // GetPresignedURLsForUpload gets a set of presigned URLs for file upload directly to S3 by a client application
-func (a *Adapter) GetPresignedURLsForUpload(paths []string) ([]string, error) {
+func (a *Adapter) GetPresignedURLsForUpload(fileNames, paths []string) (map[string]string, error) {
 	s, err := a.createS3Session(a.config.S3BucketAccelerate)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return nil, err
 	}
 
-	urls := make([]string, len(paths))
+	urls := make(map[string]string)
 	for i, path := range paths {
-		req, _ := s3.New(s).PutObjectRequest(&s3.PutObjectInput{
+		req, _ := s3.New(s).CreateMultipartUploadRequest(&s3.CreateMultipartUploadInput{
 			Bucket: aws.String(a.config.S3Bucket),
 			Key:    aws.String(path),
 		})
-		urls[i], err = req.Presign(time.Duration(a.presignExpirationMinutes) * time.Minute)
+		url, err := req.Presign(time.Duration(a.presignExpirationMinutes) * time.Minute)
 		if err != nil {
 			return nil, err
 		}
+		urls[url] = fileNames[i]
 	}
 	return urls, nil
 }
@@ -305,23 +306,24 @@ func (a *Adapter) DownloadFile(path string) ([]byte, error) {
 }
 
 // GetPresignedURLsForDownload gets a set of presigned URLs for file download directly from S3 by a client application
-func (a *Adapter) GetPresignedURLsForDownload(paths []string) ([]string, error) {
+func (a *Adapter) GetPresignedURLsForDownload(fileNames, paths []string) (map[string]string, error) {
 	s, err := a.createS3Session(a.config.S3BucketAccelerate)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return nil, err
 	}
 
-	urls := make([]string, len(paths))
+	urls := make(map[string]string)
 	for i, path := range paths {
 		req, _ := s3.New(s).GetObjectRequest(&s3.GetObjectInput{
 			Bucket: aws.String(a.config.S3Bucket),
 			Key:    aws.String(path),
 		})
-		urls[i], err = req.Presign(time.Duration(a.presignExpirationMinutes) * time.Minute)
+		url, err := req.Presign(time.Duration(a.presignExpirationMinutes) * time.Minute)
 		if err != nil {
 			return nil, err
 		}
+		urls[url] = fileNames[i]
 	}
 	return urls, nil
 }
