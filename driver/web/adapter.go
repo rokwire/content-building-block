@@ -115,6 +115,7 @@ func (we Adapter) Start() {
 	contentRouter.HandleFunc("/data/{key}", we.coreAuthWrapFunc(we.apisHandler.GetDataContentItem, we.auth.coreAuth.standardAuth)).Methods("GET")
 	contentRouter.HandleFunc("/files", we.coreAuthWrapFunc(we.apisHandler.GetFileContentItem, we.auth.coreAuth.standardAuth)).Methods("GET")
 	contentRouter.HandleFunc("/files/upload", we.coreAuthWrapFunc(we.apisHandler.GetFileContentUploadURLs, we.auth.coreAuth.standardAuth)).Methods("GET")
+	//TODO: add /files/upload/multipart for large file uploads
 	contentRouter.HandleFunc("/files/download", we.coreAuthWrapFunc(we.apisHandler.GetFileContentDownloadURLs, we.auth.coreAuth.standardAuth)).Methods("GET")
 	contentRouter.HandleFunc("/data", we.coreAuthWrapFunc(we.apisHandler.GetDataContentItems, we.auth.coreAuth.standardAuth)).Methods("GET")
 

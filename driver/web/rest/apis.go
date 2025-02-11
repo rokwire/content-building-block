@@ -912,7 +912,7 @@ func (h ApisHandler) GetFileContentDownloadURLs(claims *tokenauth.Claims, w http
 		return
 	}
 
-	urls, err := h.app.Services.GetFileContentUploadURLs(claims, fileNames, entityID, category)
+	urls, err := h.app.Services.GetFileContentDownloadURLs(claims, fileNames, entityID, category)
 	if err != nil {
 		log.Printf("Error getting file download stream: %s\n", err)
 		http.Error(w, "Error getting file download stream", http.StatusInternalServerError)
@@ -921,7 +921,7 @@ func (h ApisHandler) GetFileContentDownloadURLs(claims *tokenauth.Claims, w http
 
 	data, err := json.Marshal(urls)
 	if err != nil {
-		log.Println("Error on marshal of upload urls")
+		log.Println("Error on marshal of download urls")
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}

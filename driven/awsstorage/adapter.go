@@ -263,7 +263,7 @@ func (a *Adapter) GetPresignedURLsForUpload(fileNames, paths []string) (map[stri
 
 	urls := make(map[string]string)
 	for i, path := range paths {
-		req, _ := s3.New(s).CreateMultipartUploadRequest(&s3.CreateMultipartUploadInput{
+		req, _ := s3.New(s).PutObjectRequest(&s3.PutObjectInput{
 			Bucket: aws.String(a.config.S3Bucket),
 			Key:    aws.String(path),
 		})
