@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Add CORS support
+- Support user file uploads to S3 [#114](https://github.com/rokwire/content-building-block/issues/114)
 
 ## [1.9.0] - 2024-12-03
 ### Added

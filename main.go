@@ -91,12 +91,22 @@ func main() {
 
 	// S3 Adapter
 	s3Bucket := envLoader.GetAndLogEnvVar(envPrefix+"S3_BUCKET", true, true)
+	s3BucketAccelerateStr := envLoader.GetAndLogEnvVar(envPrefix+"S3_BUCKET_ACCELERATE", false, false)
+	s3BucketAccelerate := false
+	s3BucketAccelerate, err = strconv.ParseBool(s3BucketAccelerateStr)
+	if err != nil {
+		logger.Warnf("error parsing S3 bucket accelerate: %s - applying default", err.Error())
+	}
+	// only allow S3 transfer accleration on the bucket used for all file types for now
+
 	s3ProfileImagesBucket := envLoader.GetAndLogEnvVar(envPrefix+"S3_PROFILE_IMAGES_BUCKET", true, true)
 	s3UsersAudiosBucket := envLoader.GetAndLogEnvVar(envPrefix+"S3_USERS_AUDIOS_BUCKET", true, true)
 	s3Region := envLoader.GetAndLogEnvVar(envPrefix+"S3_REGION", true, true)
 	awsAccessKeyID := envLoader.GetAndLogEnvVar(envPrefix+"AWS_ACCESS_KEY_ID", true, true)
 	awsSecretAccessKey := envLoader.GetAndLogEnvVar(envPrefix+"AWS_SECRET_ACCESS_KEY", true, true)
+
 	awsConfig := &model.AWSConfig{S3Bucket: s3Bucket,
+		S3BucketAccelerate:    s3BucketAccelerate,
 		S3ProfileImagesBucket: s3ProfileImagesBucket,
 		S3UsersAudiosBucket:   s3UsersAudiosBucket,
 		S3Region:              s3Region, AWSAccessKeyID: awsAccessKeyID, AWSSecretAccessKey: awsSecretAccessKey}
