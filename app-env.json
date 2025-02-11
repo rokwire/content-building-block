@@ -10,6 +10,7 @@
         "CONTENT_MONGO_DATABASE": "<db-name>",
         "CONTENT_MONGO_TIMEOUT": "",
         "CONTENT_S3_BUCKET": "",
+        "CONTENT_S3_BUCKET_ACCELERATE": "false",
         "CONTENT_S3_PROFILE_IMAGES_BUCKET": "",
         "CONTENT_S3_USERS_AUDIOS_BUCKET": "",
         "CONTENT_S3_REGION": "",
