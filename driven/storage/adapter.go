@@ -330,8 +330,11 @@ func (sa *Adapter) FindContentItems(appID *string, orgID string, ids []string, c
 // GetContentItems retrieves all content items
 func (sa *Adapter) GetContentItems(appID *string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
 
-	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+	filter := bson.D{
 		primitive.E{Key: "org_id", Value: orgID}}
+	if appID != nil {
+		filter = append(filter, primitive.E{Key: "app_id", Value: appID})
+	}
 	if len(ids) > 0 {
 		filter = append(filter, primitive.E{Key: "_id", Value: bson.M{"$in": ids}})
 	}
