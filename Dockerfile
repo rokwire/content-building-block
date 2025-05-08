@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine as builder
+FROM golang:1.23-alpine as builder
 
 ENV CGO_ENABLED=1
 
@@ -10,10 +10,10 @@ WORKDIR /content-app
 COPY . .
 RUN make
 
-FROM alpine:3.17.2
+FROM alpine:3.21.3
 
-#we need timezone database
-RUN apk add --no-cache tzdata
+#we need timezone database + certificates
+RUN apk add --no-cache tzdata ca-certificates
 
 RUN apk update && \
     apk upgrade -U && \
