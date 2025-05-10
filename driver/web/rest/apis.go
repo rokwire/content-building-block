@@ -27,7 +27,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
-	"github.com/rokwire/core-auth-library-go/v3/tokenauth"
+	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/tokenauth"
 	"go.mongodb.org/mongo-driver/bson"
 
 	"github.com/gabriel-vasile/mimetype"
@@ -301,8 +301,14 @@ func (h ApisHandler) GetUserVoiceRecord(claims *tokenauth.Claims, w http.Respons
 
 // DeleteVoiceRecord deletes the user voice record
 func (h ApisHandler) DeleteVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	extension := r.URL.Query().Get("extension")
+	if len(extension) <= 0 {
+		log.Print("Missing extension query param\n")
+		http.Error(w, "missing 'extension' query param", http.StatusBadRequest)
+		return
+	}
 
-	err := h.app.Services.DeleteVoiceRecord(claims.Subject)
+	err := h.app.Services.DeleteVoiceRecord(claims.Subject, extension)
 	if err != nil {
 		if err != nil {
 			log.Printf("error on delete AWS voice audio file: %s", err)
@@ -862,7 +868,34 @@ func (h ApisHandler) GetFileContentUploadURLs(claims *tokenauth.Claims, w http.R
 		return
 	}
 
-	fileRefs, err := h.app.Services.GetFileContentUploadURLs(claims, fileNames, entityID, category)
+	handleDuplicateFileNames := true
+	handleDuplicateFileNamesStr := r.URL.Query().Get("handle-duplicate-filenames")
+	if handleDuplicateFileNamesStr != "" {
+		handleDuplicateFileNamesVal, err := strconv.ParseBool(handleDuplicateFileNamesStr)
+		if err == nil {
+			handleDuplicateFileNames = handleDuplicateFileNamesVal
+		}
+	}
+
+	addAppOrgIDToPath := true
+	addAppOrgIDToPathStr := r.URL.Query().Get("add-path-apporg-id")
+	if addAppOrgIDToPathStr != "" {
+		addAppOrgIDToPathVal, err := strconv.ParseBool(addAppOrgIDToPathStr)
+		if err == nil {
+			addAppOrgIDToPath = addAppOrgIDToPathVal
+		}
+	}
+
+	publicRead := true
+	publicReadStr := r.URL.Query().Get("public-read")
+	if publicReadStr != "" {
+		publicReadVal, err := strconv.ParseBool(publicReadStr)
+		if err == nil {
+			publicRead = publicReadVal
+		}
+	}
+
+	fileRefs, err := h.app.Services.GetFileContentUploadURLs(claims, fileNames, entityID, category, addAppOrgIDToPath, handleDuplicateFileNames, publicRead)
 	if err != nil {
 		log.Printf("Error getting file upload references: %s\n", err)
 		http.Error(w, "Error getting file upload references", http.StatusInternalServerError)
@@ -915,7 +948,16 @@ func (h ApisHandler) GetFileContentDownloadURLs(claims *tokenauth.Claims, w http
 		return
 	}
 
-	fileRefs, err := h.app.Services.GetFileContentDownloadURLs(claims, fileKeys, entityID, category)
+	addAppOrgIDToPath := true
+	addAppOrgIDToPathStr := r.URL.Query().Get("add-path-apporg-id")
+	if addAppOrgIDToPathStr != "" {
+		addAppOrgIDToPathVal, err := strconv.ParseBool(addAppOrgIDToPathStr)
+		if err == nil {
+			addAppOrgIDToPath = addAppOrgIDToPathVal
+		}
+	}
+
+	fileRefs, err := h.app.Services.GetFileContentDownloadURLs(claims, fileKeys, entityID, category, addAppOrgIDToPath)
 	if err != nil {
 		log.Printf("Error getting file download references: %s\n", err)
 		http.Error(w, "Error getting file download references", http.StatusInternalServerError)

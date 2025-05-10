@@ -24,7 +24,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/rokwire/logging-library-go/v2/logs"
+	"github.com/rokwire/rokwire-building-block-sdk-go/utils/logging/logs"
 )
 
 type deleteDataLogic struct {
@@ -167,11 +167,14 @@ func (d deleteDataLogic) deleteAppOrgUsersData(appID string, orgID string, accou
 		}
 
 		//delete voice record
-		err = d.awsAdapter.DeleteUserVoiceRecord(accountID)
+		err = d.awsAdapter.DeleteUserVoiceRecord(accountID, ".m4a")
 		if err != nil {
 			d.logger.Debugf("error on delete voice record - %s", err)
+			err = d.awsAdapter.DeleteUserVoiceRecord(accountID, ".wav")
+			if err != nil {
+				d.logger.Debugf("error on delete voice record - %s", err)
+			}
 		}
-
 	}
 }
 
