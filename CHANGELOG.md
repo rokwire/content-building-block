@@ -14,6 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Generate file IDs for S3 file uploads
 - Reintroduce file extensions for S3
 
+## [1.11.0] - 2024-05-08
+### Changed
+- Support Google Trust Services as CA [#118](https://github.com/rokwire/content-building-block/issues/118)
+
+## [1.10.0] - 2025-02-19
+### Changed
+- Updated the go version to 1.23
+### Added
+- Fix get content_items admin api and expose query params for categories and ids [#115](https://github.com/rokwire/content-building-block/issues/115)
+
 ## [1.9.0] - 2024-12-03
 ### Added
 - Add API to get voice record by user ID [#111](https://github.com/rokwire/content-building-block/issues/111)
