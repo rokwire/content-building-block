@@ -1043,6 +1043,8 @@ type getContentItemsRequestBody struct {
 // @Tags Admin
 // @ID AdminGetContentItems
 // @Param all-apps query boolean false "It says if the data is associated with the current app or it is for all the apps within the organization. It is 'false' by default."
+// @Param categories query string false "categories - coma separated list of categories"
+// @Param ids query string false "ids - coma separated list of ids"
 // @Param offset query string false "offset"
 // @Param limit query string false "limit - limit the result"
 // @Param order query string false "order - Possible values: asc, desc. Default: desc"
@@ -1052,6 +1054,18 @@ type getContentItemsRequestBody struct {
 // @Security AdminUserAuth
 // @Router /admin/content_items [get]
 func (h AdminApisHandler) GetContentItems(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	var categories []string
+	catogyValues := r.URL.Query()["categories"]
+	if len(catogyValues) > 0 {
+		categories = strings.Split(catogyValues[0], ",")
+	}
+
+	var ids []string
+	idValues := r.URL.Query()["ids"]
+	if len(idValues) > 0 {
+		ids = strings.Split(idValues[0], ",")
+	}
+
 	//get all-apps param value
 	allApps := false //false by defautl
 	allAppsParam := r.URL.Query().Get("all-apps")
@@ -1083,13 +1097,18 @@ func (h AdminApisHandler) GetContentItems(claims *tokenauth.Claims, w http.Respo
 		order = &orders[0]
 	}
 
-	var item getContentItemsRequestBody
-	bodyErr := json.NewDecoder(r.Body).Decode(&item)
-	if bodyErr != nil {
-		log.Printf("Warning: bad getContentItemsRequestBody request: %s", bodyErr)
+	item := getContentItemsRequestBody{IDs: ids, Categories: categories}
+	if len(ids) == 0 && len(categories) == 0 {
+		bodyErr := json.NewDecoder(r.Body).Decode(&item)
+		if bodyErr != nil {
+			log.Printf("Warning: bad getContentItemsRequestBody request: %s", bodyErr)
+		} else {
+			ids = item.IDs
+			categories = item.Categories
+		}
 	}
 
-	resData, err := h.app.Services.GetContentItems(allApps, claims.AppID, claims.OrgID, item.IDs, item.Categories, offset, limit, order)
+	resData, err := h.app.Services.GetContentItems(allApps, claims.AppID, claims.OrgID, ids, categories, offset, limit, order)
 	if err != nil {
 		log.Printf("Error on cgetting content items - %s\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
