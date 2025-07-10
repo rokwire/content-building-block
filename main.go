@@ -29,9 +29,9 @@ import (
 	"strings"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/rokwire/core-auth-library-go/v2/authservice"
-	"github.com/rokwire/core-auth-library-go/v2/sigauth"
 
+	rokwireAuth "github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth"
+	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/sigauth"
 	"github.com/rokwire/rokwire-building-block-sdk-go/utils/logging/logs"
 )
 
@@ -57,17 +57,17 @@ func main() {
 	//common
 	coreBBHost := getEnvKey("CONTENT_CORE_BB_HOST", true)
 	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
-	authService := auth.Service{
+	authService := rokwireAuth.Service{
 		ServiceID:   serviceID,
 		ServiceHost: contentServiceURL,
 		FirstParty:  true,
 		AuthBaseURL: coreBBHost,
 	}
-	serviceRegLoader, err := auth.NewRemoteServiceRegLoader(&authService, []string{"auth"})
+	serviceRegLoader, err := rokwireAuth.NewRemoteServiceRegLoader(&authService, []string{"auth"})
 	if err != nil {
 		log.Fatalf("Error initializing remote service registration loader: %v", err)
 	}
-	serviceRegManager, err := auth.NewServiceRegManager(&authService, serviceRegLoader)
+	serviceRegManager, err := rokwireAuth.NewServiceRegManager(&authService, serviceRegLoader)
 	if err != nil {
 		log.Fatalf("Error initializing service registration manager: %v", err)
 	}
@@ -124,11 +124,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error initializing signature auth: %v", err)
 	}
-	serviceAccountLoader, err := auth.NewRemoteServiceAccountLoader(&authService, serviceAccountID, signatureAuth)
+	serviceAccountLoader, err := rokwireAuth.NewRemoteServiceAccountLoader(&authService, serviceAccountID, signatureAuth)
 	if err != nil {
 		log.Fatalf("Error initializing remote service account loader: %v", err)
 	}
-	serviceAccountManager, err := auth.NewServiceAccountManager(&authService, serviceAccountLoader)
+	serviceAccountManager, err := rokwireAuth.NewServiceAccountManager(&authService, serviceAccountLoader)
 	if err != nil {
 		log.Fatalf("Error initializing service account manager: %v", err)
 	}
