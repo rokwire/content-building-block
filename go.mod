@@ -6,7 +6,6 @@ require (
 	github.com/PuerkitoBio/goquery v1.10.2
 	github.com/aws/aws-sdk-go v1.55.6
 	github.com/gabriel-vasile/mimetype v1.4.8
-	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/mux v1.8.1
 	github.com/kolesa-team/go-webp v1.0.4
