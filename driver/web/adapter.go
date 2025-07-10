@@ -28,8 +28,7 @@ import (
 	"github.com/rokwire/rokwire-building-block-sdk-go/utils/logging/logs"
 	"gopkg.in/yaml.v2"
 
-	"github.com/rokwire/core-auth-library-go/v2/authservice"
-	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
+	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/tokenauth"
 
 	"github.com/gorilla/mux"
 	httpSwagger "github.com/swaggo/http-swagger"

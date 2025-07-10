@@ -19,9 +19,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/rokwire/core-auth-library-go/v2/authorization"
-	"github.com/rokwire/core-auth-library-go/v2/authservice"
-	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
+	rokwireAuth "github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth"
+	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/authorization"
+	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/tokenauth"
 	"github.com/rokwire/rokwire-building-block-sdk-go/utils/errors"
 	"github.com/rokwire/rokwire-building-block-sdk-go/utils/logging/logs"
 	"github.com/rokwire/rokwire-building-block-sdk-go/utils/logging/logutils"
@@ -42,7 +42,7 @@ type Auth struct {
 }
 
 // NewAuth creates new auth handler
-func NewAuth(app *core.Application, serviceRegManager *auth.ServiceRegManager, logger *logs.Logger) *Auth {
+func NewAuth(app *core.Application, serviceRegManager *rokwireAuth.ServiceRegManager, logger *logs.Logger) *Auth {
 	coreAuth := NewCoreAuth(app, serviceRegManager)
 
 	bbsStandardHandler, err := newBBsStandardHandler(serviceRegManager)
@@ -72,7 +72,7 @@ type CoreAuth struct {
 }
 
 // NewCoreAuth creates new CoreAuth
-func NewCoreAuth(app *core.Application, serviceRegManager *auth.ServiceRegManager) *CoreAuth {
+func NewCoreAuth(app *core.Application, serviceRegManager *rokwireAuth.ServiceRegManager) *CoreAuth {
 	adminPermissionAuth := authorization.NewCasbinAuthorization("driver/web/authorization_model.conf",
 		"driver/web/authorization_policy.csv")
 	tokenAuth, err := tokenauth.NewTokenAuth(true, serviceRegManager, adminPermissionAuth, nil)
@@ -89,7 +89,7 @@ func NewCoreAuth(app *core.Application, serviceRegManager *auth.ServiceRegManage
 }
 
 // BBs auth ///////////
-func newBBsStandardHandler(serviceRegManager *auth.ServiceRegManager) (*tokenauth.StandardHandler, error) {
+func newBBsStandardHandler(serviceRegManager *rokwireAuth.ServiceRegManager) (*tokenauth.StandardHandler, error) {
 	bbsPermissionAuth := authorization.NewCasbinStringAuthorization("driver/web/authorization_bbs_permission_policy.csv")
 	bbsTokenAuth, err := tokenauth.NewTokenAuth(true, serviceRegManager, bbsPermissionAuth, nil)
 	if err != nil {
@@ -113,7 +113,7 @@ func newBBsStandardHandler(serviceRegManager *auth.ServiceRegManager) (*tokenaut
 }
 
 // TPs auth ///////////
-func newTPsStandardHandler(serviceRegManager *auth.ServiceRegManager) (*tokenauth.StandardHandler, error) {
+func newTPsStandardHandler(serviceRegManager *rokwireAuth.ServiceRegManager) (*tokenauth.StandardHandler, error) {
 	tpsPermissionAuth := authorization.NewCasbinStringAuthorization("driver/web/authorization_tps_permission_policy.csv")
 	tpsTokenAuth, err := tokenauth.NewTokenAuth(true, serviceRegManager, tpsPermissionAuth, nil)
 	if err != nil {
