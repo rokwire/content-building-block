@@ -28,9 +28,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/golang-jwt/jwt"
-
 	rokwireAuth "github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth"
+	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/keys"
 	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/sigauth"
 	"github.com/rokwire/rokwire-building-block-sdk-go/utils/logging/logs"
 )
@@ -67,7 +66,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error initializing remote service registration loader: %v", err)
 	}
-	serviceRegManager, err := rokwireAuth.NewServiceRegManager(&authService, serviceRegLoader)
+	serviceRegManager, err := rokwireAuth.NewServiceRegManager(&authService, serviceRegLoader, true)
 	if err != nil {
 		log.Fatalf("Error initializing service registration manager: %v", err)
 	}
@@ -114,13 +113,20 @@ func main() {
 
 	//core adapter
 	serviceAccountID := getEnvKey("CONTENT_SERVICE_ACCOUNT_ID", false)
-	privKeyRaw := getEnvKey("CONTENT_PRIV_KEY", true)
-	privKeyRaw = strings.ReplaceAll(privKeyRaw, "\\n", "\n")
-	privKey, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(privKeyRaw))
-	if err != nil {
-		log.Fatalf("Error parsing priv key: %v", err)
+	authPrivKeyPemString := getEnvKey("CONTENT_PRIV_KEY", false)
+	var authPrivKeyPem string
+	if authPrivKeyPemString != "" {
+		//make it to be a single line - AWS environemnt variable issue
+		authPrivKeyPem = strings.ReplaceAll(authPrivKeyPemString, `\n`, "\n")
+	} else {
+		log.Fatalf("APPOINTMENTS_PRIV_KEY environment variable is not set")
 	}
-	signatureAuth, err := sigauth.NewSignatureAuth(privKey, serviceRegManager, false)
+	alg := keys.RS256
+	privKey, err := keys.NewPrivKey(alg, authPrivKeyPem)
+	if err != nil {
+		logger.Fatalf("Failed to parse auth priv key: %v", err)
+	}
+	signatureAuth, err := sigauth.NewSignatureAuth(privKey, serviceRegManager, false, true)
 	if err != nil {
 		log.Fatalf("Error initializing signature auth: %v", err)
 	}

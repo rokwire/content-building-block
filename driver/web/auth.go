@@ -108,8 +108,8 @@ func newBBsStandardHandler(serviceRegManager *rokwireAuth.ServiceRegManager) (*t
 		return http.StatusOK, nil
 	}
 
-	auth := tokenauth.NewStandardHandler(*bbsTokenAuth, check)
-	return &auth, nil
+	auth := tokenauth.NewStandardHandler(bbsTokenAuth, check)
+	return auth, nil
 }
 
 // TPs auth ///////////
@@ -132,8 +132,8 @@ func newTPsStandardHandler(serviceRegManager *rokwireAuth.ServiceRegManager) (*t
 		return http.StatusOK, nil
 	}
 
-	auth := tokenauth.NewStandardHandler(*tpsTokenAuth, check)
-	return &auth, nil
+	auth := tokenauth.NewStandardHandler(tpsTokenAuth, check)
+	return auth, nil
 }
 
 // PermissionsAuth entity
@@ -145,7 +145,7 @@ type PermissionsAuth struct {
 func (a *PermissionsAuth) start() {}
 
 func (a *PermissionsAuth) check(req *http.Request) (int, *tokenauth.Claims, error) {
-	claims, err := a.tokenAuth.CheckRequestTokens(req)
+	claims, err := a.tokenAuth.CheckRequestToken(req)
 	if err != nil {
 		return http.StatusUnauthorized, nil, errors.WrapErrorAction("typeCheckServicesAuthRequestToken", logutils.TypeToken, nil, err)
 	}
@@ -174,7 +174,7 @@ type UserAuth struct {
 func (a *UserAuth) start() {}
 
 func (a *UserAuth) check(req *http.Request) (int, *tokenauth.Claims, error) {
-	claims, err := a.tokenAuth.CheckRequestTokens(req)
+	claims, err := a.tokenAuth.CheckRequestToken(req)
 	if err != nil {
 		return http.StatusUnauthorized, nil, errors.WrapErrorAction("typeCheckServicesAuthRequestToken", logutils.TypeToken, nil, err)
 	}
@@ -202,7 +202,7 @@ type StandardAuth struct {
 func (a *StandardAuth) start() {}
 
 func (a *StandardAuth) check(req *http.Request) (int, *tokenauth.Claims, error) {
-	claims, err := a.tokenAuth.CheckRequestTokens(req)
+	claims, err := a.tokenAuth.CheckRequestToken(req)
 	if err != nil {
 		return http.StatusUnauthorized, nil, errors.WrapErrorAction("typeCheckServicesAuthRequestToken", logutils.TypeToken, nil, err)
 	}

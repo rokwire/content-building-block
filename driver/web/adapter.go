@@ -28,6 +28,7 @@ import (
 	"github.com/rokwire/rokwire-building-block-sdk-go/utils/logging/logs"
 	"gopkg.in/yaml.v2"
 
+	rokwireAuth "github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth"
 	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/tokenauth"
 
 	"github.com/gorilla/mux"
@@ -288,7 +289,7 @@ func (we Adapter) authWrapFunc(handler bbsAuthFunc, authorization tokenauth.Hand
 }
 
 // NewWebAdapter creates new WebAdapter instance
-func NewWebAdapter(host string, port string, app *core.Application, serviceRegManager *auth.ServiceRegManager, logger *logs.Logger) Adapter {
+func NewWebAdapter(host string, port string, app *core.Application, serviceRegManager *rokwireAuth.ServiceRegManager, logger *logs.Logger) Adapter {
 	yamlDoc, err := loadDocsYAML(host)
 	if err != nil {
 		logger.Fatalf("error parsing docs yaml - %s", err.Error())
