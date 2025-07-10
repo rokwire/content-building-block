@@ -1,6 +1,6 @@
 module content
 
-go 1.24.2
+go 1.24
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.2
@@ -12,8 +12,6 @@ require (
 	github.com/kolesa-team/go-webp v1.0.4
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/rokwire/core-auth-library-go/v2 v2.2.0
-	github.com/rokwire/logging-library-go/v2 v2.3.0
 	github.com/rokwire/rokwire-building-block-sdk-go v1.8.3
 	github.com/swaggo/http-swagger v1.3.4
 	go.mongodb.org/mongo-driver v1.17.3

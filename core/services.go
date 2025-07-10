@@ -604,7 +604,7 @@ func (s *servicesImpl) DeleteFileContentItem(claims *tokenauth.Claims, fileName 
 func checkPermissions(itemPermissions []string, claimsPermissions string) bool {
 	permissions := strings.Split(claimsPermissions, ",")
 	for _, element := range itemPermissions {
-		if authutils.ContainsString(permissions, element) {
+		if rokwireutils.ContainsString(permissions, element) {
 			return true
 		}
 	}
