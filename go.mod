@@ -1,6 +1,6 @@
 module content
 
-go 1.24
+go 1.24.2
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.2
@@ -12,6 +12,7 @@ require (
 	github.com/kolesa-team/go-webp v1.0.4
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/patrickmn/go-cache v2.1.0+incompatible
+	github.com/rokwire/core-auth-library-go/v2 v2.2.0
 	github.com/rokwire/rokwire-building-block-sdk-go v1.8.3
 	github.com/swaggo/http-swagger v1.3.4
 	go.mongodb.org/mongo-driver v1.17.3
@@ -37,8 +38,8 @@ require (
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/mailru/easyjson v0.9.0 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
+	github.com/rokwire/logging-library-go/v2 v2.0.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
-	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/swaggo/files v0.0.0-20220610200504-28940afbdbfe // indirect
 	github.com/swaggo/swag v1.16.4 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect

@@ -72,8 +72,10 @@ github.com/rogpeppe/go-internal v1.11.0 h1:cWPaGQEPrBb5/AsnsZesgZZ9yb1OQ+GOISoDN
 github.com/rogpeppe/go-internal v1.11.0/go.mod h1:ddIwULY96R17DhadqLgMfk9H9tvdUzkipdSkR5nkCZA=
 github.com/rokwire/core-auth-library-go/v2 v2.2.0 h1:AMnYyGBIQMVY2w/+gYeVl05BqpBcjttRKj3urXO2OVo=
 github.com/rokwire/core-auth-library-go/v2 v2.2.0/go.mod h1:0MO0lt55BvVjLmegbbDeTyNQR+UL0wKzOvZvnMtRw0w=
-github.com/rokwire/logging-library-go/v2 v2.3.0 h1:79paNwa+DwvaMNyTqg4emkXbn6xHIkpmDKWfQ2K6FUc=
-github.com/rokwire/logging-library-go/v2 v2.3.0/go.mod h1:ns94awYfgAzKynb/sI4X8TP6UGovfiGHLqVE2wzccR8=
+github.com/rokwire/logging-library-go/v2 v2.0.0 h1:Uo088Hs3G2LjLveyUCOK3ii0AWYYobb+oDs/dH9uCSY=
+github.com/rokwire/logging-library-go/v2 v2.0.0/go.mod h1:6QSqTlk5nNQcZweqg0sLCCoIwpRpTu3AmOi7EJy38Tg=
+github.com/rokwire/rokwire-building-block-sdk-go v1.8.3 h1:QmCGeVBFZ655yrmVzEpb6PbAtLywiais01oaAkxSVGQ=
+github.com/rokwire/rokwire-building-block-sdk-go v1.8.3/go.mod h1:0Nw2kjCxItS/Wm9JIDeiz23dxT1H2m3SisBASmLhXb4=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=
 github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
