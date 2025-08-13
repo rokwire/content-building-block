@@ -29,8 +29,9 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/nfnt/resize"
-	"github.com/rokwire/core-auth-library-go/v2/authutils"
-	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
+
+	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/tokenauth"
+	"github.com/rokwire/rokwire-building-block-sdk-go/utils/rokwireutils"
 	"go.mongodb.org/mongo-driver/bson"
 
 	"github.com/kolesa-team/go-webp/encoder"
@@ -640,7 +641,7 @@ func (s *servicesImpl) DeleteFileContentItem(claims *tokenauth.Claims, fileName 
 func checkPermissions(itemPermissions []string, claimsPermissions string) bool {
 	permissions := strings.Split(claimsPermissions, ",")
 	for _, element := range itemPermissions {
-		if authutils.ContainsString(permissions, element) {
+		if rokwireutils.ContainsString(permissions, element) {
 			return true
 		}
 	}

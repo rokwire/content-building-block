@@ -25,11 +25,11 @@ import (
 	"os"
 	"time"
 
-	"github.com/rokwire/logging-library-go/v2/logs"
+	"github.com/rokwire/rokwire-building-block-sdk-go/utils/logging/logs"
 	"gopkg.in/yaml.v2"
 
-	"github.com/rokwire/core-auth-library-go/v2/authservice"
-	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
+	rokwireAuth "github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth"
+	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/tokenauth"
 
 	"github.com/gorilla/mux"
 	httpSwagger "github.com/swaggo/http-swagger"
@@ -291,7 +291,7 @@ func (we Adapter) authWrapFunc(handler bbsAuthFunc, authorization tokenauth.Hand
 }
 
 // NewWebAdapter creates new WebAdapter instance
-func NewWebAdapter(host string, port string, app *core.Application, serviceRegManager *authservice.ServiceRegManager, logger *logs.Logger) Adapter {
+func NewWebAdapter(host string, port string, app *core.Application, serviceRegManager *rokwireAuth.ServiceRegManager, logger *logs.Logger) Adapter {
 	yamlDoc, err := loadDocsYAML(host)
 	if err != nil {
 		logger.Fatalf("error parsing docs yaml - %s", err.Error())

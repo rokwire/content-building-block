@@ -28,11 +28,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/golang-jwt/jwt"
-	"github.com/rokwire/core-auth-library-go/v2/authservice"
-	"github.com/rokwire/core-auth-library-go/v2/sigauth"
-
-	"github.com/rokwire/logging-library-go/v2/logs"
+	rokwireAuth "github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth"
+	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/keys"
+	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/sigauth"
+	"github.com/rokwire/rokwire-building-block-sdk-go/utils/logging/logs"
 )
 
 var (
@@ -57,17 +56,17 @@ func main() {
 	//common
 	coreBBHost := getEnvKey("CONTENT_CORE_BB_HOST", true)
 	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
-	authService := authservice.AuthService{
+	authService := rokwireAuth.Service{
 		ServiceID:   serviceID,
 		ServiceHost: contentServiceURL,
 		FirstParty:  true,
 		AuthBaseURL: coreBBHost,
 	}
-	serviceRegLoader, err := authservice.NewRemoteServiceRegLoader(&authService, []string{"auth"})
+	serviceRegLoader, err := rokwireAuth.NewRemoteServiceRegLoader(&authService, []string{"auth"})
 	if err != nil {
 		log.Fatalf("Error initializing remote service registration loader: %v", err)
 	}
-	serviceRegManager, err := authservice.NewServiceRegManager(&authService, serviceRegLoader)
+	serviceRegManager, err := rokwireAuth.NewServiceRegManager(&authService, serviceRegLoader, true)
 	if err != nil {
 		log.Fatalf("Error initializing service registration manager: %v", err)
 	}
@@ -123,21 +122,28 @@ func main() {
 
 	//core adapter
 	serviceAccountID := getEnvKey("CONTENT_SERVICE_ACCOUNT_ID", false)
-	privKeyRaw := getEnvKey("CONTENT_PRIV_KEY", true)
-	privKeyRaw = strings.ReplaceAll(privKeyRaw, "\\n", "\n")
-	privKey, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(privKeyRaw))
-	if err != nil {
-		log.Fatalf("Error parsing priv key: %v", err)
+	authPrivKeyPemString := getEnvKey("CONTENT_PRIV_KEY", false)
+	var authPrivKeyPem string
+	if authPrivKeyPemString != "" {
+		//make it to be a single line - AWS environemnt variable issue
+		authPrivKeyPem = strings.ReplaceAll(authPrivKeyPemString, `\n`, "\n")
+	} else {
+		log.Fatalf("APPOINTMENTS_PRIV_KEY environment variable is not set")
 	}
-	signatureAuth, err := sigauth.NewSignatureAuth(privKey, serviceRegManager, false)
+	alg := keys.RS256
+	privKey, err := keys.NewPrivKey(alg, authPrivKeyPem)
+	if err != nil {
+		logger.Fatalf("Failed to parse auth priv key: %v", err)
+	}
+	signatureAuth, err := sigauth.NewSignatureAuth(privKey, serviceRegManager, false, true)
 	if err != nil {
 		log.Fatalf("Error initializing signature auth: %v", err)
 	}
-	serviceAccountLoader, err := authservice.NewRemoteServiceAccountLoader(&authService, serviceAccountID, signatureAuth)
+	serviceAccountLoader, err := rokwireAuth.NewRemoteServiceAccountLoader(&authService, serviceAccountID, signatureAuth)
 	if err != nil {
 		log.Fatalf("Error initializing remote service account loader: %v", err)
 	}
-	serviceAccountManager, err := authservice.NewServiceAccountManager(&authService, serviceAccountLoader)
+	serviceAccountManager, err := rokwireAuth.NewServiceAccountManager(&authService, serviceAccountLoader)
 	if err != nil {
 		log.Fatalf("Error initializing service account manager: %v", err)
 	}
@@ -172,7 +178,7 @@ func getEnvKey(key string, required bool) string {
 		if required {
 			log.Fatal("No provided environment variable for " + key)
 		} else {
-			log.Printf("No provided environment variable for " + key)
+			log.Printf("No provided environment variable for %s", key)
 		}
 	}
 	return value

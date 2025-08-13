@@ -24,9 +24,9 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/rokwire/logging-library-go/v2/errors"
-	"github.com/rokwire/logging-library-go/v2/logs"
-	"github.com/rokwire/logging-library-go/v2/logutils"
+	"github.com/rokwire/rokwire-building-block-sdk-go/utils/errors"
+	"github.com/rokwire/rokwire-building-block-sdk-go/utils/logging/logs"
+	"github.com/rokwire/rokwire-building-block-sdk-go/utils/logging/logutils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -162,11 +162,11 @@ func (sa *Adapter) DeleteStudentGuide(appID string, orgID string, id string) err
 		return err
 	}
 	if result == nil {
-		return fmt.Errorf("result is nil for resource item with id " + id)
+		return fmt.Errorf("result is nil for resource item with id %s", id)
 	}
 	deletedCount := result.DeletedCount
 	if deletedCount != 1 {
-		return fmt.Errorf("error occured while deleting a resource item with id " + id)
+		return fmt.Errorf("error occured while deleting a resource item with id %s", id)
 	}
 	return nil
 
@@ -257,11 +257,11 @@ func (sa *Adapter) DeleteHealthLocation(appID string, orgID string, id string) e
 		return err
 	}
 	if result == nil {
-		return fmt.Errorf("result is nil for resource item with id " + id)
+		return fmt.Errorf("result is nil for resource item with id %s", id)
 	}
 	deletedCount := result.DeletedCount
 	if deletedCount != 1 {
-		return fmt.Errorf("error occured while deleting a resource item with id " + id)
+		return fmt.Errorf("error occured while deleting a resource item with id %s", id)
 	}
 	return nil
 
@@ -330,8 +330,11 @@ func (sa *Adapter) FindContentItems(appID *string, orgID string, ids []string, c
 // GetContentItems retrieves all content items
 func (sa *Adapter) GetContentItems(appID *string, orgID string, ids []string, categoryList []string, offset *int64, limit *int64, order *string) ([]model.ContentItemResponse, error) {
 
-	filter := bson.D{primitive.E{Key: "app_id", Value: appID},
+	filter := bson.D{
 		primitive.E{Key: "org_id", Value: orgID}}
+	if appID != nil {
+		filter = append(filter, primitive.E{Key: "app_id", Value: appID})
+	}
 	if len(ids) > 0 {
 		filter = append(filter, primitive.E{Key: "_id", Value: bson.M{"$in": ids}})
 	}
@@ -433,11 +436,11 @@ func (sa *Adapter) DeleteContentItem(appID *string, orgID string, id string) err
 		return err
 	}
 	if result == nil {
-		return fmt.Errorf("result is nil for resource item with id " + id)
+		return fmt.Errorf("result is nil for resource item with id %s", id)
 	}
 	deletedCount := result.DeletedCount
 	if deletedCount != 1 {
-		return fmt.Errorf("error occured while deleting a resource item with id " + id)
+		return fmt.Errorf("error occured while deleting a resource item with id %s", id)
 	}
 	return nil
 }
@@ -549,11 +552,11 @@ func (sa *Adapter) DeleteDataContentItem(appID *string, orgID string, key string
 		return err
 	}
 	if result == nil {
-		return fmt.Errorf("result is nil for data content item with key " + key)
+		return fmt.Errorf("result is nil for data content item with key %s", key)
 	}
 	deletedCount := result.DeletedCount
 	if deletedCount != 1 {
-		return fmt.Errorf("error occured while deleting a data content item with key " + key)
+		return fmt.Errorf("error occured while deleting a data content item with key %s", key)
 	}
 	return nil
 }
@@ -615,11 +618,11 @@ func (sa *Adapter) DeleteCategory(appID *string, orgID string, name string) erro
 		return err
 	}
 	if result == nil {
-		return fmt.Errorf("result is nil for cateogry with id " + name)
+		return fmt.Errorf("result is nil for cateogry with id %s", name)
 	}
 	deletedCount := result.DeletedCount
 	if deletedCount != 1 {
-		return fmt.Errorf("error occured while deleting a category with id " + name)
+		return fmt.Errorf("error occured while deleting a category with id %s", name)
 	}
 	return nil
 }
