@@ -104,7 +104,7 @@ func (we Adapter) Start() {
 	contentRouter.HandleFunc("/student_guides/{id}", we.coreAuthWrapFunc(we.apisHandler.GetStudentGuide, we.auth.coreAuth.standardAuth)).Methods("GET")
 	contentRouter.HandleFunc("/health_locations", we.coreAuthWrapFunc(we.apisHandler.GetHealthLocations, we.auth.coreAuth.standardAuth)).Methods("GET")
 	contentRouter.HandleFunc("/health_locations/{id}", we.coreAuthWrapFunc(we.apisHandler.GetHealthLocation, we.auth.coreAuth.standardAuth)).Methods("GET")
-	contentRouter.HandleFunc("/content_items", we.coreAuthWrapFunc(we.apisHandler.GetContentItems, we.auth.coreAuth.standardAuth)).Methods("GET")
+	contentRouter.HandleFunc("/content_items", we.coreAuthWrapFunc(we.apisHandler.GetContentItems, we.auth.coreAuth.standardAuth)).Methods("GET", "POST")
 	contentRouter.HandleFunc("/content_items/{id}", we.coreAuthWrapFunc(we.apisHandler.GetContentItem, we.auth.coreAuth.standardAuth)).Methods("GET")
 	contentRouter.HandleFunc("/content_item/categories", we.coreAuthWrapFunc(we.apisHandler.GetContentItemsCategories, we.auth.coreAuth.standardAuth)).Methods("GET")
 	contentRouter.HandleFunc("/image", we.coreAuthWrapFunc(we.apisHandler.UploadImage, we.auth.coreAuth.userAuth)).Methods("POST")
@@ -113,6 +113,7 @@ func (we Adapter) Start() {
 	contentRouter.HandleFunc("/data/{key}", we.coreAuthWrapFunc(we.apisHandler.GetDataContentItem, we.auth.coreAuth.standardAuth)).Methods("GET")
 	contentRouter.HandleFunc("/files", we.coreAuthWrapFunc(we.apisHandler.GetFileContentItem, we.auth.coreAuth.standardAuth)).Methods("GET")
 	contentRouter.HandleFunc("/files/upload", we.coreAuthWrapFunc(we.apisHandler.GetFileContentUploadURLs, we.auth.coreAuth.standardAuth)).Methods("GET")
+	//TODO: add /files/upload/multipart for large file uploads
 	contentRouter.HandleFunc("/files/download", we.coreAuthWrapFunc(we.apisHandler.GetFileContentDownloadURLs, we.auth.coreAuth.standardAuth)).Methods("GET")
 	contentRouter.HandleFunc("/data", we.coreAuthWrapFunc(we.apisHandler.GetDataContentItems, we.auth.coreAuth.standardAuth)).Methods("GET")
 
@@ -305,8 +306,8 @@ func NewWebAdapter(host string, port string, app *core.Application, serviceRegMa
 	tpsApisHandler := rest.NewTPSApisHandler(app)
 	return Adapter{host: host, port: port, cachedYamlDoc: yamlDoc, auth: auth,
 		apisHandler: apisHandler, adminApisHandler: adminApisHandler,
-		bbsApisHandler: bbsApisHandler, tpsApisHandler: tpsApisHandler,
-		app: app, logger: logger}
+		bbsApisHandler: bbsApisHandler, tpsApisHandler: tpsApisHandler, app: app,
+		logger: logger}
 }
 
 // AppListener implements core.ApplicationListener interface

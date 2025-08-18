@@ -7,9 +7,9 @@ get:
   security:
     - bearerAuth: [] 
   parameters:
-    - name: fileNames
+    - name: fileKeys
       in: query
-      description: comma-separated list of names of the files
+      description: comma-separated list of keys of the files
       required: true
       style: form
       explode: false
@@ -31,6 +31,14 @@ get:
       explode: false
       schema:
         type: string
+    - name: add-path-apporg-id
+      in: query
+      description: whether the service should add the app ID and org ID to the URL
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: boolean
   responses:
     200:
       description: Success
@@ -39,7 +47,7 @@ get:
           schema:
             type: array
             items:
-              type: string
+              $ref: "../../schemas/application/FileContentItemRef.yaml"
     400:
       description: Bad request
     401:

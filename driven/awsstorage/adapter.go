@@ -32,22 +32,28 @@ import (
 )
 
 const (
-	defaultPresignExpirationMinutes int = 5
+	defaultUploadPresignExpirationMinutes   int = 5
+	defaultDownloadPresignExpirationMinutes int = 60 * 24
 )
 
 // Adapter implements the Storage interface
 type Adapter struct {
-	config                   *model.AWSConfig
-	presignExpirationMinutes int
+	config *model.AWSConfig
+
+	uploadPresignExpirationMinutes   int
+	downloadPresignExpirationMinutes int
 }
 
 // NewAWSStorageAdapter creates a new storage adapter instance
-func NewAWSStorageAdapter(config *model.AWSConfig, presignExpirationMinutes int) *Adapter {
+func NewAWSStorageAdapter(config *model.AWSConfig, uploadPresignExpirationMinutes int, downloadPresignExpirationMinutes int) *Adapter {
 	//return &Adapter{S3Bucket: S3Bucket, S3Region: S3Region, AWSAccessKeyID: AWSAccessKeyID, AWSSecretAccessKey: AWSSecretAccessKey}
-	if presignExpirationMinutes == 0 {
-		presignExpirationMinutes = defaultPresignExpirationMinutes
+	if uploadPresignExpirationMinutes == 0 {
+		uploadPresignExpirationMinutes = defaultUploadPresignExpirationMinutes
 	}
-	return &Adapter{config: config, presignExpirationMinutes: presignExpirationMinutes}
+	if downloadPresignExpirationMinutes == 0 {
+		downloadPresignExpirationMinutes = defaultDownloadPresignExpirationMinutes
+	}
+	return &Adapter{config: config, uploadPresignExpirationMinutes: uploadPresignExpirationMinutes, downloadPresignExpirationMinutes: downloadPresignExpirationMinutes}
 }
 
 // LoadImage loads image at specific path
@@ -199,14 +205,14 @@ func (a *Adapter) LoadUserVoiceRecord(accountID string) ([]byte, error) {
 }
 
 // DeleteUserVoiceRecord deletes the voice record for the user
-func (a *Adapter) DeleteUserVoiceRecord(accountID string) error {
+func (a *Adapter) DeleteUserVoiceRecord(accountID string, extension string) error {
 	s, err := a.createS3Session(false)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return err
 	}
 
-	key := fmt.Sprintf("names-records/%s.m4a", accountID)
+	key := fmt.Sprintf("names-records/%s%s", accountID, extension)
 
 	session := s3.New(s)
 	_, err = session.DeleteObject(&s3.DeleteObjectInput{
@@ -254,25 +260,32 @@ func (a *Adapter) UploadFile(body io.Reader, path string) (*string, error) {
 }
 
 // GetPresignedURLsForUpload gets a set of presigned URLs for file upload directly to S3 by a client application
-func (a *Adapter) GetPresignedURLsForUpload(paths []string) ([]string, error) {
+func (a *Adapter) GetPresignedURLsForUpload(fileKeys, paths []string, publicRead bool) ([]model.FileContentItemRef, error) {
 	s, err := a.createS3Session(a.config.S3BucketAccelerate)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return nil, err
 	}
 
-	urls := make([]string, len(paths))
+	var acl *string
+	if publicRead {
+		acl = aws.String("public-read")
+	}
+
+	refs := make([]model.FileContentItemRef, len(paths))
 	for i, path := range paths {
 		req, _ := s3.New(s).PutObjectRequest(&s3.PutObjectInput{
 			Bucket: aws.String(a.config.S3Bucket),
 			Key:    aws.String(path),
+			ACL:    acl,
 		})
-		urls[i], err = req.Presign(time.Duration(a.presignExpirationMinutes) * time.Minute)
+		url, err := req.Presign(time.Duration(a.uploadPresignExpirationMinutes) * time.Minute)
 		if err != nil {
 			return nil, err
 		}
+		refs[i] = model.FileContentItemRef{Key: fileKeys[i], URL: url}
 	}
-	return urls, nil
+	return refs, nil
 }
 
 // DownloadFile loads a file at a specific path
@@ -305,25 +318,26 @@ func (a *Adapter) DownloadFile(path string) ([]byte, error) {
 }
 
 // GetPresignedURLsForDownload gets a set of presigned URLs for file download directly from S3 by a client application
-func (a *Adapter) GetPresignedURLsForDownload(paths []string) ([]string, error) {
+func (a *Adapter) GetPresignedURLsForDownload(fileKeys, paths []string) ([]model.FileContentItemRef, error) {
 	s, err := a.createS3Session(a.config.S3BucketAccelerate)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return nil, err
 	}
 
-	urls := make([]string, len(paths))
+	refs := make([]model.FileContentItemRef, len(paths))
 	for i, path := range paths {
 		req, _ := s3.New(s).GetObjectRequest(&s3.GetObjectInput{
 			Bucket: aws.String(a.config.S3Bucket),
 			Key:    aws.String(path),
 		})
-		urls[i], err = req.Presign(time.Duration(a.presignExpirationMinutes) * time.Minute)
+		url, err := req.Presign(time.Duration(a.downloadPresignExpirationMinutes) * time.Minute)
 		if err != nil {
 			return nil, err
 		}
+		refs[i] = model.FileContentItemRef{Key: fileKeys[i], URL: url}
 	}
-	return urls, nil
+	return refs, nil
 }
 
 // StreamDownloadFile streams a file downlod from S3

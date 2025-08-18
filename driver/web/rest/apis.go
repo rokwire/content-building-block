@@ -301,8 +301,14 @@ func (h ApisHandler) GetUserVoiceRecord(claims *tokenauth.Claims, w http.Respons
 
 // DeleteVoiceRecord deletes the user voice record
 func (h ApisHandler) DeleteVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	extension := r.URL.Query().Get("extension")
+	if len(extension) <= 0 {
+		log.Print("Missing extension query param\n")
+		http.Error(w, "missing 'extension' query param", http.StatusBadRequest)
+		return
+	}
 
-	err := h.app.Services.DeleteVoiceRecord(claims.Subject)
+	err := h.app.Services.DeleteVoiceRecord(claims.Subject, extension)
 	if err != nil {
 		if err != nil {
 			log.Printf("error on delete AWS voice audio file: %s", err)
@@ -476,6 +482,7 @@ func (h ApisHandler) GetHealthLocation(claims *tokenauth.Claims, w http.Response
 // @Success 200 {array} model.ContentItem
 // @Security UserAuth
 // @Router /content_items [get]
+// @Router /content_items [post]
 func (h ApisHandler) GetContentItems(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	//get all-apps param value
 	allApps := false //false by defautl
@@ -833,6 +840,7 @@ func (h ApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Respons
 // @ID GetFileContentUploadURLs
 // @Param fileNames body string false "fileNames - comma-separated list of file names"
 // @Param category body string false "category - category of file content item"
+// @Param entityID body string false "category - id of entity file content item belongs to"
 // @Success 200
 // @Security UserAuth
 // @Router /files/upload [get]
@@ -860,16 +868,43 @@ func (h ApisHandler) GetFileContentUploadURLs(claims *tokenauth.Claims, w http.R
 		return
 	}
 
-	urls, err := h.app.Services.GetFileContentUploadURLs(claims, fileNames, entityID, category)
+	handleDuplicateFileNames := true
+	handleDuplicateFileNamesStr := r.URL.Query().Get("handle-duplicate-filenames")
+	if handleDuplicateFileNamesStr != "" {
+		handleDuplicateFileNamesVal, err := strconv.ParseBool(handleDuplicateFileNamesStr)
+		if err == nil {
+			handleDuplicateFileNames = handleDuplicateFileNamesVal
+		}
+	}
+
+	addAppOrgIDToPath := true
+	addAppOrgIDToPathStr := r.URL.Query().Get("add-path-apporg-id")
+	if addAppOrgIDToPathStr != "" {
+		addAppOrgIDToPathVal, err := strconv.ParseBool(addAppOrgIDToPathStr)
+		if err == nil {
+			addAppOrgIDToPath = addAppOrgIDToPathVal
+		}
+	}
+
+	publicRead := true
+	publicReadStr := r.URL.Query().Get("public-read")
+	if publicReadStr != "" {
+		publicReadVal, err := strconv.ParseBool(publicReadStr)
+		if err == nil {
+			publicRead = publicReadVal
+		}
+	}
+
+	fileRefs, err := h.app.Services.GetFileContentUploadURLs(claims, fileNames, entityID, category, addAppOrgIDToPath, handleDuplicateFileNames, publicRead)
 	if err != nil {
-		log.Printf("Error getting file download stream: %s\n", err)
-		http.Error(w, "Error getting file download stream", http.StatusInternalServerError)
+		log.Printf("Error getting file upload references: %s\n", err)
+		http.Error(w, "Error getting file upload references", http.StatusInternalServerError)
 		return
 	}
 
-	data, err := json.Marshal(urls)
+	data, err := json.Marshal(fileRefs)
 	if err != nil {
-		log.Println("Error on marshal of upload urls")
+		log.Println("Error on marshal of file upload references")
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
@@ -885,22 +920,23 @@ func (h ApisHandler) GetFileContentUploadURLs(claims *tokenauth.Claims, w http.R
 // @ID GetFileContentDownloadURLs
 // @Param fileNames body string false "fileNames - comma-separated list of file names"
 // @Param category body string false "category - category of file content item"
+// @Param entityID body string false "category - id of entity file content item belongs to"
 // @Success 200
 // @Security UserAuth
 // @Router /files/download [get]
 func (h ApisHandler) GetFileContentDownloadURLs(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 
-	fileNamesStr := r.URL.Query().Get("fileNames")
-	if len(fileNamesStr) <= 0 {
-		log.Print("Missing file names query param\n")
-		http.Error(w, "missing 'fileNames' query param", http.StatusBadRequest)
+	fileKeysStr := r.URL.Query().Get("fileKeys")
+	if len(fileKeysStr) <= 0 {
+		log.Print("Missing file keys query param\n")
+		http.Error(w, "missing 'fileKeys' query param", http.StatusBadRequest)
 		return
 	}
 
-	fileNames := strings.Split(fileNamesStr, ",")
-	if len(fileNames) <= 0 {
-		log.Print("Missing file names\n")
-		http.Error(w, "missing file names", http.StatusBadRequest)
+	fileKeys := strings.Split(fileKeysStr, ",")
+	if len(fileKeys) <= 0 {
+		log.Print("Missing file keys\n")
+		http.Error(w, "missing file keys", http.StatusBadRequest)
 		return
 	}
 
@@ -912,16 +948,25 @@ func (h ApisHandler) GetFileContentDownloadURLs(claims *tokenauth.Claims, w http
 		return
 	}
 
-	urls, err := h.app.Services.GetFileContentUploadURLs(claims, fileNames, entityID, category)
+	addAppOrgIDToPath := true
+	addAppOrgIDToPathStr := r.URL.Query().Get("add-path-apporg-id")
+	if addAppOrgIDToPathStr != "" {
+		addAppOrgIDToPathVal, err := strconv.ParseBool(addAppOrgIDToPathStr)
+		if err == nil {
+			addAppOrgIDToPath = addAppOrgIDToPathVal
+		}
+	}
+
+	fileRefs, err := h.app.Services.GetFileContentDownloadURLs(claims, fileKeys, entityID, category, addAppOrgIDToPath)
 	if err != nil {
-		log.Printf("Error getting file download stream: %s\n", err)
-		http.Error(w, "Error getting file download stream", http.StatusInternalServerError)
+		log.Printf("Error getting file download references: %s\n", err)
+		http.Error(w, "Error getting file download references", http.StatusInternalServerError)
 		return
 	}
 
-	data, err := json.Marshal(urls)
+	data, err := json.Marshal(fileRefs)
 	if err != nil {
-		log.Println("Error on marshal of upload urls")
+		log.Println("Error on marshal of file download references")
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
