@@ -301,14 +301,7 @@ func (h ApisHandler) GetUserVoiceRecord(claims *tokenauth.Claims, w http.Respons
 
 // DeleteVoiceRecord deletes the user voice record
 func (h ApisHandler) DeleteVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	extension := r.URL.Query().Get("extension")
-	if len(extension) <= 0 {
-		log.Print("Missing extension query param\n")
-		http.Error(w, "missing 'extension' query param", http.StatusBadRequest)
-		return
-	}
-
-	err := h.app.Services.DeleteVoiceRecord(claims.Subject, extension)
+	err := h.app.Services.DeleteVoiceRecord(claims.Subject)
 	if err != nil {
 		if err != nil {
 			log.Printf("error on delete AWS voice audio file: %s", err)

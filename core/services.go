@@ -383,8 +383,8 @@ func (s *servicesImpl) GetVoiceRecord(userID string) ([]byte, error) {
 	return fileContent, nil
 }
 
-func (s *servicesImpl) DeleteVoiceRecord(userID string, extension string) error {
-	err := s.app.awsAdapter.DeleteUserVoiceRecord(userID, extension)
+func (s *servicesImpl) DeleteVoiceRecord(userID string) error {
+	err := s.app.awsAdapter.DeleteUserVoiceRecord(userID)
 	if err != nil {
 		return err
 	}

@@ -50,7 +50,7 @@ type Services interface {
 
 	UploadVoiceRecord(userID string, bytes []byte) error
 	GetVoiceRecord(userID string) ([]byte, error)
-	DeleteVoiceRecord(userID string, extension string) error
+	DeleteVoiceRecord(userID string) error
 
 	GetTwitterPosts(userID string, twitterQueryParams string, force bool) (map[string]interface{}, error)
 

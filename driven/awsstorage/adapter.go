@@ -205,14 +205,14 @@ func (a *Adapter) LoadUserVoiceRecord(accountID string) ([]byte, error) {
 }
 
 // DeleteUserVoiceRecord deletes the voice record for the user
-func (a *Adapter) DeleteUserVoiceRecord(accountID string, extension string) error {
+func (a *Adapter) DeleteUserVoiceRecord(accountID string) error {
 	s, err := a.createS3Session(false)
 	if err != nil {
 		log.Printf("Could not create S3 session")
 		return err
 	}
 
-	key := fmt.Sprintf("names-records/%s%s", accountID, extension)
+	key := fmt.Sprintf("names-records/%s.m4a", accountID)
 
 	session := s3.New(s)
 	_, err = session.DeleteObject(&s3.DeleteObjectInput{
