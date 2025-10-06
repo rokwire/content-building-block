@@ -657,7 +657,7 @@ func (sa *Adapter) StoreMultiTenancyData(appID string, orgID string) error {
 }
 
 // CreateMetaData creates meta_data object
-func (sa *Adapter) CreateMetaData() (*model.MetaData, error) {
+func (sa *Adapter) CreateMetaData(key string, value map[string]interface{}) (*model.MetaData, error) {
 	return nil, nil
 }
 

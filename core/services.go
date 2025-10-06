@@ -431,8 +431,8 @@ func (s *servicesImpl) GetDataContentItems(claims *tokenauth.Claims, category st
 	return item, nil
 }
 
-func (s *servicesImpl) CreateMetaData() (*model.MetaData, error) {
-	metaData, err := s.app.storage.CreateMetaData()
+func (s *servicesImpl) CreateMetaData(key string, value map[string]interface{}) (*model.MetaData, error) {
+	metaData, err := s.app.storage.CreateMetaData(key, value)
 	if err != nil {
 		return nil, err
 	}
