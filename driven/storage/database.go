@@ -40,6 +40,7 @@ type database struct {
 	contentItems     *collectionWrapper
 	dataContentItems *collectionWrapper
 	categories       *collectionWrapper
+	metaData         *collectionWrapper
 
 	logger *logs.Logger
 }
@@ -98,6 +99,12 @@ func (m *database) start() error {
 		return err
 	}
 
+	metaData := &collectionWrapper{database: m, coll: db.Collection("meta_data")}
+	err = m.applyMetaDataChecks(metaData)
+	if err != nil {
+		return err
+	}
+
 	//asign the db, db client and the collections
 	m.db = db
 	m.dbClient = client
@@ -107,6 +114,7 @@ func (m *database) start() error {
 	m.contentItems = contentItems
 	m.dataContentItems = dataContentItems
 	m.categories = categories
+	m.metaData = metaData
 
 	return nil
 }
@@ -188,6 +196,18 @@ func (m *database) applyCategoriesChecks(categories *collectionWrapper) error {
 	}
 
 	log.Println("categories checks passed")
+	return nil
+}
+
+func (m *database) applyMetaDataChecks(metaData *collectionWrapper) error {
+	log.Println("apply meta_data checks.....")
+	//Add org_id + app_id index
+	err := metaData.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1},
+		primitive.E{Key: "app_id", Value: 1}}, false)
+	if err != nil {
+		return err
+	}
+	log.Println("meta_data checks passed")
 	return nil
 }
 
