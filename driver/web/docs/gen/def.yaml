@@ -2878,6 +2878,37 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
+  '/meta_data/{key}':
+    get:
+      tags:
+        - Client
+      summary: Retrieves a health location by id
+      description: |
+        Retrieves a health location by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: key
+          in: path
+          description: the key of the meta_data
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetaData'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
   /bbs/image:
     post:
       tags:

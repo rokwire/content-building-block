@@ -112,7 +112,9 @@ paths:
   /files:
     $ref: "./resources/client/file-content-items.yaml"  
   /meta_data:
-    $ref: "./resources/client/meta-data.yaml"     
+    $ref: "./resources/client/meta-data.yaml"    
+  /meta_data/{key}:
+    $ref: "./resources/client/meta-data-id.yaml"      
 
  #BBs
   /bbs/image:

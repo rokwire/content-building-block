@@ -1,17 +1,20 @@
-post:
+get:
   tags:
-    - Client
-  summary: Create meta data
+  - Client
+  summary: Retrieves a health location by id
   description: |
-    Create meta data
+    Retrieves a health location by id
   security:
     - bearerAuth: []
-  requestBody:
-    required: true
-    content:
-      application/json:
-        schema:
-          $ref: "../../schemas/apis/client/meta-data/request/Request.yaml"
+  parameters:
+    - name: key
+      in: path
+      description: the key of the meta_data
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
   responses:
     200:
       description: Success
