@@ -439,6 +439,14 @@ func (s *servicesImpl) CreateMetaData(key string, value map[string]interface{}) 
 	return metaData, nil
 }
 
+func (s *servicesImpl) GetMetaData(key *string) (*model.MetaData, error) {
+	item, err := s.app.storage.FindMetaData(key)
+	if err != nil {
+		return nil, err
+	}
+	return item, nil
+}
+
 func (s *servicesImpl) CreateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error) {
 
 	category, err := s.app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category)

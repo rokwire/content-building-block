@@ -675,6 +675,18 @@ func (sa *Adapter) CreateMetaData(key string, value map[string]interface{}) (*mo
 	return &item, nil
 }
 
+// FindMetaData find meta_data object
+func (sa *Adapter) FindMetaData(key *string) (*model.MetaData, error) {
+	filter := bson.D{primitive.E{Key: "key", Value: key}}
+
+	var result *model.MetaData
+	err := sa.db.metaData.FindOne(sa.context, filter, &result, nil)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 func (sa *Adapter) abortTransaction(sessionContext mongo.SessionContext) {
 	err := sessionContext.AbortTransaction(sessionContext)
 	if err != nil {
