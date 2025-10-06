@@ -658,7 +658,21 @@ func (sa *Adapter) StoreMultiTenancyData(appID string, orgID string) error {
 
 // CreateMetaData creates meta_data object
 func (sa *Adapter) CreateMetaData(key string, value map[string]interface{}) (*model.MetaData, error) {
-	return nil, nil
+	now := time.Now()
+	id, _ := uuid.NewUUID()
+	item := model.MetaData{
+		ID:          id.String(),
+		Key:         key,
+		Value:       value,
+		DateCreated: now,
+	}
+
+	_, err := sa.db.metaData.InsertOne(sa.context, &item)
+	if err != nil {
+		return nil, err
+	}
+
+	return &item, nil
 }
 
 func (sa *Adapter) abortTransaction(sessionContext mongo.SessionContext) {
