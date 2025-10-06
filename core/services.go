@@ -431,7 +431,7 @@ func (s *servicesImpl) GetDataContentItems(claims *tokenauth.Claims, category st
 	return item, nil
 }
 
-func (s *servicesImpl) CreateMetaData(key string, value map[string]interface{}) (*model.MetaData, error) {
+func (s *servicesImpl) CreateOrUpdateMetaData(key string, value map[string]interface{}) (*model.MetaData, error) {
 	var metaData *model.MetaData
 
 	findMetaData, err := s.app.storage.FindMetaData(&key)

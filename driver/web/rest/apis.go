@@ -864,12 +864,12 @@ func (h ApisHandler) GetDataContentItems(claims *tokenauth.Claims, w http.Respon
 	w.Write(data)
 }
 
-type createMetaDataRequestBody struct {
+type createOrUpdateMetaDataRequestBody struct {
 	Key   string                 `json:"key"`
 	Value map[string]interface{} `json:"value"`
 } // @name createMetaDataRequestBody
 
-// CreateMetaData creates meta data object
+// CreateOrUpdateMetaData creates or updates meta data object
 // @Descriptions Creates meta data object
 // @Tags Client
 // @ID creates meta data object
@@ -879,8 +879,8 @@ type createMetaDataRequestBody struct {
 // @Success 200
 // @Security UserAuth
 // @Router /meta-data [post]
-func (h ApisHandler) CreateMetaData(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	var body createMetaDataRequestBody
+func (h ApisHandler) CreateOrUpdateMetaData(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	var body createOrUpdateMetaDataRequestBody
 	bodyData, _ := ioutil.ReadAll(r.Body)
 	if len(bodyData) > 0 {
 		bodyErr := json.Unmarshal(bodyData, &body)
@@ -889,7 +889,7 @@ func (h ApisHandler) CreateMetaData(claims *tokenauth.Claims, w http.ResponseWri
 		}
 	}
 
-	resData, err := h.app.Services.CreateMetaData(body.Key, body.Value)
+	resData, err := h.app.Services.CreateOrUpdateMetaData(body.Key, body.Value)
 	if err != nil {
 		log.Printf("Error on creating  meta- data content items with category")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
