@@ -682,9 +682,28 @@ func (sa *Adapter) FindMetaData(key *string) (*model.MetaData, error) {
 	var result *model.MetaData
 	err := sa.db.metaData.FindOne(sa.context, filter, &result, nil)
 	if err != nil {
-		return nil, err
+		return nil, nil
 	}
 	return result, nil
+}
+
+// UpdateMetaData updates a  metaData
+func (sa *Adapter) UpdateMetaData(item *model.MetaData, value map[string]interface{}) (*model.MetaData, error) {
+	filter := bson.D{
+		primitive.E{Key: "key", Value: item.Key}}
+	update := bson.D{
+		primitive.E{Key: "$set", Value: bson.D{
+			primitive.E{Key: "value", Value: value},
+			primitive.E{Key: "date_updated", Value: time.Now().UTC()},
+		}},
+	}
+	_, err := sa.db.metaData.UpdateOne(sa.context, filter, update, nil)
+	if err != nil {
+		log.Printf("error updating category: %s", err)
+		return nil, err
+	}
+
+	return item, nil
 }
 
 func (sa *Adapter) abortTransaction(sessionContext mongo.SessionContext) {

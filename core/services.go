@@ -432,10 +432,24 @@ func (s *servicesImpl) GetDataContentItems(claims *tokenauth.Claims, category st
 }
 
 func (s *servicesImpl) CreateMetaData(key string, value map[string]interface{}) (*model.MetaData, error) {
-	metaData, err := s.app.storage.CreateMetaData(key, value)
+	var metaData *model.MetaData
+
+	findMetaData, err := s.app.storage.FindMetaData(&key)
 	if err != nil {
 		return nil, err
 	}
+	if findMetaData == nil {
+		metaData, err = s.app.storage.CreateMetaData(key, value)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		metaData, err = s.app.storage.UpdateMetaData(findMetaData, value)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	return metaData, nil
 }
 
