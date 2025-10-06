@@ -38,3 +38,12 @@ type Category struct {
 	DateUpdated *time.Time `json:"date_updated,omitempty" bson:"date_updated,omitempty"`
 	Permissions []string   `json:"permissions" bson:"permissions"`
 } // @name Category
+
+// Metadata defines a meta_data object
+type MetaData struct {
+	ID          string                 `json:"id" bson:"_id"`
+	Key         string                 `json:"key" bson:"key"`
+	Value       map[string]interface{} `json:"value" bson:"value"`
+	DateCreated time.Time              `json:"date_created" bson:"date_created"`
+	DateUpdated *time.Time             `json:"date_updated,omitempty" bson:"date_updated,omitempty"`
+} // @name MetaData

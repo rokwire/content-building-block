@@ -431,6 +431,14 @@ func (s *servicesImpl) GetDataContentItems(claims *tokenauth.Claims, category st
 	return item, nil
 }
 
+func (s *servicesImpl) CreateMetaData() (*model.MetaData, error) {
+	metaData, err := s.app.storage.CreateMetaData()
+	if err != nil {
+		return nil, err
+	}
+	return metaData, nil
+}
+
 func (s *servicesImpl) CreateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error) {
 
 	category, err := s.app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category)

@@ -864,6 +864,37 @@ func (h ApisHandler) GetDataContentItems(claims *tokenauth.Claims, w http.Respon
 	w.Write(data)
 }
 
+// CreateMetaData creates meta data object
+// @Descriptions Creates meta data object
+// @Tags Client
+// @ID creates meta data object
+// @Param data body createMetaData  "body json including key (string) and map[string]interface value"
+// @Accept json
+// @Produce json
+// @Success 200
+// @Security UserAuth
+// @Router /meta-data [post]
+func (h ApisHandler) CreateMetaData(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	resData, err := h.app.Services.CreateMetaData()
+	if err != nil {
+		log.Printf("Error on creating  meta- data content items with category")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal of data content type")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 func intPostValueFromString(stringValue string) int {
 	var value int
 	if len(stringValue) > 0 {

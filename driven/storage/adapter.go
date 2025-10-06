@@ -656,6 +656,11 @@ func (sa *Adapter) StoreMultiTenancyData(appID string, orgID string) error {
 	return nil
 }
 
+// CreateMetaData creates meta_data object
+func (sa *Adapter) CreateMetaData() (*model.MetaData, error) {
+	return nil, nil
+}
+
 func (sa *Adapter) abortTransaction(sessionContext mongo.SessionContext) {
 	err := sessionContext.AbortTransaction(sessionContext)
 	if err != nil {
