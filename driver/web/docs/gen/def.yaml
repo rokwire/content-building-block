@@ -2842,6 +2842,42 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
+  /meta_data:
+    post:
+      tags:
+        - Client
+      summary: Create meta data
+      description: |
+        Create meta data
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - key
+                - data
+              type: object
+              properties:
+                key:
+                  type: string
+                value:
+                  type: object
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetaData'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
   /bbs/image:
     post:
       tags:
@@ -2985,3 +3021,19 @@ components:
           type: integer
         quality:
           type: integer
+    MetaData:
+      required:
+        - key
+        - data
+      type: object
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        value:
+          type: object
+        date_created:
+          type: string
+        date_updated:
+          type: string

@@ -110,7 +110,9 @@ paths:
   /data/{key}:
     $ref: "./resources/client/data-content-itemsids.yaml" 
   /files:
-    $ref: "./resources/client/file-content-items.yaml"     
+    $ref: "./resources/client/file-content-items.yaml"  
+  /meta_data:
+    $ref: "./resources/client/meta-data.yaml"     
 
  #BBs
   /bbs/image:

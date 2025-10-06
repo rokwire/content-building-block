@@ -3,3 +3,5 @@ Reward:
   $ref: "./application/ContentItem.yaml"
 RewardClaim:
   $ref: "./application/ImageSpec.yaml"
+MetaData:
+  $ref: "./application/MetaData.yaml"  
