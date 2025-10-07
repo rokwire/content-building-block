@@ -39,7 +39,7 @@ type Category struct {
 	Permissions []string   `json:"permissions" bson:"permissions"`
 } // @name Category
 
-// Metadata defines a meta_data object
+// MetaData defines a meta_data object
 type MetaData struct {
 	ID          string                 `json:"id" bson:"_id"`
 	Key         string                 `json:"key" bson:"key"`
