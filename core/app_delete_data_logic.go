@@ -171,7 +171,6 @@ func (d deleteDataLogic) deleteAppOrgUsersData(appID string, orgID string, accou
 		if err != nil {
 			d.logger.Debugf("error on delete voice record - %s", err)
 		}
-
 	}
 }
 

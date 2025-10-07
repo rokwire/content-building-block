@@ -1,10 +1,10 @@
-// Copyright 2022 Board of Trustees of the University of Illinois.
+// Copyright 2025 Board of Trustees of the University of Illinois.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,8 +14,8 @@
 
 package model
 
-// Config the main config structure
-type Config struct {
-	CoreBBHost        string
-	ContentServiceURL string
+// FileContentItemRef represents a reference to a file that is located in external storage at URL
+type FileContentItemRef struct {
+	Key string `json:"key"`
+	URL string `json:"url"`
 }
