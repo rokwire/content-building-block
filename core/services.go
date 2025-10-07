@@ -460,6 +460,15 @@ func (s *servicesImpl) GetMetaData(key *string) (*model.MetaData, error) {
 	return item, nil
 }
 
+func (s *servicesImpl) DeleteMetaData(key string) error {
+	err := s.app.storage.DeleteMetaData(key)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (s *servicesImpl) CreateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error) {
 
 	category, err := s.app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category)

@@ -1086,6 +1086,24 @@ func (h ApisHandler) GetMetaData(claims *tokenauth.Claims, w http.ResponseWriter
 	w.Write(data)
 }
 
+// DeleteMetaData deletes meta data by key
+func (h ApisHandler) DeleteMetaData(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key := vars["key"]
+
+	err := h.app.Services.DeleteMetaData(key)
+	if err != nil {
+		if err != nil {
+			log.Printf("error on delete meta data: %s", err)
+		}
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Success"))
+}
+
 func intPostValueFromString(stringValue string) int {
 	var value int
 	if len(stringValue) > 0 {

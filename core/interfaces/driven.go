@@ -61,6 +61,7 @@ type Storage interface {
 	CreateMetaData(key string, value map[string]interface{}) (*model.MetaData, error)
 	FindMetaData(key *string) (*model.MetaData, error)
 	UpdateMetaData(item *model.MetaData, value map[string]interface{}) (*model.MetaData, error)
+	DeleteMetaData(key string) error
 }
 
 // Core BB interface

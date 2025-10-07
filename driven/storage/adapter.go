@@ -687,6 +687,12 @@ func (sa *Adapter) FindMetaData(key *string) (*model.MetaData, error) {
 	return result, nil
 }
 
+// DeleteMetaData deletes meta_data object
+func (sa *Adapter) DeleteMetaData(key string) error {
+
+	return nil
+}
+
 // UpdateMetaData updates a  metaData
 func (sa *Adapter) UpdateMetaData(item *model.MetaData, value map[string]interface{}) (*model.MetaData, error) {
 	filter := bson.D{

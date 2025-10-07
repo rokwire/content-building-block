@@ -118,6 +118,7 @@ func (we Adapter) Start() {
 	contentRouter.HandleFunc("/data", we.coreAuthWrapFunc(we.apisHandler.GetDataContentItems, we.auth.coreAuth.standardAuth)).Methods("GET")
 	contentRouter.HandleFunc("/meta-data", we.coreAuthWrapFunc(we.apisHandler.CreateOrUpdateMetaData, we.auth.coreAuth.standardAuth)).Methods("POST")
 	contentRouter.HandleFunc("/meta-data/{key}", we.coreAuthWrapFunc(we.apisHandler.GetMetaData, we.auth.coreAuth.standardAuth)).Methods("GET")
+	contentRouter.HandleFunc("/meta-data/{key}", we.coreAuthWrapFunc(we.apisHandler.DeleteMetaData, we.auth.coreAuth.standardAuth)).Methods("DELETE")
 
 	// handle student guide admin apis
 	adminSubRouter := contentRouter.PathPrefix("/admin").Subrouter()
