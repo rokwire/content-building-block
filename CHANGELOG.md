@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Meta_data dependancies [#125](https://github.com/rokwire/content-building-block/issues/125) 
+## [1.13.1] - 2024-10-07
+### Fixed
+- Fixed environment variable [#127](https://github.com/rokwire/content-building-block/issues/127)
+
+## [1.13.0] - 2024-10-07
+### Added
+- Support user file uploads to S3 [#114](https://github.com/rokwire/content-building-block/issues/114)
 
 ## [1.12.0] - 2024-07-10
 ### Changed

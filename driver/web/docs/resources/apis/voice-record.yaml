@@ -41,7 +41,7 @@ delete:
   description: |
      Delete the user voice record
   security:
-    - bearerAuth: [] 
+    - bearerAuth: []
   responses:
     200:
       description: Success
