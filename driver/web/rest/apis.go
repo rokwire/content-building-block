@@ -301,7 +301,6 @@ func (h ApisHandler) GetUserVoiceRecord(claims *tokenauth.Claims, w http.Respons
 
 // DeleteVoiceRecord deletes the user voice record
 func (h ApisHandler) DeleteVoiceRecord(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-
 	err := h.app.Services.DeleteVoiceRecord(claims.Subject)
 	if err != nil {
 		if err != nil {
@@ -476,6 +475,7 @@ func (h ApisHandler) GetHealthLocation(claims *tokenauth.Claims, w http.Response
 // @Success 200 {array} model.ContentItem
 // @Security UserAuth
 // @Router /content_items [get]
+// @Router /content_items [post]
 func (h ApisHandler) GetContentItems(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	//get all-apps param value
 	allApps := false //false by defautl
@@ -825,6 +825,148 @@ func (h ApisHandler) GetFileContentItem(claims *tokenauth.Claims, w http.Respons
 
 	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", fileName))
 	w.Header().Set("Cache-Control", "no-store")
+}
+
+// GetFileContentUploadURLs Get URLs to upload files to S3
+// @Description Get URLs to upload files to S3
+// @Tags Client
+// @ID GetFileContentUploadURLs
+// @Param fileNames body string false "fileNames - comma-separated list of file names"
+// @Param category body string false "category - category of file content item"
+// @Param entityID body string false "category - id of entity file content item belongs to"
+// @Success 200
+// @Security UserAuth
+// @Router /files/upload [get]
+func (h ApisHandler) GetFileContentUploadURLs(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	fileNamesStr := r.URL.Query().Get("fileNames")
+	if len(fileNamesStr) <= 0 {
+		log.Print("Missing file names query param\n")
+		http.Error(w, "missing 'fileNames' query param", http.StatusBadRequest)
+		return
+	}
+
+	fileNames := strings.Split(fileNamesStr, ",")
+	if len(fileNames) <= 0 {
+		log.Print("Missing file names\n")
+		http.Error(w, "missing file names", http.StatusBadRequest)
+		return
+	}
+
+	entityID := r.URL.Query().Get("entityID")
+	category := r.URL.Query().Get("category")
+	if len(category) <= 0 {
+		log.Print("Missing category\n")
+		http.Error(w, "missing 'category' query param", http.StatusBadRequest)
+		return
+	}
+
+	handleDuplicateFileNames := true
+	handleDuplicateFileNamesStr := r.URL.Query().Get("handle-duplicate-filenames")
+	if handleDuplicateFileNamesStr != "" {
+		handleDuplicateFileNamesVal, err := strconv.ParseBool(handleDuplicateFileNamesStr)
+		if err == nil {
+			handleDuplicateFileNames = handleDuplicateFileNamesVal
+		}
+	}
+
+	addAppOrgIDToPath := true
+	addAppOrgIDToPathStr := r.URL.Query().Get("add-path-apporg-id")
+	if addAppOrgIDToPathStr != "" {
+		addAppOrgIDToPathVal, err := strconv.ParseBool(addAppOrgIDToPathStr)
+		if err == nil {
+			addAppOrgIDToPath = addAppOrgIDToPathVal
+		}
+	}
+
+	publicRead := true
+	publicReadStr := r.URL.Query().Get("public-read")
+	if publicReadStr != "" {
+		publicReadVal, err := strconv.ParseBool(publicReadStr)
+		if err == nil {
+			publicRead = publicReadVal
+		}
+	}
+
+	fileRefs, err := h.app.Services.GetFileContentUploadURLs(claims, fileNames, entityID, category, addAppOrgIDToPath, handleDuplicateFileNames, publicRead)
+	if err != nil {
+		log.Printf("Error getting file upload references: %s\n", err)
+		http.Error(w, "Error getting file upload references", http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(fileRefs)
+	if err != nil {
+		log.Println("Error on marshal of file upload references")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// GetFileContentDownloadURLs Get URLs to download files from S3
+// @Description Get URLs to download files from S3
+// @Tags Client
+// @ID GetFileContentDownloadURLs
+// @Param fileNames body string false "fileNames - comma-separated list of file names"
+// @Param category body string false "category - category of file content item"
+// @Param entityID body string false "category - id of entity file content item belongs to"
+// @Success 200
+// @Security UserAuth
+// @Router /files/download [get]
+func (h ApisHandler) GetFileContentDownloadURLs(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+
+	fileKeysStr := r.URL.Query().Get("fileKeys")
+	if len(fileKeysStr) <= 0 {
+		log.Print("Missing file keys query param\n")
+		http.Error(w, "missing 'fileKeys' query param", http.StatusBadRequest)
+		return
+	}
+
+	fileKeys := strings.Split(fileKeysStr, ",")
+	if len(fileKeys) <= 0 {
+		log.Print("Missing file keys\n")
+		http.Error(w, "missing file keys", http.StatusBadRequest)
+		return
+	}
+
+	entityID := r.URL.Query().Get("entityID")
+	category := r.URL.Query().Get("category")
+	if len(category) <= 0 {
+		log.Print("Missing category\n")
+		http.Error(w, "missing 'category' query param", http.StatusBadRequest)
+		return
+	}
+
+	addAppOrgIDToPath := true
+	addAppOrgIDToPathStr := r.URL.Query().Get("add-path-apporg-id")
+	if addAppOrgIDToPathStr != "" {
+		addAppOrgIDToPathVal, err := strconv.ParseBool(addAppOrgIDToPathStr)
+		if err == nil {
+			addAppOrgIDToPath = addAppOrgIDToPathVal
+		}
+	}
+
+	fileRefs, err := h.app.Services.GetFileContentDownloadURLs(claims, fileKeys, entityID, category, addAppOrgIDToPath)
+	if err != nil {
+		log.Printf("Error getting file download references: %s\n", err)
+		http.Error(w, "Error getting file download references", http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(fileRefs)
+	if err != nil {
+		log.Println("Error on marshal of file download references")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // GetDataContentItems Gets data content items

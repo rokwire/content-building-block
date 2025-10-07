@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Rokwire Content Building Block API
   description: Rokwire Content Block API Documentation
-  version: 1.12.0
+  version: 1.13.0
 servers:  
   - url: 'https://api.rokwire.illinois.edu/content'
     description: Production server
@@ -110,7 +110,11 @@ paths:
   /data/{key}:
     $ref: "./resources/client/data-content-itemsids.yaml" 
   /files:
-    $ref: "./resources/client/file-content-items.yaml"     
+    $ref: "./resources/client/file-content-items.yaml"
+  /files/upload:
+    $ref: "./resources/client/file-content-upload.yaml"
+  /files/download:
+    $ref: "./resources/client/file-content-download.yaml"
 
  #BBs
   /bbs/image:

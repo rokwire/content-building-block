@@ -24,13 +24,13 @@ import (
 	"content/driven/twitter"
 	driver "content/driver/web"
 	"log"
-	"os"
 	"strconv"
 	"strings"
 
 	rokwireAuth "github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth"
 	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/keys"
 	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/sigauth"
+	"github.com/rokwire/rokwire-building-block-sdk-go/utils/envloader"
 	"github.com/rokwire/rokwire-building-block-sdk-go/utils/logging/logs"
 )
 
@@ -50,12 +50,17 @@ func main() {
 
 	loggerOpts := logs.LoggerOpts{SuppressRequests: logs.NewStandardHealthCheckHTTPRequestProperties(serviceID + "/version")}
 	logger := logs.NewLogger(serviceID, &loggerOpts)
+	envLoader := envloader.NewEnvLoader(Version, logger)
 
-	port := getEnvKey("CONTENT_PORT", true)
+	envPrefix := strings.ToUpper(serviceID) + "_"
+
+	port := envLoader.GetAndLogEnvVar(envPrefix+"PORT", true, false)
 
 	//common
-	coreBBHost := getEnvKey("CONTENT_CORE_BB_HOST", true)
-	contentServiceURL := getEnvKey("CONTENT_SERVICE_URL", true)
+	host := envLoader.GetAndLogEnvVar(envPrefix+"HOST", true, false)
+	coreBBHost := envLoader.GetAndLogEnvVar(envPrefix+"CORE_BB_HOST", true, false)
+	contentServiceURL := envLoader.GetAndLogEnvVar(envPrefix+"SERVICE_URL", true, false)
+
 	authService := rokwireAuth.Service{
 		ServiceID:   serviceID,
 		ServiceHost: contentServiceURL,
@@ -66,16 +71,16 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error initializing remote service registration loader: %v", err)
 	}
-	serviceRegManager, err := rokwireAuth.NewServiceRegManager(&authService, serviceRegLoader, true)
+	serviceRegManager, err := rokwireAuth.NewServiceRegManager(&authService, serviceRegLoader, !strings.HasPrefix(contentServiceURL, "http://localhost"))
 	if err != nil {
 		log.Fatalf("Error initializing service registration manager: %v", err)
 	}
 	//end common
 
 	//mongoDB adapter
-	mongoDBAuth := getEnvKey("CONTENT_MONGO_AUTH", true)
-	mongoDBName := getEnvKey("CONTENT_MONGO_DATABASE", true)
-	mongoTimeout := getEnvKey("CONTENT_MONGO_TIMEOUT", false)
+	mongoDBAuth := envLoader.GetAndLogEnvVar(envPrefix+"MONGO_AUTH", true, true)
+	mongoDBName := envLoader.GetAndLogEnvVar(envPrefix+"MONGO_DATABASE", true, false)
+	mongoTimeout := envLoader.GetAndLogEnvVar(envPrefix+"MONGO_TIMEOUT", false, false)
 	storageAdapter := storage.NewStorageAdapter(mongoDBAuth, mongoDBName, mongoTimeout, logger)
 	err = storageAdapter.Start()
 	if err != nil {
@@ -83,60 +88,73 @@ func main() {
 	}
 
 	// S3 Adapter
-	s3Bucket := getEnvKey("CONTENT_S3_BUCKET", true)
-	s3ProfileImagesBucket := getEnvKey("CONTENT_S3_PROFILE_IMAGES_BUCKET", true)
-	s3UsersAudiosBucket := getEnvKey("CONTENT_S3_USERS_AUDIOS_BUCKET", true)
-	s3Region := getEnvKey("CONTENT_S3_REGION", true)
-	awsAccessKeyID := getEnvKey("CONTENT_AWS_ACCESS_KEY_ID", true)
-	awsSecretAccessKey := getEnvKey("CONTENT_AWS_SECRET_ACCESS_KEY", true)
+	s3Bucket := envLoader.GetAndLogEnvVar(envPrefix+"S3_BUCKET", true, true)
+	s3BucketAccelerateStr := envLoader.GetAndLogEnvVar(envPrefix+"S3_BUCKET_ACCELERATE", false, false)
+	s3BucketAccelerate := false
+	s3BucketAccelerate, err = strconv.ParseBool(s3BucketAccelerateStr)
+	if err != nil {
+		logger.Warnf("error parsing S3 bucket accelerate: %s - applying default", err.Error())
+	}
+	// only allow S3 transfer accleration on the bucket used for all file types for now
+
+	s3ProfileImagesBucket := envLoader.GetAndLogEnvVar(envPrefix+"S3_PROFILE_IMAGES_BUCKET", true, true)
+	s3UsersAudiosBucket := envLoader.GetAndLogEnvVar(envPrefix+"S3_USERS_AUDIOS_BUCKET", true, true)
+	s3Region := envLoader.GetAndLogEnvVar(envPrefix+"S3_REGION", true, true)
+	awsAccessKeyID := envLoader.GetAndLogEnvVar(envPrefix+"AWS_ACCESS_KEY_ID", true, true)
+	awsSecretAccessKey := envLoader.GetAndLogEnvVar(envPrefix+"AWS_SECRET_ACCESS_KEY", true, true)
+
 	awsConfig := &model.AWSConfig{S3Bucket: s3Bucket,
+		S3BucketAccelerate:    s3BucketAccelerate,
 		S3ProfileImagesBucket: s3ProfileImagesBucket,
 		S3UsersAudiosBucket:   s3UsersAudiosBucket,
 		S3Region:              s3Region, AWSAccessKeyID: awsAccessKeyID, AWSSecretAccessKey: awsSecretAccessKey}
 
-	presignExpirationMinutesVal := getEnvKey("CONTENT_S3_REQUEST_PRESIGN_EXPIRATION_MINUTES", false)
-	presignExpirationMinutes, err := strconv.Atoi(presignExpirationMinutesVal)
+	uploadPresignExpirationMinutesVal := envLoader.GetAndLogEnvVar(envPrefix+"S3_UPLOAD_PRESIGN_EXPIRATION_MINUTES", false, false)
+	uploadPresignExpirationMinutes, err := strconv.Atoi(uploadPresignExpirationMinutesVal)
 	if err != nil {
-		logger.Warnf("error parsing S3 request presign expiration minutes: %s - applying default", err.Error())
+		logger.Warnf("error parsing S3 upload presign expiration minutes: %s - applying default", err.Error())
 	}
-	awsAdapter := awsstorage.NewAWSStorageAdapter(awsConfig, presignExpirationMinutes)
+	downloadPresignExpirationMinutesVal := envLoader.GetAndLogEnvVar(envPrefix+"S3_DOWNLOAD_PRESIGN_EXPIRATION_MINUTES", false, false)
+	downloadPresignExpirationMinutes, err := strconv.Atoi(downloadPresignExpirationMinutesVal)
+	if err != nil {
+		logger.Warnf("error parsing S3 download presign expiration minutes: %s - applying default", err.Error())
+	}
+	awsAdapter := awsstorage.NewAWSStorageAdapter(awsConfig, uploadPresignExpirationMinutes, downloadPresignExpirationMinutes)
 
-	defaultCacheExpirationSeconds := getEnvKey("CONTENT_DEFAULT_CACHE_EXPIRATION_SECONDS", false)
+	defaultCacheExpirationSeconds := envLoader.GetAndLogEnvVar(envPrefix+"DEFAULT_CACHE_EXPIRATION_SECONDS", false, false)
 	cacheAdapter := cacheadapter.NewCacheAdapter(defaultCacheExpirationSeconds)
 
-	twitterFeedURL := getEnvKey("CONTENT_TWITTER_FEED_URL", true)
-	twitterAccessToken := getEnvKey("CONTENT_TWITTER_ACCESS_TOKEN", true)
+	twitterFeedURL := envLoader.GetAndLogEnvVar(envPrefix+"TWITTER_FEED_URL", true, false)
+	twitterAccessToken := envLoader.GetAndLogEnvVar(envPrefix+"TWITTER_ACCESS_TOKEN", true, true)
 	twitterAdapter := twitter.NewTwitterAdapter(twitterFeedURL, twitterAccessToken)
 
-	mtAppID := getEnvKey("CONTENT_MULTI_TENANCY_APP_ID", true)
-	mtOrgID := getEnvKey("CONTENT_MULTI_TENANCY_ORG_ID", true)
+	mtAppID := envLoader.GetAndLogEnvVar(envPrefix+"MULTI_TENANCY_APP_ID", true, true)
+	mtOrgID := envLoader.GetAndLogEnvVar(envPrefix+"MULTI_TENANCY_ORG_ID", true, true)
 
 	//core adapter
-	serviceAccountID := getEnvKey("CONTENT_SERVICE_ACCOUNT_ID", false)
-	authPrivKeyPemString := getEnvKey("CONTENT_PRIV_KEY", false)
-	var authPrivKeyPem string
-	if authPrivKeyPemString != "" {
-		//make it to be a single line - AWS environemnt variable issue
-		authPrivKeyPem = strings.ReplaceAll(authPrivKeyPemString, `\n`, "\n")
+	var serviceAccountManager *rokwireAuth.ServiceAccountManager
+
+	serviceAccountID := envLoader.GetAndLogEnvVar(envPrefix+"SERVICE_ACCOUNT_ID", false, false)
+	privKeyRaw := envLoader.GetAndLogEnvVar(envPrefix+"PRIV_KEY", true, true)
+	privKeyRaw = strings.ReplaceAll(privKeyRaw, "\\n", "\n")
+	privKey, err := keys.NewPrivKey(keys.RS256, privKeyRaw)
+	if err != nil {
+		logger.Errorf("Error parsing priv key: %v", err)
+	} else if serviceAccountID == "" {
+		logger.Errorf("Missing service account id")
 	} else {
-		log.Fatalf("APPOINTMENTS_PRIV_KEY environment variable is not set")
-	}
-	alg := keys.RS256
-	privKey, err := keys.NewPrivKey(alg, authPrivKeyPem)
-	if err != nil {
-		logger.Fatalf("Failed to parse auth priv key: %v", err)
-	}
-	signatureAuth, err := sigauth.NewSignatureAuth(privKey, serviceRegManager, false, true)
-	if err != nil {
-		log.Fatalf("Error initializing signature auth: %v", err)
-	}
-	serviceAccountLoader, err := rokwireAuth.NewRemoteServiceAccountLoader(&authService, serviceAccountID, signatureAuth)
-	if err != nil {
-		log.Fatalf("Error initializing remote service account loader: %v", err)
-	}
-	serviceAccountManager, err := rokwireAuth.NewServiceAccountManager(&authService, serviceAccountLoader)
-	if err != nil {
-		log.Fatalf("Error initializing service account manager: %v", err)
+		signatureAuth, err := sigauth.NewSignatureAuth(privKey, serviceRegManager, false, true)
+		if err != nil {
+			log.Fatalf("Error initializing signature auth: %v", err)
+		}
+		serviceAccountLoader, err := rokwireAuth.NewRemoteServiceAccountLoader(&authService, serviceAccountID, signatureAuth)
+		if err != nil {
+			log.Fatalf("Error initializing remote service account loader: %v", err)
+		}
+		serviceAccountManager, err = rokwireAuth.NewServiceAccountManager(&authService, serviceAccountLoader)
+		if err != nil {
+			log.Fatalf("Error initializing service account manager: %v", err)
+		}
 	}
 	coreAdapter := corebb.NewCoreAdapter(coreBBHost, serviceAccountManager)
 
@@ -144,33 +162,6 @@ func main() {
 	application := core.NewApplication(Version, Build, storageAdapter, awsAdapter, twitterAdapter, cacheAdapter, mtAppID, mtOrgID, serviceID, coreAdapter, logger)
 	application.Start()
 
-	// web adapter
-	webAdapter := driver.NewWebAdapter(contentServiceURL, port, application, serviceRegManager, logger)
-
+	webAdapter := driver.NewWebAdapter(host, port, application, serviceRegManager, logger)
 	webAdapter.Start()
-}
-
-func getEnvKeyAsList(key string, required bool) []string {
-	stringValue := getEnvKey(key, required)
-
-	// it is comma separated format
-	stringListValue := strings.Split(stringValue, ",")
-	if len(stringListValue) == 0 && required {
-		log.Fatalf("missing or empty env var: %s", key)
-	}
-
-	return stringListValue
-}
-
-func getEnvKey(key string, required bool) string {
-	// get from the environment
-	value, exist := os.LookupEnv(key)
-	if !exist {
-		if required {
-			log.Fatal("No provided environment variable for " + key)
-		} else {
-			log.Printf("No provided environment variable for %s", key)
-		}
-	}
-	return value
 }

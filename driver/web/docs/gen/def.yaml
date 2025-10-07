@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Rokwire Content Building Block API
   description: Rokwire Content Block API Documentation
-  version: 1.12.0
+  version: 1.13.0
 servers:
   - url: 'https://api.rokwire.illinois.edu/content'
     description: Production server
@@ -315,17 +315,6 @@ paths:
         Retrieves health locations
       security:
         - bearerAuth: []
-      requestBody:
-        description: Retrieves  all content items
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                ids:
-                  type: string
-                categories:
-                  type: string
       parameters:
         - name: all-apps
           in: query
@@ -375,7 +364,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -548,7 +537,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -708,7 +697,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -744,7 +733,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -783,7 +772,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -882,7 +871,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -911,7 +900,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -950,7 +939,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -1049,7 +1038,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -1078,7 +1067,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -1117,7 +1106,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -1216,7 +1205,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -1245,7 +1234,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -1284,7 +1273,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -1383,7 +1372,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -1412,7 +1401,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -1451,7 +1440,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -1565,7 +1554,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -1607,7 +1596,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -1685,7 +1674,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -1836,7 +1825,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1admin~1data/put/responses/200/content/application~1json/schema'
+                $ref: '#/components/schemas/DataContentItem'
         '400':
           description: Bad request
         '401':
@@ -1875,24 +1864,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  category:
-                    type: string
-                  key:
-                    type: string
-                  date_created:
-                    type: string
-                  date_updated:
-                    type: string
-                  data:
-                    type: object
-                  org_id:
-                    type: string
-                  app_id:
-                    type: string
+                $ref: '#/components/schemas/DataContentItem'
         '400':
           description: Bad request
         '401':
@@ -1926,7 +1898,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/~1admin~1data/put/responses/200/content/application~1json/schema'
+                  $ref: '#/components/schemas/DataContentItem'
         '400':
           description: Bad request
         '401':
@@ -1959,7 +1931,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1admin~1data/put/responses/200/content/application~1json/schema'
+                $ref: '#/components/schemas/DataContentItem'
         '400':
           description: Bad request
         '401':
@@ -2243,7 +2215,7 @@ paths:
         - Apis
       summary: Retrieves the profile photo
       description: |
-        Retrieves a reward inventory by id
+        Retrieves a profile photo by user id
       security:
         - bearerAuth: []
       parameters:
@@ -2278,7 +2250,7 @@ paths:
         - Apis
       summary: Retrieves the profile photo
       description: |
-        Retrieves a reward inventory by id
+        Retrieves the user's profile photo
       security:
         - bearerAuth: []
       parameters:
@@ -2574,6 +2546,21 @@ paths:
           explode: false
           schema:
             type: string
+      requestBody:
+        description: Content items filter
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                categories:
+                  type: array
+                  items:
+                    type: string
       responses:
         '200':
           description: Success
@@ -2582,7 +2569,69 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    post:
+      tags:
+        - Client
+      summary: Retrieves  all content items
+      description: |
+        Retrieves  all content items
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: all-apps
+          in: query
+          description: all-apps
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: offset
+          in: query
+          description: offset
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: limit the result
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: 'Possible values - asc, desc. Default - desc'
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        description: Content items filter
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1content_items/get/requestBody/content/application~1json/schema'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -2623,7 +2672,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reward'
+                  $ref: '#/components/schemas/ContentItem'
         '400':
           description: Bad request
         '401':
@@ -2769,7 +2818,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/paths/~1admin~1data/put/responses/200/content/application~1json/schema'
+                  $ref: '#/components/schemas/DataContentItem'
         '400':
           description: Bad request
         '401':
@@ -2800,7 +2849,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1admin~1data/put/responses/200/content/application~1json/schema'
+                $ref: '#/components/schemas/DataContentItem'
         '400':
           description: Bad request
         '401':
@@ -2836,6 +2885,136 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /files/upload:
+    get:
+      tags:
+        - Client
+      summary: Client API that gets presigned URLs for file upload to AWS S3
+      description: |
+        Gets presigned URLs for file upload to AWS S3
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: fileNames
+          in: query
+          description: comma-separated list of names of the files
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: entityID
+          in: query
+          description: id of entity to associate file
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: category of files
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: handle-duplicate-filenames
+          in: query
+          description: whether the service can modify given filenames to handle duplicates
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: add-path-apporg-id
+          in: query
+          description: whether the service should add the app ID and org ID to the URL
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: boolean
+        - name: public-read
+          in: query
+          description: whether the uploaded file should publicly readable
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileContentItemRef'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  /files/download:
+    get:
+      tags:
+        - Client
+      summary: Client API that gets presigned URLs for file download from AWS S3
+      description: |
+        Gets presigned URLs for file download from AWS S3
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: fileKeys
+          in: query
+          description: comma-separated list of keys of the files
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: entityID
+          in: query
+          description: id of entity to associate file
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: category of files
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: add-path-apporg-id
+          in: query
+          description: whether the service should add the app ID and org ID to the URL
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileContentItemRef'
         '400':
           description: Bad request
         '401':
@@ -2959,7 +3138,7 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    Reward:
+    ContentItem:
       type: object
       properties:
         _id:
@@ -2976,7 +3155,36 @@ components:
           type: string
         app_id:
           type: string
-    RewardClaim:
+    DataContentItem:
+      type: object
+      properties:
+        id:
+          type: string
+        category:
+          type: string
+        key:
+          type: string
+        date_created:
+          type: string
+        date_updated:
+          type: string
+        data:
+          type: object
+        org_id:
+          type: string
+        app_id:
+          type: string
+    FileContentItemRef:
+      required:
+        - key
+        - url
+      type: object
+      properties:
+        key:
+          type: string
+        url:
+          type: string
+    ImageSpec:
       type: object
       properties:
         height:

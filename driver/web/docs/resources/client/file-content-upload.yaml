@@ -1,0 +1,72 @@
+get:
+  tags:
+    - Client
+  summary: Client API that gets presigned URLs for file upload to AWS S3
+  description: |
+    Gets presigned URLs for file upload to AWS S3
+  security:
+    - bearerAuth: [] 
+  parameters:
+    - name: fileNames
+      in: query
+      description: comma-separated list of names of the files
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string
+    - name: entityID
+      in: query
+      description: id of entity to associate file
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: string
+    - name: category
+      in: query
+      description: category of files
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string
+    - name: handle-duplicate-filenames
+      in: query
+      description: whether the service can modify given filenames to handle duplicates
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: boolean
+    - name: add-path-apporg-id
+      in: query
+      description: whether the service should add the app ID and org ID to the URL
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: boolean
+    - name: public-read
+      in: query
+      description: whether the uploaded file should publicly readable
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: boolean
+  responses:
+    200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../schemas/application/FileContentItemRef.yaml"
+    400:
+      description: Bad request
+    401:
+      description: Unauthorized
+    500:
+      description: Internal error
