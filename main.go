@@ -57,7 +57,7 @@ func main() {
 	port := envLoader.GetAndLogEnvVar(envPrefix+"PORT", true, false)
 
 	//common
-	host := envLoader.GetAndLogEnvVar(envPrefix+"HOST", true, false)
+	host := envLoader.GetAndLogEnvVar(envPrefix+"HOST", false, false)
 	coreBBHost := envLoader.GetAndLogEnvVar(envPrefix+"CORE_BB_HOST", true, false)
 	contentServiceURL := envLoader.GetAndLogEnvVar(envPrefix+"SERVICE_URL", true, false)
 
