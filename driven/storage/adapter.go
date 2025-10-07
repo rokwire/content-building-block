@@ -689,7 +689,19 @@ func (sa *Adapter) FindMetaData(key *string) (*model.MetaData, error) {
 
 // DeleteMetaData deletes meta_data object
 func (sa *Adapter) DeleteMetaData(key string) error {
+	filter := bson.D{primitive.E{Key: "key", Value: key}}
 
+	result, err := sa.db.metaData.DeleteOne(sa.context, filter, nil)
+	if err != nil {
+		return err
+	}
+	if result == nil {
+		return fmt.Errorf("result is nil for meta_data with key %s", key)
+	}
+	deletedCount := result.DeletedCount
+	if deletedCount != 1 {
+		return fmt.Errorf("error occured while deleting a meta_data with key %s", key)
+	}
 	return nil
 }
 
