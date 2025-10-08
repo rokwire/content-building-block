@@ -59,6 +59,9 @@ type Services interface {
 	UpdateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error)
 	DeleteDataContentItem(claims *tokenauth.Claims, key string) error
 	GetDataContentItems(claims *tokenauth.Claims, category string) ([]*model.DataContentItem, error)
+	CreateOrUpdateMetaData(key string, value map[string]interface{}) (*model.MetaData, error)
+	GetMetaData(key *string) (*model.MetaData, error)
+	DeleteMetaData(key string) error
 
 	CreateCategory(claims *tokenauth.Claims, item *model.Category) (*model.Category, error)
 	GetCategory(claims *tokenauth.Claims, name string) (*model.Category, error)

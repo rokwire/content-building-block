@@ -1,0 +1,15 @@
+required:
+  - key
+  - data
+type: object
+properties:
+  id:
+    type: string
+  key:
+    type: string
+  value:
+    type: object
+  date_created:
+    type: string  
+  date_updated:
+    type: string    

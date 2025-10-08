@@ -1,6 +1,8 @@
 # application
 ContentItem:
   $ref: "./application/ContentItem.yaml"
+MetaData:
+  $ref: "./application/MetaData.yaml"  
 DataContentItem:
   $ref: "./application/DataContentItem.yaml"
 FileContentItemRef:

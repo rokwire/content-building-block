@@ -1,0 +1,9 @@
+required:
+  - key
+  - data
+type: object
+properties:
+  key:
+    type: string
+  value:
+    type: object  

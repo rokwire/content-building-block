@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Rokwire Content Building Block API
   description: Rokwire Content Block API Documentation
-  version: 1.13.1
+  version: 1.14.0
 servers:
   - url: 'https://api.rokwire.illinois.edu/content'
     description: Production server
@@ -2891,6 +2891,99 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
+  /meta_data:
+    post:
+      tags:
+        - Client
+      summary: Create meta data
+      description: |
+        Create meta data
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - key
+                - data
+              type: object
+              properties:
+                key:
+                  type: string
+                value:
+                  type: object
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetaData'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+  '/meta_data/{key}':
+    get:
+      tags:
+        - Client
+      summary: Retrieves a health location by id
+      description: |
+        Retrieves a health location by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: key
+          in: path
+          description: the key of the meta_data
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetaData'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
+    delete:
+      tags:
+        - Client
+      summary: Delete meta data object
+      description: |
+        Delete meta data object
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: key
+          in: path
+          description: id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal error
   /files/upload:
     get:
       tags:
@@ -3154,6 +3247,22 @@ components:
         org_id:
           type: string
         app_id:
+          type: string
+    MetaData:
+      required:
+        - key
+        - data
+      type: object
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        value:
+          type: object
+        date_created:
+          type: string
+        date_updated:
           type: string
     DataContentItem:
       type: object

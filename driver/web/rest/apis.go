@@ -1006,6 +1006,87 @@ func (h ApisHandler) GetDataContentItems(claims *tokenauth.Claims, w http.Respon
 	w.Write(data)
 }
 
+type createOrUpdateMetaDataRequestBody struct {
+	Key   string                 `json:"key"`
+	Value map[string]interface{} `json:"value"`
+} // @name createMetaDataRequestBody
+
+// CreateOrUpdateMetaData creates or updates meta data object
+func (h ApisHandler) CreateOrUpdateMetaData(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	var body createOrUpdateMetaDataRequestBody
+	bodyData, _ := ioutil.ReadAll(r.Body)
+	if len(bodyData) > 0 {
+		bodyErr := json.Unmarshal(bodyData, &body)
+		if bodyErr != nil {
+			log.Printf("Warning: bad createMetaDataRequestBody request: %s", bodyErr)
+		}
+	}
+
+	resData, err := h.app.Services.CreateOrUpdateMetaData(body.Key, body.Value)
+	if err != nil {
+		log.Printf("Error on creating  meta- data content items with category")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal of data content type")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// GetMetaData Gets meta data
+func (h ApisHandler) GetMetaData(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key := vars["key"]
+	var keyPtr *string
+	if key, ok := vars["key"]; ok {
+		keyPtr = &key
+	}
+
+	resData, err := h.app.Services.GetMetaData(keyPtr)
+	if err != nil {
+		log.Printf("Error on getting data content type with key - %s\n %s", key, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(resData)
+	if err != nil {
+		log.Println("Error on marshal of data content type")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// DeleteMetaData deletes meta data by key
+func (h ApisHandler) DeleteMetaData(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key := vars["key"]
+
+	err := h.app.Services.DeleteMetaData(key)
+	if err != nil {
+		if err != nil {
+			log.Printf("error on delete meta data: %s", err)
+		}
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Success"))
+}
+
 func intPostValueFromString(stringValue string) int {
 	var value int
 	if len(stringValue) > 0 {
