@@ -1,13 +1,9 @@
 # application
 ContentItem:
   $ref: "./application/ContentItem.yaml"
-RewardClaim:
-  $ref: "./application/ImageSpec.yaml"
 MetaData:
   $ref: "./application/MetaData.yaml"  
 DataContentItem:
   $ref: "./application/DataContentItem.yaml"
 FileContentItemRef:
   $ref: "./application/FileContentItemRef.yaml"
-ImageSpec:
-  $ref: "./application/ImageSpec.yaml"

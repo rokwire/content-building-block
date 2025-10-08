@@ -3248,8 +3248,6 @@ components:
           type: string
         app_id:
           type: string
-    RewardClaim:
-      $ref: '#/components/schemas/ImageSpec'
     MetaData:
       required:
         - key
@@ -3295,12 +3293,3 @@ components:
           type: string
         url:
           type: string
-    ImageSpec:
-      type: object
-      properties:
-        height:
-          type: integer
-        width:
-          type: integer
-        quality:
-          type: integer

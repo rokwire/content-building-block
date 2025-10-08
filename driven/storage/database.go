@@ -201,12 +201,13 @@ func (m *database) applyCategoriesChecks(categories *collectionWrapper) error {
 
 func (m *database) applyMetaDataChecks(metaData *collectionWrapper) error {
 	log.Println("apply meta_data checks.....")
-	//Add org_id + app_id index
-	err := metaData.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1},
-		primitive.E{Key: "app_id", Value: 1}}, false)
+
+	// Add key index
+	err := metaData.AddIndex(bson.D{primitive.E{Key: "key", Value: 1}}, false)
 	if err != nil {
 		return err
 	}
+
 	log.Println("meta_data checks passed")
 	return nil
 }
