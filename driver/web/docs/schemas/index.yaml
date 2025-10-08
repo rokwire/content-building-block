@@ -7,3 +7,5 @@ DataContentItem:
   $ref: "./application/DataContentItem.yaml"
 FileContentItemRef:
   $ref: "./application/FileContentItemRef.yaml"
+ImageSpec:
+  $ref: "./application/ImageSpec.yaml"
