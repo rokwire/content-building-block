@@ -430,6 +430,45 @@ func (s *servicesImpl) GetDataContentItems(claims *tokenauth.Claims, category st
 	return item, nil
 }
 
+func (s *servicesImpl) CreateOrUpdateMetaData(key string, value map[string]interface{}) (*model.MetaData, error) {
+	var metaData *model.MetaData
+
+	findMetaData, err := s.app.storage.FindMetaData(&key)
+	if err != nil {
+		return nil, err
+	}
+	if findMetaData == nil {
+		metaData, err = s.app.storage.CreateMetaData(key, value)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		metaData, err = s.app.storage.UpdateMetaData(findMetaData, value)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return metaData, nil
+}
+
+func (s *servicesImpl) GetMetaData(key *string) (*model.MetaData, error) {
+	item, err := s.app.storage.FindMetaData(key)
+	if err != nil {
+		return nil, err
+	}
+	return item, nil
+}
+
+func (s *servicesImpl) DeleteMetaData(key string) error {
+	err := s.app.storage.DeleteMetaData(key)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (s *servicesImpl) CreateDataContentItem(claims *tokenauth.Claims, item *model.DataContentItem) (*model.DataContentItem, error) {
 
 	category, err := s.app.storage.FindCategory(&claims.AppID, claims.OrgID, item.Category)

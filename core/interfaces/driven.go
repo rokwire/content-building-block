@@ -57,6 +57,11 @@ type Storage interface {
 	FindCategory(appID *string, orgID string, name string) (*model.Category, error)
 	UpdateCategory(appID *string, orgID string, item *model.Category) (*model.Category, error)
 	DeleteCategory(appID *string, orgID string, key string) error
+
+	CreateMetaData(key string, value map[string]interface{}) (*model.MetaData, error)
+	FindMetaData(key *string) (*model.MetaData, error)
+	UpdateMetaData(item *model.MetaData, value map[string]interface{}) (*model.MetaData, error)
+	DeleteMetaData(key string) error
 }
 
 // Core BB interface

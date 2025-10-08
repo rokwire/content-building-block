@@ -656,6 +656,74 @@ func (sa *Adapter) StoreMultiTenancyData(appID string, orgID string) error {
 	return nil
 }
 
+// CreateMetaData creates meta_data object
+func (sa *Adapter) CreateMetaData(key string, value map[string]interface{}) (*model.MetaData, error) {
+	now := time.Now()
+	id, _ := uuid.NewUUID()
+	item := model.MetaData{
+		ID:          id.String(),
+		Key:         key,
+		Value:       value,
+		DateCreated: now,
+	}
+
+	_, err := sa.db.metaData.InsertOne(sa.context, &item)
+	if err != nil {
+		return nil, err
+	}
+
+	return &item, nil
+}
+
+// FindMetaData find meta_data object
+func (sa *Adapter) FindMetaData(key *string) (*model.MetaData, error) {
+	filter := bson.D{primitive.E{Key: "key", Value: key}}
+
+	var result *model.MetaData
+	err := sa.db.metaData.FindOne(sa.context, filter, &result, nil)
+	if err != nil {
+		return nil, nil
+	}
+	return result, nil
+}
+
+// DeleteMetaData deletes meta_data object
+func (sa *Adapter) DeleteMetaData(key string) error {
+	filter := bson.D{primitive.E{Key: "key", Value: key}}
+
+	result, err := sa.db.metaData.DeleteOne(sa.context, filter, nil)
+	if err != nil {
+		return err
+	}
+	if result == nil {
+		return fmt.Errorf("result is nil for meta_data with key %s", key)
+	}
+	deletedCount := result.DeletedCount
+	if deletedCount != 1 {
+		return fmt.Errorf("error occured while deleting a meta_data with key %s", key)
+	}
+	return nil
+}
+
+// UpdateMetaData updates a  metaData
+func (sa *Adapter) UpdateMetaData(item *model.MetaData, value map[string]interface{}) (*model.MetaData, error) {
+	filter := bson.D{
+		primitive.E{Key: "key", Value: item.Key}}
+	update := bson.D{
+		primitive.E{Key: "$set", Value: bson.D{
+			primitive.E{Key: "value", Value: value},
+			primitive.E{Key: "date_updated", Value: time.Now().UTC()},
+		}},
+	}
+	_, err := sa.db.metaData.UpdateOne(sa.context, filter, update, nil)
+	if err != nil {
+		log.Printf("error updating category: %s", err)
+		return nil, err
+	}
+
+	return item, nil
+}
+
 func (sa *Adapter) abortTransaction(sessionContext mongo.SessionContext) {
 	err := sessionContext.AbortTransaction(sessionContext)
 	if err != nil {
