@@ -1012,15 +1012,6 @@ type createOrUpdateMetaDataRequestBody struct {
 } // @name createMetaDataRequestBody
 
 // CreateOrUpdateMetaData creates or updates meta data object
-// @Descriptions Creates meta data object
-// @Tags Client
-// @ID creates meta data object
-// @Param data body createMetaDataRequestBody  "body json including key (string) and map[string]interface value"
-// @Accept json
-// @Produce json
-// @Success 200
-// @Security UserAuth
-// @Router /meta-data [post]
 func (h ApisHandler) CreateOrUpdateMetaData(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	var body createOrUpdateMetaDataRequestBody
 	bodyData, _ := ioutil.ReadAll(r.Body)
@@ -1051,14 +1042,6 @@ func (h ApisHandler) CreateOrUpdateMetaData(claims *tokenauth.Claims, w http.Res
 }
 
 // GetMetaData Gets meta data
-// @Description Gets meta data object
-// @Tags Client
-// @ID GetMetaData
-// @Accept json
-// @Produce json
-// @Success 200
-// @Security UserAuth
-// @Router /meta-data/{key} [get]
 func (h ApisHandler) GetMetaData(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key := vars["key"]
