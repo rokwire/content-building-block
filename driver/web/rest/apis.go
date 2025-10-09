@@ -1051,7 +1051,7 @@ func (h ApisHandler) GetMetaData(claims *tokenauth.Claims, w http.ResponseWriter
 
 	resData, err := h.app.Services.GetMetaData(key)
 	if err != nil {
-		log.Printf("Error on getting data content type with key - %s\n %s", key, err)
+		log.Printf("Error on getting meta data with key - %s\n %s", *key, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
