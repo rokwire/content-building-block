@@ -1043,16 +1043,15 @@ func (h ApisHandler) CreateOrUpdateMetaData(claims *tokenauth.Claims, w http.Res
 
 // GetMetaData Gets meta data
 func (h ApisHandler) GetMetaData(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	key := vars["key"]
-	var keyPtr *string
-	if key, ok := vars["key"]; ok {
-		keyPtr = &key
+	var key *string
+	keyPtr, ok := r.URL.Query()["key"]
+	if ok && len(keyPtr[0]) > 0 {
+		key = &keyPtr[0]
 	}
 
-	resData, err := h.app.Services.GetMetaData(keyPtr)
+	resData, err := h.app.Services.GetMetaData(key)
 	if err != nil {
-		log.Printf("Error on getting data content type with key - %s\n %s", key, err)
+		log.Printf("Error on getting meta data with key - %s\n %s", *key, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -1071,10 +1070,13 @@ func (h ApisHandler) GetMetaData(claims *tokenauth.Claims, w http.ResponseWriter
 
 // DeleteMetaData deletes meta data by key
 func (h ApisHandler) DeleteMetaData(claims *tokenauth.Claims, w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	key := vars["key"]
+	var key *string
+	keyPtr, ok := r.URL.Query()["key"]
+	if ok && len(keyPtr[0]) > 0 {
+		key = &keyPtr[0]
+	}
 
-	err := h.app.Services.DeleteMetaData(key)
+	err := h.app.Services.DeleteMetaData(*key)
 	if err != nil {
 		if err != nil {
 			log.Printf("error on delete meta data: %s", err)
