@@ -113,8 +113,6 @@ paths:
     $ref: "./resources/client/file-content-items.yaml"  
   /meta_data:
     $ref: "./resources/client/meta-data.yaml"    
-  /meta_data/{key}:
-    $ref: "./resources/client/meta-data-id.yaml"      
   /files/upload:
     $ref: "./resources/client/file-content-upload.yaml"
   /files/download:
