@@ -2938,10 +2938,10 @@ paths:
         - bearerAuth: []
       parameters:
         - name: key
-          in: path
-          description: the key of the meta_data
+          in: query
+          description: the key of meta_data
           required: false
-          style: simple
+          style: form
           explode: false
           schema:
             type: string
