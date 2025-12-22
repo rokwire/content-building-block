@@ -87,7 +87,7 @@ func main() {
 		log.Fatal("Cannot start the mongoDB adapter - " + err.Error())
 	}
 
-	//S3 Adapter
+	// S3 Adapter
 	s3Bucket := envLoader.GetAndLogEnvVar(envPrefix+"S3_BUCKET", true, true)
 	s3BucketAccelerateStr := envLoader.GetAndLogEnvVar(envPrefix+"S3_BUCKET_ACCELERATE", false, false)
 	s3BucketAccelerate := false
