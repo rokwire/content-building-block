@@ -62,6 +62,8 @@ type Storage interface {
 	FindMetaData(key *string) (*model.MetaData, error)
 	UpdateMetaData(item *model.MetaData, value map[string]interface{}) (*model.MetaData, error)
 	DeleteMetaData(key string) error
+
+	SyncDepartmentAttributes(appID *string, orgID string, contentItemID string) error
 }
 
 // Core BB interface
