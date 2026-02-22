@@ -15,12 +15,17 @@
 package storage
 
 import (
+	"bytes"
 	"content/core/interfaces"
 	"content/core/model"
 	"context"
+	"encoding/csv"
 	"fmt"
+	"io"
 	"log"
+	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -725,7 +730,294 @@ func (sa *Adapter) UpdateMetaData(item *model.MetaData, value map[string]interfa
 }
 
 func (sa *Adapter) SyncDepartmentAttributes(appID *string, orgID string, contentItemID string) error {
-	return nil
+	units, err := fetchUniversityUnits()
+	if err != nil {
+		return err
+	}
+
+	// 1) load attributes doc (the one you pasted)
+	filter := bson.M{"_id": contentItemID, "app_id": appID, "org_id": orgID}
+	var doc bson.M
+	if err := sa.db.contentItems.FindOne(sa.context, filter, &doc, nil); err != nil {
+		return err
+	}
+
+	// 2) load snapshot (separate doc)
+	snapFilter := bson.M{"category": "uiuc_units_snapshot", "app_id": appID, "org_id": orgID}
+	var snapDoc bson.M
+	err = sa.db.contentItems.FindOne(sa.context, snapFilter, &snapDoc, nil)
+	if err != nil {
+		// first run: just save snapshot and exit (no renames yet)
+		return sa.saveUnitsSnapshot(appID, orgID, units)
+	}
+
+	oldUnits := extractUnitsSnapshot(snapDoc)
+	oldByID := unitsByID(oldUnits)
+	newByID := unitsByID(units)
+
+	// 3) detect renames by ID and apply alias updates
+	for id, oldU := range oldByID {
+		newU, ok := newByID[id]
+		if !ok {
+			continue
+		}
+
+		deptRenamed := oldU.Name != newU.Name
+		colRenamed := oldU.CollegeName != newU.CollegeName
+
+		if !deptRenamed && !colRenamed {
+			continue
+		}
+
+		// rename department entry: {label:new, value:old} and keep requirements.college as OLD
+		if deptRenamed {
+			if err := sa.renameDepartmentValue(filter, oldU.CollegeName, oldU.Name, newU.Name, newU.CollegeName); err != nil {
+				return err
+			}
+		}
+
+		// rename college display: update group for all departments with requirements.college == oldCollege
+		if colRenamed {
+			if err := sa.renameCollegeGroupForDepartments(filter, oldU.CollegeName, newU.CollegeName); err != nil {
+				return err
+			}
+		}
+	}
+
+	// 4) add new departments (IDs present in new but not in old)
+	for id, newU := range newByID {
+		if _, ok := oldByID[id]; ok {
+			continue
+		}
+		if err := sa.addDepartmentValue(filter, newU); err != nil {
+			return err
+		}
+	}
+
+	// 5) update snapshot at end
+	return sa.saveUnitsSnapshot(appID, orgID, units)
+}
+
+func fetchUniversityUnits() ([]model.UniversityUnit, error) {
+	resp, err := http.Get("https://www.dmi.illinois.edu/ddd/mktextdirectory.asp")
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return nil, fmt.Errorf("dmi status: %d", resp.StatusCode)
+	}
+
+	raw, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	// TSV reader
+	r := csv.NewReader(bytes.NewReader(raw))
+	r.Comma = '\t'
+	r.FieldsPerRecord = -1
+	r.LazyQuotes = true
+
+	records, err := r.ReadAll()
+	if err != nil {
+		return nil, err
+	}
+	if len(records) < 2 {
+		return nil, fmt.Errorf("dmi: not enough rows")
+	}
+
+	header := records[0]
+	colIndex := func(name string) (int, error) {
+		for i, h := range header {
+			if strings.TrimSpace(h) == name {
+				return i, nil
+			}
+		}
+		return -1, fmt.Errorf("missing column %q", name)
+	}
+
+	idxID, err := colIndex("Banner_Org")
+	if err != nil {
+		return nil, err
+	}
+	idxName, err := colIndex("deptFullName")
+	if err != nil {
+		return nil, err
+	}
+	idxCollege, err := colIndex("CollegeName")
+	if err != nil {
+		return nil, err
+	}
+
+	units := make([]model.UniversityUnit, 0, len(records)-1)
+	for _, row := range records[1:] {
+		maxIdx := idxID
+		if idxName > maxIdx {
+			maxIdx = idxName
+		}
+		if idxCollege > maxIdx {
+			maxIdx = idxCollege
+		}
+		if len(row) <= maxIdx {
+			continue
+		}
+
+		id := strings.TrimSpace(row[idxID])
+		name := strings.TrimSpace(row[idxName])
+		col := strings.TrimSpace(row[idxCollege])
+
+		if id == "" || name == "" || col == "" {
+			continue
+		}
+
+		units = append(units, model.UniversityUnit{
+			ID: id, Name: name, CollegeName: col,
+		})
+	}
+	return units, nil
+}
+
+func unitsByID(units []model.UniversityUnit) map[string]model.UniversityUnit {
+	m := make(map[string]model.UniversityUnit, len(units))
+	for _, u := range units {
+		m[u.ID] = u
+	}
+	return m
+}
+
+func (sa *Adapter) renameDepartmentValue(
+	filter bson.M,
+	oldCollege string,
+	oldLabel string,
+	newLabel string,
+	newCollege string,
+) error {
+
+	update := bson.M{
+		"$set": bson.M{
+			"data.attributes.$[attr].values.$[val].label": newLabel,
+			"data.attributes.$[attr].values.$[val].value": oldLabel,
+			"data.attributes.$[attr].values.$[val].group": newCollege, // display only
+			"date_updated": time.Now().UTC(),
+		},
+	}
+
+	opts := options.Update().SetArrayFilters(options.ArrayFilters{
+		Filters: []interface{}{
+			bson.M{"attr.id": "department"},
+			bson.M{
+				"val.label":                oldLabel,
+				"val.requirements.college": oldCollege,
+			},
+		},
+	})
+
+	_, err := sa.db.contentItems.UpdateOne(sa.context, filter, update, opts)
+	return err
+}
+func (sa *Adapter) renameCollegeGroupForDepartments(filter bson.M, oldCollege, newCollege string) error {
+	update := bson.M{
+		"$set": bson.M{
+			"data.attributes.$[attr].values.$[val].group": newCollege,
+			"date_updated": time.Now().UTC(),
+		},
+	}
+
+	opts := options.Update().SetArrayFilters(options.ArrayFilters{
+		Filters: []interface{}{
+			bson.M{"attr.id": "department"},
+			bson.M{"val.requirements.college": oldCollege},
+		},
+	})
+
+	_, err := sa.db.contentItems.UpdateOne(sa.context, filter, update, opts)
+	return err
+}
+
+func extractUnitsSnapshot(doc bson.M) []model.UniversityUnit {
+	data, _ := doc["data"].(bson.M)
+	if data == nil {
+		return nil
+	}
+	rawUnits, _ := data["units"].(bson.A)
+	if rawUnits == nil {
+		return nil
+	}
+
+	out := make([]model.UniversityUnit, 0, len(rawUnits))
+	for _, it := range rawUnits {
+		m, _ := it.(bson.M)
+		if m == nil {
+			continue
+		}
+		out = append(out, model.UniversityUnit{
+			ID:          fmt.Sprint(m["id"]),
+			Name:        fmt.Sprint(m["name"]),
+			CollegeName: fmt.Sprint(m["college"]),
+		})
+	}
+	return out
+}
+
+func (sa *Adapter) saveUnitsSnapshot(appID *string, orgID string, units []model.UniversityUnit) error {
+	dataUnits := make(bson.A, 0, len(units))
+	for _, u := range units {
+		dataUnits = append(dataUnits, bson.M{
+			"id":      u.ID,
+			"name":    u.Name,
+			"college": u.CollegeName,
+		})
+	}
+
+	update := bson.M{
+		"$set": bson.M{
+			"category":     "uiuc_units_snapshot",
+			"app_id":       appID,
+			"org_id":       orgID,
+			"data":         bson.M{"units": dataUnits},
+			"date_updated": time.Now().UTC(),
+		},
+		"$setOnInsert": bson.M{
+			"date_created": time.Now().UTC(),
+		},
+	}
+
+	opts := options.Update().SetUpsert(true)
+	_, err := sa.db.contentItems.UpdateOne(sa.context,
+		bson.M{"category": "uiuc_units_snapshot", "app_id": appID, "org_id": orgID},
+		update, opts,
+	)
+	return err
+}
+
+func (sa *Adapter) addDepartmentValue(filter bson.M, u model.UniversityUnit) error {
+	newVal := bson.M{
+		"group": u.CollegeName,
+		"label": u.Name,
+		"requirements": bson.M{
+			"college": u.CollegeName,
+		},
+	}
+
+	update := bson.M{
+		"$push": bson.M{
+			"data.attributes.$[attr].values": newVal,
+		},
+		"$set": bson.M{
+			"date_updated": time.Now().UTC(),
+		},
+	}
+
+	opts := options.Update().SetArrayFilters(options.ArrayFilters{
+		Filters: []interface{}{
+			bson.M{"attr.id": "department"},
+		},
+	})
+
+	_, err := sa.db.contentItems.UpdateOne(sa.context, filter, update, opts)
+	return err
 }
 
 func (sa *Adapter) abortTransaction(sessionContext mongo.SessionContext) {

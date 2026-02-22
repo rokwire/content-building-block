@@ -29,3 +29,10 @@ type ContentItem struct {
 	OrgID       string      `json:"org_id" bson:"org_id"`
 	AppID       *string     `json:"app_id" bson:"app_id"`
 } // @name ContentItem
+
+// UniversityUnit defines  data structure that would be used for renaming attributes
+type UniversityUnit struct {
+	ID          string
+	Name        string
+	CollegeName string
+} // @name UniversityUnit
