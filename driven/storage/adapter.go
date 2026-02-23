@@ -724,6 +724,200 @@ func (sa *Adapter) UpdateMetaData(item *model.MetaData, value map[string]interfa
 	return item, nil
 }
 
+// SyncDepartmentAttributes updates ONLY the "department" attribute inside the single document {category:"attributes"}.
+func (sa *Adapter) SyncDepartmentAttributes(units []model.UniversityUnit) error {
+	// load the single attributes document
+	filter := bson.M{"category": "attributes"}
+
+	var doc bson.M
+	if err := sa.db.contentItems.FindOne(context.Background(), filter, &doc, nil); err != nil {
+		return err
+	}
+
+	// existing department entries
+	byValue, byLegacy := extractDepartmentIndexes(doc)
+
+	for _, u := range units {
+		if u.ID == "" || u.Name == "" || u.CollegeName == "" {
+			continue
+		}
+
+		if oldLabel, ok := byValue[u.ID]; ok {
+			// renamed department label (or you just want to enforce correctness)
+			if oldLabel != u.Name {
+				if err := sa.UpdateDepartmentLabel(filter, u.ID, u.Name); err != nil {
+					return err
+				}
+			}
+			continue
+		}
+
+		// Legacy: match existing entry that has no value by (college|label),
+		legacyKey := makeLegacyKey(u.CollegeName, u.Name)
+		if _, ok := byLegacy[legacyKey]; ok {
+			if err := sa.MigrateDepartmentValueByLegacy(filter, u.CollegeName, u.Name, u.ID); err != nil {
+				return err
+			}
+			continue
+		}
+
+		// Add new department
+		if err := sa.AddDepartmentValue(filter, u); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// extractDepartmentIndexes builds two indexes from the attributes document:
+func extractDepartmentIndexes(doc bson.M) (map[string]string, map[string]struct{}) {
+	byValue := make(map[string]string)
+	byLegacy := make(map[string]struct{})
+
+	data, ok := doc["data"].(bson.M)
+	if !ok {
+		return byValue, byLegacy
+	}
+
+	attrs, ok := data["attributes"].(bson.A)
+	if !ok {
+		return byValue, byLegacy
+	}
+
+	for _, attr := range attrs {
+		a, ok := attr.(bson.M)
+		if !ok {
+			continue
+		}
+
+		if a["id"] != "department" {
+			continue
+		}
+
+		values, ok := a["values"].(bson.A)
+		if !ok {
+			continue
+		}
+
+		for _, v := range values {
+			val, ok := v.(bson.M)
+			if !ok {
+				continue
+			}
+
+			label, _ := val["label"].(string)
+			value, _ := val["value"].(string)
+
+			// college can be in requirements.college OR group
+			college := ""
+			if req, ok := val["requirements"].(bson.M); ok {
+				if c, _ := req["college"].(string); c != "" {
+					college = c
+				}
+			}
+			if college == "" {
+				if g, _ := val["group"].(string); g != "" {
+					college = g
+				}
+			}
+
+			if value != "" {
+				byValue[value] = label
+			}
+			if college != "" && label != "" {
+				byLegacy[makeLegacyKey(college, label)] = struct{}{}
+			}
+		}
+	}
+
+	return byValue, byLegacy
+}
+
+func makeLegacyKey(college, label string) string {
+	return college + "|" + label
+}
+
+// UpdateDepartmentLabel updates ONLY the label for a department entry matched by value (ID).
+func (sa *Adapter) UpdateDepartmentLabel(filter bson.M, value string, newLabel string) error {
+	update := bson.M{
+		"$set": bson.M{
+			"data.attributes.$[attr].values.$[val].label": newLabel,
+			"date_updated": time.Now().UTC(),
+		},
+	}
+
+	opts := options.Update().SetArrayFilters(options.ArrayFilters{
+		Filters: []interface{}{
+			bson.M{"attr.id": "department"},
+			bson.M{"val.value": value},
+		},
+	})
+
+	_, err := sa.db.contentItems.UpdateOne(context.Background(), filter, update, opts)
+	return err
+}
+
+// MigrateDepartmentValueByLegacy finds an existing department entry by (college + label)
+func (sa *Adapter) MigrateDepartmentValueByLegacy(filter bson.M, college string, label string, id string) error {
+	update := bson.M{
+		"$set": bson.M{
+			"data.attributes.$[attr].values.$[val].value": id,
+			// keep label and college consistent too (safe + avoids weird UI grouping)
+			"data.attributes.$[attr].values.$[val].label":                label,
+			"data.attributes.$[attr].values.$[val].group":                college,
+			"data.attributes.$[attr].values.$[val].requirements.college": college,
+			"date_updated": time.Now().UTC(),
+		},
+	}
+
+	opts := options.Update().SetArrayFilters(options.ArrayFilters{
+		Filters: []interface{}{
+			bson.M{"attr.id": "department"},
+			bson.M{
+				"val.label": label,
+				"$or": []bson.M{
+					{"val.requirements.college": college},
+					{"val.group": college},
+				},
+			},
+		},
+	})
+
+	_, err := sa.db.contentItems.UpdateOne(context.Background(), filter, update, opts)
+	return err
+}
+
+// AddDepartmentValue pushes a new department entry.
+func (sa *Adapter) AddDepartmentValue(filter bson.M, u model.UniversityUnit) error {
+	newValue := bson.M{
+		"group": u.CollegeName,
+		"label": u.Name,
+		"value": u.ID,
+		"requirements": bson.M{
+			"college": u.CollegeName,
+		},
+	}
+
+	update := bson.M{
+		"$push": bson.M{
+			"data.attributes.$[attr].values": newValue,
+		},
+		"$set": bson.M{
+			"date_updated": time.Now().UTC(),
+		},
+	}
+
+	opts := options.Update().SetArrayFilters(options.ArrayFilters{
+		Filters: []interface{}{
+			bson.M{"attr.id": "department"},
+		},
+	})
+
+	_, err := sa.db.contentItems.UpdateOne(context.Background(), filter, update, opts)
+	return err
+}
+
 func (sa *Adapter) abortTransaction(sessionContext mongo.SessionContext) {
 	err := sessionContext.AbortTransaction(sessionContext)
 	if err != nil {

@@ -62,6 +62,10 @@ type Storage interface {
 	FindMetaData(key *string) (*model.MetaData, error)
 	UpdateMetaData(item *model.MetaData, value map[string]interface{}) (*model.MetaData, error)
 	DeleteMetaData(key string) error
+
+	SyncDepartmentAttributes(units []model.UniversityUnit) error
+	UpdateDepartmentLabel(filter bson.M, value string, newLabel string) error
+	AddDepartmentValue(filter bson.M, u model.UniversityUnit) error
 }
 
 // Core BB interface
