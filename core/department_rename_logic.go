@@ -18,6 +18,12 @@ package core
 
 import (
 	"content/core/interfaces"
+	"content/core/model"
+	"encoding/csv"
+	"fmt"
+	"io"
+	"net/http"
+	"strings"
 	"time"
 
 	"github.com/rokwire/rokwire-building-block-sdk-go/utils/logging/logs"
@@ -67,10 +73,10 @@ func (d departmentRenameLogic) setupTimerForRename() {
 		now.Hour(), now.Minute(), now.Second(),
 	)
 
-	nowSecondsInDay := 60*60*now.Hour() + 60*now.Minute() + now.Second()
-	desiredMoment := 10800 // 3 AM
+	//nowSecondsInDay := 60*60*now.Hour() + 60*now.Minute() + now.Second()
+	//desiredMoment := 10800 // 3 AM
 
-	var durationInSeconds int
+	/*var durationInSeconds int
 	d.logger.Infof(
 		"setupTimerForDepartmentRename -> nowSecondsInDay:%d desiredMoment:%d\n",
 		nowSecondsInDay, desiredMoment,
@@ -83,9 +89,9 @@ func (d departmentRenameLogic) setupTimerForRename() {
 		d.logger.Infof("setupTimerForDepartmentRename -> already processed today, so the first process will be tomorrow")
 		leftToday := 86400 - nowSecondsInDay
 		durationInSeconds = leftToday + desiredMoment // time left today + desired moment tomorrow
-	}
-	//duration := time.Second * time.Duration(3)
-	duration := time.Second * time.Duration(durationInSeconds)
+	}*/
+	duration := time.Second * time.Duration(3)
+	//duration := time.Second * time.Duration(durationInSeconds)
 	d.logger.Infof("setupTimerForDepartmentRename -> first call after %s", duration)
 
 	d.dailyRenameTimer = time.NewTimer(duration)
@@ -126,4 +132,99 @@ func (d departmentRenameLogic) process() {
 }
 
 func (d departmentRenameLogic) processRename() {
+	units, err := fetchUniversityUnits()
+	if err != nil {
+		return
+	}
+	fmt.Print(units)
+}
+
+func fetchUniversityUnits() ([]model.UniversityUnit, error) {
+	client := &http.Client{Timeout: 15 * time.Second}
+
+	req, err := http.NewRequest(http.MethodGet, "https://www.dmi.illinois.edu/ddd/mktextdirectory.asp", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return nil, fmt.Errorf("dmi returned status: %d", resp.StatusCode)
+	}
+
+	r := csv.NewReader(resp.Body)
+	r.Comma = '\t'
+	r.FieldsPerRecord = -1
+	r.LazyQuotes = true
+
+	header, err := r.Read()
+	if err != nil {
+		return nil, err
+	}
+
+	findIndex := func(name string) (int, error) {
+		for i, h := range header {
+			if strings.TrimSpace(h) == name {
+				return i, nil
+			}
+		}
+		return -1, fmt.Errorf("column %s not found", name)
+	}
+
+	idIdx, err := findIndex("Banner_Org")
+	if err != nil {
+		return nil, err
+	}
+	nameIdx, err := findIndex("deptFullName")
+	if err != nil {
+		return nil, err
+	}
+	collegeIdx, err := findIndex("CollegeName")
+	if err != nil {
+		return nil, err
+	}
+
+	maxIdx := idIdx
+	if nameIdx > maxIdx {
+		maxIdx = nameIdx
+	}
+	if collegeIdx > maxIdx {
+		maxIdx = collegeIdx
+	}
+
+	units := make([]model.UniversityUnit, 0, 2048)
+
+	for {
+		row, err := r.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		if len(row) <= maxIdx {
+			continue
+		}
+
+		id := strings.TrimSpace(row[idIdx])
+		name := strings.TrimSpace(row[nameIdx])
+		college := strings.TrimSpace(row[collegeIdx])
+
+		if id == "" || name == "" || college == "" {
+			continue
+		}
+
+		units = append(units, model.UniversityUnit{
+			ID:          id,
+			Name:        name,
+			CollegeName: college,
+		})
+	}
+
+	return units, nil
 }
