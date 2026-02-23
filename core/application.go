@@ -47,6 +47,8 @@ type Application struct {
 
 	//delete data logic
 	deleteDataLogic deleteDataLogic
+	//department rename logic
+	departmentRenameLogic departmentRenameLogic
 }
 
 // Start starts the core part of the application
@@ -59,6 +61,8 @@ func (app *Application) Start() {
 	}
 
 	app.deleteDataLogic.start()
+	app.departmentRenameLogic.start()
+
 }
 
 // as the service starts supporting multi-tenancy we need to add the needed multi-tenancy fields for the existing data,
@@ -115,10 +119,11 @@ func NewApplication(version string, build string, storage interfaces.Storage, aw
 	serviceID string, coreBB interfaces.Core, logger *logs.Logger) *Application {
 	cacheLock := &sync.Mutex{}
 	deleteDataLogic := deleteLogic(*logger, coreBB, serviceID, storage, awsAdapter)
+	departmentRenameLogic := newDepartmentRenameLogic(*logger, storage)
 
 	application := Application{version: version, build: build, cacheLock: cacheLock, storage: storage,
 		awsAdapter: awsAdapter, twitterAdapter: twitterAdapter, cacheAdapter: cacheadapter,
-		multiTenancyAppID: mtAppID, multiTenancyOrgID: mtOrgID, deleteDataLogic: deleteDataLogic, logger: logger}
+		multiTenancyAppID: mtAppID, multiTenancyOrgID: mtOrgID, deleteDataLogic: deleteDataLogic, departmentRenameLogic: departmentRenameLogic, logger: logger}
 
 	// add the drivers ports/interfaces
 	application.Services = &servicesImpl{app: &application}

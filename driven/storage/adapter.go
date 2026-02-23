@@ -724,10 +724,6 @@ func (sa *Adapter) UpdateMetaData(item *model.MetaData, value map[string]interfa
 	return item, nil
 }
 
-func (sa *Adapter) SyncDepartmentAttributes(appID *string, orgID string, contentItemID string) error {
-	return nil
-}
-
 func (sa *Adapter) abortTransaction(sessionContext mongo.SessionContext) {
 	err := sessionContext.AbortTransaction(sessionContext)
 	if err != nil {

@@ -31,20 +31,13 @@ type departmentRenameLogic struct {
 	orgID         string
 	contentItemID string
 
-	timer *time.Timer
-	done  chan bool
+	//delete data timer
+	dailyRenameTimer *time.Timer
+	timerDone        chan bool
 }
 
-func newDepartmentRenameLogic(logger logs.Logger, storage interfaces.Storage, appID *string, orgID string, contentItemID string) departmentRenameLogic {
-
-	return departmentRenameLogic{
-		logger:        logger,
-		storage:       storage,
-		appID:         appID,
-		orgID:         orgID,
-		contentItemID: contentItemID,
-		done:          make(chan bool),
-	}
+func newDepartmentRenameLogic(logger logs.Logger, storage interfaces.Storage) departmentRenameLogic {
+	return departmentRenameLogic{logger: logger, storage: storage}
 }
 
 func (d departmentRenameLogic) start() {
@@ -53,44 +46,84 @@ func (d departmentRenameLogic) start() {
 
 func (d departmentRenameLogic) setupTimerForRename() {
 
-	location, _ := time.LoadLocation("America/Chicago")
-	now := time.Now().In(location)
+	// cancel if active
+	if d.dailyRenameTimer != nil {
+		d.logger.Info("setupTimerForDepartmentRename -> there is active timer, so cancel it")
 
-	nowSeconds := now.Hour()*3600 + now.Minute()*60 + now.Second()
-	desired := 3 * 3600 // 3 AM
-
-	var wait int
-	if nowSeconds <= desired {
-		wait = desired - nowSeconds
-	} else {
-		wait = (86400 - nowSeconds) + desired
+		// signal abort first, then stop timer
+		d.timerDone <- true
+		d.dailyRenameTimer.Stop()
 	}
 
-	d.timer = time.NewTimer(time.Duration(wait) * time.Second)
+	// wait until it is the correct moment from the day
+	location, err := time.LoadLocation("America/Chicago")
+	if err != nil {
+		d.logger.Errorf("Error getting location:%s\n", err.Error())
+	}
 
+	now := time.Now().In(location)
+	d.logger.Infof(
+		"setupTimerForDepartmentRename -> now - hours:%d minutes:%d seconds:%d\n",
+		now.Hour(), now.Minute(), now.Second(),
+	)
+
+	nowSecondsInDay := 60*60*now.Hour() + 60*now.Minute() + now.Second()
+	desiredMoment := 10800 // 3 AM
+
+	var durationInSeconds int
+	d.logger.Infof(
+		"setupTimerForDepartmentRename -> nowSecondsInDay:%d desiredMoment:%d\n",
+		nowSecondsInDay, desiredMoment,
+	)
+
+	if nowSecondsInDay <= desiredMoment {
+		d.logger.Infof("setupTimerForDepartmentRename -> not processed today, so the first process will be today")
+		durationInSeconds = desiredMoment - nowSecondsInDay
+	} else {
+		d.logger.Infof("setupTimerForDepartmentRename -> already processed today, so the first process will be tomorrow")
+		leftToday := 86400 - nowSecondsInDay
+		durationInSeconds = leftToday + desiredMoment // time left today + desired moment tomorrow
+	}
+	//duration := time.Second * time.Duration(3)
+	duration := time.Second * time.Duration(durationInSeconds)
+	d.logger.Infof("setupTimerForDepartmentRename -> first call after %s", duration)
+
+	d.dailyRenameTimer = time.NewTimer(duration)
 	select {
-	case <-d.timer.C:
+	case <-d.dailyRenameTimer.C:
+		d.logger.Info("setupTimerForDepartmentRename -> rename timer expired")
+		d.dailyRenameTimer = nil
+
 		d.process()
-	case <-d.done:
-		d.timer.Stop()
+	case <-d.timerDone:
+		// timer aborted
+		d.logger.Info("setupTimerForDepartmentRename -> rename timer aborted")
+		d.dailyRenameTimer = nil
 	}
 }
 
 func (d departmentRenameLogic) process() {
+	d.logger.Info("Deleting data process")
 
-	d.logger.Info("Department sync started")
+	//process work
+	d.processRename()
 
-	err := d.storage.SyncDepartmentAttributes(d.appID, d.orgID, d.contentItemID)
-	if err != nil {
-		d.logger.Errorf("Department sync error: %v", err)
-	}
-
-	d.timer = time.NewTimer(24 * time.Hour)
-
+	//generate new processing after 24 hours
+	duration := time.Hour * 24
+	d.logger.Infof("Rename data process -> next call after %s", duration)
+	d.dailyRenameTimer = time.NewTimer(duration)
 	select {
-	case <-d.timer.C:
+	case <-d.dailyRenameTimer.C:
+		d.logger.Info("Rename data process -> timer expired")
+		d.dailyRenameTimer = nil
+
 		d.process()
-	case <-d.done:
-		d.timer.Stop()
+	case <-d.timerDone:
+		// timer aborted
+		d.logger.Info("Rename data process -> timer aborted")
+		d.dailyRenameTimer = nil
 	}
+}
+
+func (d departmentRenameLogic) processRename() {
 }
