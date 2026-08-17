@@ -23,7 +23,9 @@ import (
 	storage "content/driven/storage"
 	"content/driven/twitter"
 	driver "content/driver/web"
+	"context"
 	"log"
+	"os"
 	"strconv"
 	"strings"
 
@@ -42,6 +44,13 @@ var (
 )
 
 func main() {
+	if err := runUIUCDMIPrototype(context.Background(), os.Stdout); err != nil {
+		log.Fatalf("UIUC DMI prototype failed: %v", err)
+	}
+	if uiucDMIPrototypeOnly {
+		return
+	}
+
 	if len(Version) == 0 {
 		Version = "dev"
 	}
