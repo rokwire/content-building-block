@@ -1,394 +1,463 @@
-source_id	record_type	Campus	College	Dept	Deptname	deptFullName	CollegeName	Dean	Active	Duplicate	directoryDisplay
-illinois.edu:NA:630	department	1	NA	630	Illinois Human Resources	Illinois Human Resources	Chancellor	F	Y	T	True
-illinois.edu:NA	college_admin	1	NA	700	Office of the Chancellor	Office of the Chancellor	Chancellor	T	Y	F	True
-illinois.edu:NV:433	department	1	NV	433	Office for Access and Equity	Office for Access and Equity	Vice Chancellor for Access	F	Y	F	True
-illinois.edu:NB	college_admin	1	NB	431	Provost/EVC Admin	Office of the Provost and Executive Vice Chancellor	Provost & Executive VC	T	Y	F	True
-illinois.edu:NB:223	department	1	NB	223	University Laboratory HS	University Laboratory High School	Provost & Executive VC	F	Y	F	True
-illinois.edu:NT	college_admin	1	NT	618	Ofc of the Chief Info Officer	Office of the Chief Information Officer	Technology Svcs at Illinois	T	Y	F	True
-illinois.edu:NT:798	department	1	NT	798	Technology Services	Technology Services at Illinois	Technology Svcs at Illinois	F	Y	T	True
-illinois.edu:NB:970	department	1	NB	970	Big Ten Academic Alliance	Big Ten Academic Alliance	Provost & Executive VC	F	Y	T	True
-illinois.edu:NB:898	department	1	NB	898	Office of the Registrar	Office of the Registrar	Provost & Executive VC	F	Y	F	True
-illinois.edu:NB:269	department	1	NB	269	Principal's Scholars Pgm	Principal's Scholars Program	Provost & Executive VC	F	Y	F	True
-illinois.edu:NB:759	department	1	NB	759	Campus Honors Program	Campus Honors Program	Provost & Executive VC	F	Y	F	True
-illinois.edu:NB:593	department	1	NB	593	Undergraduate Admissions	Office of Undergraduate Admissions	Provost & Executive VC	F	Y	F	True
-illinois.edu:NB:962	department	1	NB	962	Div of Management Information	Division of Management Information	Provost & Executive VC	F	Y	F	True
-illinois.edu:NL:664	department	1	NL	664	Division of Public Safety	Division of Public Safety	VC Finance and Administration	F	Y	F	True
-illinois.edu:NC	college_admin	1	NC	426	Eng & Constr Serv Admin	Engineering & Constr Service Admin	Administrative Services	T	Y	T	False
-illinois.edu:NN:940	department	1	NN	940	Safety and Compliance	Safety and Compliance	Facilities	F	Y	F	True
-illinois.edu:NC:763	department	1	NC	763	F&S Document Services	F&S Document Services	Administrative Services	F	Y	T	False
-illinois.edu:NC:566	department	1	NC	566	Campus Stores and Receiving	Campus Stores and Receiving	Administrative Services	F	Y	F	True
-illinois.edu:NQ:293	department	1	NQ	293	Parking Department	Parking Department	Auxiliary Units	F	Y	F	True
-illinois.edu:NE	college_admin	1	NE	370	OVCRI Admin	Office of the Vice Chancellor for Research and Innovation - Administration	VC for Research and Innovation	T	Y	F	True
-illinois.edu:NE:393	department	1	NE	393	OVCRI Support	Office of the Vice Chancellor for Research and Innovation - Support	VC for Research and Innovation	F	Y	T	False
-illinois.edu:NE:207	department	1	NE	207	Research Board	Research Board	VC for Research and Innovation	F	Y	F	True
-illinois.edu:NP:320	department	1	NP	320	Supercomputing Applications	National Center for Supercomputing Applications (NCSA)	OVCRI Institutes	F	Y	F	True
-illinois.edu:NB:626	department	1	NB	626	Center for Advanced Study	Center for Advanced Study (CAS)	Provost & Executive VC	F	Y	F	True
-illinois.edu:NE:298	department	1	NE	298	Animal Care Program	Animal Care Program	VC for Research and Innovation	F	Y	F	True
-illinois.edu:NE:531	department	1	NE	531	Biotechnology Center	Biotechnology Center	VC for Research and Innovation	F	Y	F	True
-illinois.edu:NP:231	department	1	NP	231	IGB	Carl R. Woese Institute for Genomic Biology	OVCRI Institutes	F	Y	F	True
-illinois.edu:NE:877	department	1	NE	877	Division of Research Safety	Division of Research Safety	VC for Research and Innovation	F	Y	F	True
-illinois.edu:NE:959	department	1	NE	959	EnterpriseWorks	EnterpriseWorks Business Incubator	VC for Research and Innovation	F	Y	F	True
-illinois.edu:NE:344	department	1	NE	344	Protection of Research Subject	Office for the Protection of Research Subjects	VC for Research and Innovation	F	Y	F	True
-illinois.edu:NE:409	department	1	NE	409	Office of Animal Research Comp	Office of Animal Research Compliance	VC for Research and Innovation	F	Y	F	True
-illinois.edu:NP:547	department	1	NP	547	IL State Geological Survey	Illinois State Geological Survey	OVCRI Institutes	F	Y	F	True
-illinois.edu:NP:375	department	1	NP	375	IL Natural History Survey	Illinois Natural History Survey	OVCRI Institutes	F	Y	F	True
-illinois.edu:NP:740	department	1	NP	740	IL State Water Survey	Illinois State Water Survey	OVCRI Institutes	F	Y	F	True
-illinois.edu:NP:807	department	1	NP	807	IL Sustainable Technology Ctr	Illinois Sustainable Technology Center	OVCRI Institutes	F	Y	F	True
-illinois.edu:NG:236	department	1	NG	236	General & Unassigned	General	Misc Admin Units	F	Y	F	False
-illinois.edu:NG:376	department	1	NG	376	Campus Insurance Coverage	Campus Insurance Coverage	Misc Admin Units	F	Y	F	False
-illinois.edu:NG:813	department	1	NG	813	Development & Foundation Svcs	Development and Foundation Services	Misc Admin Units	F	Y	F	False
-illinois.edu:NG:467	department	1	NG	467	Leasehold	Leasehold Rentals	Misc Admin Units	F	Y	F	False
-illinois.edu:NG:769	department	1	NG	769	Memorial Stadium	Memorial Stadium	Misc Admin Units	F	Y	F	False
-illinois.edu:NG:753	department	1	NG	753	Medicare	Medicare	Misc Admin Units	F	Y	F	False
-illinois.edu:NG:503	department	1	NG	503	Worker's Compensation	Workers' Compensation	Misc Admin Units	F	Y	F	False
-illinois.edu:NL:611	department	1	NL	611	Illini Center	Illini Center	VC Finance and Administration	F	Y	F	True
-illinois.edu:NJ	college_admin	1	NJ	825	VC Student Affairs	Office of the Vice Chancellor for Student Affairs	Vice Chanc Student Affairs	T	Y	F	True
-illinois.edu:NJ:459	department	1	NJ	459	Student Success, Incl & Belong	Student Success, Inclusion, and Belonging	Vice Chanc Student Affairs	F	Y	F	True
-illinois.edu:NJ:743	department	1	NJ	743	Jeffries Ctr Acces and AcadSuc	Michael L. Jeffries, Sr. Center for Access and Academic Success	Vice Chanc Student Affairs	F	Y	F	True
-illinois.edu:NJ:391	department	1	NJ	391	The Career Center	The Career Center	Vice Chanc Student Affairs	F	Y	T	True
-illinois.edu:NJ:573	department	1	NJ	573	Student Conflict Resolution	Office for Student Conflict Resolution	Vice Chanc Student Affairs	F	Y	F	True
-illinois.edu:NJ:695	department	1	NJ	695	Counseling Center	Counseling Center	Vice Chanc Student Affairs	F	Y	F	True
-illinois.edu:NB:678	department	1	NB	678	Student Financial Aid	Office of Student Financial Aid	Provost & Executive VC	F	Y	F	True
-illinois.edu:NQ:551	department	1	NQ	551	McKinley Health Center	McKinley Health Center	Auxiliary Units	F	Y	F	True
-illinois.edu:NA:504	department	1	NA	504	Employee Dev and Learning	Employee Development and Learning	Chancellor	F	Y	F	True
-illinois.edu:NA:980	department	1	NA	980	Faculty/Staff Assistance Svcs	Faculty/Staff Assistance Services	Chancellor	F	Y	F	True
-illinois.edu:NA:665	department	1	NA	665	Office of Public Engagement	Office of Public Engagement	Chancellor	F	Y	F	True
-illinois.edu:NL:693	department	1	NL	693	Willard Airport Commercial Op	Willard Airport Commercial Operations	VC Finance and Administration	F	Y	T	True
-illinois.edu:KL	college_admin	1	KL	483	Agr, Consumer, & Env Sci Admn	College of Agricultural, Consumer and Environmental Sciences Administration	Agr, Consumer, & Env Sciences	T	Y	F	True
-illinois.edu:KL:452	department	1	KL	452	Agr, Consumer, & Env Sci Gen	College of Agricultural, Consumer and Environmental Sciences Administration General Expenses	Agr, Consumer, & Env Sciences	F	Y	T	False
-illinois.edu:KL:348	department	1	KL	348	ACES Technology Services	ACES Technology Services	Agr, Consumer, & Env Sciences	F	Y	F	True
-illinois.edu:KL:470	department	1	KL	470	Agr & Consumer Economics	Department of Agricultural and Consumer Economics	Agr, Consumer, & Env Sciences	F	Y	F	True
-illinois.edu:KL:741	department	1	KL	741	Agricultural & Biological Engr	Department of Agricultural and Biological Engineering	Agr, Consumer, & Env Sciences	F	Y	F	True
-illinois.edu:KL:306	department	1	KL	306	Agr, Consumer, & Env Sciences	Agricultural, Consumer and Environmental Sciences Courses	Agr, Consumer, & Env Sciences	F	Y	T	False
-illinois.edu:KL:802	department	1	KL	802	Crop Sciences	Department of Crop Sciences	Agr, Consumer, & Env Sciences	F	Y	F	True
-illinois.edu:KL:384	department	1	KL	384	Cooperative Extension	Cooperative Extension Service	Agr, Consumer, & Env Sciences	F	Y	T	True
-illinois.edu:KL:538	department	1	KL	538	Animal Sciences	Department of Animal Sciences	Agr, Consumer, & Env Sciences	F	Y	F	True
-illinois.edu:KL:793	department	1	KL	793	Human Dvlpmt & Family Studies	Department of Human Development and Family Studies	Agr, Consumer, & Env Sciences	F	Y	F	True
-illinois.edu:KL:698	department	1	KL	698	Food Science & Human Nutrition	Department of Food Science and Human Nutrition	Agr, Consumer, & Env Sciences	F	Y	F	True
-illinois.edu:KL:875	department	1	KL	875	Natural Res & Env Sci	Department of Natural Resources and Environmental Sciences	Agr, Consumer, & Env Sciences	F	Y	F	True
-illinois.edu:KL:971	department	1	KL	971	Nutritional Sciences	Nutritional Sciences	Agr, Consumer, & Env Sciences	F	Y	F	True
-illinois.edu:LC:888	department	1	LC	888	Veterinary Prog in Agr	Veterinary Program in Agriculture	Veterinary Medicine	F	Y	T	True
-illinois.edu:KL:416	department	1	KL	416	Agricultural Buildings, O & M	Agricultural Buildings, Operation and Maintenance	Agr, Consumer, & Env Sciences	F	Y	T	True
-illinois.edu:KM	college_admin	1	KM	952	Gies College of Business	Gies College of Business Administration	Gies College of Business	T	Y	F	True
-illinois.edu:KM:432	department	1	KM	432	Gies Business General	Gies College of Business General Expenses	Gies College of Business	F	Y	T	False
-illinois.edu:KM:979	department	1	KM	979	Student & Corporate Connection	Gies Student and Corporate Connections	Gies College of Business	F	Y	F	True
-illinois.edu:KM:847	department	1	KM	847	IT Partners Gies Business	Information Technology Partners at Gies Business	Gies College of Business	F	Y	F	True
-illinois.edu:KM:346	department	1	KM	346	Accountancy	Department of Accountancy	Gies College of Business	F	Y	F	True
-illinois.edu:KM:230	department	1	KM	230	MBA Program Administration	Regular Masters of Business Administration Program Administration	Gies College of Business	F	Y	F	True
-illinois.edu:KM:330	department	1	KM	330	Gies Advancement	Gies College of Business Advancement	Gies College of Business	F	Y	F	True
-illinois.edu:KM:938	department	1	KM	938	Executive MBA Program	Executive Masters of Business Administration Program	Gies College of Business	F	Y	F	True
-illinois.edu:KM:260	department	1	KM	260	Finance	Department of Finance	Gies College of Business	F	Y	F	True
-illinois.edu:KM:902	department	1	KM	902	Business Administration	Department of Business Administration	Gies College of Business	F	Y	F	True
-illinois.edu:KM:446	department	1	KM	446	Bureau Economic & Business Res	Bureau of Economic and Business Research	Gies College of Business	F	Y	T	True
-illinois.edu:KM:469	department	1	KM	469	Executive Development Ctr	Executive Development Center	Gies College of Business	F	Y	F	True
-illinois.edu:KN	college_admin	1	KN	335	Education Administration	College of Education Administration	Education	T	Y	F	True
-illinois.edu:KN:617	department	1	KN	617	Education General Expen	College of Education General Expenses	Education	F	Y	T	False
-illinois.edu:KN:616	department	1	KN	616	Educational Psychology	Department of Educational Psychology	Education	F	Y	F	True
-illinois.edu:KN:613	department	1	KN	613	Curriculum and Instruction	Department of Curriculum and Instruction	Education	F	Y	F	True
-illinois.edu:KN:570	department	1	KN	570	Special Education	Department of Special Education	Education	F	Y	F	True
-illinois.edu:KN:760	department	1	KN	760	Educ Policy, Orgzn & Leadrshp	Education Policy, Organization and Leadership	Education	F	Y	F	True
-illinois.edu:KN:418	department	1	KN	418	Bureau Educational Research	Bureau of Educational Research	Education	F	Y	F	True
-illinois.edu:KN:676	department	1	KN	676	Center for Study of Reading	Center for the Study of Reading	Education	F	Y	F	True
-illinois.edu:KN:541	department	1	KN	541	Council Teacher Ed Admin	Council on Teacher Education	Education	F	Y	F	True
-illinois.edu:KP	college_admin	1	KP	227	Engineering Administration	Grainger Engineering Administration	Grainger Engineering	T	Y	F	True
-illinois.edu:KP:602	department	1	KP	602	Engineering General Expen	Grainger Engineering General Expenses	Grainger Engineering	F	Y	T	False
-illinois.edu:KP:487	department	1	KP	487	Micro and Nanotechnology Lab	Micro and Nanotechnology Laboratory	Grainger Engineering	F	Y	F	True
-illinois.edu:KP:615	department	1	KP	615	Aerospace Engineering	Department of Aerospace Engineering	Grainger Engineering	F	Y	F	True
-illinois.edu:KP:343	department	1	KP	343	Bioengineering	Department of Bioengineering	Grainger Engineering	F	Y	F	True
-illinois.edu:KP:246	department	1	KP	246	Computational Science & Engr	Computational Science and Engineering	Grainger Engineering	F	Y	F	True
-illinois.edu:KP:434	department	1	KP	434	Siebel School Comp & Data Sci	Siebel School of Computing and Data Science	Grainger Engineering	F	Y	T	True
-illinois.edu:KP:251	department	1	KP	251	Civil & Environmental Eng	Department of Civil and Environmental Engineering	Grainger Engineering	F	Y	F	True
-illinois.edu:KP:239	department	1	KP	239	Coordinated Science Lab	Coordinated Science Lab	Grainger Engineering	F	Y	F	True
-illinois.edu:KP:933	department	1	KP	933	Electrical & Computer Eng	Department of Electrical and Computer Engineering	Grainger Engineering	F	Y	F	True
-illinois.edu:KP:545	department	1	KP	545	Engineering Courses	Grainger Engineering Courses	Grainger Engineering	F	Y	T	False
-illinois.edu:KP:697	department	1	KP	697	Engineering Honors	Grainger Engineering Honors Courses	Grainger Engineering	F	Y	T	False
-illinois.edu:KP:422	department	1	KP	422	Industrial&Enterprise Sys Eng	Department of Industrial and Enterprise Systems Engineering	Grainger Engineering	F	Y	F	True
-illinois.edu:KP:204	department	1	KP	204	Manufacturing Engineering	Manufacturing Engineering	Grainger Engineering	F	Y	F	True
-illinois.edu:KP:220	department	1	KP	220	Materials Research Lab	Materials Research Laboratory	Grainger Engineering	F	Y	F	True
-illinois.edu:KP:919	department	1	KP	919	Materials Science & Engineerng	Department of Materials Science and Engineering	Grainger Engineering	F	Y	F	True
-illinois.edu:KP:917	department	1	KP	917	Mechanical Sci & Engineering	Department of Mechanical Science and Engineering	Grainger Engineering	F	Y	F	True
-illinois.edu:KP:973	department	1	KP	973	Nuclear, Plasma, & Rad Engr	Department of Nuclear, Plasma, and Radiological Engineering	Grainger Engineering	F	Y	F	True
-illinois.edu:KP:244	department	1	KP	244	Physics	Department of Physics	Grainger Engineering	F	Y	F	True
-illinois.edu:KR	college_admin	1	KR	447	Fine & Applied Arts Admin	College of Fine and Applied Arts Administration	Fine & Applied Arts	T	Y	T	True
-illinois.edu:KR:663	department	1	KR	663	FAA General Expen	College of Fine and Applied Arts General Expenses	Fine & Applied Arts	F	Y	T	False
-illinois.edu:KR:481	department	1	KR	481	Action Research Illinois	Action Research Illinois	Fine & Applied Arts	F	Y	T	True
-illinois.edu:KR:767	department	1	KR	767	Architecture	School of Architecture	Fine & Applied Arts	F	Y	F	True
-illinois.edu:KR:526	department	1	KR	526	Art & Design	School of Art and Design	Fine & Applied Arts	F	Y	F	True
-illinois.edu:KR:801	department	1	KR	801	Dance	Department of Dance	Fine & Applied Arts	F	Y	F	True
-illinois.edu:KR:262	department	1	KR	262	Krannert Center	Krannert Center for the Performing Arts	Fine & Applied Arts	F	Y	F	True
-illinois.edu:KR:569	department	1	KR	569	Landscape Architecture	Department of Landscape Architecture	Fine & Applied Arts	F	Y	F	True
-illinois.edu:KR:495	department	1	KR	495	Music	School of Music	Fine & Applied Arts	F	Y	F	True
-illinois.edu:KR:883	department	1	KR	883	Theatre	Department of Theatre	Fine & Applied Arts	F	Y	F	True
-illinois.edu:KR:209	department	1	KR	209	U of I Bands	University of Illinois Bands	Fine & Applied Arts	F	Y	T	True
-illinois.edu:KR:733	department	1	KR	733	Urban & Regional Planning	Department of Urban and Regional Planning	Fine & Applied Arts	F	Y	F	True
-illinois.edu:KR:607	department	1	KR	607	Krannert Art Museum	Krannert Art Museum and Kinkead Pavilion	Fine & Applied Arts	F	Y	F	True
-illinois.edu:KR:644	department	1	KR	644	Fine & Applied Arts Courses	Fine and Applied Arts Courses	Fine & Applied Arts	F	Y	T	False
-illinois.edu:KS	college_admin	1	KS	486	Graduate Admin	Graduate College Administration	Graduate College	T	Y	F	True
-illinois.edu:KS:259	department	1	KS	259	Graduate General Expen	Graduate College General Expenses	Graduate College	F	Y	T	False
-illinois.edu:KS:211	department	1	KS	211	CIC Traveling Scholars	Committee on Institutional Cooperation Traveling Scholars	Graduate College	F	Y	F	False
-illinois.edu:KS:419	department	1	KS	419	Center for Adv Study Courses	Center for Advanced Study Courses	Graduate College	F	Y	T	False
-illinois.edu:KS:297	department	1	KS	297	Grad College Access Programs	Graduate College Access Programs	Graduate College	F	Y	F	False
-illinois.edu:KS:683	department	1	KS	683	Fellowships	Fellowships	Graduate College	F	Y	F	False
-illinois.edu:KS:913	department	1	KS	913	Graduate College Programs	Graduate College Programs	Graduate College	F	Y	F	False
-illinois.edu:KT	college_admin	1	KT	934	College of Media Admin	College of Media Administration	College of Media	T	Y	F	True
-illinois.edu:KT:686	department	1	KT	686	College of Media Gen. Expenses	College of Media General Expenses	College of Media	F	Y	T	False
-illinois.edu:KT:408	department	1	KT	408	Advertising	Charles H. Sandage Department of Advertising	College of Media	F	Y	F	True
-illinois.edu:KT:642	department	1	KT	642	Journalism	Department of Journalism	College of Media	F	Y	F	True
-illinois.edu:KT:238	department	1	KT	238	Inst of Communications Rsch	Institute of Communications Research	College of Media	F	Y	F	True
-illinois.edu:KT:953	department	1	KT	953	IPM Content Programming	IPM Content Programming	College of Media	F	Y	F	False
-illinois.edu:KT:647	department	1	KT	647	IPM Development	IPM Development	College of Media	F	Y	F	False
-illinois.edu:KT:417	department	1	KT	417	IPM Administration	IPM Administration	College of Media	F	Y	T	True
-illinois.edu:KU	college_admin	1	KU	853	Law	Law	Law	T	Y	F	True
-illinois.edu:KU:694	department	1	KU	694	Law Library	Law Library	Law	F	Y	T	True
-illinois.edu:KV	college_admin	1	KV	580	LAS Administration	College of Liberal Arts and Sciences Administration	Liberal Arts & Sciences	T	Y	F	True
-illinois.edu:KV:920	department	1	KV	920	LAS General Expen	College of Liberal Arts and Sciences General Expenses	Liberal Arts & Sciences	F	Y	T	False
-illinois.edu:KV:584	department	1	KV	584	Cell & Developmental Biology	Department of Cell and Developmental Biology	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:461	department	1	KV	461	Center for African Studies	Center for African Studies	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:303	department	1	KV	303	African American Studies	Department of African American Studies	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:241	department	1	KV	241	Anthropology	Department of Anthropology	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:362	department	1	KV	362	E. Asian Languages & Cultures	Department of East Asian Languages and Cultures	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:404	department	1	KV	404	Asian American Studies	Department of Asian American Studies	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:430	department	1	KV	430	Astronomy	Department of Astronomy	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:932	department	1	KV	932	E Asian & Pacific Studies Cntr	Center for East Asian and Pacific Studies	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:253	department	1	KV	253	Climate Meteorology & Atm Sci	Department of Climate, Meteorology and Atmospheric Sciences	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:870	department	1	KV	870	Biophysics & Quant Biology	Center for Biophysics and Quantitative Biology	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:276	department	1	KV	276	Center for Writing Studies	Center for Writing Studies	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:377	department	1	KV	377	Plant Biology	Department of Plant Biology	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:625	department	1	KV	625	Sch Lit, Cultures, Ling Adm	School of Literatures, Cultures, and Linguistics Administration	Liberal Arts & Sciences	F	Y	T	True
-illinois.edu:KV:383	department	1	KV	383	School of Integrative Biology	School of Integrative Biology	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:925	department	1	KV	925	Unit For Criticism	Unit for Criticism	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:514	department	1	KV	514	Classics	Department of the Classics	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:771	department	1	KV	771	Comparative & World Literature	Department of Comparative and World Literature	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:499	department	1	KV	499	English	Department of English	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:292	department	1	KV	292	Evolution Ecology Behavior	Department of Evolution, Ecology, and Behavior	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:361	department	1	KV	361	Entomology	Department of Entomology	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:LQ:984	department	1	LQ	984	Intensive English Institute	Intensive English Institute	Illinois International Prgms	F	Y	F	True
-illinois.edu:KV:985	department	1	KV	985	French and Italian	Department of French and Italian	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:872	department	1	KV	872	Geography & GIS	Department of Geography and Geographic Information Science	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:655	department	1	KV	655	Earth Sci & Environmental Chng	Earth Science and Environmental Change	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:982	department	1	KV	982	Latina/Latino Studies	Department of Latina/Latino Studies	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:729	department	1	KV	729	Latin American & Carib Studies	Center for Latin American and Caribbean Studies	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:927	department	1	KV	927	Germanic Languages & Lit	Department of Germanic Languages and Literatures	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:451	department	1	KV	451	History	Department of History	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:NP:327	department	1	NP	327	Humanities Research Institute	Humanities Research Institute	OVCRI Institutes	F	Y	F	True
-illinois.edu:KV:864	department	1	KV	864	Linguistics	Department of Linguistics	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:397	department	1	KV	397	Life Sciences	Life Sciences	Liberal Arts & Sciences	F	Y	T	False
-illinois.edu:KV:257	department	1	KV	257	Mathematics	Department of Mathematics	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:948	department	1	KV	948	Microbiology	Department of Microbiology	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:723	department	1	KV	723	Prg in Jewish Culture &Society	The Program in Jewish Culture and Society	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:715	department	1	KV	715	Philosophy	Department of Philosophy	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:652	department	1	KV	652	Program in Medieval Studies	Program in Medieval Studies	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:604	department	1	KV	604	Molecular & Integrative Physl	Department of Molecular and Integrative Physiology	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:415	department	1	KV	415	School of Molecular & Cell Bio	School of Molecular and Cellular Biology	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:710	department	1	KV	710	Political Science	Department of Political Science	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:553	department	1	KV	553	Russian,E European,Eurasn Ctr	Russian, East European and Eurasian Center	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:299	department	1	KV	299	Psychology	Department of Psychology	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:490	department	1	KV	490	Religion	Department of Religion	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:958	department	1	KV	958	Slavic Languages & Literature	Department of Slavic Languages and Literatures	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:324	department	1	KV	324	Sociology	Department of Sociology	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:441	department	1	KV	441	Appl Technol Learning A & S	Applied Technologies for Learning in the Arts and Sciences	Liberal Arts & Sciences	F	Y	T	True
-illinois.edu:KV:954	department	1	KV	954	Ctr S. Asian & MidEast Studies	Center for South Asian and Middle Eastern Studies	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:585	department	1	KV	585	Spanish and Portuguese	Department of Spanish and Portuguese	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:489	department	1	KV	489	Communication	Department of Communication	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:680	department	1	KV	680	Gender and Women's Studies	Department of Gender and Women's Studies	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:895	department	1	KV	895	Spurlock Museum	Spurlock Museum	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:583	department	1	KV	583	Statistics	Department of Statistics	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:510	department	1	KV	510	School of Chemical Sciences	School of Chemical Sciences	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:438	department	1	KV	438	Biochemistry	Department of Biochemistry	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:413	department	1	KV	413	Chemistry	Department of Chemistry	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:687	department	1	KV	687	Chemical & Biomolecular Engr	Chemical and Biomolecular Engineering	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:405	department	1	KV	405	Economics	Department of Economics	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KV:670	department	1	KV	670	Liberal Arts & Sciences Course	Liberal Arts and Sciences Courses	Liberal Arts & Sciences	F	Y	T	False
-illinois.edu:KY	college_admin	1	KY	682	Applied Health Sciences Admin	College of Applied Health Sciences Administration	Applied Health Sciences	T	Y	F	True
-illinois.edu:KY:347	department	1	KY	347	Applied Health Sci General Exp	College of Applied Health Sciences General Expenses	Applied Health Sciences	F	Y	T	False
-illinois.edu:KY:981	department	1	KY	981	Disability Research Institute	Disability Research Institute	Applied Health Sciences	F	Y	T	True
-illinois.edu:KY:581	department	1	KY	581	Health and Kinesiology	Department of Health and Kinesiology	Applied Health Sciences	F	Y	F	True
-illinois.edu:KY:714	department	1	KY	714	Recreation, Sport and Tourism	Department of Recreation, Sport and Tourism	Applied Health Sciences	F	Y	F	True
-illinois.edu:KY:943	department	1	KY	943	Disability Res & Educ Svcs	Disability Resources and Educational Services	Applied Health Sciences	F	Y	F	True
-illinois.edu:KY:679	department	1	KY	679	Speech & Hearing Science	Department of Speech and Hearing Science	Applied Health Sciences	F	Y	F	True
-illinois.edu:KY:754	department	1	KY	754	Applied Health Sci Courses	Applied Health Sciences Courses	Applied Health Sciences	F	Y	T	False
-illinois.edu:LB	college_admin	1	LB	761	Medicine at UC Admin	Medicine at Urbana-Champaign Administration	Medicine at Urbana-Champaign	T	Y	F	True
-illinois.edu:LC	college_admin	1	LC	444	Vet Medicine Administration	College of Veterinary Medicine Administration	Veterinary Medicine	T	Y	T	True
-illinois.edu:LC:463	department	1	LC	463	Vet Medicine General Expen	College of Veterinary Medicine General Expenses	Veterinary Medicine	F	Y	T	False
-illinois.edu:LC:726	department	1	LC	726	Veterinary Diagnostic Lab	Veterinary Diagnostic Laboratory	Veterinary Medicine	F	Y	F	True
-illinois.edu:LC:873	department	1	LC	873	Comparative Biosciences	Department of Comparative Biosciences	Veterinary Medicine	F	Y	F	True
-illinois.edu:LC:598	department	1	LC	598	Vet Clinical Medicine	Department of Veterinary Clinical Medicine	Veterinary Medicine	F	Y	F	True
-illinois.edu:LC:282	department	1	LC	282	Pathobiology	Department of Pathobiology	Veterinary Medicine	F	Y	F	True
-illinois.edu:LC:819	department	1	LC	819	Center for Zoonoses Research	Center for Zoonoses Research	Veterinary Medicine	F	Y	T	True
-illinois.edu:LC:249	department	1	LC	249	Vet Med College-Wide Programs	Veterinary Medicine College-Wide Programs	Veterinary Medicine	F	Y	T	False
-illinois.edu:LD	college_admin	1	LD	974	Armed Forces Coordinator	Armed Forces Coordinator	Armed Forces	T	Y	F	True
-illinois.edu:LD:762	department	1	LD	762	Air Force Aerospace Studies	Department of Air Force Aerospace Studies	Armed Forces	F	Y	F	True
-illinois.edu:LD:914	department	1	LD	914	Military Science	Department of Military Science	Armed Forces	F	Y	F	True
-illinois.edu:LD:558	department	1	LD	558	Naval Science	Department of Naval Science	Armed Forces	F	Y	F	True
-illinois.edu:LF:305	department	1	LF	305	Fire Service Institute	Fire Service Institute	Public Safety	F	Y	F	True
-illinois.edu:NL:575	department	1	NL	575	Police Training Institute	Police Training Institute	VC Finance and Administration	F	Y	F	True
-illinois.edu:LG	college_admin	1	LG	568	School of Labor & Empl. Rel.	School of Labor and Employment Relations	School of Labor & Empl. Rel.	T	Y	F	True
-illinois.edu:NP:392	department	1	NP	392	Beckman Institute	Beckman Institute for Advanced Science and Technology	OVCRI Institutes	F	Y	F	True
-illinois.edu:LL	college_admin	1	LL	783	School of Social Work	School of Social Work	School of Social Work	T	Y	F	True
-illinois.edu:LN	college_admin	1	LN	641	Center Innov in Teach Learn	Center for Innovation in Teaching and Learning	Center for Innov Teach Learn	T	Y	F	True
-illinois.edu:LN:627	department	1	LN	627	Publications and Promotion	Publications and Promotion	Center for Innov Teach Learn	F	Y	T	False
-illinois.edu:LN:590	department	1	LN	590	Guided and Self-Paced Study	Guided and Self-Paced Study	Center for Innov Teach Learn	F	Y	F	True
-illinois.edu:NL:550	department	1	NL	550	Allerton Park & Retreat Center	Allerton Park and Retreat Center	VC Finance and Administration	F	Y	T	True
-illinois.edu:LN:951	department	1	LN	951	Academic Outreach	Division of Academic Outreach	Center for Innov Teach Learn	F	Y	T	False
-illinois.edu:LP	college_admin	1	LP	992	Information Sciences	Information Sciences	School of Information Sciences	T	Y	F	True
-illinois.edu:LP:560	department	1	LP	560	Center for Children's Books	The Center for Children's Books	School of Information Sciences	F	Y	T	True
-illinois.edu:KV:411	department	1	KV	411	The ACDIS Program	The Program in Arms Control and Domestic and International Security	Liberal Arts & Sciences	F	Y	T	True
-illinois.edu:LQ:533	department	1	LQ	533	Illinois Abroad	Illinois Abroad and Global Exchange	Illinois International Prgms	F	Y	T	True
-illinois.edu:LQ:794	department	1	LQ	794	Intl Student and Scholar Svcs	International Student and Scholar Services	Illinois International Prgms	F	Y	F	True
-illinois.edu:LR	college_admin	1	LR	540	Library Admin	Library Administration	Library	T	Y	F	True
-illinois.edu:LR:600	department	1	LR	600	Library Research & Publication	Library Research and Publication	Library	F	Y	T	True
-illinois.edu:LR:396	department	1	LR	396	Mortenson Cntr Int'l Lib Prgms	Mortenson Center for International Library Programs	Library	F	Y	T	True
-illinois.edu:LR:668	department	1	LR	668	Library	Library	Library	F	Y	T	True
-illinois.edu:LR:795	department	1	LR	795	Library Collections/Support	Library Collections/Support	Library	F	Y	T	True
-illinois.edu:NN	college_admin	1	NN	701	Facilities & Services	Facilities and Services	Facilities	T	Y	T	True
-illinois.edu:NN:456	department	1	NN	456	Building Operation	Building Operation	Facilities	F	Y	T	False
-illinois.edu:NN:815	department	1	NN	815	Bldg Maintenance Crafts/Trades	Building Maintenance Crafts and Trades	Facilities	F	Y	T	True
-illinois.edu:NN:328	department	1	NN	328	F&S Grounds	F&S Grounds Department	Facilities	F	Y	T	True
-illinois.edu:NC:766	department	1	NC	766	F&S Fleet Operations	F&S Fleet Operations	Administrative Services	F	Y	T	True
-illinois.edu:NN:398	department	1	NN	398	Heat Light & Power	Heat, Light and Power	Facilities	F	Y	T	True
-illinois.edu:MY	college_admin	1	MY	862	Energy Management Services	Energy Management Services	Energy Services	T	Y	T	False
-illinois.edu:NN:518	department	1	NN	518	Construction Projects	Construction Projects	Facilities	F	Y	F	True
-illinois.edu:NN:814	department	1	NN	814	Capital Programs	Capital Programs	Facilities	F	Y	F	True
-illinois.edu:NN:465	department	1	NN	465	Capital Admin & Development	Capital Administration & Development	Facilities	F	Y	T	False
-illinois.edu:NQ:571	department	1	NQ	571	Division of Campus Recreation	Division of Campus Recreation	Auxiliary Units	F	Y	F	True
-illinois.edu:NQ:279	department	1	NQ	279	Office of the Dean of Students	Office of the Dean of Students	Auxiliary Units	F	Y	T	True
-illinois.edu:NQ:270	department	1	NQ	270	Housing Division	Housing Division	Auxiliary Units	F	Y	F	True
-illinois.edu:NU:296	department	1	NU	296	State Farm Center	State Farm Center	Intercollegiate Athletics	F	Y	F	True
-illinois.edu:NQ:389	department	1	NQ	389	Illini Union	Illini Union	Auxiliary Units	F	Y	F	True
-illinois.edu:NU	college_admin	1	NU	336	Intercollegiate Athletics	Division of Intercollegiate Athletics (DIA)	Intercollegiate Athletics	T	Y	F	True
-illinois.edu:KV:218	department	1	KV	218	Cline Ctr for Adv Social Rsrch	Cline Center for Advanced Social Research	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:NQ:233	department	1	NQ	233	Student Affairs Technology	Student Affairs Technology	Auxiliary Units	F	Y	F	True
-illinois.edu:NA:234	department	1	NA	234	Web Services	Web Services	Chancellor	F	Y	T	True
-illinois.edu:NA:243	department	1	NA	243	StratCommunications-Marketing	The Office of Strategic Communications and Marketing	Chancellor	F	Y	T	True
-illinois.edu:KW:248	department	1	KW	248	Exploratory Studies Course		Division of ExploratoryStudies	F	Y	F	False
-illinois.edu:LC:255	department	1	LC	255	Veterinary Teaching Hospital	Veterinary Teaching Hospital	Veterinary Medicine	F	Y	T	True
-illinois.edu:KV:265	department	1	KV	265	Sch Earth, Soc, Environ Admin	School of Earth, Society, and Environment Administration	Liberal Arts & Sciences	F	Y	F	False
-illinois.edu:NN:266	department	1	NN	266	Building Maintenance Functionl	Building Maintenance Functional	Facilities	F	Y	F	False
-illinois.edu:NV:267	department	1	NV	267	Comm Engage and Adv	Communicty Engagement and Advocacy	Vice Chancellor for Access	F	Y	F	True
-illinois.edu:KP:273	department	1	KP	273	Engr Shared Admin Services	Grainger Engineering Shared Administrative Services	Grainger Engineering	F	Y	F	True
-illinois.edu:NS	college_admin	1	NS	280	Ofc VC Inst Advancement	Office of the Vice Chancellor for Institutional Advancement	VC for Inst Advancement	T	Y	T	True
-illinois.edu:KM:281	department	1	KM	281	Content & Ed PortfolioStrategy	Content and Educational Portfolio Strategy	Gies College of Business	F	Y	F	True
-illinois.edu:NA:283	department	1	NA	283	Strategic Marketing & Branding	Strategic Marketing and Branding	Chancellor	F	Y	F	True
-illinois.edu:KP:285	department	1	KP	285	Discovery Partners Inst UIUC	Discovery Partners Institute University of Illinois Urbana-Champaign	Grainger Engineering	F	Y	F	True
-illinois.edu:LM:290	department	1	LM	290	Provost Courses	Provost Courses	Provost Academic Programs	F	Y	F	False
-illinois.edu:KY:294	department	1	KY	294	Interdisciplinary Health Sci	Interdisciplinary Health Sciences	Applied Health Sciences	F	Y	F	True
-illinois.edu:KV:302	department	1	KV	302	Int'l Forum for US Studies	International Forum for US Studies	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:NW	college_admin	1	NW	307	Chief of Staff	Chief of Staff - Chancellor	VC Administrative Strategy	T	Y	F	True
-illinois.edu:KN:309	department	1	KN	309	Centers &Strategic Initiatives	Centers and Strategic Initiatives	Education	F	Y	F	True
-illinois.edu:NN:311	department	1	NN	311	F&S Engineering Services	F&S Engineering Services	Facilities	F	Y	T	True
-illinois.edu:NB:317	department	1	NB	317	Enrollment Mgmt Shared Svcs	Enrollment Management Shared Services	Provost & Executive VC	F	Y	T	True
-illinois.edu:LT:318	department	1	LT	318	Dept of Neuro and Neurosurg	Department of Neurology and Neurosurgery	Carle Illinois Medicine	F	Y	F	True
-illinois.edu:NQ:321	department	1	NQ	321	Aux. Health/WB Marketing	Auxiliary Health & Wellbeing Marketing	Auxiliary Units	F	Y	F	True
-illinois.edu:KM:325	department	1	KM	325	Action Learning	Action Learning	Gies College of Business	F	Y	F	True
-illinois.edu:NJ:329	department	1	NJ	329	SmartHealthyCommunity(Rokwire)	Smart Healthy Community (Rokwire)	Vice Chanc Student Affairs	F	Y	F	False
-illinois.edu:NP:332	department	1	NP	332	Prairie Research Institute	Prairie Research Institute	OVCRI Institutes	F	Y	F	True
-illinois.edu:NE:334	department	1	NE	334	Illinois Facilities at IQMP	Illinois Facilities at the Illinois Quantum and Microelectronics Park	VC for Research and Innovation	F	Y	F	True
-illinois.edu:KP:337	department	1	KP	337	Siebel Center for Design	Siebel Center for Design	Grainger Engineering	F	Y	F	True
-illinois.edu:KL:342	department	1	KL	342	Ag Ldrshp Educ Comm Program	Agricultural Leadership Education and Communication Program	Agr, Consumer, & Env Sciences	F	Y	F	True
-illinois.edu:KV:345	department	1	KV	345	European Union Center	European Union Center	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:NL:355	department	1	NL	355	Aviation Lease	Aviation Lease	VC Finance and Administration	F	Y	F	True
-illinois.edu:NA:358	department	1	NA	358	Special Events	Special Events	Chancellor	F	Y	F	True
-illinois.edu:NT:365	department	1	NT	365	Swanlund IT	Swanlund IT	Technology Svcs at Illinois	F	Y	F	True
-illinois.edu:NN:374	department	1	NN	374	Construction Improvements	Construction Improvements	Facilities	F	Y	F	False
-illinois.edu:KY:378	department	1	KY	378	Tech for Health & Independence	Technology for Health and Independence	Applied Health Sciences	F	Y	F	True
-illinois.edu:NQ:385	department	1	NQ	385	Conference Services	Conference Services	Auxiliary Units	F	Y	F	True
-illinois.edu:NV:394	department	1	NV	394	Business Community Econ Dev	Business Community Economic Development	Vice Chancellor for Access	F	Y	F	True
-illinois.edu:NA:395	department	1	NA	395	News Bureau	News Bureau	Chancellor	F	Y	T	True
-illinois.edu:KM:400	department	1	KM	400	Innovation & Transformation	Gies Innovation and Transformation	Gies College of Business	F	Y	F	True
-illinois.edu:NB:401	department	1	NB	401	Office of Undergrad Research	Office of Undergrad Research	Provost & Executive VC	F	Y	F	True
-illinois.edu:KV:407	department	1	KV	407	Lemann Center	Lemann Center for Brazilian Studies	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:NN:421	department	1	NN	421	Maint NAF-Incrementally Funded	Maintenance New Area Funds-Incrementally Funded	Facilities	F	Y	F	False
-illinois.edu:NQ:427	department	1	NQ	427	Campus Mail	Campus Mail	Auxiliary Units	F	Y	F	True
-illinois.edu:NB:429	department	1	NB	429	Osher Lifelong Learning Inst	Osher Lifelong Learning Institute	Provost & Executive VC	F	Y	N	True
-illinois.edu:KT:436	department	1	KT	436	Media and Cinema Studies	Department of Media and Cinema Studies	College of Media	F	Y	F	True
-illinois.edu:NJ:442	department	1	NJ	442	Stdt Affairs Human Resources	Student Affairs Human Resources	Vice Chanc Student Affairs	F	Y	F	True
-illinois.edu:KP:454	department	1	KP	454	Applied Research Institute	Applied Research Institute	Grainger Engineering	F	Y	F	True
-illinois.edu:LP:468	department	1	LP	468	Informatics	Informatics	School of Information Sciences	F	Y	F	True
-illinois.edu:LT:472	department	1	LT	472	Dept of Surg and Digest Health	Department of Surgery and Digestive Health	Carle Illinois Medicine	F	Y	F	True
-illinois.edu:KM:478	department	1	KM	478	Gies Business Grad Programs	Gies Business Graduate Programs	Gies College of Business	F	Y	F	False
-illinois.edu:LQ:482	department	1	LQ	482	Global Education & Training	Global Education & Training	Illinois International Prgms	F	Y	F	True
-illinois.edu:KM:485	department	1	KM	485	Gies Access and Engagement	Gies Access and Engagement	Gies College of Business	F	Y	F	True
-illinois.edu:NP:502	department	1	NP	502	IL State Archaeological Survey	Illinois State Archaeological Survey	OVCRI Institutes	F	Y	F	True
-illinois.edu:NP:508	department	1	NP	508	Inst for Sustain, Enrgy, & Env	Institute for Sustainability, Energy, and Environment	OVCRI Institutes	F	Y	F	True
-illinois.edu:KP:512	department	1	KP	512	Intl Research Relations	Office of International Research Relations	Grainger Engineering	F	Y	F	False
-illinois.edu:NP:520	department	1	NP	520	Interdis Health Sci Institute	Interdisciplinary Health Sciences Institute	OVCRI Institutes	F	Y	F	True
-illinois.edu:KL:521	department	1	KL	521	ADM Institute for PHL	ADM Institute for the Prevention of Postharvest Loss	Agr, Consumer, & Env Sciences	F	Y	F	True
-illinois.edu:KV:522	department	1	KV	522	Illinois Global Institute	Illinois Global Institute	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:NW:527	department	1	NW	527	Ofc of Strategic Project Mgmt	Office of Strategic Project Management	VC Administrative Strategy	F	Y	F	True
-illinois.edu:NL:532	department	1	NL	532	Div of Parks & Natural Spaces	Div of Parks & Natural Spaces	VC Finance and Administration	F	Y	F	True
-illinois.edu:NV:534	department	1	NV	534	Campus Climate and Belonging	Office for Campus Climate and Belonging	Vice Chancellor for Access	F	Y	F	True
-illinois.edu:KV:535	department	1	KV	535	Center for Global Studies	Center for Global Studies	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:NN:543	department	1	NN	543	Maintenance Asset Management	Maintenance Asset Management	Facilities	F	Y	F	True
-illinois.edu:KM:559	department	1	KM	559	Gies Graduate Programs	Gies Graduate Programs	Gies College of Business	F	Y	F	True
-illinois.edu:KV:563	department	1	KV	563	Global Studies Prog & Courses	Global Studies Programs and Courses	Liberal Arts & Sciences	F	Y	F	False
-illinois.edu:KT:564	department	1	KT	564	IPM Delivery	IPM Delivery	College of Media	F	Y	F	False
-illinois.edu:KV:577	department	1	KV	577	American Indian Studies Prgrm	American Indian Studies Program	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:KT:579	department	1	KT	579	IPM Outreach & Engagement	IPM Outreach & Engagement	College of Media	F	Y	F	True
-illinois.edu:KM:589	department	1	KM	589	GiesResearch&FacultyExcellence	Gies Research and Faculty Excellence	Gies College of Business	F	Y	F	True
-illinois.edu:NV	college_admin	1	NV	594	Vice Chancellor for Access	Office of the Vice Chancellor for Access, Civil Rights, and Community	Vice Chancellor for Access	T	Y	F	True
-illinois.edu:KV:597	department	1	KV	597	Study of Global Gender Equity	Center for the Study of Global Gender Equity	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:NJ:603	department	1	NJ	603	Testing Center	Testing Center	Vice Chanc Student Affairs	F	Y	F	True
-illinois.edu:KW	college_admin	1	KW	605	Div Exploratory Studies Admin	Division of Exploratory Studies Administration	Division of ExploratoryStudies	T	Y	F	True
-illinois.edu:NE:612	department	1	NE	612	Agr Animal Care & Use Program	Agricultural Animal Care and Use Program	VC for Research and Innovation	F	Y	F	False
-illinois.edu:NL:614	department	1	NL	614	Capital Planning	Capital Planning	VC Finance and Administration	F	Y	F	True
-illinois.edu:KY:623	department	1	KY	623	Chez Veterans Center	Chez Veterans Center	Applied Health Sciences	F	Y	F	True
-illinois.edu:NL:629	department	1	NL	629	UIUC Purchasing CMO	UIUC Purchasing CMO	VC Finance and Administration	F	Y	F	True
-illinois.edu:LQ	college_admin	1	LQ	631	Illinois International	Illinois International Programs	Illinois International Prgms	T	Y	F	True
-illinois.edu:NJ:635	department	1	NJ	635	Illinois Leadership Center	Illinois Leadership Center	Vice Chanc Student Affairs	F	Y	T	True
-illinois.edu:NA:639	department	1	NA	639	UI AlumniAssociation	University of Illinois Alumni Association	Chancellor	F	Y	F	False
-illinois.edu:KT:646	department	1	KT	646	College of Media Programs Crse	College of Media Programs Courses	College of Media	F	Y	T	False
-illinois.edu:NE:658	department	1	NE	658	Office of Corporate Relations	Office of Corporate Relations	VC for Research and Innovation	F	Y	F	True
-illinois.edu:KT:659	department	1	KT	659	IPM Content Production	IPM Content Production	College of Media	F	Y	F	False
-illinois.edu:KP:661	department	1	KP	661	Engineering IT Shared Services	Grainger Engineering IT Shared Services	Grainger Engineering	F	Y	F	True
-illinois.edu:NL	college_admin	1	NL	677	Finance Budget & Planning	Finance Budget and Planning	VC Finance and Administration	T	Y	F	True
-illinois.edu:NE:681	department	1	NE	681	Sponsored Programs Admin	Sponsored Programs Administration	VC for Research and Innovation	F	Y	F	True
-illinois.edu:KR:690	department	1	KR	690	Japan House	Japan House	Fine & Applied Arts	F	Y	F	True
-illinois.edu:LC:692	department	1	LC	692	Medical District Vet Clinic	Medical District Veterinary Clinic	Veterinary Medicine	F	Y	F	True
-illinois.edu:NE:696	department	1	NE	696	Office of Proposal Development	Office of Proposal Development	VC for Research and Innovation	F	Y	F	True
-illinois.edu:NJ:703	department	1	NJ	703	Student Health Insurance	Student Health Insurance	Vice Chanc Student Affairs	F	Y	F	True
-illinois.edu:KT:708	department	1	KT	708	IPM Content Information	IPM Content Information	College of Media	F	Y	F	False
-illinois.edu:LN:711	department	1	LN	711	I-STEM Education Initiative	Illinois Science, Technology, Engineering, and Mathematics Education Initiative	Center for Innov Teach Learn	F	Y	F	True
-illinois.edu:NE:719	department	1	NE	719	OCR Special Projects	Office of Corporate Relations Special Projects	VC for Research and Innovation	F	Y	F	True
-illinois.edu:KM:720	department	1	KM	720	Illinois Business Consulting	Illinois Business Consulting (IBC)	Gies College of Business	F	Y	F	True
-illinois.edu:KM:725	department	1	KM	725	Gies Global Programs	Gies Global Programs	Gies College of Business	F	Y	F	True
-illinois.edu:KP:727	department	1	KP	727	Information Trust Institute	Information Trust Institute	Grainger Engineering	F	Y	F	True
-illinois.edu:KW:736	department	1	KW	736	Center Advising & Acad Svcs	Campus Center for Advising and Academic Services	Division of ExploratoryStudies	F	Y	T	True
-illinois.edu:KM:747	department	1	KM	747	Gies Mktg & Communications	Gies College of Business Marketing and Communications	Gies College of Business	F	Y	F	True
-illinois.edu:NT:749	department	1	NT	749	Campus Research IT	Campus Research IT	Technology Svcs at Illinois	F	Y	F	True
-illinois.edu:NP:768	department	1	NP	768	Cancer Center at Illinois	Cancer Center at Illinois	OVCRI Institutes	F	Y	F	True
-illinois.edu:KV:787	department	1	KV	787	Translation & Interpreting St	Program in Translation and Interpreting Studies	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:NP:797	department	1	NP	797	Social Behavioral Science Inst	Social & Behavioral Science Institute	OVCRI Institutes	F	Y	F	True
-illinois.edu:NL:808	department	1	NL	808	Arboretum	Arboretum	VC Finance and Administration	F	Y	F	True
-illinois.edu:NJ:822	department	1	NJ	822	Inclusion & Intercultural Rels	Office of Inclusion and Intercultural Relations	Vice Chanc Student Affairs	F	Y	F	False
-illinois.edu:KM:826	department	1	KM	826	Ctr Business & Public Policy	Center for Business and Public Policy	Gies College of Business	F	Y	F	True
-illinois.edu:NE:827	department	1	NE	827	Office of Research Security	Office of Research Security	VC for Research and Innovation	F	Y	F	True
-illinois.edu:NL:839	department	1	NL	839	Admin and Operations	Administration and Operations	VC Finance and Administration	F	Y	F	True
-illinois.edu:KS:840	department	1	KS	840	Professional Education		Graduate College	F	Y	F	True
-illinois.edu:NV:852	department	1	NV	852	Illinois Scholars Program	Illinois Scholars Program	Vice Chancellor for Access	F	Y	F	True
-illinois.edu:KP:855	department	1	KP	855	Technology Entrepreneur Ctr	Technology Entrepreneur Center	Grainger Engineering	F	Y	F	True
-illinois.edu:LT:859	department	1	LT	859	Clinical Sciences	Clinical Sciences	Carle Illinois Medicine	F	Y	F	True
-illinois.edu:NT:860	department	1	NT	860	TS IT Service Delivery	Technology Services IT Service Delivery	Technology Svcs at Illinois	F	Y	F	True
-illinois.edu:LT:861	department	1	LT	861	Biomed & Translational Sci	Biomedical and Translational Sciences	Carle Illinois Medicine	F	Y	F	True
-illinois.edu:KV:863	department	1	KV	863	Actuarial Sci and Risk Mgmt	Program in Actuarial Science and Risk Management	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:LT:869	department	1	LT	869	Carle Illinois COM Pgm & Crse	Carle Illinois College of Medicine Program and Courses	Carle Illinois Medicine	F	Y	F	False
-illinois.edu:NE:871	department	1	NE	871	IL Quantum & Microelec Park	Illinois Quantum and Microelectronics Park, LLC	VC for Research and Innovation	F	Y	F	True
-illinois.edu:NL:874	department	1	NL	874	Office of Threat Assessment	Office of Threat Assessment	VC Finance and Administration	F	Y	F	True
-illinois.edu:MY:876	department	1	MY	876	Utilities - UIUC	Utilities - UIUC	Energy Services	F	Y	T	True
-illinois.edu:KM:880	department	1	KM	880	Teaching and Learning	Gies Teaching and Learning	Gies College of Business	F	Y	F	True
-illinois.edu:LN:882	department	1	LN	882	Undergrad Education Reserves	Undergraduate Education Reserves	Center for Innov Teach Learn	F	Y	F	False
-illinois.edu:KV:901	department	1	KV	901	Sch Earth Soc Env Courses	School of Earth, Society, and Environment Courses	Liberal Arts & Sciences	F	Y	F	False
-illinois.edu:KM:906	department	1	KM	906	OV Office of Entrepreneurship	Origin Ventures Office of Entrepreneurship	Gies College of Business	F	Y	F	True
-illinois.edu:NL:907	department	1	NL	907	Facility Scheduling & Logistic	Facility Scheduling & Logistics	VC Finance and Administration	F	Y	F	True
-illinois.edu:NN:915	department	1	NN	915	Waste Management	F&S Waste Management and Recycling	Facilities	F	Y	F	True
-illinois.edu:KY:918	department	1	KY	918	Ctr Health, Aging, Disability	Center for Health, Aging, and Disability	Applied Health Sciences	F	Y	F	True
-illinois.edu:NV:930	department	1	NV	930	Civil Rights Coords Admin	Civil Rights Coordinators Admin	Vice Chancellor for Access	F	Y	F	True
-illinois.edu:KM:936	department	1	KM	936	Gies Undergraduate Affairs	Gies College of Business Office of Undergraduate Affairs	Gies College of Business	F	Y	F	True
-illinois.edu:KV:937	department	1	KV	937	SLCL Courses	School of Literatures, Cultures, Linguistics Courses	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:LT	college_admin	1	LT	944	Carle IL COM Administration	Carle Illinois College of Medicine - Administration	Carle Illinois Medicine	T	Y	F	True
-illinois.edu:LT:946	department	1	LT	946	Dept of Cardio Med and Surg	Department of Cardiovascular Medicine and Surgery	Carle Illinois Medicine	F	Y	F	True
-illinois.edu:KM:950	department	1	KM	950	Office of Access and Community	Gies Office of Access and Community	Gies College of Business	F	Y	F	True
-illinois.edu:LT:960	department	1	LT	960	Department of Oncology	Department of Oncology	Carle Illinois Medicine	F	Y	F	True
-illinois.edu:NE:964	department	1	NE	964	Research Park	Research Park	VC for Research and Innovation	F	Y	F	True
-illinois.edu:KV:968	department	1	KV	968	Neuroscience Program	Neuroscience Program	Liberal Arts & Sciences	F	Y	F	True
-illinois.edu:NB:972	department	1	NB	972	Student Financial Aid-Admin	Office of Student Financial Aid-Administration	Provost & Executive VC	F	Y	F	True
-illinois.edu:NQ:975	department	1	NQ	975	Conference Center	Conference Center	Auxiliary Units	F	Y	F	True
+OUR_include	OUR_include_reason	OUR_record_type	OUR_source_id	OUR_display_name	RAW_Campus	RAW_College	RAW_Dept	RAW_Deptname	RAW_deptFullName	RAW_CollegeName	RAW_Dean	RAW_Active	RAW_Duplicate	RAW_directoryDisplay
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AA	391	Secr Ofc/Board of Trustees	Secretary of the Board of Trustees	Executive Offices	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	college_admin			9	AA	615	President's Office	President's Office	Executive Offices	T	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AT	693	Ofc of Governmental Relations	Office of Governmental Relations	Vice Pres External Rel & Comm	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	college_admin			9	AM	813	U of I Foundation	University of Illinois Foundation	University of Il Foundation	T	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AA	550	University Counsel	Office of University Counsel	Executive Offices	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	college_admin			9	AD	848	Office of University Audits	Office of University Audits	University Audits	T	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AH	723	Univ Ofc Planning & Budgeting	University Office for Planning and Budgeting	Exec VP & VP Academic Affairs	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AZ	862	Planning-Intercampus Mail&Tran	Inter-Campus Mail and Transportation	Misc Univ Admin	F	Y	T	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AR	835	Merchant Card Services	Merchant Card Services	Office of Treasury Operations	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	college_admin			9	AL	832	Cap Prgm, Real Est, & Util Svc	Capital Programs, Real Estate, and Utility Services	Cap Prgm, Real Est, & Util Svc	T	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	college_admin			9	AE	699	Admin Info Technology Services	University Office of Administrative Information Technology Services (AITS)	Admin Info Technology Services	T	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	college_admin			9	AR	727	Treasury Operations	Treasury Operations	Office of Treasury Operations	T	Y	T	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AR	769	Banking & Investment Services	Banking and Investment Services	Office of Treasury Operations	F	Y	T	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	college_admin			9	AF	820	AVP Procurement Services	Assistant Vice President Procurement Services	Ofc of Procurement Services	T	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AR	521	Risk Management	University Office of Risk Management	Office of Treasury Operations	F	Y	T	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	college_admin			9	AH	709	Exec VP & VP Academic Affairs	Office of the Executive Vice President and Vice President for Academic Affairs	Exec VP & VP Academic Affairs	T	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AH	512	University Press	University of Illinois Press	Exec VP & VP Academic Affairs	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AH	229	Instit of Govt & Pub Affs	Institute of Government and Public Affairs	Exec VP & VP Academic Affairs	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AH	360	Academic Programs and Services	University Academic Programs and Services	Exec VP & VP Academic Affairs	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AH	276	Special Univ Academic Programs	Special University Academic Programs	Exec VP & VP Academic Affairs	F	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	college_admin			9	AJ	757	Vice Pres Econ Dev and Innov	Office of the Vice President for Economic Development and Innovation	Vice Pres Econ Dev and Innov	T	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AH	904	System Human Resource Services	System Human Resource Services	Exec VP & VP Academic Affairs	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NA:630	Illinois Human Resources	1	NA	630	Illinois Human Resources	Illinois Human Resources	Chancellor	F	Y	T	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AS	641	Univ Acct & Fin Report	University Accounting and Financial Reporting	Office of the Controller	F	Y	T	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AS	374	University Payroll & Benefits	University Payroll and Benefits	Office of the Controller	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AZ	236	Univ System Offices Reserve	University System Offices Reserve	Misc Univ Admin	F	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AX	869	University-wide Resources	University - Wide Resources	University Wide Units	F	Y	T	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AH	212	UA Employee Relations and HR	University Administration Employee Relations and Human Resources	Exec VP & VP Academic Affairs	F	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AH	292	CARLI	The Consortium of Academic and Research Libraries in Illinois	Exec VP & VP Academic Affairs	F	Y	T	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AJ	368	OTM Chicago	Office of Technology Management Chicago	Vice Pres Econ Dev and Innov	F	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	college_admin			9	AN	370	Univ Ethics & Compliance Ofc	University Ethics and Compliance Office	University Ethics Office	T	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AJ	453	Illinois Ventures	Illinois Ventures	Vice Pres Econ Dev and Innov	F	Y	T	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AJ	460	OTM Urbana-Champaign	Office of Technology Management Urbana-Champaign	Vice Pres Econ Dev and Innov	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	college_admin			9	AP	666	VP Chief Financial Officer	Office of the Vice President and Chief Financial Officer	VP Chief Financial Officer	T	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AR	722	Agricultural Property Services	Agricultural Property Services	Office of Treasury Operations	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AR	732	University Tax	University Tax	Office of Treasury Operations	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AZ	753	Medicare	Medicare	Misc Univ Admin	F	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	college_admin			9	AS	791	AVP Controller	Assistant Vice President and Controller	Office of the Controller	T	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AF	888	Sys Purchasing & Sup Srvc	System Purchasing and Support Services	Ofc of Procurement Services	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:NA	Office of the Chancellor	1	NA	700	Office of the Chancellor	Office of the Chancellor	Chancellor	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NV:433	Office for Access and Equity	1	NV	433	Office for Access and Equity	Office for Access and Equity	Vice Chancellor for Access	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:NB	Provost/EVC Admin	1	NB	431	Provost/EVC Admin	Office of the Provost and Executive Vice Chancellor	Provost & Executive VC	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NB:223	University Laboratory HS	1	NB	223	University Laboratory HS	University Laboratory High School	Provost & Executive VC	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:NT	Ofc of the Chief Info Officer	1	NT	618	Ofc of the Chief Info Officer	Office of the Chief Information Officer	Technology Svcs at Illinois	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NT:798	Technology Services	1	NT	798	Technology Services	Technology Services at Illinois	Technology Svcs at Illinois	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NB:970	Big Ten Academic Alliance	1	NB	970	Big Ten Academic Alliance	Big Ten Academic Alliance	Provost & Executive VC	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NB:898	Office of the Registrar	1	NB	898	Office of the Registrar	Office of the Registrar	Provost & Executive VC	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NB:269	Principal's Scholars Pgm	1	NB	269	Principal's Scholars Pgm	Principal's Scholars Program	Provost & Executive VC	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NB:759	Campus Honors Program	1	NB	759	Campus Honors Program	Campus Honors Program	Provost & Executive VC	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NB:593	Undergraduate Admissions	1	NB	593	Undergraduate Admissions	Office of Undergraduate Admissions	Provost & Executive VC	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NB:962	Div of Management Information	1	NB	962	Div of Management Information	Division of Management Information	Provost & Executive VC	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NL:664	Division of Public Safety	1	NL	664	Division of Public Safety	Division of Public Safety	VC Finance and Administration	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:NC	Eng & Constr Serv Admin	1	NC	426	Eng & Constr Serv Admin	Engineering & Constr Service Admin	Administrative Services	T	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NN:940	Safety and Compliance	1	NN	940	Safety and Compliance	Safety and Compliance	Facilities	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NC:763	F&S Document Services	1	NC	763	F&S Document Services	F&S Document Services	Administrative Services	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NC:566	Campus Stores and Receiving	1	NC	566	Campus Stores and Receiving	Campus Stores and Receiving	Administrative Services	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NQ:293	Parking Department	1	NQ	293	Parking Department	Parking Department	Auxiliary Units	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:NE	OVCRI Admin	1	NE	370	OVCRI Admin	Office of the Vice Chancellor for Research and Innovation - Administration	VC for Research and Innovation	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:393	OVCRI Support	1	NE	393	OVCRI Support	Office of the Vice Chancellor for Research and Innovation - Support	VC for Research and Innovation	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:207	Research Board	1	NE	207	Research Board	Research Board	VC for Research and Innovation	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NP:320	Supercomputing Applications	1	NP	320	Supercomputing Applications	National Center for Supercomputing Applications (NCSA)	OVCRI Institutes	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NB:626	Center for Advanced Study	1	NB	626	Center for Advanced Study	Center for Advanced Study (CAS)	Provost & Executive VC	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:298	Animal Care Program	1	NE	298	Animal Care Program	Animal Care Program	VC for Research and Innovation	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:531	Biotechnology Center	1	NE	531	Biotechnology Center	Biotechnology Center	VC for Research and Innovation	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NP:231	IGB	1	NP	231	IGB	Carl R. Woese Institute for Genomic Biology	OVCRI Institutes	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:877	Division of Research Safety	1	NE	877	Division of Research Safety	Division of Research Safety	VC for Research and Innovation	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:959	EnterpriseWorks	1	NE	959	EnterpriseWorks	EnterpriseWorks Business Incubator	VC for Research and Innovation	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:344	Protection of Research Subject	1	NE	344	Protection of Research Subject	Office for the Protection of Research Subjects	VC for Research and Innovation	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:409	Office of Animal Research Comp	1	NE	409	Office of Animal Research Comp	Office of Animal Research Compliance	VC for Research and Innovation	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NP:547	IL State Geological Survey	1	NP	547	IL State Geological Survey	Illinois State Geological Survey	OVCRI Institutes	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NP:375	IL Natural History Survey	1	NP	375	IL Natural History Survey	Illinois Natural History Survey	OVCRI Institutes	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NP:740	IL State Water Survey	1	NP	740	IL State Water Survey	Illinois State Water Survey	OVCRI Institutes	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NP:807	IL Sustainable Technology Ctr	1	NP	807	IL Sustainable Technology Ctr	Illinois Sustainable Technology Center	OVCRI Institutes	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NG:236	General & Unassigned	1	NG	236	General & Unassigned	General	Misc Admin Units	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NG:376	Campus Insurance Coverage	1	NG	376	Campus Insurance Coverage	Campus Insurance Coverage	Misc Admin Units	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NG:813	Development & Foundation Svcs	1	NG	813	Development & Foundation Svcs	Development and Foundation Services	Misc Admin Units	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NG:467	Leasehold	1	NG	467	Leasehold	Leasehold Rentals	Misc Admin Units	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NG:769	Memorial Stadium	1	NG	769	Memorial Stadium	Memorial Stadium	Misc Admin Units	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NG:753	Medicare	1	NG	753	Medicare	Medicare	Misc Admin Units	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NG:503	Worker's Compensation	1	NG	503	Worker's Compensation	Workers' Compensation	Misc Admin Units	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NL:611	Illini Center	1	NL	611	Illini Center	Illini Center	VC Finance and Administration	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:NJ	VC Student Affairs	1	NJ	825	VC Student Affairs	Office of the Vice Chancellor for Student Affairs	Vice Chanc Student Affairs	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NJ:459	Student Success, Incl & Belong	1	NJ	459	Student Success, Incl & Belong	Student Success, Inclusion, and Belonging	Vice Chanc Student Affairs	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NJ:743	Jeffries Ctr Acces and AcadSuc	1	NJ	743	Jeffries Ctr Acces and AcadSuc	Michael L. Jeffries, Sr. Center for Access and Academic Success	Vice Chanc Student Affairs	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NJ:391	The Career Center	1	NJ	391	The Career Center	The Career Center	Vice Chanc Student Affairs	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NJ:573	Student Conflict Resolution	1	NJ	573	Student Conflict Resolution	Office for Student Conflict Resolution	Vice Chanc Student Affairs	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NJ:695	Counseling Center	1	NJ	695	Counseling Center	Counseling Center	Vice Chanc Student Affairs	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NB:678	Student Financial Aid	1	NB	678	Student Financial Aid	Office of Student Financial Aid	Provost & Executive VC	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NQ:551	McKinley Health Center	1	NQ	551	McKinley Health Center	McKinley Health Center	Auxiliary Units	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NA:504	Employee Dev and Learning	1	NA	504	Employee Dev and Learning	Employee Development and Learning	Chancellor	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NA:980	Faculty/Staff Assistance Svcs	1	NA	980	Faculty/Staff Assistance Svcs	Faculty/Staff Assistance Services	Chancellor	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NA:665	Office of Public Engagement	1	NA	665	Office of Public Engagement	Office of Public Engagement	Chancellor	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NL:693	Willard Airport Commercial Op	1	NL	693	Willard Airport Commercial Op	Willard Airport Commercial Operations	VC Finance and Administration	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:KL	Agr, Consumer, & Env Sci Admn	1	KL	483	Agr, Consumer, & Env Sci Admn	College of Agricultural, Consumer and Environmental Sciences Administration	Agr, Consumer, & Env Sciences	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KL:452	Agr, Consumer, & Env Sci Gen	1	KL	452	Agr, Consumer, & Env Sci Gen	College of Agricultural, Consumer and Environmental Sciences Administration General Expenses	Agr, Consumer, & Env Sciences	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KL:348	ACES Technology Services	1	KL	348	ACES Technology Services	ACES Technology Services	Agr, Consumer, & Env Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KL:470	Agr & Consumer Economics	1	KL	470	Agr & Consumer Economics	Department of Agricultural and Consumer Economics	Agr, Consumer, & Env Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KL:741	Agricultural & Biological Engr	1	KL	741	Agricultural & Biological Engr	Department of Agricultural and Biological Engineering	Agr, Consumer, & Env Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KL:306	Agr, Consumer, & Env Sciences	1	KL	306	Agr, Consumer, & Env Sciences	Agricultural, Consumer and Environmental Sciences Courses	Agr, Consumer, & Env Sciences	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KL:802	Crop Sciences	1	KL	802	Crop Sciences	Department of Crop Sciences	Agr, Consumer, & Env Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KL:384	Cooperative Extension	1	KL	384	Cooperative Extension	Cooperative Extension Service	Agr, Consumer, & Env Sciences	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KL:538	Animal Sciences	1	KL	538	Animal Sciences	Department of Animal Sciences	Agr, Consumer, & Env Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KL:793	Human Dvlpmt & Family Studies	1	KL	793	Human Dvlpmt & Family Studies	Department of Human Development and Family Studies	Agr, Consumer, & Env Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KL:698	Food Science & Human Nutrition	1	KL	698	Food Science & Human Nutrition	Department of Food Science and Human Nutrition	Agr, Consumer, & Env Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KL:875	Natural Res & Env Sci	1	KL	875	Natural Res & Env Sci	Department of Natural Resources and Environmental Sciences	Agr, Consumer, & Env Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KL:971	Nutritional Sciences	1	KL	971	Nutritional Sciences	Nutritional Sciences	Agr, Consumer, & Env Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LC:888	Veterinary Prog in Agr	1	LC	888	Veterinary Prog in Agr	Veterinary Program in Agriculture	Veterinary Medicine	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KL:416	Agricultural Buildings, O & M	1	KL	416	Agricultural Buildings, O & M	Agricultural Buildings, Operation and Maintenance	Agr, Consumer, & Env Sciences	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:KM	Gies College of Business	1	KM	952	Gies College of Business	Gies College of Business Administration	Gies College of Business	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:432	Gies Business General	1	KM	432	Gies Business General	Gies College of Business General Expenses	Gies College of Business	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:979	Student & Corporate Connection	1	KM	979	Student & Corporate Connection	Gies Student and Corporate Connections	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:847	IT Partners Gies Business	1	KM	847	IT Partners Gies Business	Information Technology Partners at Gies Business	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:346	Accountancy	1	KM	346	Accountancy	Department of Accountancy	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:230	MBA Program Administration	1	KM	230	MBA Program Administration	Regular Masters of Business Administration Program Administration	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:330	Gies Advancement	1	KM	330	Gies Advancement	Gies College of Business Advancement	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:938	Executive MBA Program	1	KM	938	Executive MBA Program	Executive Masters of Business Administration Program	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:260	Finance	1	KM	260	Finance	Department of Finance	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:902	Business Administration	1	KM	902	Business Administration	Department of Business Administration	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:446	Bureau Economic & Business Res	1	KM	446	Bureau Economic & Business Res	Bureau of Economic and Business Research	Gies College of Business	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:469	Executive Development Ctr	1	KM	469	Executive Development Ctr	Executive Development Center	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:KN	Education Administration	1	KN	335	Education Administration	College of Education Administration	Education	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KN:617	Education General Expen	1	KN	617	Education General Expen	College of Education General Expenses	Education	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KN:616	Educational Psychology	1	KN	616	Educational Psychology	Department of Educational Psychology	Education	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KN:613	Curriculum and Instruction	1	KN	613	Curriculum and Instruction	Department of Curriculum and Instruction	Education	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KN:570	Special Education	1	KN	570	Special Education	Department of Special Education	Education	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KN:760	Educ Policy, Orgzn & Leadrshp	1	KN	760	Educ Policy, Orgzn & Leadrshp	Education Policy, Organization and Leadership	Education	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KN:418	Bureau Educational Research	1	KN	418	Bureau Educational Research	Bureau of Educational Research	Education	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KN:676	Center for Study of Reading	1	KN	676	Center for Study of Reading	Center for the Study of Reading	Education	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KN:541	Council Teacher Ed Admin	1	KN	541	Council Teacher Ed Admin	Council on Teacher Education	Education	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:KP	Engineering Administration	1	KP	227	Engineering Administration	Grainger Engineering Administration	Grainger Engineering	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:602	Engineering General Expen	1	KP	602	Engineering General Expen	Grainger Engineering General Expenses	Grainger Engineering	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:487	Micro and Nanotechnology Lab	1	KP	487	Micro and Nanotechnology Lab	Micro and Nanotechnology Laboratory	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:615	Aerospace Engineering	1	KP	615	Aerospace Engineering	Department of Aerospace Engineering	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:343	Bioengineering	1	KP	343	Bioengineering	Department of Bioengineering	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:246	Computational Science & Engr	1	KP	246	Computational Science & Engr	Computational Science and Engineering	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:434	Siebel School Comp & Data Sci	1	KP	434	Siebel School Comp & Data Sci	Siebel School of Computing and Data Science	Grainger Engineering	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:251	Civil & Environmental Eng	1	KP	251	Civil & Environmental Eng	Department of Civil and Environmental Engineering	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:239	Coordinated Science Lab	1	KP	239	Coordinated Science Lab	Coordinated Science Lab	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:933	Electrical & Computer Eng	1	KP	933	Electrical & Computer Eng	Department of Electrical and Computer Engineering	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:545	Engineering Courses	1	KP	545	Engineering Courses	Grainger Engineering Courses	Grainger Engineering	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:697	Engineering Honors	1	KP	697	Engineering Honors	Grainger Engineering Honors Courses	Grainger Engineering	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:422	Industrial&Enterprise Sys Eng	1	KP	422	Industrial&Enterprise Sys Eng	Department of Industrial and Enterprise Systems Engineering	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:204	Manufacturing Engineering	1	KP	204	Manufacturing Engineering	Manufacturing Engineering	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:220	Materials Research Lab	1	KP	220	Materials Research Lab	Materials Research Laboratory	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:919	Materials Science & Engineerng	1	KP	919	Materials Science & Engineerng	Department of Materials Science and Engineering	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:917	Mechanical Sci & Engineering	1	KP	917	Mechanical Sci & Engineering	Department of Mechanical Science and Engineering	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:973	Nuclear, Plasma, & Rad Engr	1	KP	973	Nuclear, Plasma, & Rad Engr	Department of Nuclear, Plasma, and Radiological Engineering	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:244	Physics	1	KP	244	Physics	Department of Physics	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:KR	Fine & Applied Arts Admin	1	KR	447	Fine & Applied Arts Admin	College of Fine and Applied Arts Administration	Fine & Applied Arts	T	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KR:663	FAA General Expen	1	KR	663	FAA General Expen	College of Fine and Applied Arts General Expenses	Fine & Applied Arts	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KR:481	Action Research Illinois	1	KR	481	Action Research Illinois	Action Research Illinois	Fine & Applied Arts	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KR:767	Architecture	1	KR	767	Architecture	School of Architecture	Fine & Applied Arts	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KR:526	Art & Design	1	KR	526	Art & Design	School of Art and Design	Fine & Applied Arts	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KR:801	Dance	1	KR	801	Dance	Department of Dance	Fine & Applied Arts	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KR:262	Krannert Center	1	KR	262	Krannert Center	Krannert Center for the Performing Arts	Fine & Applied Arts	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KR:569	Landscape Architecture	1	KR	569	Landscape Architecture	Department of Landscape Architecture	Fine & Applied Arts	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KR:495	Music	1	KR	495	Music	School of Music	Fine & Applied Arts	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KR:883	Theatre	1	KR	883	Theatre	Department of Theatre	Fine & Applied Arts	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KR:209	U of I Bands	1	KR	209	U of I Bands	University of Illinois Bands	Fine & Applied Arts	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KR:733	Urban & Regional Planning	1	KR	733	Urban & Regional Planning	Department of Urban and Regional Planning	Fine & Applied Arts	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KR:607	Krannert Art Museum	1	KR	607	Krannert Art Museum	Krannert Art Museum and Kinkead Pavilion	Fine & Applied Arts	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KR:644	Fine & Applied Arts Courses	1	KR	644	Fine & Applied Arts Courses	Fine and Applied Arts Courses	Fine & Applied Arts	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:KS	Graduate Admin	1	KS	486	Graduate Admin	Graduate College Administration	Graduate College	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KS:259	Graduate General Expen	1	KS	259	Graduate General Expen	Graduate College General Expenses	Graduate College	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KS:211	CIC Traveling Scholars	1	KS	211	CIC Traveling Scholars	Committee on Institutional Cooperation Traveling Scholars	Graduate College	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KS:419	Center for Adv Study Courses	1	KS	419	Center for Adv Study Courses	Center for Advanced Study Courses	Graduate College	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KS:297	Grad College Access Programs	1	KS	297	Grad College Access Programs	Graduate College Access Programs	Graduate College	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KS:683	Fellowships	1	KS	683	Fellowships	Fellowships	Graduate College	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KS:913	Graduate College Programs	1	KS	913	Graduate College Programs	Graduate College Programs	Graduate College	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:KT	College of Media Admin	1	KT	934	College of Media Admin	College of Media Administration	College of Media	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KT:686	College of Media Gen. Expenses	1	KT	686	College of Media Gen. Expenses	College of Media General Expenses	College of Media	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KT:408	Advertising	1	KT	408	Advertising	Charles H. Sandage Department of Advertising	College of Media	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KT:642	Journalism	1	KT	642	Journalism	Department of Journalism	College of Media	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KT:238	Inst of Communications Rsch	1	KT	238	Inst of Communications Rsch	Institute of Communications Research	College of Media	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KT:953	IPM Content Programming	1	KT	953	IPM Content Programming	IPM Content Programming	College of Media	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KT:647	IPM Development	1	KT	647	IPM Development	IPM Development	College of Media	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KT:417	IPM Administration	1	KT	417	IPM Administration	IPM Administration	College of Media	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:KU	Law	1	KU	853	Law	Law	Law	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KU:694	Law Library	1	KU	694	Law Library	Law Library	Law	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:KV	LAS Administration	1	KV	580	LAS Administration	College of Liberal Arts and Sciences Administration	Liberal Arts & Sciences	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:920	LAS General Expen	1	KV	920	LAS General Expen	College of Liberal Arts and Sciences General Expenses	Liberal Arts & Sciences	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:584	Cell & Developmental Biology	1	KV	584	Cell & Developmental Biology	Department of Cell and Developmental Biology	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:461	Center for African Studies	1	KV	461	Center for African Studies	Center for African Studies	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:303	African American Studies	1	KV	303	African American Studies	Department of African American Studies	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:241	Anthropology	1	KV	241	Anthropology	Department of Anthropology	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:362	E. Asian Languages & Cultures	1	KV	362	E. Asian Languages & Cultures	Department of East Asian Languages and Cultures	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:404	Asian American Studies	1	KV	404	Asian American Studies	Department of Asian American Studies	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:430	Astronomy	1	KV	430	Astronomy	Department of Astronomy	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:932	E Asian & Pacific Studies Cntr	1	KV	932	E Asian & Pacific Studies Cntr	Center for East Asian and Pacific Studies	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:253	Climate Meteorology & Atm Sci	1	KV	253	Climate Meteorology & Atm Sci	Department of Climate, Meteorology and Atmospheric Sciences	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:870	Biophysics & Quant Biology	1	KV	870	Biophysics & Quant Biology	Center for Biophysics and Quantitative Biology	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:276	Center for Writing Studies	1	KV	276	Center for Writing Studies	Center for Writing Studies	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:377	Plant Biology	1	KV	377	Plant Biology	Department of Plant Biology	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:625	Sch Lit, Cultures, Ling Adm	1	KV	625	Sch Lit, Cultures, Ling Adm	School of Literatures, Cultures, and Linguistics Administration	Liberal Arts & Sciences	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:383	School of Integrative Biology	1	KV	383	School of Integrative Biology	School of Integrative Biology	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:925	Unit For Criticism	1	KV	925	Unit For Criticism	Unit for Criticism	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:514	Classics	1	KV	514	Classics	Department of the Classics	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:771	Comparative & World Literature	1	KV	771	Comparative & World Literature	Department of Comparative and World Literature	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:499	English	1	KV	499	English	Department of English	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:292	Evolution Ecology Behavior	1	KV	292	Evolution Ecology Behavior	Department of Evolution, Ecology, and Behavior	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:361	Entomology	1	KV	361	Entomology	Department of Entomology	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LQ:984	Intensive English Institute	1	LQ	984	Intensive English Institute	Intensive English Institute	Illinois International Prgms	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:985	French and Italian	1	KV	985	French and Italian	Department of French and Italian	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:872	Geography & GIS	1	KV	872	Geography & GIS	Department of Geography and Geographic Information Science	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:655	Earth Sci & Environmental Chng	1	KV	655	Earth Sci & Environmental Chng	Earth Science and Environmental Change	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:982	Latina/Latino Studies	1	KV	982	Latina/Latino Studies	Department of Latina/Latino Studies	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:729	Latin American & Carib Studies	1	KV	729	Latin American & Carib Studies	Center for Latin American and Caribbean Studies	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:927	Germanic Languages & Lit	1	KV	927	Germanic Languages & Lit	Department of Germanic Languages and Literatures	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:451	History	1	KV	451	History	Department of History	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NP:327	Humanities Research Institute	1	NP	327	Humanities Research Institute	Humanities Research Institute	OVCRI Institutes	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:864	Linguistics	1	KV	864	Linguistics	Department of Linguistics	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:397	Life Sciences	1	KV	397	Life Sciences	Life Sciences	Liberal Arts & Sciences	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:257	Mathematics	1	KV	257	Mathematics	Department of Mathematics	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:948	Microbiology	1	KV	948	Microbiology	Department of Microbiology	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:723	Prg in Jewish Culture &Society	1	KV	723	Prg in Jewish Culture &Society	The Program in Jewish Culture and Society	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:715	Philosophy	1	KV	715	Philosophy	Department of Philosophy	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:652	Program in Medieval Studies	1	KV	652	Program in Medieval Studies	Program in Medieval Studies	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:604	Molecular & Integrative Physl	1	KV	604	Molecular & Integrative Physl	Department of Molecular and Integrative Physiology	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:415	School of Molecular & Cell Bio	1	KV	415	School of Molecular & Cell Bio	School of Molecular and Cellular Biology	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:710	Political Science	1	KV	710	Political Science	Department of Political Science	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:553	Russian,E European,Eurasn Ctr	1	KV	553	Russian,E European,Eurasn Ctr	Russian, East European and Eurasian Center	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:299	Psychology	1	KV	299	Psychology	Department of Psychology	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:490	Religion	1	KV	490	Religion	Department of Religion	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:958	Slavic Languages & Literature	1	KV	958	Slavic Languages & Literature	Department of Slavic Languages and Literatures	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:324	Sociology	1	KV	324	Sociology	Department of Sociology	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:441	Appl Technol Learning A & S	1	KV	441	Appl Technol Learning A & S	Applied Technologies for Learning in the Arts and Sciences	Liberal Arts & Sciences	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:954	Ctr S. Asian & MidEast Studies	1	KV	954	Ctr S. Asian & MidEast Studies	Center for South Asian and Middle Eastern Studies	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:585	Spanish and Portuguese	1	KV	585	Spanish and Portuguese	Department of Spanish and Portuguese	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:489	Communication	1	KV	489	Communication	Department of Communication	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:680	Gender and Women's Studies	1	KV	680	Gender and Women's Studies	Department of Gender and Women's Studies	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:895	Spurlock Museum	1	KV	895	Spurlock Museum	Spurlock Museum	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:583	Statistics	1	KV	583	Statistics	Department of Statistics	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:510	School of Chemical Sciences	1	KV	510	School of Chemical Sciences	School of Chemical Sciences	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:438	Biochemistry	1	KV	438	Biochemistry	Department of Biochemistry	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:413	Chemistry	1	KV	413	Chemistry	Department of Chemistry	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:687	Chemical & Biomolecular Engr	1	KV	687	Chemical & Biomolecular Engr	Chemical and Biomolecular Engineering	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:405	Economics	1	KV	405	Economics	Department of Economics	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:670	Liberal Arts & Sciences Course	1	KV	670	Liberal Arts & Sciences Course	Liberal Arts and Sciences Courses	Liberal Arts & Sciences	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:KY	Applied Health Sciences Admin	1	KY	682	Applied Health Sciences Admin	College of Applied Health Sciences Administration	Applied Health Sciences	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KY:347	Applied Health Sci General Exp	1	KY	347	Applied Health Sci General Exp	College of Applied Health Sciences General Expenses	Applied Health Sciences	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KY:981	Disability Research Institute	1	KY	981	Disability Research Institute	Disability Research Institute	Applied Health Sciences	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KY:581	Health and Kinesiology	1	KY	581	Health and Kinesiology	Department of Health and Kinesiology	Applied Health Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KY:714	Recreation, Sport and Tourism	1	KY	714	Recreation, Sport and Tourism	Department of Recreation, Sport and Tourism	Applied Health Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KY:943	Disability Res & Educ Svcs	1	KY	943	Disability Res & Educ Svcs	Disability Resources and Educational Services	Applied Health Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KY:679	Speech & Hearing Science	1	KY	679	Speech & Hearing Science	Department of Speech and Hearing Science	Applied Health Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KY:754	Applied Health Sci Courses	1	KY	754	Applied Health Sci Courses	Applied Health Sciences Courses	Applied Health Sciences	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:LB	Medicine at UC Admin	1	LB	761	Medicine at UC Admin	Medicine at Urbana-Champaign Administration	Medicine at Urbana-Champaign	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:LC	Vet Medicine Administration	1	LC	444	Vet Medicine Administration	College of Veterinary Medicine Administration	Veterinary Medicine	T	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LC:463	Vet Medicine General Expen	1	LC	463	Vet Medicine General Expen	College of Veterinary Medicine General Expenses	Veterinary Medicine	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LC:726	Veterinary Diagnostic Lab	1	LC	726	Veterinary Diagnostic Lab	Veterinary Diagnostic Laboratory	Veterinary Medicine	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LC:873	Comparative Biosciences	1	LC	873	Comparative Biosciences	Department of Comparative Biosciences	Veterinary Medicine	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LC:598	Vet Clinical Medicine	1	LC	598	Vet Clinical Medicine	Department of Veterinary Clinical Medicine	Veterinary Medicine	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LC:282	Pathobiology	1	LC	282	Pathobiology	Department of Pathobiology	Veterinary Medicine	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LC:819	Center for Zoonoses Research	1	LC	819	Center for Zoonoses Research	Center for Zoonoses Research	Veterinary Medicine	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LC:249	Vet Med College-Wide Programs	1	LC	249	Vet Med College-Wide Programs	Veterinary Medicine College-Wide Programs	Veterinary Medicine	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:LD	Armed Forces Coordinator	1	LD	974	Armed Forces Coordinator	Armed Forces Coordinator	Armed Forces	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LD:762	Air Force Aerospace Studies	1	LD	762	Air Force Aerospace Studies	Department of Air Force Aerospace Studies	Armed Forces	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LD:914	Military Science	1	LD	914	Military Science	Department of Military Science	Armed Forces	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LD:558	Naval Science	1	LD	558	Naval Science	Department of Naval Science	Armed Forces	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LF:305	Fire Service Institute	1	LF	305	Fire Service Institute	Fire Service Institute	Public Safety	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NL:575	Police Training Institute	1	NL	575	Police Training Institute	Police Training Institute	VC Finance and Administration	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:LG	School of Labor & Empl. Rel.	1	LG	568	School of Labor & Empl. Rel.	School of Labor and Employment Relations	School of Labor & Empl. Rel.	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NP:392	Beckman Institute	1	NP	392	Beckman Institute	Beckman Institute for Advanced Science and Technology	OVCRI Institutes	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:LL	School of Social Work	1	LL	783	School of Social Work	School of Social Work	School of Social Work	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:LN	Center Innov in Teach Learn	1	LN	641	Center Innov in Teach Learn	Center for Innovation in Teaching and Learning	Center for Innov Teach Learn	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LN:627	Publications and Promotion	1	LN	627	Publications and Promotion	Publications and Promotion	Center for Innov Teach Learn	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LN:590	Guided and Self-Paced Study	1	LN	590	Guided and Self-Paced Study	Guided and Self-Paced Study	Center for Innov Teach Learn	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NL:550	Allerton Park & Retreat Center	1	NL	550	Allerton Park & Retreat Center	Allerton Park and Retreat Center	VC Finance and Administration	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LN:951	Academic Outreach	1	LN	951	Academic Outreach	Division of Academic Outreach	Center for Innov Teach Learn	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:LP	Information Sciences	1	LP	992	Information Sciences	Information Sciences	School of Information Sciences	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LP:560	Center for Children's Books	1	LP	560	Center for Children's Books	The Center for Children's Books	School of Information Sciences	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:411	The ACDIS Program	1	KV	411	The ACDIS Program	The Program in Arms Control and Domestic and International Security	Liberal Arts & Sciences	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LQ:533	Illinois Abroad	1	LQ	533	Illinois Abroad	Illinois Abroad and Global Exchange	Illinois International Prgms	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LQ:794	Intl Student and Scholar Svcs	1	LQ	794	Intl Student and Scholar Svcs	International Student and Scholar Services	Illinois International Prgms	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:LR	Library Admin	1	LR	540	Library Admin	Library Administration	Library	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LR:600	Library Research & Publication	1	LR	600	Library Research & Publication	Library Research and Publication	Library	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LR:396	Mortenson Cntr Int'l Lib Prgms	1	LR	396	Mortenson Cntr Int'l Lib Prgms	Mortenson Center for International Library Programs	Library	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LR:668	Library	1	LR	668	Library	Library	Library	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LR:795	Library Collections/Support	1	LR	795	Library Collections/Support	Library Collections/Support	Library	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:NN	Facilities & Services	1	NN	701	Facilities & Services	Facilities and Services	Facilities	T	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NN:456	Building Operation	1	NN	456	Building Operation	Building Operation	Facilities	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NN:815	Bldg Maintenance Crafts/Trades	1	NN	815	Bldg Maintenance Crafts/Trades	Building Maintenance Crafts and Trades	Facilities	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NN:328	F&S Grounds	1	NN	328	F&S Grounds	F&S Grounds Department	Facilities	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NC:766	F&S Fleet Operations	1	NC	766	F&S Fleet Operations	F&S Fleet Operations	Administrative Services	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NN:398	Heat Light & Power	1	NN	398	Heat Light & Power	Heat, Light and Power	Facilities	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:MY	Energy Management Services	1	MY	862	Energy Management Services	Energy Management Services	Energy Services	T	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NN:518	Construction Projects	1	NN	518	Construction Projects	Construction Projects	Facilities	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NN:814	Capital Programs	1	NN	814	Capital Programs	Capital Programs	Facilities	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NN:465	Capital Admin & Development	1	NN	465	Capital Admin & Development	Capital Administration & Development	Facilities	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NQ:571	Division of Campus Recreation	1	NQ	571	Division of Campus Recreation	Division of Campus Recreation	Auxiliary Units	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NQ:279	Office of the Dean of Students	1	NQ	279	Office of the Dean of Students	Office of the Dean of Students	Auxiliary Units	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NQ:270	Housing Division	1	NQ	270	Housing Division	Housing Division	Auxiliary Units	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NU:296	State Farm Center	1	NU	296	State Farm Center	State Farm Center	Intercollegiate Athletics	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NQ:389	Illini Union	1	NQ	389	Illini Union	Illini Union	Auxiliary Units	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:NU	Intercollegiate Athletics	1	NU	336	Intercollegiate Athletics	Division of Intercollegiate Athletics (DIA)	Intercollegiate Athletics	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:218	Cline Ctr for Adv Social Rsrch	1	KV	218	Cline Ctr for Adv Social Rsrch	Cline Center for Advanced Social Research	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NQ:233	Student Affairs Technology	1	NQ	233	Student Affairs Technology	Student Affairs Technology	Auxiliary Units	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NA:234	Web Services	1	NA	234	Web Services	Web Services	Chancellor	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NA:243	StratCommunications-Marketing	1	NA	243	StratCommunications-Marketing	The Office of Strategic Communications and Marketing	Chancellor	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KW:248	Exploratory Studies Course	1	KW	248	Exploratory Studies Course		Division of ExploratoryStudies	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LC:255	Veterinary Teaching Hospital	1	LC	255	Veterinary Teaching Hospital	Veterinary Teaching Hospital	Veterinary Medicine	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:265	Sch Earth, Soc, Environ Admin	1	KV	265	Sch Earth, Soc, Environ Admin	School of Earth, Society, and Environment Administration	Liberal Arts & Sciences	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NN:266	Building Maintenance Functionl	1	NN	266	Building Maintenance Functionl	Building Maintenance Functional	Facilities	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NV:267	Comm Engage and Adv	1	NV	267	Comm Engage and Adv	Communicty Engagement and Advocacy	Vice Chancellor for Access	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:273	Engr Shared Admin Services	1	KP	273	Engr Shared Admin Services	Grainger Engineering Shared Administrative Services	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:NS	Ofc VC Inst Advancement	1	NS	280	Ofc VC Inst Advancement	Office of the Vice Chancellor for Institutional Advancement	VC for Inst Advancement	T	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:281	Content & Ed PortfolioStrategy	1	KM	281	Content & Ed PortfolioStrategy	Content and Educational Portfolio Strategy	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NA:283	Strategic Marketing & Branding	1	NA	283	Strategic Marketing & Branding	Strategic Marketing and Branding	Chancellor	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:285	Discovery Partners Inst UIUC	1	KP	285	Discovery Partners Inst UIUC	Discovery Partners Institute University of Illinois Urbana-Champaign	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LM:290	Provost Courses	1	LM	290	Provost Courses	Provost Courses	Provost Academic Programs	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KY:294	Interdisciplinary Health Sci	1	KY	294	Interdisciplinary Health Sci	Interdisciplinary Health Sciences	Applied Health Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:302	Int'l Forum for US Studies	1	KV	302	Int'l Forum for US Studies	International Forum for US Studies	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:NW	Chief of Staff	1	NW	307	Chief of Staff	Chief of Staff - Chancellor	VC Administrative Strategy	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KN:309	Centers &Strategic Initiatives	1	KN	309	Centers &Strategic Initiatives	Centers and Strategic Initiatives	Education	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NN:311	F&S Engineering Services	1	NN	311	F&S Engineering Services	F&S Engineering Services	Facilities	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NB:317	Enrollment Mgmt Shared Svcs	1	NB	317	Enrollment Mgmt Shared Svcs	Enrollment Management Shared Services	Provost & Executive VC	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LT:318	Dept of Neuro and Neurosurg	1	LT	318	Dept of Neuro and Neurosurg	Department of Neurology and Neurosurgery	Carle Illinois Medicine	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NQ:321	Aux. Health/WB Marketing	1	NQ	321	Aux. Health/WB Marketing	Auxiliary Health & Wellbeing Marketing	Auxiliary Units	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:325	Action Learning	1	KM	325	Action Learning	Action Learning	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NJ:329	SmartHealthyCommunity(Rokwire)	1	NJ	329	SmartHealthyCommunity(Rokwire)	Smart Healthy Community (Rokwire)	Vice Chanc Student Affairs	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NP:332	Prairie Research Institute	1	NP	332	Prairie Research Institute	Prairie Research Institute	OVCRI Institutes	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:334	Illinois Facilities at IQMP	1	NE	334	Illinois Facilities at IQMP	Illinois Facilities at the Illinois Quantum and Microelectronics Park	VC for Research and Innovation	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:337	Siebel Center for Design	1	KP	337	Siebel Center for Design	Siebel Center for Design	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KL:342	Ag Ldrshp Educ Comm Program	1	KL	342	Ag Ldrshp Educ Comm Program	Agricultural Leadership Education and Communication Program	Agr, Consumer, & Env Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:345	European Union Center	1	KV	345	European Union Center	European Union Center	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NL:355	Aviation Lease	1	NL	355	Aviation Lease	Aviation Lease	VC Finance and Administration	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NA:358	Special Events	1	NA	358	Special Events	Special Events	Chancellor	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NT:365	Swanlund IT	1	NT	365	Swanlund IT	Swanlund IT	Technology Svcs at Illinois	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NN:374	Construction Improvements	1	NN	374	Construction Improvements	Construction Improvements	Facilities	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KY:378	Tech for Health & Independence	1	KY	378	Tech for Health & Independence	Technology for Health and Independence	Applied Health Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NQ:385	Conference Services	1	NQ	385	Conference Services	Conference Services	Auxiliary Units	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NV:394	Business Community Econ Dev	1	NV	394	Business Community Econ Dev	Business Community Economic Development	Vice Chancellor for Access	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NA:395	News Bureau	1	NA	395	News Bureau	News Bureau	Chancellor	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:400	Innovation & Transformation	1	KM	400	Innovation & Transformation	Gies Innovation and Transformation	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NB:401	Office of Undergrad Research	1	NB	401	Office of Undergrad Research	Office of Undergrad Research	Provost & Executive VC	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:407	Lemann Center	1	KV	407	Lemann Center	Lemann Center for Brazilian Studies	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NN:421	Maint NAF-Incrementally Funded	1	NN	421	Maint NAF-Incrementally Funded	Maintenance New Area Funds-Incrementally Funded	Facilities	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NQ:427	Campus Mail	1	NQ	427	Campus Mail	Campus Mail	Auxiliary Units	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NB:429	Osher Lifelong Learning Inst	1	NB	429	Osher Lifelong Learning Inst	Osher Lifelong Learning Institute	Provost & Executive VC	F	Y	N	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KT:436	Media and Cinema Studies	1	KT	436	Media and Cinema Studies	Department of Media and Cinema Studies	College of Media	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NJ:442	Stdt Affairs Human Resources	1	NJ	442	Stdt Affairs Human Resources	Student Affairs Human Resources	Vice Chanc Student Affairs	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:454	Applied Research Institute	1	KP	454	Applied Research Institute	Applied Research Institute	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LP:468	Informatics	1	LP	468	Informatics	Informatics	School of Information Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LT:472	Dept of Surg and Digest Health	1	LT	472	Dept of Surg and Digest Health	Department of Surgery and Digestive Health	Carle Illinois Medicine	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:478	Gies Business Grad Programs	1	KM	478	Gies Business Grad Programs	Gies Business Graduate Programs	Gies College of Business	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LQ:482	Global Education & Training	1	LQ	482	Global Education & Training	Global Education & Training	Illinois International Prgms	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:485	Gies Access and Engagement	1	KM	485	Gies Access and Engagement	Gies Access and Engagement	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NP:502	IL State Archaeological Survey	1	NP	502	IL State Archaeological Survey	Illinois State Archaeological Survey	OVCRI Institutes	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NP:508	Inst for Sustain, Enrgy, & Env	1	NP	508	Inst for Sustain, Enrgy, & Env	Institute for Sustainability, Energy, and Environment	OVCRI Institutes	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:512	Intl Research Relations	1	KP	512	Intl Research Relations	Office of International Research Relations	Grainger Engineering	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NP:520	Interdis Health Sci Institute	1	NP	520	Interdis Health Sci Institute	Interdisciplinary Health Sciences Institute	OVCRI Institutes	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KL:521	ADM Institute for PHL	1	KL	521	ADM Institute for PHL	ADM Institute for the Prevention of Postharvest Loss	Agr, Consumer, & Env Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:522	Illinois Global Institute	1	KV	522	Illinois Global Institute	Illinois Global Institute	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NW:527	Ofc of Strategic Project Mgmt	1	NW	527	Ofc of Strategic Project Mgmt	Office of Strategic Project Management	VC Administrative Strategy	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NL:532	Div of Parks & Natural Spaces	1	NL	532	Div of Parks & Natural Spaces	Div of Parks & Natural Spaces	VC Finance and Administration	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NV:534	Campus Climate and Belonging	1	NV	534	Campus Climate and Belonging	Office for Campus Climate and Belonging	Vice Chancellor for Access	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:535	Center for Global Studies	1	KV	535	Center for Global Studies	Center for Global Studies	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NN:543	Maintenance Asset Management	1	NN	543	Maintenance Asset Management	Maintenance Asset Management	Facilities	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:559	Gies Graduate Programs	1	KM	559	Gies Graduate Programs	Gies Graduate Programs	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:563	Global Studies Prog & Courses	1	KV	563	Global Studies Prog & Courses	Global Studies Programs and Courses	Liberal Arts & Sciences	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KT:564	IPM Delivery	1	KT	564	IPM Delivery	IPM Delivery	College of Media	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:577	American Indian Studies Prgrm	1	KV	577	American Indian Studies Prgrm	American Indian Studies Program	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KT:579	IPM Outreach & Engagement	1	KT	579	IPM Outreach & Engagement	IPM Outreach & Engagement	College of Media	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:589	GiesResearch&FacultyExcellence	1	KM	589	GiesResearch&FacultyExcellence	Gies Research and Faculty Excellence	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:NV	Vice Chancellor for Access	1	NV	594	Vice Chancellor for Access	Office of the Vice Chancellor for Access, Civil Rights, and Community	Vice Chancellor for Access	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:597	Study of Global Gender Equity	1	KV	597	Study of Global Gender Equity	Center for the Study of Global Gender Equity	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NJ:603	Testing Center	1	NJ	603	Testing Center	Testing Center	Vice Chanc Student Affairs	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:KW	Div Exploratory Studies Admin	1	KW	605	Div Exploratory Studies Admin	Division of Exploratory Studies Administration	Division of ExploratoryStudies	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:612	Agr Animal Care & Use Program	1	NE	612	Agr Animal Care & Use Program	Agricultural Animal Care and Use Program	VC for Research and Innovation	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NL:614	Capital Planning	1	NL	614	Capital Planning	Capital Planning	VC Finance and Administration	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KY:623	Chez Veterans Center	1	KY	623	Chez Veterans Center	Chez Veterans Center	Applied Health Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NL:629	UIUC Purchasing CMO	1	NL	629	UIUC Purchasing CMO	UIUC Purchasing CMO	VC Finance and Administration	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:LQ	Illinois International	1	LQ	631	Illinois International	Illinois International Programs	Illinois International Prgms	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NJ:635	Illinois Leadership Center	1	NJ	635	Illinois Leadership Center	Illinois Leadership Center	Vice Chanc Student Affairs	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NA:639	UI AlumniAssociation	1	NA	639	UI AlumniAssociation	University of Illinois Alumni Association	Chancellor	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KT:646	College of Media Programs Crse	1	KT	646	College of Media Programs Crse	College of Media Programs Courses	College of Media	F	Y	T	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:658	Office of Corporate Relations	1	NE	658	Office of Corporate Relations	Office of Corporate Relations	VC for Research and Innovation	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KT:659	IPM Content Production	1	KT	659	IPM Content Production	IPM Content Production	College of Media	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:661	Engineering IT Shared Services	1	KP	661	Engineering IT Shared Services	Grainger Engineering IT Shared Services	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:NL	Finance Budget & Planning	1	NL	677	Finance Budget & Planning	Finance Budget and Planning	VC Finance and Administration	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:681	Sponsored Programs Admin	1	NE	681	Sponsored Programs Admin	Sponsored Programs Administration	VC for Research and Innovation	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KR:690	Japan House	1	KR	690	Japan House	Japan House	Fine & Applied Arts	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LC:692	Medical District Vet Clinic	1	LC	692	Medical District Vet Clinic	Medical District Veterinary Clinic	Veterinary Medicine	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:696	Office of Proposal Development	1	NE	696	Office of Proposal Development	Office of Proposal Development	VC for Research and Innovation	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NJ:703	Student Health Insurance	1	NJ	703	Student Health Insurance	Student Health Insurance	Vice Chanc Student Affairs	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KT:708	IPM Content Information	1	KT	708	IPM Content Information	IPM Content Information	College of Media	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LN:711	I-STEM Education Initiative	1	LN	711	I-STEM Education Initiative	Illinois Science, Technology, Engineering, and Mathematics Education Initiative	Center for Innov Teach Learn	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:719	OCR Special Projects	1	NE	719	OCR Special Projects	Office of Corporate Relations Special Projects	VC for Research and Innovation	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:720	Illinois Business Consulting	1	KM	720	Illinois Business Consulting	Illinois Business Consulting (IBC)	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:725	Gies Global Programs	1	KM	725	Gies Global Programs	Gies Global Programs	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:727	Information Trust Institute	1	KP	727	Information Trust Institute	Information Trust Institute	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KW:736	Center Advising & Acad Svcs	1	KW	736	Center Advising & Acad Svcs	Campus Center for Advising and Academic Services	Division of ExploratoryStudies	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:747	Gies Mktg & Communications	1	KM	747	Gies Mktg & Communications	Gies College of Business Marketing and Communications	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NT:749	Campus Research IT	1	NT	749	Campus Research IT	Campus Research IT	Technology Svcs at Illinois	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NP:768	Cancer Center at Illinois	1	NP	768	Cancer Center at Illinois	Cancer Center at Illinois	OVCRI Institutes	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:787	Translation & Interpreting St	1	KV	787	Translation & Interpreting St	Program in Translation and Interpreting Studies	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NP:797	Social Behavioral Science Inst	1	NP	797	Social Behavioral Science Inst	Social & Behavioral Science Institute	OVCRI Institutes	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NL:808	Arboretum	1	NL	808	Arboretum	Arboretum	VC Finance and Administration	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NJ:822	Inclusion & Intercultural Rels	1	NJ	822	Inclusion & Intercultural Rels	Office of Inclusion and Intercultural Relations	Vice Chanc Student Affairs	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:826	Ctr Business & Public Policy	1	KM	826	Ctr Business & Public Policy	Center for Business and Public Policy	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:827	Office of Research Security	1	NE	827	Office of Research Security	Office of Research Security	VC for Research and Innovation	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NL:839	Admin and Operations	1	NL	839	Admin and Operations	Administration and Operations	VC Finance and Administration	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KS:840	Professional Education	1	KS	840	Professional Education		Graduate College	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NV:852	Illinois Scholars Program	1	NV	852	Illinois Scholars Program	Illinois Scholars Program	Vice Chancellor for Access	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KP:855	Technology Entrepreneur Ctr	1	KP	855	Technology Entrepreneur Ctr	Technology Entrepreneur Center	Grainger Engineering	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LT:859	Clinical Sciences	1	LT	859	Clinical Sciences	Clinical Sciences	Carle Illinois Medicine	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NT:860	TS IT Service Delivery	1	NT	860	TS IT Service Delivery	Technology Services IT Service Delivery	Technology Svcs at Illinois	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LT:861	Biomed & Translational Sci	1	LT	861	Biomed & Translational Sci	Biomedical and Translational Sciences	Carle Illinois Medicine	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:863	Actuarial Sci and Risk Mgmt	1	KV	863	Actuarial Sci and Risk Mgmt	Program in Actuarial Science and Risk Management	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LT:869	Carle Illinois COM Pgm & Crse	1	LT	869	Carle Illinois COM Pgm & Crse	Carle Illinois College of Medicine Program and Courses	Carle Illinois Medicine	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:871	IL Quantum & Microelec Park	1	NE	871	IL Quantum & Microelec Park	Illinois Quantum and Microelectronics Park, LLC	VC for Research and Innovation	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NL:874	Office of Threat Assessment	1	NL	874	Office of Threat Assessment	Office of Threat Assessment	VC Finance and Administration	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:MY:876	Utilities - UIUC	1	MY	876	Utilities - UIUC	Utilities - UIUC	Energy Services	F	Y	T	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:880	Teaching and Learning	1	KM	880	Teaching and Learning	Gies Teaching and Learning	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LN:882	Undergrad Education Reserves	1	LN	882	Undergrad Education Reserves	Undergraduate Education Reserves	Center for Innov Teach Learn	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:901	Sch Earth Soc Env Courses	1	KV	901	Sch Earth Soc Env Courses	School of Earth, Society, and Environment Courses	Liberal Arts & Sciences	F	Y	F	False
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:906	OV Office of Entrepreneurship	1	KM	906	OV Office of Entrepreneurship	Origin Ventures Office of Entrepreneurship	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NL:907	Facility Scheduling & Logistic	1	NL	907	Facility Scheduling & Logistic	Facility Scheduling & Logistics	VC Finance and Administration	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NN:915	Waste Management	1	NN	915	Waste Management	F&S Waste Management and Recycling	Facilities	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KY:918	Ctr Health, Aging, Disability	1	KY	918	Ctr Health, Aging, Disability	Center for Health, Aging, and Disability	Applied Health Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NV:930	Civil Rights Coords Admin	1	NV	930	Civil Rights Coords Admin	Civil Rights Coordinators Admin	Vice Chancellor for Access	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:936	Gies Undergraduate Affairs	1	KM	936	Gies Undergraduate Affairs	Gies College of Business Office of Undergraduate Affairs	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:937	SLCL Courses	1	KV	937	SLCL Courses	School of Literatures, Cultures, Linguistics Courses	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	college_admin	illinois.edu:LT	Carle IL COM Administration	1	LT	944	Carle IL COM Administration	Carle Illinois College of Medicine - Administration	Carle Illinois Medicine	T	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LT:946	Dept of Cardio Med and Surg	1	LT	946	Dept of Cardio Med and Surg	Department of Cardiovascular Medicine and Surgery	Carle Illinois Medicine	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KM:950	Office of Access and Community	1	KM	950	Office of Access and Community	Gies Office of Access and Community	Gies College of Business	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:LT:960	Department of Oncology	1	LT	960	Department of Oncology	Department of Oncology	Carle Illinois Medicine	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NE:964	Research Park	1	NE	964	Research Park	Research Park	VC for Research and Innovation	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:KV:968	Neuroscience Program	1	KV	968	Neuroscience Program	Neuroscience Program	Liberal Arts & Sciences	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NB:972	Student Financial Aid-Admin	1	NB	972	Student Financial Aid-Admin	Office of Student Financial Aid-Administration	Provost & Executive VC	F	Y	F	True
+YES	Included by OUR rule: RAW_Campus=1 and RAW_Active=Y; RAW_Duplicate and RAW_directoryDisplay are review-only	department	illinois.edu:NQ:975	Conference Center	1	NQ	975	Conference Center	Conference Center	Auxiliary Units	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=2, expected UIUC RAW_Campus=1	college_admin			2	FW	591	Nursing Administration	College of Nursing Administration	Nursing	T	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=2, expected UIUC RAW_Campus=1	department			2	FW	995	Ofc of Academic Programs-Nurs	College of Nursing Office of Academic Programs	Nursing	F	Y	T	False
+NO	Excluded by OUR rule: RAW_Campus=2, expected UIUC RAW_Campus=1	department			2	FW	929	Practice, Policy &Partnerships	Office of Practice, Policy & Partnerships	Nursing	F	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=2, expected UIUC RAW_Campus=1	department			2	FW	643	Reg Nursing Program: Urbana	Regional Nursing Program: Urbana - Champaign	Nursing	F	Y	T	True
+NO	Excluded by OUR rule: RAW_Campus=2, expected UIUC RAW_Campus=1	department			2	FW	662	Health Systems Science	Department of Health Systems Science	Nursing	F	Y	T	False
+NO	Excluded by OUR rule: RAW_Campus=2, expected UIUC RAW_Campus=1	department			2	FW	842	Human Development Nursing Sci	Department of Human Development Nursing Science	Nursing	F	Y	T	False
+NO	Excluded by OUR rule: RAW_Campus=2, expected UIUC RAW_Campus=1	department			2	FW	564	Ofc Global Health Leadership	Global Health Leadership Office	Nursing	F	Y	T	False
+NO	Excluded by OUR rule: RAW_Campus=2, expected UIUC RAW_Campus=1	department			2	FW	829	Ofc Research Facilitation	Center for Research Facilitation	Nursing	F	Y	T	False
+NO	Excluded by OUR rule: RAW_Campus=2, expected UIUC RAW_Campus=1	college_admin			2	GD	761	Administration & Gen Exp	College of Medicine at Urbana-Champaign Administration and General Expenses	UIC College of Medicine	T	Y	T	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AJ	213	Discovery Partners Institute	Discovery Partners Institute	Vice Pres Econ Dev and Innov	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AJ	214	DPI PTTL Community Education	DPI Pritzker Tech Talent Labs Community Education	Vice Pres Econ Dev and Innov	F	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AP	234	System Office Shared Services	System Office Shared Services	VP Chief Financial Officer	F	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AH	267	SHIELD IL Deployment Unit	SHIELD Illinois Deployment Unit	Exec VP & VP Academic Affairs	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AS	271	University Bursar	University Bursar	Office of the Controller	F	Y	T	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AJ	438	IL Wrkfr and Educ Rsrch Collab	Illinois Workforce and Education Research Collaborative	Vice Pres Econ Dev and Innov	F	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AF	499	Utilities - System	Utilities - System	Ofc of Procurement Services	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AH	507	Data Strategy & Analytics	Data Strategy & Analytics	Exec VP & VP Academic Affairs	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AA	517	Strategic Initiatives	Office of Strategic Initiatives	Executive Offices	F	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	college_admin			9	AU	526	AVP Budget and Business Ops	AVP Budget and Business Operations	Budget & Business Operations	T	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AJ	551	DPI New Business Ventures	DPI New Business Ventures	Vice Pres Econ Dev and Innov	F	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AF	608	SO Contract Management	SO Contract Management	Ofc of Procurement Services	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AP	609	SHIELD T3	SHIELD T3	VP Chief Financial Officer	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AE	620	Source2Pay	Source2Pay	Admin Info Technology Services	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AJ	634	DPI Applied Rsrch and Dev	DPI Applied Research and DevelopmentNULL	Vice Pres Econ Dev and Innov	F	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AF	698	University Payables	University Payables	Ofc of Procurement Services	F	Y	N	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AF	770	Procurement Diversity	Procurement Diversity	Ofc of Procurement Services	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AS	850	System Government Costing	System Government Costing	Office of the Controller	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AF	857	State University Procurement	State University Procurement	Ofc of Procurement Services	F	Y	T	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AF	980	UIUC Purchasing & Sup Services	UIUC Purchasing & Sup Services	Ofc of Procurement Services	F	Y	F	True
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	department			9	AH	993	Digital Risk Office	Digital Risk Office	Exec VP & VP Academic Affairs	F	Y	F	False
+NO	Excluded by OUR rule: RAW_Campus=9, expected UIUC RAW_Campus=1	college_admin			9	AT	995	VP External Rel & Comm	Vice President of External Relations & Communications	Vice Pres External Rel & Comm	T	Y	F	False
