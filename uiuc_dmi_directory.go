@@ -62,6 +62,7 @@ type uiucDMIDepartment struct {
 	UnitID            string
 	DepartmentID      string
 	Name              string
+	FullName          string
 	ParentCollegeID   string
 	ParentCollegeName string
 	SourceLine        int
@@ -99,12 +100,18 @@ type uiucDMITSVSchema struct {
 }
 
 func runUIUCDMIPrototype(ctx context.Context, output io.Writer) error {
+	current, err := loadCurrentUIUCAttributes(currentUIUCAttributesFile())
+	if err != nil {
+		return err
+	}
+
 	client := &http.Client{Timeout: 30 * time.Second}
 	analysis, err := fetchUIUCDMIAnalysis(ctx, client, uiucDMIDirectoryURL)
 	if err != nil {
 		return err
 	}
-	return printUIUCDMIAnalysis(output, analysis)
+	comparison := compareUIUCAttributes(analysis, current)
+	return printUIUCAttributeComparison(output, analysis, current, comparison)
 }
 
 func fetchUIUCDMIAnalysis(ctx context.Context, client *http.Client, sourceURL string) (*uiucDMIAnalysis, error) {
@@ -234,6 +241,7 @@ func analyzeUIUCDMIDirectory(input io.Reader) (*uiucDMIAnalysis, error) {
 			UnitID:            raw.College,
 			DepartmentID:      raw.Dept,
 			Name:              raw.DeptName,
+			FullName:          raw.DeptFullName,
 			ParentCollegeID:   collegeID,
 			ParentCollegeName: raw.CollegeName,
 			SourceLine:        raw.SourceLine,
