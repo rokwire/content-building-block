@@ -22,9 +22,9 @@ import (
 	"time"
 
 	"github.com/rokwire/rokwire-building-block-sdk-go/utils/logging/logs"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type collectionWrapper struct {
@@ -32,7 +32,7 @@ type collectionWrapper struct {
 	coll     *mongo.Collection
 }
 
-func (collWrapper *collectionWrapper) Find(ctx context.Context, filter interface{}, result interface{}, findOptions *options.FindOptions) error {
+func (collWrapper *collectionWrapper) Find(ctx context.Context, filter interface{}, result interface{}, findOptions *options.FindOptionsBuilder) error {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -53,7 +53,7 @@ func (collWrapper *collectionWrapper) Find(ctx context.Context, filter interface
 	return err
 }
 
-func (collWrapper *collectionWrapper) FindOne(ctx context.Context, filter interface{}, result interface{}, findOptions *options.FindOneOptions) error {
+func (collWrapper *collectionWrapper) FindOne(ctx context.Context, filter interface{}, result interface{}, findOptions *options.FindOneOptionsBuilder) error {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -75,7 +75,7 @@ func (collWrapper *collectionWrapper) FindOne(ctx context.Context, filter interf
 	return nil
 }
 
-func (collWrapper *collectionWrapper) ReplaceOne(ctx context.Context, filter interface{}, replacement interface{}, replaceOptions *options.ReplaceOptions) error {
+func (collWrapper *collectionWrapper) ReplaceOne(ctx context.Context, filter interface{}, replacement interface{}, replaceOptions *options.ReplaceOptionsBuilder) error {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -96,7 +96,14 @@ func (collWrapper *collectionWrapper) ReplaceOne(ctx context.Context, filter int
 	if res == nil {
 		return errors.New("replace one - res is nil")
 	}
-	if replaceOptions.Upsert == nil || !*replaceOptions.Upsert {
+
+	resolvedOptions := options.ReplaceOptions{}
+	for _, setOpt := range replaceOptions.List() {
+		if setOpt != nil {
+			_ = setOpt(&resolvedOptions)
+		}
+	}
+	if resolvedOptions.Upsert == nil || !*resolvedOptions.Upsert {
 		matchedCount := res.MatchedCount
 		if matchedCount == 0 {
 			return errors.New("replace one - no record replaced")
@@ -121,7 +128,7 @@ func (collWrapper *collectionWrapper) InsertOne(ctx context.Context, data interf
 	return nil, err
 }
 
-func (collWrapper *collectionWrapper) InsertMany(ctx context.Context, documents []interface{}, opts *options.InsertManyOptions) (*mongo.InsertManyResult, error) {
+func (collWrapper *collectionWrapper) InsertMany(ctx context.Context, documents []interface{}, opts *options.InsertManyOptionsBuilder) (*mongo.InsertManyResult, error) {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -136,7 +143,7 @@ func (collWrapper *collectionWrapper) InsertMany(ctx context.Context, documents 
 	return result, nil
 }
 
-func (collWrapper *collectionWrapper) DeleteMany(ctx context.Context, filter interface{}, opts *options.DeleteOptions) (*mongo.DeleteResult, error) {
+func (collWrapper *collectionWrapper) DeleteMany(ctx context.Context, filter interface{}, opts *options.DeleteManyOptionsBuilder) (*mongo.DeleteResult, error) {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -151,7 +158,7 @@ func (collWrapper *collectionWrapper) DeleteMany(ctx context.Context, filter int
 	return result, nil
 }
 
-func (collWrapper *collectionWrapper) DeleteOne(ctx context.Context, filter interface{}, opts *options.DeleteOptions) (*mongo.DeleteResult, error) {
+func (collWrapper *collectionWrapper) DeleteOne(ctx context.Context, filter interface{}, opts *options.DeleteOneOptionsBuilder) (*mongo.DeleteResult, error) {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -166,7 +173,7 @@ func (collWrapper *collectionWrapper) DeleteOne(ctx context.Context, filter inte
 	return result, nil
 }
 
-func (collWrapper *collectionWrapper) UpdateOne(ctx context.Context, filter interface{}, update interface{}, opts *options.UpdateOptions) (*mongo.UpdateResult, error) {
+func (collWrapper *collectionWrapper) UpdateOne(ctx context.Context, filter interface{}, update interface{}, opts *options.UpdateOneOptionsBuilder) (*mongo.UpdateResult, error) {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -181,7 +188,7 @@ func (collWrapper *collectionWrapper) UpdateOne(ctx context.Context, filter inte
 	return updateResult, nil
 }
 
-func (collWrapper *collectionWrapper) UpdateMany(ctx context.Context, filter interface{}, update interface{}, opts *options.UpdateOptions) (*mongo.UpdateResult, error) {
+func (collWrapper *collectionWrapper) UpdateMany(ctx context.Context, filter interface{}, update interface{}, opts *options.UpdateManyOptionsBuilder) (*mongo.UpdateResult, error) {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -196,7 +203,7 @@ func (collWrapper *collectionWrapper) UpdateMany(ctx context.Context, filter int
 	return updateResult, nil
 }
 
-func (collWrapper *collectionWrapper) FindOneAndUpdate(ctx context.Context, filter interface{}, update interface{}, result interface{}, opts *options.FindOneAndUpdateOptions) error {
+func (collWrapper *collectionWrapper) FindOneAndUpdate(ctx context.Context, filter interface{}, update interface{}, result interface{}, opts *options.FindOneAndUpdateOptionsBuilder) error {
 	ctx, cancel := context.WithTimeout(ctx, collWrapper.database.mongoTimeout)
 	defer cancel()
 
@@ -304,22 +311,22 @@ func (collWrapper *collectionWrapper) AddIndex(keys interface{}, unique bool) er
 
 	if unique {
 		index.Options = options.Index()
-		index.Options.Unique = &unique
+		index.Options.SetUnique(unique)
 	}
 
-	_, err := collWrapper.coll.Indexes().CreateOne(ctx, index, nil)
+	_, err := collWrapper.coll.Indexes().CreateOne(ctx, index)
 
 	return err
 }
 
-func (collWrapper *collectionWrapper) AddIndexWithOptions(keys interface{}, opt *options.IndexOptions) error {
+func (collWrapper *collectionWrapper) AddIndexWithOptions(keys interface{}, opt *options.IndexOptionsBuilder) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*15000)
 	defer cancel()
 
 	index := mongo.IndexModel{Keys: keys}
 	index.Options = opt
 
-	_, err := collWrapper.coll.Indexes().CreateOne(ctx, index, nil)
+	_, err := collWrapper.coll.Indexes().CreateOne(ctx, index)
 
 	return err
 }
@@ -328,12 +335,12 @@ func (collWrapper *collectionWrapper) DropIndex(name string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*15000)
 	defer cancel()
 
-	_, err := collWrapper.coll.Indexes().DropOne(ctx, name, nil)
+	err := collWrapper.coll.Indexes().DropOne(ctx, name)
 
 	return err
 }
 
-func (collWrapper *collectionWrapper) Aggregate(ctx context.Context, pipeline interface{}, result interface{}, ops *options.AggregateOptions) error {
+func (collWrapper *collectionWrapper) Aggregate(ctx context.Context, pipeline interface{}, result interface{}, ops *options.AggregateOptionsBuilder) error {
 	if ctx == nil {
 		ctx = context.Background()
 	}
