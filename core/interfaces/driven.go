@@ -13,7 +13,7 @@ package interfaces
 import (
 	"content/core/model"
 
-	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 // Storage is used by core to storage data - DB storage adapter, file storage adapter etc

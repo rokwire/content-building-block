@@ -31,7 +31,7 @@ import (
 	"github.com/nfnt/resize"
 	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/tokenauth"
 	"github.com/rokwire/rokwire-building-block-sdk-go/utils/rokwireutils"
-	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/v2/bson"
 
 	"github.com/kolesa-team/go-webp/encoder"
 	"github.com/kolesa-team/go-webp/webp"

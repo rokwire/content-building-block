@@ -15,7 +15,7 @@ import (
 	"io"
 
 	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/tokenauth"
-	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 // Services exposes APIs for the driver adapters

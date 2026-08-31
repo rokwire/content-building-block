@@ -20,11 +20,10 @@ import (
 	"time"
 
 	"github.com/rokwire/rokwire-building-block-sdk-go/utils/logging/logs"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type database struct {
@@ -50,10 +49,9 @@ func (m *database) start() error {
 	log.Println("database -> start")
 
 	//connect to the database
-	clientOptions := options.Client().ApplyURI(m.mongoDBAuth)
-	connectContext, cancel := context.WithTimeout(context.Background(), m.mongoTimeout)
-	client, err := mongo.Connect(connectContext, clientOptions)
-	cancel()
+	clientOptions := options.Client().ApplyURI(m.mongoDBAuth).
+		SetBSONOptions(&options.BSONOptions{DefaultDocumentMap: true})
+	client, err := mongo.Connect(clientOptions)
 	if err != nil {
 		return err
 	}
@@ -123,8 +121,8 @@ func (m *database) applyStudentGuidesChecks(studentGuides *collectionWrapper) er
 	log.Println("apply student guides checks.....")
 
 	//Add org_id + app_id index
-	err := studentGuides.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1},
-		primitive.E{Key: "app_id", Value: 1}}, false)
+	err := studentGuides.AddIndex(bson.D{bson.E{Key: "org_id", Value: 1},
+		bson.E{Key: "app_id", Value: 1}}, false)
 	if err != nil {
 		return err
 	}
@@ -137,8 +135,8 @@ func (m *database) applyHealthLocationsChecks(healthLocations *collectionWrapper
 	log.Println("health locations guides checks.....")
 
 	//Add org_id + app_id index
-	err := healthLocations.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1},
-		primitive.E{Key: "app_id", Value: 1}}, false)
+	err := healthLocations.AddIndex(bson.D{bson.E{Key: "org_id", Value: 1},
+		bson.E{Key: "app_id", Value: 1}}, false)
 	if err != nil {
 		return err
 	}
@@ -151,20 +149,20 @@ func (m *database) applyContentItemsChecks(contentItems *collectionWrapper) erro
 	log.Println("apply content_items checks.....")
 
 	//Add org_id + app_id index
-	err := contentItems.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1},
-		primitive.E{Key: "app_id", Value: 1}}, false)
+	err := contentItems.AddIndex(bson.D{bson.E{Key: "org_id", Value: 1},
+		bson.E{Key: "app_id", Value: 1}}, false)
 	if err != nil {
 		return err
 	}
 
 	// Add category index
-	err = contentItems.AddIndex(bson.D{primitive.E{Key: "category", Value: 1}}, false)
+	err = contentItems.AddIndex(bson.D{bson.E{Key: "category", Value: 1}}, false)
 	if err != nil {
 		return err
 	}
 
 	// Add date_created index
-	err = contentItems.AddIndex(bson.D{primitive.E{Key: "date_created", Value: 1}}, false)
+	err = contentItems.AddIndex(bson.D{bson.E{Key: "date_created", Value: 1}}, false)
 	if err != nil {
 		return err
 	}
@@ -177,7 +175,7 @@ func (m *database) applyDataContentItemsChecks(dataContentItems *collectionWrapp
 	log.Println("apply data_content_items checks.....")
 
 	//Add org_id + app_id index
-	err := dataContentItems.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1}, primitive.E{Key: "app_id", Value: 1}, primitive.E{Key: "key", Value: 1}}, true)
+	err := dataContentItems.AddIndex(bson.D{bson.E{Key: "org_id", Value: 1}, bson.E{Key: "app_id", Value: 1}, bson.E{Key: "key", Value: 1}}, true)
 	if err != nil {
 		return err
 	}
@@ -190,7 +188,7 @@ func (m *database) applyCategoriesChecks(categories *collectionWrapper) error {
 	log.Println("apply categories checks.....")
 
 	//Add org_id + app_id index
-	err := categories.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1}, primitive.E{Key: "app_id", Value: 1}, primitive.E{Key: "name", Value: 1}}, true)
+	err := categories.AddIndex(bson.D{bson.E{Key: "org_id", Value: 1}, bson.E{Key: "app_id", Value: 1}, bson.E{Key: "name", Value: 1}}, true)
 	if err != nil {
 		return err
 	}
@@ -203,7 +201,7 @@ func (m *database) applyMetaDataChecks(metaData *collectionWrapper) error {
 	log.Println("apply meta_data checks.....")
 
 	// Add key index
-	err := metaData.AddIndex(bson.D{primitive.E{Key: "key", Value: 1}}, false)
+	err := metaData.AddIndex(bson.D{bson.E{Key: "key", Value: 1}}, false)
 	if err != nil {
 		return err
 	}

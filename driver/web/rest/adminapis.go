@@ -28,7 +28,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/rokwire/rokwire-building-block-sdk-go/services/core/auth/tokenauth"
-	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 // AdminApisHandler handles the rest Admin APIs implementation
